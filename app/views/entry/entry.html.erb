@@ -2,8 +2,84 @@
 	<table>
 		<tr>
 			<th>Ticket #</th>
+			<th>Delivered on</th>
+			<th>Job</th>
+			<th>Logger</th>
+			<th>Landowner</th>
+		</tr>
+		<tr>
+			<td>
+				<input type="text"/>
+			</td>
+			<td>
+				<input type="text" id="date"/>
+				<script> $('#date').datepicker()</script>
+			</td>
+			<td>
+				<input type="text" id="job_name"/>
+				<script> 
+					$(function() {
+						var jobs = [
+							"Joe Rhoades",
+							"Lone Bear",
+							"Durell",
+							"Esteb",
+							"Hazen Trust",
+							"Harder",
+							"Randy Johnson"
+						];
+												
+						$('#job_name').autocomplete({ 
+							source: jobs,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
+				<input type="text" id="logger_name"/>
+				<script> 
+					$(function() {
+						var loggers = [
+							"Tapani Underground",
+							"Stephenson Logging",
+							"Levanen Inc",
+							"Josh Gillette"
+						];
+												
+						$('#logger_name').autocomplete({ 
+							source: loggers,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
+			<td>
+				<input type="text" id="landowner_name"/>
+				<script> 
+					$(function() {
+						var owners = [
+							"Joe Rhoades",
+							"Feigley Road Partners LLC",
+							"John Durrell",
+							"Orville Esteb",
+							"Hazen Trust c/o Riverview Bank",
+							"Levy LLC",
+							"Randy Johnson",
+							"Josh Gillette"
+						];
+												
+						$('#landowner_name').autocomplete({ 
+							source: owners,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
 		</tr>
 		
 	</table>
-	<input type="text"/>
+	
 </section>
