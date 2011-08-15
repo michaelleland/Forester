@@ -107,17 +107,6 @@ a:hover {
 #contents {
 	
 	height: 600px;
-	
-	background: #F1F1F1;
-	border: 1px solid #BABABA;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	margin-bottom: 0px;
-}
-
-#ui-tabs-1 {
-	padding: 0px;
 }
 
 table {
