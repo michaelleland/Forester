@@ -1,0 +1,268 @@
+body {
+  background: #f1f1f1;
+  color: #333;
+  font-size: 11px;
+  height: auto;
+  padding-bottom: 20px;
+}
+/*Header styling*/
+
+#header	{
+	color: black;
+	height: 50px;
+	background: #d1d1d1;
+	-moz-border-radius: 8px 8px 0px 0px;
+	-webkit-border-radius: 8px 8px 0px 0px;
+	border-radius: 8px 8px 0px 0px;
+	margin-bottom: 0px;
+	margin-top: 3px;
+	padding-top: 8px;
+}
+
+/*Header buttons*/
+
+#headerbuttons {
+	float: right;
+	height: 15px;
+	margin-top: 5px;
+}
+
+#headerbuttons ul {
+	list-style: none;
+}
+
+#headerbuttons img {
+	border: 0px;
+}
+
+#headerbuttons li a.button {
+	background: #EEEEEE url(/images/n1.gif);
+	border-radius: 3px;
+	border: 1px solid;
+	padding: 4px 10px 4px;
+	color:	#666666;
+	text-decoration: none;
+	display: block;
+	margin-bottom: 10px;
+	float: right;
+}
+
+#headerbuttons li a:hover {
+	color: #000000;
+}
+
+/* Navigation */
+
+#nav {
+	background: #d1d1d1;
+	height: 25px;
+	color: #000000;
+	border-bottom: 5px solid #0a7e07;
+	margin-bottom: 10px;
+}
+
+#nav ul {
+	list-style: none;
+	padding: 4px;
+}
+
+#nav li {
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#nav li a {
+	background: #EEEEEE;
+	border: 1px solid #999999;
+	border-bottom: none;
+	color: #666666;
+	font-size: 14px;
+	padding: 4px 15px 4px;
+	text-decoration: none;
+}
+
+#nav li a:hover {
+	color: black;
+}
+
+#nav li a#active {
+	background: #EEEEEE url(/images/n3.png);
+}
+	
+/*a styles*/
+
+a {
+  color: #001a9c;
+  font-weight: bold;
+  text-decoration: none;
+ }
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+/*Contents styling*/
+#contents {
+	background: #F1F1F1;
+	border: 1px solid #BABABA;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 0px;
+}
+
+#pagedescription {
+	background:#B5B5FF;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding-top: 5px;
+	/*In order to get the background color to fill all the way to the side,
+	 * had to replace the margin on left and right with padding on left
+	 * and right, below. this replaces the margin defined in 960.css.
+	 */
+	padding-left: 10px;
+	margin-left: 0px;
+	padding-right: 10px;
+	margin-right: 0px;
+}
+#pagedescription h2 {
+	margin-bottom: 5px;
+}
+
+#contentmiddle {
+	background: #fff;
+	padding-left: 10px;
+	margin-left: 0px;
+	padding-right: 10px;
+	margin-right: 0px;
+	padding-bottom: 10px;
+}
+
+#inactive_sub {
+	opacity: 0.25;
+}
+
+#active_sub {
+
+}
+
+
+/*Content control styling*/
+
+#contentcontrol {
+	height: 35px;
+}
+
+#controlbuttons {
+	display: inline;
+	width: 460px;
+}
+
+
+#contentcontrol ul {
+	margin-top: 10px;
+	list-style: none;
+	padding: 0px;
+}
+
+#contentcontrol li {
+	display: block;
+	float: right;
+	margin-right: 5px;
+	margin-left: 0px;
+}
+
+#contentcontrol li a {
+	background: #EEEEEE url(/images/n1.gif);
+	border: 1px solid #999999;
+	color: #666666;
+	padding: 4px 15px 4px;
+	text-decoration: none;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#contentcontrol li a:hover {
+	color: black;
+}
+
+/*sidebar styling*/
+
+#sidebar {
+	margin-right: 0px;
+	padding-right: 10px;
+}
+
+#sidebar h2 {
+	padding: 0px;
+	font-weight: bold;
+	color: #939393;
+}
+
+/*Bottom Content styling*/
+
+#contentbottom {
+	background: #fff;
+	margin-top: 0px;
+	padding-top: 10px;
+	padding-left: 10px;
+	margin-left: 0px;
+	padding-right: 10px;
+	margin-right: 0px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+/*history styling*/
+
+#recent_history {
+	border-top: 1px solid #BABABA;
+	padding-top: 10px;
+}
+#recent_history ul {
+	list-style: none;
+}
+
+#recent_history span {
+	color: #BABABA;
+	font-size: 10px;
+}
+
+/*footer styling*/
+#footer {
+	background: #f1f1f1;
+}
+
+#footertext {
+	float: right;
+}
+
+#footertext span {
+	color: #BABABA;
+}
+
+
+/*Container styling*/
+
+.container_12,
+.container_16,
+.container_24 {
+  background-color: #fff;
+  background-repeat: repeat-y;
+  margin-bottom: 20px;
+}
+
+.container_12 {
+  background-image: url(../img/12_col.gif);
+}
+
+.container_16 {
+  background-image: url(../img/16_col.gif);
+}
+
+.container_24 {
+  background-image: url(../img/24_col.gif);
+}
