@@ -14,22 +14,30 @@
 	<header class="container_12">
 
 	</header>
-	<nav class="container_12">
+	<div class="container_12" id="tabs">
 		<ul>
 			<li><%= link_to "Entry", "entry" %></li>
 			<li><%= link_to "Setup", "setup" %></li>
 			<li><%= link_to "Reports", "reports" %></li>
 		</ul>
-	</nav>
+	</div>
 	
-	<script> $('nav').tabs()</script>
+	<script> 
+		$('#tabs').tabs();		
+	</script>
 	
-	<section id="page" class="container_12">
-		<%= yield %>
+	<section class="container_12" id="content_area">
+		
+		
 	</section>
+	
 	<footer class="container_12">
 		
 		
 	</footer>
+	<div id="ui-tabs-1">
+		
+	</div>
+	
 </body>
 </html>

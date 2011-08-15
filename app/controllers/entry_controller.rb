@@ -4,5 +4,9 @@ class EntryController < ApplicationController
   def entry
   end
   
+  def add_entry_row
+    
+  end
+  
 
 end
