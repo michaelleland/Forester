@@ -2,21 +2,22 @@
 	<table>
 		<tr>
 			<th>Ticket #</th>
-			<th>Delivered on</th>
+			<th>Date</th>
 			<th>Job</th>
 			<th>Logger</th>
 			<th>Landowner</th>
+			<th>Destination</th>
 		</tr>
 		<tr>
 			<td>
-				<input type="text"/>
+				<input type="text" size="5"/>
 			</td>
 			<td>
-				<input type="text" id="date"/>
+				<input type="text" id="date" size="7"/>
 				<script> $('#date').datepicker()</script>
 			</td>
 			<td>
-				<input type="text" id="job_name"/>
+				<input type="text" id="job_name" size="12"/>
 				<script> 
 					$(function() {
 						var jobs = [
@@ -37,7 +38,7 @@
 					});
 				</script>
 			</td>
-				<input type="text" id="logger_name"/>
+				<input type="text" id="logger_name" size="12"/>
 				<script> 
 					$(function() {
 						var loggers = [
@@ -56,7 +57,7 @@
 				</script>
 			</td>
 			<td>
-				<input type="text" id="landowner_name"/>
+				<input type="text" id="landowner_name" size="15"/>
 				<script> 
 					$(function() {
 						var owners = [
@@ -72,6 +73,30 @@
 												
 						$('#landowner_name').autocomplete({ 
 							source: owners,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
+			<td>
+				<input type="text" id="destination_name" size="15"/>
+				<script> 
+					$(function() {
+						var destinations = [
+							"Weyco Oly",
+							"Weyco Export",
+							"Willis Enterprises",
+							"Simpson Mill 5",
+							"Rainestree",
+							"Merrill and Ring",
+							"TMI forest Products",
+							"Weyco Hardwood"
+							"Pacific Fibre"
+						];
+												
+						$('#destination_name').autocomplete({ 
+							source: destinations,
 							delay: 50,
 							autoFocus: true
 						});
