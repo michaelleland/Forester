@@ -1,5 +1,7 @@
 Forester::Application.routes.draw do
-  get "entry/entry"
+  match "/setup" => "setup#jobs"
+  match "/reports" => "reports#owner_receipt"
+  match "/entry" => "entry#entry"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -50,7 +52,7 @@ Forester::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "entry#entry"
+  root :to => "index#index"
 
   # See how all your routes lay out with "rake routes"
 
