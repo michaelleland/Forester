@@ -109,8 +109,11 @@ a:hover {
 	height: 600px;
 }
 
+#ui-tabs-1 {
+	display: inline;
+}
+
 table {
-	margin: auto;
 	margin-bottom: 5px;
 	margin-top: 5px;
 }
@@ -271,4 +274,24 @@ input, select {
 
 .container_24 {
   background-image: url(../img/24_col.gif);
+}
+
+/* Entry page styling */
+
+#Incredible_invisible_text {
+	color: transparent;
+}
+
+#data_entry {
+	display: block;
+	margin: auto;
+}
+
+#submitted_rows {
+	display: block;
+	margin: auto;
+}
+
+table {
+	margin: auto;
 }

@@ -1,0 +1,22 @@
+var ticket_no = '<%= params[:ticket_no] %>'
+var date = '<%= params[:date] %>'
+var job_name = '<%= params[:job_name] %>'
+var logger_name = '<%= params[:logger_name] %>'
+var landowner_name = '<%= params[:landowner_name] %>'
+var destination_name = '<%= params[:destination_name] %>'
+var wood_type = '<%= params[:wood_type] %>'
+var load_type = '<%= params[:load_type] %>'
+var load_pay = '<%= params[:load_pay] %>'
+
+$('tbody').append('<tr>')
+	$('tbody').append('<td>'+ticket_no+'</td>')
+	$('tbody').append('<td>'+date+'</td>')
+	$('tbody').append('<td>'+job_name+'</td>')
+	$('tbody').append('<td>'+logger_name+'</td>')
+	$('tbody').append('<td>'+landowner_name+'</td>')
+	$('tbody').append('<td>'+destination_name+'</td>')
+	$('tbody').append('<td>'+wood_type+'</td>')
+	$('tbody').append('<td>'+load_type+'</td>')
+	$('tbody').append('<td>'+load_pay+'</td>')
+	$('tbody').append('<td><input type="button" value="Edit"/> </td>')
+$('tbody').append('</tr>')
