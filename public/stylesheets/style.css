@@ -109,8 +109,11 @@ a:hover {
 	height: 600px;
 }
 
+#ui-tabs-1 {
+	display: inline;
+}
+
 table {
-	margin: auto;
 	margin-bottom: 5px;
 	margin-top: 5px;
 }
@@ -271,4 +274,77 @@ input, select {
 
 .container_24 {
   background-image: url(../img/24_col.gif);
+}
+
+/* Entry page styling */
+
+#Incredible_invisible_text {
+	color: transparent;
+}
+
+#data_entry {
+	display: block;
+	margin: auto;
+}
+
+#submitted_rows {
+	display: block;
+	margin: auto;
+}
+
+table {
+	margin: auto;
+}
+
+/* Setup page styling */
+
+.selected {
+	background: #DEEDD0;
+	width: 92%;
+	
+	margin-left: 3px;
+	padding-left: 12px;
+	
+	display: block;
+	
+	border: solid 1px #AED0EA;
+	
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#inner_nav {
+	background: #DEEDF7;
+	margin-top: 5px;
+	padding-top: 5px;
+	border: solid 1px #AED0EA;
+	
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#jobs {
+	margin-top: 5px;
+	
+}
+
+#ui-tabs-1 {
+	padding: 0px;
+}
+
+#ui-tabs-2 {
+	padding: 0px;
+}
+
+#ui-tabs-3 {
+	padding: 0px;
+}
+
+ul {
+	list-style: none; 
+	margin-left: 0px;
+}
+
+li {
+	margin-left: 15px;
 }

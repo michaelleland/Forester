@@ -8,5 +8,4 @@ class EntryController < ApplicationController
     
   end
   
-
 end

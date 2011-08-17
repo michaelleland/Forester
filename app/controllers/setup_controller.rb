@@ -3,7 +3,11 @@ class SetupController < ApplicationController
   
   def jobs
   end
-
+  
+  def job
+    
+  end
+  
   def owners
   end
 

@@ -1,4 +1,5 @@
-	<form action="/add_entry_row" method="post" >
+<section class='grid_12' id="data_entry">
+	<form action="/add_entry_row" method="post" data-remote="true">
 		<table>
 			<tr>
 				<th>Ticket #</th>
@@ -10,17 +11,18 @@
 				<th>Wood type</th>
 				<th>Load type</th>
 				<th>Load pay</th>
+				<th>Action</th>
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="ticket_no" size="5"/>
+					<input type="text" name="ticket_no" size="5" class="fields"/>
 				</td>
 				<td>
-					<input type="text" name="date" id="date" size="7"/>
+					<input type="text" name="date" id="date" size="7" class="fields"/>
 					<script> $('#date').datepicker()</script>
 				</td>
 				<td>
-					<input type="text" id="job_name" name="job_name" size="12"/>
+					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
 					<script> 
 						$(function() {
 							var jobs = [
@@ -41,7 +43,8 @@
 						});
 					</script>
 				</td>
-					<input type="text" id="logger_name" name="logger_name" size="12"/>
+				<td>
+					<input type="text" id="logger_name" name="logger_name" size="12" class="fields" />
 					<script> 
 						$(function() {
 							var loggers = [
@@ -60,7 +63,7 @@
 					</script>
 				</td>
 				<td>
-					<input type="text" id="landowner_name" name="landowner_name" size="15"/>
+					<input type="text" id="landowner_name" name="landowner_name" size="15" class="fields" />
 					<script> 
 						$(function() {
 							var owners = [
@@ -83,7 +86,7 @@
 					</script>
 				</td>
 				<td>
-					<input type="text" id="destination_name" name="destination_name" size="15"/>
+					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
 					<script> 
 						$(function() {
 							var destinations = [
@@ -108,21 +111,28 @@
 				</td>
 				<td>
 					<select name="wood_type">
-						<option value="1">Export</option>
-						<option value="2">Pulp</option>
-						<option value="3">Sawlogs</option>
+						<option value="Export">Export</option>
+						<option value="Pulp">Pulp</option>
+						<option value="Sawlogs">Sawlogs</option>
 					</select>
 				</td>
 				<td>
 					<select name="load_type">
-						<option value="1">MBF</option>
-						<option value="2">Tonnage</option>
+						<option value="MBF">MBF</option>
+						<option value="Tonnage">Tonnage</option>
 					</select>
 				</td>
 				<td>
-					<input type="text" size="8" name="load_pay"/>
+					<input type="text" size="8" name="load_pay" class="fields"/>
 				</td>
-				<input type="submit" value="Submit" onclick="$"/>
+				<td>
+					<input type="submit" value="Submit" />
+				</td>
 			</tr>
+			<tr>
+				<td id="Incredible_invisible_text">Tag!</td>				
+			</tr>
+				
 		</table>
 	</form>
+</section>
