@@ -3,6 +3,7 @@ Forester::Application.routes.draw do
   match "/reports" => "reports#owner_receipt"
   match "/entry" => "entry#entry"
   match "/add_entry_row" => "entry#add_entry_row", :via => "post"
+  match "/job/:id" => "setup#job"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

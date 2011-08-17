@@ -295,3 +295,56 @@ input, select {
 table {
 	margin: auto;
 }
+
+/* Setup page styling */
+
+.selected {
+	background: #DEEDD0;
+	width: 92%;
+	
+	margin-left: 3px;
+	padding-left: 12px;
+	
+	display: block;
+	
+	border: solid 1px #AED0EA;
+	
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#inner_nav {
+	background: #DEEDF7;
+	margin-top: 5px;
+	padding-top: 5px;
+	border: solid 1px #AED0EA;
+	
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#jobs {
+	margin-top: 5px;
+	
+}
+
+#ui-tabs-1 {
+	padding: 0px;
+}
+
+#ui-tabs-2 {
+	padding: 0px;
+}
+
+#ui-tabs-3 {
+	padding: 0px;
+}
+
+ul {
+	list-style: none; 
+	margin-left: 0px;
+}
+
+li {
+	margin-left: 15px;
+}
