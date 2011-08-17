@@ -1,11 +1,16 @@
 <div class="grid_2" id="inner_nav">
-	<ul>
-		<li class="selected"><a href="google.com" data-remote="true">Jobs</a></li>
-		<li><a href="google.com" data-remote="true">Loggers</a></li>
-		<li><a href="google.com" data-remote="true">Truckers</a></li>
-		<li><a href="google.com" data-remote="true">Landowners</a></li>
-		<li><a href="google.com" data-remote="true">Sawmills</a></li>
-	</ul>
+	<% if $active == 1 %>
+		<ul>
+			<li class="selected"><a href="google.com" data-remote="true">Jobs</a></li>
+			<li><a href="google.com" data-remote="true">Loggers</a></li>
+			<li><a href="google.com" data-remote="true">Truckers</a></li>
+			<li><a href="google.com" data-remote="true">Landowners</a></li>
+			<li><a href="google.com" data-remote="true">Sawmills</a></li>
+		</ul>
+	<% else %>
+	
+	
+	<% end %>
 </div>
 
 <%= yield %>
