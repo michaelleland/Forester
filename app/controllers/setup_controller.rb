@@ -4,7 +4,7 @@ class SetupController < ApplicationController
   def jobs
   end
   
-  def job
+  def show_jobs
     
   end
   
@@ -13,8 +13,15 @@ class SetupController < ApplicationController
 
   def sawmills
   end
+  
+  def sawmill
+    
+  end
 
   def loggers
   end
 
+  def truckers
+  
+  end
 end

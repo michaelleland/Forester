@@ -113,6 +113,11 @@ a:hover {
 	display: inline;
 }
 
+.grid_10 {
+	margin: 0px;
+	margin-top: 5px;
+}
+
 table {
 	margin-bottom: 5px;
 	margin-top: 5px;
@@ -276,6 +281,10 @@ input, select {
   background-image: url(../img/24_col.gif);
 }
 
+#tabs {
+	height: 1900px;
+}
+
 /* Entry page styling */
 
 #Incredible_invisible_text {
@@ -340,6 +349,10 @@ table {
 	padding: 0px;
 }
 
+a:hover {
+	cursor: pointer;
+}
+
 ul {
 	list-style: none; 
 	margin-left: 0px;
@@ -347,4 +360,79 @@ ul {
 
 li {
 	margin-left: 15px;
+}
+
+/* Report styles*/
+
+img#hfi_logo {
+	float: left;
+	width: 180px;
+	height: 180px;
+}
+
+#receipt_header {
+	float: left;
+	width: 450px;
+	padding-left: 150px;
+	font-size: 25px;
+}
+
+#hfi_address_box {
+	width: 450px;
+	padding-left: 150px;
+	padding-top: 50px;
+	float: left;
+	margin-bottom: 20px;
+}
+
+#details_box {
+	margin-top: 15px;
+	float: left;
+	margin-right: 260px;
+}
+
+#details_box table th {
+	width: 180px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#details_box table td {
+	width: 180px;
+	text-align: center;
+	
+}
+
+#job_items_box {
+	margin-top: 5px;
+	float: left;
+}
+
+#job_items_box table th {
+	font-weight: bold;
+	width: 150px;
+}
+
+#job_items_box table td {
+	width: 150px;
+}
+
+#job_items_box table th.lo {
+	width: 250px;
+}
+
+.to {
+	font-weight: bold;
+}
+
+#landowner_payments {
+	margin-bottom: 10px;
+}
+
+#payment_details {
+	margin-left: 160px;
+}
+
+hr {
+	margin-bottom: 10px;
 }
