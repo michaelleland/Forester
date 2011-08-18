@@ -362,6 +362,32 @@ li {
 	margin-left: 15px;
 }
 
+.sub_header {
+	font-weight: bold;
+}
+
+.label {
+	clear: none;
+	float: left;
+	height: 25px;
+	width: 50px;
+	padding-top: 4px;
+	margin-right: 5px;
+}
+
+.input_wrapper {
+	float: left;
+	height: 25px;
+}
+
+.input_row {
+	width: 450px;
+	height: 32px;
+	clear: left;
+	float: left;
+}
+
+
 /* Report styles*/
 
 img#hfi_logo {
