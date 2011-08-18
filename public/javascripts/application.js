@@ -9,6 +9,8 @@ function change_content (target) {
 	$('#loggers').fadeOut();
 	$('#truckers').fadeOut();
 	$('#sawmills').fadeOut();
+	$('#owner_receipt').fadeOut();
+	$('#logger_receipt').fadeOut();
 
 	setTimeout(function() {
 		$('#jobs').remove();
@@ -16,6 +18,8 @@ function change_content (target) {
 		$('#loggers').remove();
 		$('#truckers').remove();
 		$('#sawmills').remove();
+		$('#owner_receipt').remove();
+		$('#logger_receipt').remove();
 	}, 600)
 	
 	setTimeout(	function () {
@@ -28,5 +32,5 @@ function change_content (target) {
 				$('#inner_nav').remove();
 				$('#'+target).fadeIn();
 		}});
-	}, 600);
+	}, 605);
 }

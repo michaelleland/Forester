@@ -89,7 +89,7 @@ body {
 #nav li a#active {
 	background: #EEEEEE url(/images/n3.png);
 }
-	
+
 /*a styles*/
 
 a {
@@ -414,7 +414,7 @@ img#hfi_logo {
 #details_box {
 	margin-top: 15px;
 	float: left;
-	margin-right: 260px;
+	width: 940px;
 }
 
 #details_box table th {
@@ -434,12 +434,24 @@ img#hfi_logo {
 	float: left;
 }
 
+#payment_details_box {
+	margin-top: 5px;
+	float: left;
+}
+
+#payment_details_box table th {
+	font-weight: bold;
+	width: 200px;
+}
+
 #job_items_box table th {
 	font-weight: bold;
+	padding-left: 5px;
 	width: 150px;
 }
 
 #job_items_box table td {
+	padding-left: 5px;
 	width: 150px;
 }
 
@@ -451,12 +463,31 @@ img#hfi_logo {
 	font-weight: bold;
 }
 
+.tp {
+	font-weight: bold;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.selector_label {
+	float: left;
+	width: 80px;
+}
+
 #landowner_payments {
+	margin: auto;
 	margin-bottom: 10px;
+	
 }
 
 #payment_details {
-	margin-left: 160px;
+	margin:auto;
+	
+}
+
+#page {
+	width: 960px;
+	margin: auto;
 }
 
 hr {

@@ -9,7 +9,13 @@ Forester::Application.routes.draw do
   match "/jobs" => "setup#jobs"
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
-
+  
+  match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
+  
+  match "/owner_receipt" => "reports#owner_receipt"
+  match "/logger_receipt" => "reports#logger_receipt"
+  match "/quarter_report" => "reports#quarter_receipt"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
