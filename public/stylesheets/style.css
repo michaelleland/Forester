@@ -5,18 +5,11 @@ body {
   height: auto;
   padding-bottom: 20px;
 }
+
 /*Header styling*/
 
-#header	{
-	color: black;
-	height: 50px;
-	background: #d1d1d1;
-	-moz-border-radius: 8px 8px 0px 0px;
-	-webkit-border-radius: 8px 8px 0px 0px;
-	border-radius: 8px 8px 0px 0px;
-	margin-bottom: 0px;
-	margin-top: 3px;
-	padding-top: 8px;
+#header {
+	background: #F2F5F7;
 }
 
 /*Header buttons*/
@@ -486,6 +479,7 @@ img#hfi_logo {
 }
 
 #page {
+	color: black;
 	width: 960px;
 	margin: auto;
 }

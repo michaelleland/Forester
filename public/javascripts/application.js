@@ -13,24 +13,29 @@ function change_content (target) {
 	$('#logger_receipt').fadeOut();
 
 	setTimeout(function() {
-		$('#jobs').remove();
-		$('#owners').remove();
-		$('#loggers').remove();
-		$('#truckers').remove();
-		$('#sawmills').remove();
-		$('#owner_receipt').remove();
-		$('#logger_receipt').remove();
-	}, 600)
-	
-	setTimeout(	function () {
+		
 		$.ajax({
 			url: '/'+target,
 			cache: false,
 			success: function (html) {
+				$('#jobs').remove();
+				$('#owners').remove();
+				$('#loggers').remove();
+				$('#truckers').remove();
+				$('#sawmills').remove();
+				$('#owner_receipt').remove();
+				$('#logger_receipt').remove();
+				
 				$('#inner_nav').after(html);
 				$('#'+target).attr('style', 'display: none');
 				$('#inner_nav').remove();
+				
+				$('#inner_nav ul').contents().each (function () { $(this).attr('class', '') });
+				$('#'+target+"_nav").attr('class', 'selected');
+				
 				$('#'+target).fadeIn();
-		}});
-	}, 605);
+			}
+		});
+			
+	}, 600);
 }
