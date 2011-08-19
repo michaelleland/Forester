@@ -3,39 +3,55 @@
 
 $('nav').tabs();
 
-function change_content (target) {
-	$('#jobs').fadeOut();
-	$('#owners').fadeOut();
-	$('#loggers').fadeOut();
-	$('#truckers').fadeOut();
-	$('#sawmills').fadeOut();
-	$('#owner_receipt').fadeOut();
-	$('#logger_receipt').fadeOut();
-
-	setTimeout(function() {
+function change_content (target, tab) {
+	
+	if (tab == 1) {
 		
-		$.ajax({
-			url: '/'+target,
-			cache: false,
-			success: function (html) {
-				$('#jobs').remove();
-				$('#owners').remove();
-				$('#loggers').remove();
-				$('#truckers').remove();
-				$('#sawmills').remove();
-				$('#owner_receipt').remove();
-				$('#logger_receipt').remove();
-				
-				$('#inner_nav').after(html);
-				$('#'+target).attr('style', 'display: none');
-				$('#inner_nav').remove();
-				
-				$('#inner_nav ul').contents().each (function () { $(this).attr('class', '') });
-				$('#'+target+"_nav").attr('class', 'selected');
-				
-				$('#'+target).fadeIn();
-			}
-		});
+		$('#setup_contents').fadeOut();
+		
+		setTimeout(function() {
+		
+			$.ajax({
+				url: '/'+target,
+				cache: false,
+				success: function (html) {
+					
+					$('#setup_contents').html(html);
+					$('#setup_contents').attr('style', 'display: none');
+					
+					$('#inner_nav ul').contents().each (function () { $(this).attr('class', '') });
+					$('#'+target+"_nav").attr('class', 'selected');
+					
+					$('#setup_contents').fadeIn();
+					
+				}
+			});
 			
-	}, 600);
+			
+		}, 600);
+		
+	} else {
+		setTimeout(function() {
+			
+			$('#report_contents').fadeOut();
+			
+			$.ajax({
+				url: '/'+target,
+				cache: false,
+				success: function (html) {
+					$('#report_contents').html(html);
+					$('#report_contents').attr('style', 'display: none');
+					
+					$('#inner_nav ul').contents().each (function () { $(this).attr('class', '') });
+					$('#'+target+"_nav").attr('class', 'selected');
+					
+					$('#report_contents').fadeIn();
+				}
+			});
+			
+				
+		}, 600);
+		
+	}
+	
 }

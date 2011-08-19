@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  layout "left_nav", :except => [:printable_owner_receipt]
+  layout nil
   
   def owner_receipt
   end
@@ -9,6 +9,10 @@ class ReportsController < ApplicationController
   end
   
   def logger_receipt
+  end
+  
+  def index
+    render :layout => "left_nav"
   end
 
 end

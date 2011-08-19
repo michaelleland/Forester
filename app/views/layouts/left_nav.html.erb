@@ -1,17 +1,17 @@
 <div class="grid_2" id="inner_nav">
 	<% if $active == 1 %>
 		<ul>
-			<li id="jobs_nav"><a onclick="change_content('jobs');">Jobs</a></li>
-			<li id="loggers_nav"><a onclick="change_content('loggers');">Loggers</a></li>
-			<li id="truckers_nav"><a onclick="change_content('truckers');">Truckers</a></li>
-			<li id="landowners_nav"><a onclick="change_content('landowners');">Landowners</a></li>
-			<li id="sawmills_nav"><a onclick="change_content('sawmills');">Sawmills</a></li>
+			<li id="jobs_nav"><a onclick="change_content('jobs', 1);">Jobs</a></li>
+			<li id="loggers_nav"><a onclick="change_content('loggers', 1);">Loggers</a></li>
+			<li id="truckers_nav"><a onclick="change_content('truckers', 1);">Truckers</a></li>
+			<li id="landowners_nav"><a onclick="change_content('landowners', 1);">Landowners</a></li>
+			<li id="sawmills_nav"><a onclick="change_content('sawmills', 1);">Sawmills</a></li>
 		</ul>
 	<% else %>
 		<ul>
-			<li id="owner_receipt_nav"><a onclick="change_content('owner_receipt');">Owner Receipt</a></li>
-			<li id="logger_receipt_nav"><a onclick="change_content('logger_receipt');">Logger Receipt</a></li>
-			<li id="quarter_report_nav"><a onclick="change_content('quarter_report');">Quarter report</a></li>
+			<li id="owner_receipt_nav"><a onclick="change_content('owner_receipt', 2);">Owner Receipt</a></li>
+			<li id="logger_receipt_nav"><a onclick="change_content('logger_receipt', 2);">Logger Receipt</a></li>
+			<li id="quarter_report_nav"><a onclick="change_content('quarter_report', 2);">Quarter report</a></li>
 		</ul>
 	<% end %>
 </div>

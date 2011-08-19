@@ -1,6 +1,6 @@
 Forester::Application.routes.draw do
-  match "/setup" => "setup#jobs"
-  match "/reports" => "reports#owner_receipt"
+  match "/setup" => "setup#index"
+  match "/reports" => "reports#index"
   match "/entry" => "entry#entry"
   match "/add_entry_row" => "entry#add_entry_row", :via => "post"
  
