@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20110908215818) do
   create_table "load_details", :force => true do |t|
     t.integer  "ticked_id"
     t.integer  "species_id"
+    t.integer  "wood_type"
     t.integer  "measure_type"
     t.float    "amount"
     t.datetime "created_at"

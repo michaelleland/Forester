@@ -160,6 +160,32 @@ a:hover {
 	
 }
 
+#quarterly_report_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
+#export_database_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
 #logger_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;

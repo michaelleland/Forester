@@ -35,7 +35,8 @@ Forester::Application.routes.draw do
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   
-  match "/quarter_report" => "reports#quarter_receipt"
+  match "/quarterly_report" => "reports#quarterly_report"
+  match "/export_database" => "reports#export_database"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

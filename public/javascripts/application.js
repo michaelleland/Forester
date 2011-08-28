@@ -6,7 +6,7 @@ $('nav').tabs();
 function change_content (target, tab) {
 	
 	var target_div = ''
-	if (tab == 1) { target_div = '#setup_contents' } else if (tab == 2) { target_div = '#receipt_contents' } else if (tab == 3) { target_div = 'report_contents'};
+	if (tab == 1) { target_div = '#setup_contents' } else if (tab == 2) { target_div = '#receipt_contents' } else if (tab == 3) { target_div = '#report_contents'};
 	
 	if (tab == 1 || tab == 2 || tab == 3) {
 		

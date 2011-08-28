@@ -3,6 +3,7 @@ class CreateLoadDetails < ActiveRecord::Migration
     create_table :load_details do |t|
       t.integer :ticked_id
       t.integer :species_id
+      t.integer :wood_type
       t.integer :measure_type
       t.float :amount
 

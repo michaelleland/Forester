@@ -74,14 +74,14 @@
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species">
+					<select class="specie_selector" name="species_1">
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
 						<% end %>
 					</select>
 				</td>
 				<td>
-					<input type="text" size="8" name="load_amount" class="fields"/>
+					<input type="text" size="8" name="load_1_amount" class="fields"/>
 				</td>
 				<td>
 					<input type="text" size="8" name="load_pay" class="fields"/>
