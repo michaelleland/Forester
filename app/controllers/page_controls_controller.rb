@@ -27,7 +27,13 @@ class PageControlsController < ApplicationController
   end
   
   def import_jobs_of_trucker
-    
+    if params[:id] != "0"
+      @t_asg = TruckerAssignment.find_all_by_partner_id(params[:id])
+      
+      @t_job_ids = @t_asg.collect {|i| i.job_id}.flatten
+      
+      @trucker_jobs = Job.find(@t_job_ids)
+    end
   end
   
 end

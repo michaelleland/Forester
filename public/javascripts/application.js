@@ -67,7 +67,7 @@ function import_jobs_of_partner(owner_id, role) {
 	var url = '';
 	if (role == 1) {
 		url = '/import_jobs_of_logger/';
-	} else if (role == 2)
+	} else if (role == 2) {
 		url = '/import_jobs_of_trucker/';
 	}
 	$.ajax ({

@@ -1,9 +1,13 @@
 <% if params[:id] == "0" %>
 	<option>No logger selected</option>
 <% else %>
-	<% @logger_jobs.each do |i| %>
+	<% unless @logger_jobs.length == 0 %>
 		<option value="0">Select a job</option>
-		<option value="<%= i.id %>"><%= i.name %></option>
+		<% @logger_jobs.each do |i| %>
+			<option value="<%= i.id %>"><%= i.name %></option>
+		<% end %>
+	<% else %>
+		<option value="0">The logger has no jobs</option>
 	<% end %>
 <% end %>
 		

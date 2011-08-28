@@ -8,7 +8,8 @@ Forester::Application.routes.draw do
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
   match "/import_jobs/:id" => "page_controls#import_jobs"
-  match "/import_jobs_of_partner/:id" => "page_controls#import_jobs_of_partner"
+  match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
+  match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"

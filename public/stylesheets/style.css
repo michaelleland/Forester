@@ -160,7 +160,7 @@ a:hover {
 	
 }
 
-#partner_receipt_selector {
+#logger_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	
@@ -173,6 +173,18 @@ a:hover {
 		
 }
 
+#trucker_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
 #owner_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
