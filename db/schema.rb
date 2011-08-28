@@ -47,10 +47,10 @@ ActiveRecord::Schema.define(:version => 20110908215818) do
   end
 
   create_table "load_details", :force => true do |t|
-    t.integer  "ticked_id"
+    t.integer  "ticket_id"
     t.integer  "species_id"
     t.integer  "wood_type"
-    t.integer  "measure_type"
+    t.integer  "load_type"
     t.float    "amount"
     t.datetime "created_at"
     t.datetime "updated_at"
