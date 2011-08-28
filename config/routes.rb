@@ -21,7 +21,9 @@ Forester::Application.routes.draw do
   match "/reports" => "reports#index"
   match "/entry" => "entry#entry"
  
+  #Entry page functions
   match "/add_entry_row" => "entry#add_entry_row", :via => "post"
+  match "/all_entries" => "page_controls#all_entries"
  
   match "/landowners" => "setup#owners"
   match "/partners" => "setup#partners"

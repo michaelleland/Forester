@@ -15,7 +15,7 @@ class EntryController < ApplicationController
       return 
     end
     
-    @params = [params[:ticket_no], params[:load_1_amount], params[:job_name], params[:destination_name], params[:date]]
+    @params = [params[:ticket_no], params[:load_1_amount], params[:job_name], params[:destination_name], params[:date], params[:load_pay]]
     
     @params.each do |i|
       if i == ""

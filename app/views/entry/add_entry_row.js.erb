@@ -1,25 +1,82 @@
 var ticket_no = '<%= params[:ticket_no] %>'
 var date = '<%= params[:date] %>'
 var job_name = '<%= params[:job_name] %>'
-var logger_name = '<%= params[:logger_name] %>'
-var landowner_name = '<%= params[:landowner_name] %>'
 var destination_name = '<%= params[:destination_name] %>'
-var wood_type = '<%= params[:wood_type] %>'
 var load_type = '<%= params[:load_type] %>'
 var load_pay = '<%= params[:load_pay] %>'
 
-$('tbody').append('<tr>')
-	$('tbody').append('<td>'+ticket_no+'</td>')
-	$('tbody').append('<td>'+date+'</td>')
-	$('tbody').append('<td>'+job_name+'</td>')
-	$('tbody').append('<td>'+logger_name+'</td>')
-	$('tbody').append('<td>'+landowner_name+'</td>')
-	$('tbody').append('<td>'+destination_name+'</td>')
-	$('tbody').append('<td>'+wood_type+'</td>')
-	$('tbody').append('<td>'+load_type+'</td>')
-	$('tbody').append('<td>'+load_pay+'</td>')
-	$('tbody').append('<td><input type="button" value="Edit"/> </td>')
-$('tbody').append('</tr>')
+$('#current_entries tbody').append('<tr>')
+	$('#current_entries tbody').append('<td>'+ticket_no+'</td>')
+	$('#current_entries tbody').append('<td>'+date+'</td>')
+	$('#current_entries tbody').append('<td>'+job_name+'</td>')
+	$('#current_entries tbody').append('<td>'+destination_name+'</td>')
+	$('#current_entries tbody').append('<td><%= WoodType.find(params[:wood_type]).name %></td>')
+	$('#current_entries tbody').append('<td>'+load_type+'</td>')
+	$('#current_entries tbody').append('<td><%= Specie.find(params[:species_1]).code %></td>')
+	$('#current_entries tbody').append('<td><%= params[:load_1_amount]%></td>')
+	$('#current_entries tbody').append('<td>'+load_pay+'</td>')
+	$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
+$('#current_entries tbody').append('</tr>')
+
+<% unless params[:species_2].nil? %>
+	$('#current_entries tbody').append('<tr>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><%= Specie.find(params[:species_2]).code %></td>')
+		$('#current_entries tbody').append('<td><%= params[:load_2_amount]%></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
+	$('#current_entries tbody').append('</tr>')
+<% end %>
+
+<% unless params[:species_3].nil? %>
+	$('#current_entries tbody').append('<tr>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><%= Specie.find(params[:species_3]).code %></td>')
+		$('#current_entries tbody').append('<td><%= params[:load_3_amount]%></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
+	$('#current_entries tbody').append('</tr>')
+<% end %>
+
+<% unless params[:species_4].nil? %>
+	$('#current_entries tbody').append('<tr>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><%= Specie.find(params[:species_4]).code  %></td>')
+		$('#current_entries tbody').append('<td><%= params[:load_4_amount]%></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
+	$('#current_entries tbody').append('</tr>')
+<% end %>
+
+<% unless params[:species_5].nil? %>
+	$('#current_entries tbody').append('<tr>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><%= Specie.find(params[:species_5]).code %></td>')
+		$('#current_entries tbody').append('<td><%= params[:load_5_amount]%></td>')
+		$('#current_entries tbody').append('<td></td>')
+		$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
+	$('#current_entries tbody').append('</tr>')
+<% end %>
 
 $('input.fields').attr('value', '');
 $('input').first().focus();

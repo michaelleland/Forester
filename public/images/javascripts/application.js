@@ -78,14 +78,3 @@ function import_jobs_of_partner(owner_id, role) {
 		}		
 	})
 }
-
-function refresh_all_entries () {
-	$.ajax ({
-		url: '/all_entries',
-		cache: false,
-		success: function (html) {
-			$$('#all_entries table tr').each(function () { this.remove()})
-			$('#all_entries table').html(html);
-		}		
-	})
-}
