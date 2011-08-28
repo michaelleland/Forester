@@ -31,7 +31,8 @@ Forester::Application.routes.draw do
   match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
   
   match "/owner_receipt" => "receipts#owner_receipt"
-  match "/partner_receipt" => "receipts#partner_receipt"  
+  match "/logger_receipt" => "receipts#logger_receipt"
+  match "/trucker_receipt" => "receipts#trucker_receipt"  
   
   match "/quarter_report" => "reports#quarter_receipt"
   

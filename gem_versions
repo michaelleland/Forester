@@ -1,0 +1,47 @@
+rake 0.9.2
+arronh-chronic 0.3.9
+abstract 1.0.0
+activesupport 3.0.9
+builder 2.1.2
+i18n 0.5.0
+activemodel 3.0.9
+erubis 2.6.6
+rack 1.2.3
+rack-mount 0.6.14
+racke-test 0.5.7
+tzinfo 0.3.29
+actionpack 3.0.9
+mime-types 1.16
+polyglot 0.3.1
+treetop 1.4.9
+mail 2.2.19
+actionmailer 3.0.9
+arel 2.0.10
+activerecord 3.0.9
+activeresource 3.0.9
+thor 0.14.6
+backup 3.0.16
+bcrypt-ruby 3.0.0
+bundler 1.0.17
+highline 1.6.2
+
+capistrano {
+	net-ssh 2.2.1
+	net-scp 1.0.4
+	net-sftp 2.0.5
+	net-ssh-gateway 1.1.0
+	capistrano 2.8.0
+}
+
+devise {
+	orm_adapter 0.0.5
+	warden 1.0.5
+	devise 1.4.4
+}
+
+rdoc 3.8
+railties 3.0.9
+jquery_rails 1.0.12
+mysql2 0.2.11
+rails 3.0.9
+whenever 0.6.8
