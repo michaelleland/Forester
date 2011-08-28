@@ -28,6 +28,21 @@
 	<script>
 		$('#jobs').accordion();
 		$('#jobs_nav').attr('class', 'selected');
+		
+		function attach_autocomplete_to_input (id) {
+			var destinations = [
+				<% Destination.all.each do |i| %>
+					<%= "'#{i.name}'," %>
+				<% end %>
+			];
+									
+			$('#input_data_row_'+id+' #destination').autocomplete({ 
+				source: destinations,
+				delay: 50,
+				autoFocus: true
+			});			
+		}
+		
 	</script>
 </div>
 

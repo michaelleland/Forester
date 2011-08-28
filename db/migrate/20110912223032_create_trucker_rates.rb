@@ -8,6 +8,10 @@ class CreateTruckerRates < ActiveRecord::Migration
       t.float :rate
       t.timestamps
     end
+    
+    TruckerRate.create(:destination_id => 1, :job_id => 1, :partner_id => 2, :load_type => "Ton", :rate => 203.50)
+    TruckerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 2, :load_type => "Ton", :rate => 199.75)
+    
   end
 
   def self.down

@@ -93,6 +93,8 @@ function refresh_all_entries () {
 function show_rate_inputs (id) {
 	$('#add_rate_row_'+id).before('<div class="data_rows" id="input_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination"  /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="load_type" name="load_type"><option value="MBF">MBF</option><option value="Ton">Ton</option></select></div></div><div class="action_link rate_link" id="add_the_rate_'+id+'" onclick="add_the_rate('+id+')">Add</div>');
 	$('#add_rate_row_'+id).fadeOut();
+	
+	attach_autocomplete_to_input(id);	
 }
 
 function add_the_rate(id) {
