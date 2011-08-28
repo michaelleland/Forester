@@ -79,9 +79,9 @@ function import_jobs_of_partner(owner_id, role) {
 	})
 }
 
-function refresh_all_entries () {
+function refresh_all_entries (type) {
 	$.ajax ({
-		url: '/all_entries',
+		url: '/all_'+type+'_entries',
 		cache: false,
 		success: function (html) {
 			$('.all_entries_row').each(function () { $(this).remove()})

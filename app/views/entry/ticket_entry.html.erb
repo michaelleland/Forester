@@ -1,5 +1,5 @@
 <div id="entry_form">
-	<form action="/add_entry_row" method="post" data-remote="true">
+	<form action="/add_ticket_entry_row" method="post" data-remote="true">
 		<h4>New Entry</h4>
 		<table id="entry_table">
 			<tr>
@@ -85,7 +85,7 @@
 					<input type="text" size="8" name="load_pay" class="fields"/>
 				</td>
 				<td>
-					<input type="submit" value="Submit" onclick="refresh_all_entries()"/>
+					<input type="submit" value="Submit" />
 				</td>
 			</tr>
 			<tr id="filler_row">
@@ -141,6 +141,6 @@
 	</table>
 	
 	<script>
-		refresh_all_entries();
+		refresh_all_entries('ticket');
 	</script>
 </div>

@@ -85,10 +85,14 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   create_table "payment_from_destinations", :force => true do |t|
     t.integer  "destination_id"
     t.integer  "job_id"
+    t.string   "load_type"
     t.date     "payment_date"
-    t.integer  "payment_no"
+    t.string   "payment_no"
     t.integer  "tickets"
-    t.float    "gross"
+    t.float    "total_payment"
+    t.float    "net_mbf"
+    t.float    "tonnage"
+    t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

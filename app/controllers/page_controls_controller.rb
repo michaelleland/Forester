@@ -1,8 +1,12 @@
 class PageControlsController < ApplicationController
   layout nil
   
-  def all_entries
+  def all_ticket_entries
    @tickets = Ticket.all 
+  end
+  
+  def all_payment_entries
+   @payments = PaymentFromDestination.all
   end
   
   def add_specie

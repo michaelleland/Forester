@@ -406,6 +406,11 @@ input, select {
 	width: 60px;
 }
 
+.payment_no_headers {
+	width: 70px;
+}
+
+
 .data_rows {
 	
 	
