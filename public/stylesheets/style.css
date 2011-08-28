@@ -10,6 +10,33 @@ body {
 	height: 60px;
 }
 
+.rates {
+	height: 150px;
+}
+
+.rates .data_rows h4 {
+	width: 200px;
+}
+
+.rate_link {
+	clear: none !important;
+}
+
+.action_link {
+	float: left;
+	clear: left;
+	
+	text-decoration: underline;
+}
+
+.action_link:hover {
+	cursor: pointer;
+}
+
+.rates .accordion_left_column .row_headers {
+	width: 150px;
+}
+
 .loggers {
 	height: 60px;
 }

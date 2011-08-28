@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110908215819) do
+ActiveRecord::Schema.define(:version => 20110912223032) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20110908215819) do
 
   create_table "jobs", :force => true do |t|
     t.string   "name"
-    t.string   "owner_id"
+    t.integer  "owner_id"
     t.float    "hfi_rate"
     t.boolean  "hfi_prime"
     t.datetime "created_at"
@@ -87,6 +87,8 @@ ActiveRecord::Schema.define(:version => 20110908215819) do
     t.integer  "job_id"
     t.date     "payment_date"
     t.integer  "payment_no"
+    t.integer  "tickets"
+    t.float    "gross"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -138,12 +140,14 @@ ActiveRecord::Schema.define(:version => 20110908215819) do
     t.datetime "updated_at"
   end
 
-  create_table "trucker_rates", :id => false, :force => true do |t|
-    t.integer "destination_id"
-    t.integer "primary_key"
-    t.integer "job_id"
-    t.integer "partner_id"
-    t.float   "rate"
+  create_table "trucker_rates", :force => true do |t|
+    t.integer  "destination_id"
+    t.integer  "job_id"
+    t.integer  "partner_id"
+    t.string   "load_type"
+    t.float    "rate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "wood_types", :force => true do |t|

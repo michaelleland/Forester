@@ -30,6 +30,7 @@ Forester::Application.routes.draw do
   match "/jobs" => "setup#jobs"
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
+  match "/rates" => "setup#rates"
   
   match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
   
@@ -42,6 +43,7 @@ Forester::Application.routes.draw do
   
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"
+  match "/new_rate/:id" => "setup#new_rate"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

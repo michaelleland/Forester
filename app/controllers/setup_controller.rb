@@ -32,7 +32,18 @@ class SetupController < ApplicationController
   def sawmill
     
   end
+  
+  def rates
+    
+  end
 
+  def new_rate
+    @destination = Destination.find_by_name(params[:destination_name])
+    @job = Job.find(params[:id])
+    @trucker = @job.trucker
+    @tr = TruckerRate.create(:destination_id => @destination.id, :job_id => params[:id], :partner_id => @trucker.id, :load_type => params[:load_type], :rate => params[:rate])
+  end
+  
   def partners
     
   end
