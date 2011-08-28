@@ -1,16 +1,16 @@
 <% @tickets.each do |i| %>
 	<% @load_details = LoadDetail.find_all_by_ticket_id(i.id)%>
-	<tr>
+	<tr class="all_entries_row">
 		<td><%= i.number %></td>
-		<td> Todai </td>
+		<td><%= i.date %></td>
 		<td><%= Job.find(i.job_id).name %></td>	
-		<td><%= Destination.find(i.destination_id)%></td>
+		<td><%= Destination.find(i.destination_id).name %></td>
 		<td><%= WoodType.find(@load_details[0].wood_type).name %></td>
 		<td><%= @load_details[0].load_type %></td>
 		<td><%= Specie.find(@load_details[0].species_id).code %></td>
 		<td><%= @load_details[0].amount %></td>
 		<td><%= i.value %></td>
-		<td><input type="button" value="edit"></td>
+		<td><input type="button" value="Edit"></td>
 	</tr>
 <% end %>
 

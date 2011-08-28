@@ -40,6 +40,9 @@ Forester::Application.routes.draw do
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   
+  #Setup page's news/edits
+  match "/new_job" => "setup#new_job"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

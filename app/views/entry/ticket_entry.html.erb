@@ -20,7 +20,7 @@
 				</td>
 				<td>
 					<input type="text" name="date" id="date" size="8" class="fields"/>
-					<script> $('#date').datepicker()</script>
+					<script> $('#date').datepicker({dateFormat: 'yy-mm-dd'})</script>
 				</td>
 				<td>
 					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
@@ -106,16 +106,16 @@
 	
 	<table>
 		<tr>
-			<th style="width: 50px;">Ticket #</th>
-			<th style="width: 80px;">Date</th>
-			<th style="width: 100px;">Job</th>
-			<th style="width: 100px;">Destination</th>
-			<th style="width: 80px;">Wood type</th>
-			<th style="width: 40px;">Load type</th>
-			<th style="width: 60px;">Species</th>
-			<th style="width: 60px;">Amount</th>
-			<th style="width: 80px;">Load pay</th>
-			<th style="width: 40px;">Action</th>
+			<th class="table_headers ticket_no_headers">Ticket #</th>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers species_headers">Species</th>
+			<th class="table_headers amount_headers">Amount</th>
+			<th class="table_headers load_pay_headers">Load pay</th>
+			<th class="table_headers action_headers">Action</th>
 		</tr>
 		
 	</table>
@@ -126,17 +126,21 @@
 	<h4>All Entries</h4>
 	<table>
 		<tr>
-			<th style="width: 50px;">Ticket #</th>
-			<th style="width: 80px;">Date</th>
-			<th style="width: 100px;">Job</th>
-			<th style="width: 100px;">Destination</th>
-			<th style="width: 80px;">Wood type</th>
-			<th style="width: 40px;">Load type</th>
-			<th style="width: 60px;">Species</th>
-			<th style="width: 60px;">Amount</th>
-			<th style="width: 80px;">Load pay</th>
-			<th style="width: 40px;">Action</th>
+			<th class="table_headers ticket_no_headers">Ticket #</th>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers species_headers">Species</th>
+			<th class="table_headers amount_headers">Amount</th>
+			<th class="table_headers load_pay_headers">Load pay</th>
+			<th class="table_headers action_headers">Action</th>
 		</tr>
 		
 	</table>
+	
+	<script>
+		refresh_all_entries();
+	</script>
 </div>

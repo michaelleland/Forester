@@ -5,6 +5,8 @@ class CreatePaymentFromDestinations < ActiveRecord::Migration
       t.integer :job_id
       t.date :payment_date
       t.integer :payment_no
+      t.integer :tickets
+      t.float :gross 
 
       t.timestamps
     end
