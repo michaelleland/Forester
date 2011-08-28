@@ -47,6 +47,7 @@ Forester::Application.routes.draw do
   match "/new_job" => "setup#new_job"
   match "/new_rate/:id" => "setup#new_rate"
   match "/new_partner" => "setup#new_partner"
+  match "/new_owner" => "setup#new_owner"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
