@@ -11,7 +11,7 @@
 				<th>Tickets</th>
 				<th>Net MBF</th>
 				<th>Tons</th>
-				<th>Total Payment</th>
+				<th>Payment</th>
 				<th>Action</th>
 			</tr>
 			<tr>
@@ -68,9 +68,14 @@
 						<option value="Tonnage">Tonnage</option>
 					</select>
 				</td>
-					<input type="text" size="3" name="tickets" class="fields"/>
 				<td>
-					<input type="text" size="8" name="gross_MBF" class="fields"/>
+					<input type="text" size="5" name="tickets" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="5" name="net_MBF" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="5" name="tonnage" class="fields"/>
 				</td>
 				<td>
 					<input type="text" size="8" name="total_payment" class="fields"/>
@@ -86,9 +91,38 @@
 <div id="current_entries">
 	<h4>Current Entries</h4>
 	
+	<table>
+		<tr>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers tickets_headers">Tickets</th>
+			<th class="table_headers net_mbf_headers">Net MBF</th>
+			<th class="table_headers tonnage_headers">Tons</th>
+			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
 </div>
 
 <div id="all_entries">
 	<h4>All Entries</h4>
-	
+	<table>
+		<tr>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers tickets_headers">Tickets</th>
+			<th class="table_headers net_mbf_headers">Net MBF</th>
+			<th class="table_headers tonnage_headers">Tons</th>
+			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
 </div>

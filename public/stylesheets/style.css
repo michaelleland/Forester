@@ -390,7 +390,21 @@ input, select {
 	width: 40px;
 }
 
+.tonnage_headers {
+	width: 60px;
+}
 
+.net_mbf_headers {
+	width: 60px;
+}
+
+.payment_headers {
+	width: 60px;
+}
+
+.tickets_headers {
+	width: 60px;
+}
 
 .data_rows {
 	
