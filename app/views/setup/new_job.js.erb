@@ -1,17 +1,2 @@
-var html ='<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" role="tab" aria-expanded="false" aria-selected="false" tabindex="-1"><a href="#"><%= @job.name %></a></h3> \
-		<div class="jobs ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" style="height: 139.8px; display: none;" role="tabpanel">	\
-			<div class="accordion_left_column"> \
-				<div class="data_rows"><h4>Partners:</h4></div> \
-				<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <%= @owner.name %></div></div> \
-				<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <%= @logger.name %></div></div> \
-				<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <%= @trucker.name %></div></div> \
-			</div> \
-			<div class="accordion_right_column"> \
-				<div class="data_rows"><h4>General info:</h4></div> \
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <%= @job.hfi_rate %> %</div></div> \
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <%= if @job.hfi_prime then "HFI" else "Bank" end %></div></div> \
-				<div class="data_rows"><div class="row_headers">Some:</div><div class="row_data"> Thing</div></div> \
-			</div>\
-		</div>';
-
-$('.jobs').last().prev().before(html);
+change_content('jobs', 1);
+setTimeout(function() { $('h3').last().prev().prev().children().last().append('<span style="color:red;"> new! </span>') }, 1500);

@@ -47,4 +47,10 @@ class SetupController < ApplicationController
   def partners
     
   end
+  
+  def new_partner
+    @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
+    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])
+    @partner = Partner.create(:name => params[:partner_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
+  end
 end

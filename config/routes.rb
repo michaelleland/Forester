@@ -46,6 +46,7 @@ Forester::Application.routes.draw do
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"
   match "/new_rate/:id" => "setup#new_rate"
+  match "/new_partner" => "setup#new_partner"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
