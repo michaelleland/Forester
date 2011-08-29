@@ -82,17 +82,14 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "payment_from_destinations", :force => true do |t|
-    t.integer  "destination_id"
     t.integer  "job_id"
     t.string   "load_type"
     t.date     "payment_date"
-    t.string   "payment_no"
-    t.integer  "tickets"
-    t.float    "total_payment"
-    t.float    "net_mbf"
+    t.string   "payment_num"
     t.float    "tonnage"
-    t.integer  "wood_type"
     t.boolean  "paid_to_owner"
+    t.boolean  "paid_to_logger"
+    t.boolean  "paid_to_trucker"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -126,13 +123,12 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.date     "date"
+    t.date     "delivery_date"
     t.integer  "destination_id"
     t.integer  "job_id"
+    t.float    "load_pay"
     t.integer  "number"
-    t.float    "value"
-    t.boolean  "paid_to_logger"
-    t.boolean  "paid_to_trucker"
+    t.integer  "payment_from_destination_id"
     t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"

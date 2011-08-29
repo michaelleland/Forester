@@ -11,9 +11,9 @@
 	</head>	
 	<body>
 		<div id="page">
-			<div class="grid_10" id="landowner_payments">	
+			<div class="grid_10" id="logger_payments">	
 				<img src="/images/HFI_logo.png" id="hfi_logo"/>
-				<div id="receipt_header">Logger</div>
+				<div id="receipt_header">Logger receipt</div>
 				
 				<div id="hfi_address_box">
 					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
@@ -47,35 +47,30 @@
 							<th>Wood type</th>
 							<th>Species</th>
 							<th>Net MBF</th>
-							<th style="text-align: right;">Amount</th>
+							<th style="text-align: right; width: 100px;">Amount</th>
 						</tr>
 						
 						<% @tickets.each do |i| %>
+							<% @net_mbf = 0; i.load_details.each {|j| if j.load_type = "MBF" then @net_mbf = @net_mbf + j.amount end } %>
+														
 							<tr>
 								<td><%= i.number %></td>
 								<td><%= i.date %></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td><%= WoodType.find(i.wood_type).name %></td>
+								<td>
+									<% i.load_details.each do |j| %>
+										<% unless j == i.load_details.last %>
+											<%= "#{Specie.find(j.species_id).code}, " %>
+										<% else %>
+											<%= "#{Specie.find(j.species_id).code}" %>
+										<% end %>							
+									<% end %>
+								</td>
+								<td><%= @net_mbf %></td>
 								<% if i == @tickets.last %>
-									<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 65px;"> + $ <%= i.total_payment %> </div></td>
+									<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 65px;"> + $ <%= i.value %> </div></td>
 								<% else %>
-									<td style="text-align: right;"> + $ <%= i.total_payment %> </td>
-								<% end %>
-							</tr>
-						<% end %>
-						
-						<% @deduction_items.each do |i| %>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td><%= i[0] %></td>
-								<td></td>
-								<% if i == @deduction_items.last %>
-									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 65px;">- $ <%= i[1] %> </div></td>
-								<% else %>
-									<td style="text-align: right;"> - $ <%= i[1] %> </td>
+									<td style="text-align: right;">  + $ <%= i.value %> </td>
 								<% end %>
 							</tr>
 						<% end %>

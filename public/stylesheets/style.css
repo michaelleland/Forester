@@ -770,7 +770,7 @@ img#hfi_logo {
 #details_box {
 	margin-top: 15px;
 	float: left;
-	width: 940px;
+	width: 500px;
 }
 
 #details_box .headers {
@@ -814,7 +814,7 @@ img#hfi_logo {
 
 #job_items_box table td {
 	padding-left: 5px;
-	width: 150px;
+	width: 100px;
 }
 
 #job_items_box table th.lo {
