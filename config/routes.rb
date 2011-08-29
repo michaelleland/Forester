@@ -45,7 +45,7 @@ Forester::Application.routes.draw do
   
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
-  
+  match "/get_payments/:id" => "page_controls#get_payments"
   
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"

@@ -9,6 +9,10 @@ class PageControlsController < ApplicationController
    @payments = PaymentFromDestination.all
   end
   
+  def get_payments
+    @payments = PaymentFromDestination.find_all_by_job_id(params[:id])
+  end
+  
   def add_specie
     
   end

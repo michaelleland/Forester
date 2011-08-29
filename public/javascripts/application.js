@@ -59,6 +59,7 @@ function import_jobs(owner_id) {
 		cache: false,
 		success: function (html) {
 			$('#job_selector').html(html);
+			$('#payments_to_receipt select').html('<option value="0">No job selected</option>');
 		}		
 	})
 }

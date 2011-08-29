@@ -56,153 +56,47 @@
 							<th></th>
 							<th>Description</th>
 							<th></th>
-							<th>Amount</th>
+							<th style="text-align: right;">Amount</th>
 						</tr>
+						
 						<% @payments.each do |i| %>
 							<tr>
 								<td><%= i.payment_no %></td>
 								<td><%= i.payment_date %></td>
 								<td></td>
-								<td>Payment from sawmill</td>
+								<td>Sawmill payment</td>
 								<td></td>
-								<td> + $ <%= i.total_payment %> </td>
+								<td style="text-align: right;"> + $ <%= i.total_payment %> </td>
 							</tr>
 						<% end %>
 						
-						<tr>
-							<td class="action_link" id="show_new_receipt_item_inputs" onclick="show_receipt_item_inputs()">Add an item</td>
-						</tr>
+						<% @deduction_items.each do |i| %>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td><%= i[0] %></td>
+								<td></td>
+								<% if i == @deduction_items.last %>
+									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 65px;">- $ <%= i[1] %> </div></td>
+								<% else %>
+									<td style="text-align: right;"> - $ <%= i[1] %> </td>
+								<% end %>
+							</tr>
+						<% end %>
 												
 						<tr>
 							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
-							<td class="tp">Total to be paid</td>
-							<td class="to"> + $ <%= @total %></td>
+							<td class="tp">Total to be paid </td>
+							<td class="to" style="text-align: right;">+ $ <%= @total %> </td>
 						</tr>
 			
 					</table>
 				</div>
 			</div>
-			
-
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			
-			
-			<div class="grid_10" id="payment_details">
-				<img src="/images/HFI_logo.png" id="hfi_logo"/>
-				<div id="receipt_header">Payment Details</div>
-				
-				<div id="hfi_address_box">
-					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
-					<div class="address_rows">Battle Ground, WA 98604</div>
-					<div class="address_rows">Ph. 360-723-5523</div>
-					<div class="address_rows">Fax. 360-723-5522</div>
-				</div>
-				
-				<div id="details_box">
-					<table>
-						<tr>
-							<th>Job name</th>
-							<th>Logger</th>
-							<th>Landowner</th>
-						</tr>
-						<tr>
-							<td>Hazen Trust</td>
-							<td>Levanen Inc</td>
-							<td>Hazen Trust c/o Riverview Bank</td>
-						</tr>
-					</table>
-				</div>
-				
-				<div id="payment_details_box">
-					<table>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th>Total</th>
-							<th>Logging</th>
-							<th>Logging</th>
-							<th></th>
-							<th>Trucking</th>
-							<th>Trucking</th>
-							<th></th>
-							<th>Total</th>
-						</tr>
-						<tr>
-							<th>Delivered on</th>
-							<th>Ticket #</th>
-							<th>Destination</th>
-							<th>MBF or Tons</th>
-							<th>Payment Type</th>
-							<th>Pay rate</th>
-							<th>Logger pay</th>
-							<th>Payment Type</th>
-							<th>Pay Rate</th>
-							<th>Trucker Pay</th>
-							<th>Logging Pay</th>
-						</tr>
-						<tr>
-							<td>08/15/2011</td>
-							<td>2893</td>
-							<td>Derek Morel</td>
-							<td>20.00</td>
-							<td>Tonnage</td>
-							<td>$ 22.50</td>
-							<td>$ 450.00</td>
-							<td>Tonnage</td>
-							<td>-</td>
-							<td>-</td>
-							<td>$ 450.00</td>
-						</tr>
-						<tr>
-							<td>08/16/2011</td>
-							<td>2899</td>
-							<td>Merril and Ring</td>
-							<td>4.56</td>
-							<td>MBF</td>
-							<td>$ 140.00</td>
-							<td>$ 638.40</td>
-							<td>Tonnage</td>
-							<td>-</td>
-							<td>-</td>
-							<td>$ 638.40</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td class="to">Total</td>
-							<td class="to">$ 1088.40</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</table>
-				</div>
-				
-			</div>
-		</div>
 	</body>
 </html>
 
@@ -214,7 +108,7 @@ function show_receipt_item_inputs () {
 
 function add_the_receipt_item () {
 	$.ajax ({
-		url: '/all_'+type+'_entries',
+		url: '/add_receipt_item',
 		cache: false,
 		success: function (html) {
 			$('.all_entries_row').each(function () { $(this).remove()})

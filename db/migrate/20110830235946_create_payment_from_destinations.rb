@@ -11,6 +11,7 @@ class CreatePaymentFromDestinations < ActiveRecord::Migration
       t.float :net_mbf
       t.float :tonnage
       t.integer :wood_type
+      t.boolean :paid_to_owner
 
       t.timestamps
     end

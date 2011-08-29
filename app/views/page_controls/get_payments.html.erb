@@ -1,0 +1,7 @@
+<% unless @payments.length == 0 %>
+	<% @payments.each do |i| %>
+		<option value="<%= i.id %>">Payment from <%= Destination.find(i.destination_id).name %> $ <%= i.total_payment %> <span style="color:yellow;"><%= if i.paid_to_owner then "paid" else "" end %></span></option>
+	<% end %>
+<% else %>
+	<option value="0">No payments</option>
+<% end %>
