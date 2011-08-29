@@ -1,15 +1,90 @@
 <div class="grid_10" id="owner_receipt_selector">
-	<h4>Select an owner in a job: </h4>
-	<form>
-		<select id="owner_selector">
+	<h4>Create a receipt for an owner: </h4>
+	<h5>First, select an owner and a job:</h5>
+	<form method="get" action="/get_owner_receipt" target="_blank">
+		<select id="owner_selector" name="owner_id">
 			<option onclick="import_jobs(0)" value="0"> Select an owner </option>
 			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<option onclick="import_jobs(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
-		<select id="job_selector">
+		<select id="job_selector" name="job_id">
 			<option>No owner selected</option>
 		</select>
-		<input type="submit" value="Get receipt" />		
+		
+		<h5>Then, select payments to be included:</h5>
+		
+		<div id="payments_to_receipt">
+			<select name="payments" multiple="true" size="6">
+				<option value="0">No job selected</option>
+			</select>
+		</div>
+		
+		<h5>Select and/or create deductions</h5>
+		
+		<div id="deductions_to_receipt_list">
+			<select id="deductions_select_list" name="payments" multiple="true" size="6">
+			</select>
+		</div>
+		
+		<div id="input_row">
+			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
+			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
+			<input type="button" value="Add deduction" onclick="add_deduction()"/>
+		</div>
+		
+		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
+		
+		<textarea rows="5"></textarea>
+		
+		<input id="submit" type="submit" value="Create receipt" />		
 	</form>	
 </div>
+
+<script>
+function add_new_deduction() {
+	var data = $('#deduction_data').attr('value');
+	var amount = $('#deduction_amount').attr('value');
+	
+	$.ajax ({
+		url: '/add_deduction?data='+data+'&deduction_amount='+amount,
+		cache: false,
+		success: function (html) {
+			$('#deductions_select').append(html);
+			$('#deduction_data').attr('value', '');
+			$('#deduction_amount').attr('value', '');
+		}
+	})
+}
+
+function add_deduction () {	
+	$('#deductions_select_list option:selected').each(function() {
+		var value = $(this).attr('value');
+		$('#deductions_select').append('<option value="'+value+'">'+$(this).html()+'</option>');
+		$('#deductions_select_list').children().each(function() { 
+			if ($(this).attr('value') == value) {
+				$(this).remove();
+			} 
+		});
+	});
+	
+	
+	/* var value = $('#deductions_select_list').val();
+	 * $('#deductions_select').append('<option value="'+value+'">'+$('#deductions_select_list option:selected').text()+'</option>')
+	 * $('#deductions_select_list').children().each(function(){ if ($(this).attr('value') == value) { $(this).remove(); } });
+	*/
+	
+}
+
+function remove_deduction () {	
+	$('#deductions_select option:selected').each(function() {
+		var value = $(this).attr('value');
+		$('#deductions_select_list').append('<option value="'+value+'">'+$(this).html()+'</option>');
+		$('#deductions_select').children().each(function() { 
+			if ($(this).attr('value') == value) {
+				$(this).remove();
+			} 
+		});
+	});
+}
+</script>

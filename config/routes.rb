@@ -27,6 +27,7 @@ Forester::Application.routes.draw do
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
  
+  #Setup page's basic page calls
   match "/landowners" => "setup#owners"
   match "/partners" => "setup#partners"
   match "/jobs" => "setup#jobs"
@@ -34,12 +35,19 @@ Forester::Application.routes.draw do
   match "/sawmills" => "setup#sawmills"
   match "/rates" => "setup#rates"
   
-  match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
-  
+  #Receipt page's basic page calls
   match "/owner_receipt" => "receipts#owner_receipt"
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   
+  #Receipt page's 'pull receipt' calls
+  match "/get_owner_receipt" => "receipts#get_owner_receipt"
+  
+  #The receipt modification pages functions
+  match "/add_deduction" => "receipts#add_deduction"
+  
+  
+  #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   

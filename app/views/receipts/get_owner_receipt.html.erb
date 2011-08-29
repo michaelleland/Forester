@@ -1,0 +1,226 @@
+<html>
+	<head>
+		<title>Owner receipt</title>
+		<link rel="stylesheet" href="/stylesheets/reset.css" />
+		<link rel="stylesheet" href="/stylesheets/text.css" />
+		<link rel="stylesheet" href="/stylesheets/960.css" />
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<link rel="stylesheet" href="/stylesheets/cupertino.css" />
+		<%= javascript_include_tag :defaults %>
+		<%= csrf_meta_tag %>
+	</head>	
+	<body>
+		<div id="page">
+			<div class="grid_10" id="landowner_payments">	
+				<img src="/images/HFI_logo.png" id="hfi_logo"/>
+				<div id="receipt_header">Landowner Payments</div>
+				
+				<div id="hfi_address_box">
+					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
+					<div class="address_rows">Battle Ground, WA 98604</div>
+					<div class="address_rows">Ph. 360-723-5523</div>
+					<div class="address_rows">Fax. 360-723-5522</div>
+				</div>
+				
+				<div id="details_box">
+					<table>
+						<tr>
+							<td class="headers">Job name</td>
+							<td class="table_data"><%= @job.name %></td>
+						</tr>
+						<tr>
+							<td class="headers">Logger name</td>
+							<td class="table_data"><%= @job.logger.name %></td>
+						</tr>
+						<tr>
+							<td class="headers">Landowner details</td>
+							<td class="table_data"><%= @job.owner.name %></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="table_data"><%= @job.owner.address.street %></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="table_data"><%= "#{@job.owner.address.city} #{$states[@job.owner.address.state]} #{@job.owner.address.zip_code}" %></td>
+						</tr>
+						
+					</table>
+				</div>
+				
+				<div id="job_items_box">
+					<table>
+						<tr>
+							<th>Payment Number</th>
+							<th>Date</th>
+							<th></th>
+							<th>Description</th>
+							<th></th>
+							<th>Amount</th>
+						</tr>
+						<% @payments.each do |i| %>
+							<tr>
+								<td><%= i.payment_no %></td>
+								<td><%= i.payment_date %></td>
+								<td></td>
+								<td>Payment from sawmill</td>
+								<td></td>
+								<td> + $ <%= i.total_payment %> </td>
+							</tr>
+						<% end %>
+						
+						<tr>
+							<td class="action_link" id="show_new_receipt_item_inputs" onclick="show_receipt_item_inputs()">Add an item</td>
+						</tr>
+												
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td class="tp">Total to be paid</td>
+							<td class="to"> + $ <%= @total %></td>
+						</tr>
+			
+					</table>
+				</div>
+			</div>
+			
+
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			
+			
+			<div class="grid_10" id="payment_details">
+				<img src="/images/HFI_logo.png" id="hfi_logo"/>
+				<div id="receipt_header">Payment Details</div>
+				
+				<div id="hfi_address_box">
+					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
+					<div class="address_rows">Battle Ground, WA 98604</div>
+					<div class="address_rows">Ph. 360-723-5523</div>
+					<div class="address_rows">Fax. 360-723-5522</div>
+				</div>
+				
+				<div id="details_box">
+					<table>
+						<tr>
+							<th>Job name</th>
+							<th>Logger</th>
+							<th>Landowner</th>
+						</tr>
+						<tr>
+							<td>Hazen Trust</td>
+							<td>Levanen Inc</td>
+							<td>Hazen Trust c/o Riverview Bank</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id="payment_details_box">
+					<table>
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th>Total</th>
+							<th>Logging</th>
+							<th>Logging</th>
+							<th></th>
+							<th>Trucking</th>
+							<th>Trucking</th>
+							<th></th>
+							<th>Total</th>
+						</tr>
+						<tr>
+							<th>Delivered on</th>
+							<th>Ticket #</th>
+							<th>Destination</th>
+							<th>MBF or Tons</th>
+							<th>Payment Type</th>
+							<th>Pay rate</th>
+							<th>Logger pay</th>
+							<th>Payment Type</th>
+							<th>Pay Rate</th>
+							<th>Trucker Pay</th>
+							<th>Logging Pay</th>
+						</tr>
+						<tr>
+							<td>08/15/2011</td>
+							<td>2893</td>
+							<td>Derek Morel</td>
+							<td>20.00</td>
+							<td>Tonnage</td>
+							<td>$ 22.50</td>
+							<td>$ 450.00</td>
+							<td>Tonnage</td>
+							<td>-</td>
+							<td>-</td>
+							<td>$ 450.00</td>
+						</tr>
+						<tr>
+							<td>08/16/2011</td>
+							<td>2899</td>
+							<td>Merril and Ring</td>
+							<td>4.56</td>
+							<td>MBF</td>
+							<td>$ 140.00</td>
+							<td>$ 638.40</td>
+							<td>Tonnage</td>
+							<td>-</td>
+							<td>-</td>
+							<td>$ 638.40</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td class="to">Total</td>
+							<td class="to">$ 1088.40</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+</html>
+
+<script>
+function show_receipt_item_inputs () {
+	$('#show_new_receipt_item_inputs').parent().before('<tr> <td></td><td></td><td></td><td><input type="text" name="item_data" id="item_data" size="10" /></td><td style="text-align: right;"><select name="polarity_selector" id="polarity_selector"><option value="1">+</option><option value="0">-</option></td><td><input style="float: left;" name="amount" id="amount" size="5" /> <div style="float: left; clear: none;" class="action_link" onclick="add_the_receipt_item();">Add</div></td></tr>')
+	$('#show_new_receipt_item_inputs').fadeOut();	
+}
+
+function add_the_receipt_item () {
+	$.ajax ({
+		url: '/all_'+type+'_entries',
+		cache: false,
+		success: function (html) {
+			$('.all_entries_row').each(function () { $(this).remove()})
+			$('#all_entries table').append(html);
+		}
+	})
+}
+	
+</script>
