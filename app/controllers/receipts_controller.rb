@@ -13,12 +13,11 @@ class ReceiptsController < ApplicationController
   end
   
   def get_owner_receipt
-    @job = Job.find(params[:job_id])
-    @owner = Owner.find(params[:owner_id])
-    @receipt = Receipt.find_by_job_id_and_owner_id(@job.id, @owner_id)
-    
     @payments = PaymentFromDestination.find(params[:payments])
     
+    @job = Job.find(@payments.first.job_id)
+    @owner = Owner.find(@job.owner_id)
+        
     @total = 0 
     @payments.collect {|i| @total = @total + i.total_payment}
     
