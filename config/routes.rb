@@ -40,12 +40,14 @@ Forester::Application.routes.draw do
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   
-  #Receipt page's 'pull receipt' calls
+  #Receipt page's "pull receipt" calls
   match "/get_owner_receipt" => "receipts#get_owner_receipt"
+  match "/get_logger_receipt" => "receipts#get_logger_receipt"
   
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
   match "/get_payments/:id" => "page_controls#get_payments"
+  match "/get_tickets/:id" => "page_controls#get_tickets"
   
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"

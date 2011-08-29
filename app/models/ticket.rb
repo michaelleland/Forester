@@ -3,8 +3,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :job
   
   def load_details
-    @conn = ActiveRecord::Base.connection
-    @result = @conn.execute("SELECT * FROM load_details WHERE ticket_id=#{self.id}").collect {|i| i[1] + i[2] + i[3]} 
+    @load_details = LoadDetail.find_all_by_ticket_id(self.id) 
   end
   
 end

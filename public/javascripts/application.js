@@ -53,17 +53,6 @@ function change_content (target, tab) {
 	}
 }
 
-function import_jobs(owner_id) {
-	$.ajax ({
-		url: '/import_jobs/'+owner_id,
-		cache: false,
-		success: function (html) {
-			$('#job_selector').html(html);
-			$('#payments_to_receipt select').html('<option value="0">No job selected</option>');
-		}		
-	})
-}
-
 function import_jobs_of_partner(owner_id, role) {
 	var url = '';
 	if (role == 1) {

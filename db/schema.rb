@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   create_table "load_details", :force => true do |t|
     t.integer  "ticket_id"
     t.integer  "species_id"
-    t.integer  "wood_type"
     t.string   "load_type"
     t.float    "amount"
     t.datetime "created_at"
@@ -132,6 +131,9 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
     t.integer  "job_id"
     t.integer  "number"
     t.float    "value"
+    t.boolean  "paid_to_logger"
+    t.boolean  "paid_to_trucker"
+    t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

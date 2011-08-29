@@ -10,7 +10,11 @@ class PageControlsController < ApplicationController
   end
   
   def get_payments
-    @payments = PaymentFromDestination.find_all_by_job_id(params[:id])
+    @unpaid_payments = PaymentFromDestination.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "payment_date")
+  end
+  
+  def get_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_logger(params[:id], false, :order => "number")
   end
   
   def add_specie

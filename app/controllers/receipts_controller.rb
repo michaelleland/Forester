@@ -24,16 +24,26 @@ class ReceiptsController < ApplicationController
     
     @deduction_items = []
     
-    params[:deductions_list].each_with_index do |i, x|
-      @deduction_items.push([i, params[:deductions_values][x]])
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        @deduction_items.push([i, params[:deductions_values][x]])
+      end     
     end
-    
+      
     @deduction_items.collect {|i| @total = @total - i[1].to_f }
     
+    @total = ((@total * 10**2).round.to_f / 10**2).to_s
+    if (@total.length - (@total.index(".")+1)) < 2
+      @total = "#{@total}0"
+    end 
   end
   
   def logger_receipt
   
+  end
+  
+  def get_logger_receipt
+    
   end
   
   def trucker_receipt

@@ -5,7 +5,7 @@
 		<td><%= i.date %></td>
 		<td><%= Job.find(i.job_id).name %></td>	
 		<td><%= Destination.find(i.destination_id).name %></td>
-		<td><%= WoodType.find(@load_details[0].wood_type).name %></td>
+		<td><%= WoodType.find(i.wood_type).name %></td>
 		<td><%= @load_details[0].load_type %></td>
 		<td><%= Specie.find(@load_details[0].species_id).code %></td>
 		<td><%= @load_details[0].amount %></td>

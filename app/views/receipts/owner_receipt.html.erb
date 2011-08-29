@@ -15,7 +15,7 @@
 		<h5>Then, select payments to be included:</h5>
 		
 		<div id="payments_to_receipt">
-			<select name="payments[]" multiple="true" size="6">
+			<select id="payments_select" name="payments[]" multiple="true" size="6">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
@@ -42,16 +42,59 @@
 		
 		<textarea rows="5"></textarea>
 		
-		<input id="submit" type="submit" value="Create receipt" />		
+		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />		
 	</form>	
 </div>
 
 <script>
+
+function import_jobs(owner_id) {
+	$.ajax ({
+		url: '/import_jobs/'+owner_id,
+		cache: false,
+		success: function (html) {
+			$('#job_selector').html(html);
+			$('#payments_to_receipt select').html('<option value="0">No job selected</option>');
+			$('#submit').attr('disabled', 'disabled');
+			$('#submit').attr('value', 'No payments selected');
+		}		
+	})
+}
+
+$('#payments_select').change(function() {
+	if ($(this).val() != '0') {
+		var enabled = true
+		$('#payments_select option:selected').each(function() {
+			if ($(this).text().indexOf('paid') != -1) {
+				enabled = false;
+				$('#submit').attr('disabled', 'disabled');
+				$('#submit').attr('value', 'No payments selected');
+				return false;
+			}			
+		});
+		
+		if (enabled) {
+			$('#submit').removeAttr('disabled');
+			$('#submit').attr('value', 'Create receipt');
+		}		
+	} else {
+		$('#submit').attr('disabled', 'disabled');
+		$('#submit').attr('value', 'No payments selected');
+	}
+});
+
 function add_new_deduction() {
 	var data = $('#deduction_data').attr('value');
 	var value = $('#deduction_value').attr('value');
-
-	$('#deductions_list').append('<option>'+data+'</option>');
+	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
+	
+	if (String(id) == "NaN") {
+		id = 1;
+	} else {
+		id = id +1;
+	}
+	
+	$('#deductions_list').append('<option value="'+id+'">'+data+'</option>');
 	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
 	$('#deduction_data').attr('value', '');
 	$('#deduction_value').attr('value', '');
@@ -97,5 +140,19 @@ function refresh_payments(id) {
 			$('#payments_to_receipt select').html(html);
 		}		
 	})
+}
+
+function select_all_deductions() {
+	var vals = []
+	$('#deductions_list option').each(function () {
+		vals.push(parseInt($(this).attr('value')));
+	})
+	$('#deductions_list').val(vals);
+	
+	vals = []
+	$('#deductions_values option').each(function () {
+		vals.push(parseInt($(this).attr('value')));
+	})
+	$('#deductions_values').val(vals);
 }
 </script>

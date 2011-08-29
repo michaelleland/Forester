@@ -126,8 +126,14 @@ body {
 	background: #EEEEEE url(/images/n3.png);
 }
 
-#inner_nav
+.nav_group_header {
+	font-weight: bold;
+	font-style: italic;
+}
 
+.nav_group {
+	margin-left: 20px;
+}
 /*Styling for navbar under tabs*/
 
 #entries_inner_nav {
@@ -251,6 +257,10 @@ a:hover {
 }
 
 #payments_to_receipt select {
+	width: 400px;
+}
+
+#tickets_select {
 	width: 400px;
 }
 
