@@ -2,13 +2,13 @@
 	<h4>Create a receipt for a logger: </h4>
 	<h5>First, select logger and a job: </h5>
 	<form action="/get_logger_receipt" method="get" target="_blank">
-		<select id="partner_selector">
+		<select id="partner_selector" name="logger_id">
 			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
 			<% Partner.all.each do |i| %>
 				<option onclick="import_jobs_of_logger(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
-		<select id="job_selector">
+		<select id="job_selector" name="job_id">
 			<option>No logger selected</option>
 		</select>
 		
@@ -46,7 +46,7 @@ function init_ticket_select () {
 
 function refresh_tickets (id) {
 	$.ajax ({
-		url: '/get_tickets/'+id,
+		url: '/get_logger_tickets/'+id,
 		cache: false,
 		success: function (html) {
 			$('#tickets_select').html(html);

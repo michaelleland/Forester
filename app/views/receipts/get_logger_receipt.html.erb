@@ -13,7 +13,7 @@
 		<div id="page">
 			<div class="grid_10" id="landowner_payments">	
 				<img src="/images/HFI_logo.png" id="hfi_logo"/>
-				<div id="receipt_header">Logger</div>
+				<div id="receipt_header">Logger receipt</div>
 				
 				<div id="hfi_address_box">
 					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
@@ -58,24 +58,9 @@
 								<td></td>
 								<td></td>
 								<% if i == @tickets.last %>
-									<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 65px;"> + $ <%= i.total_payment %> </div></td>
+									<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 65px;"> + $ <%= i.logger_value %> </div></td>
 								<% else %>
-									<td style="text-align: right;"> + $ <%= i.total_payment %> </td>
-								<% end %>
-							</tr>
-						<% end %>
-						
-						<% @deduction_items.each do |i| %>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td><%= i[0] %></td>
-								<td></td>
-								<% if i == @deduction_items.last %>
-									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 65px;">- $ <%= i[1] %> </div></td>
-								<% else %>
-									<td style="text-align: right;"> - $ <%= i[1] %> </td>
+									<td style="text-align: right;"> + $ <%= i.logger_value %> </td>
 								<% end %>
 							</tr>
 						<% end %>

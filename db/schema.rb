@@ -92,7 +92,6 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
     t.float    "net_mbf"
     t.float    "tonnage"
     t.integer  "wood_type"
-    t.boolean  "paid_to_owner"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -131,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
     t.integer  "job_id"
     t.integer  "number"
     t.float    "value"
+    t.boolean  "paid_to_owner"
     t.boolean  "paid_to_logger"
     t.boolean  "paid_to_trucker"
     t.integer  "wood_type"

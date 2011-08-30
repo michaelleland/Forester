@@ -42,7 +42,11 @@ class ReceiptsController < ApplicationController
   end
   
   def get_logger_receipt
-    
+    @job = Job.find(params[:job_id])
+    @tickets = Ticket.find(params[:tickets])
+    @total = 0
+    @tickets.each {|i| @total = @total + i.value }
+    @total = (@total*100).round.to_f / 100
   end
   
   def trucker_receipt

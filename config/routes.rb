@@ -7,7 +7,7 @@ Forester::Application.routes.draw do
   #Routes for page modifying Ajax calls
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
-  match "/import_jobs/:id" => "page_controls#import_jobs"
+  match "/import_jobs_of_owner/:id" => "page_controls#import_jobs_of_owner"
   match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   
@@ -47,11 +47,16 @@ Forester::Application.routes.draw do
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
   match "/get_payments/:id" => "page_controls#get_payments"
-  match "/get_tickets/:id" => "page_controls#get_tickets"
+  match "/get_owner_tickets/:id" => "page_controls#get_owner_tickets"
+  match "/get_logger_tickets/:id" => "page_controls#get_logger_tickets"
+  match "/get_trucker_tickets/:id" => "page_controls#get_trucker_tickets"
   
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
+  
+  #Get the thing!
+  match "/export_the_thing" => "reports#export_the_thing"
   
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"

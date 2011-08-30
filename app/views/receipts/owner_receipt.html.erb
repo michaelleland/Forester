@@ -3,24 +3,25 @@
 	<h5>First, select an owner and a job:</h5>
 	<form method="get" action="/get_owner_receipt" target="_blank">
 		<select id="owner_selector" name="owner_id">
-			<option onclick="import_jobs(0)" value="0"> Select an owner </option>
+			<option onclick="import_jobs_of_owner(0)" value="0"> Select an owner </option>
 			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
+				<option onclick="import_jobs_of_owner(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
+		
 		<select id="job_selector" name="job_id">
 			<option>No owner selected</option>
 		</select>
 		
-		<h5>Then, select payments to be included:</h5>
+		<h5>Then, select tickets to be paid:</h5>
 		
-		<div id="payments_to_receipt">
-			<select id="payments_select" name="payments[]" multiple="true" size="6">
+		<div id="tickets_to_receipt">
+			<select id="tickets_select" name="tickets[]" multiple="true" size="6">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
 		
-		<h5>Add deductions</h5>
+		<h5>Add deductions: </h5>
 		
 		<div id="deductions_to_receipt_list">
 			<select id="deductions_list" name="deductions_list[]" multiple="true" size="6">
@@ -48,9 +49,9 @@
 
 <script>
 
-function import_jobs(owner_id) {
+function import_jobs_of_owner(owner_id) {
 	$.ajax ({
-		url: '/import_jobs/'+owner_id,
+		url: '/import_jobs_of_owner/'+owner_id,
 		cache: false,
 		success: function (html) {
 			$('#job_selector').html(html);
@@ -132,12 +133,12 @@ function remove_deduction () {
 	});
 }
 
-function refresh_payments(id) {
+function refresh_tickets (id) {
 	$.ajax ({
-		url: '/get_payments/'+id,
+		url: '/get_logger_tickets/'+id,
 		cache: false,
 		success: function (html) {
-			$('#payments_to_receipt select').html(html);
+			$('#tickets_select').html(html);
 		}		
 	})
 }
