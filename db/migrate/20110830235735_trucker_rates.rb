@@ -1,9 +1,9 @@
 class TruckerRates < ActiveRecord::Migration
   def self.up
-    create_table :trucker_rates do |t|
-      t.integer :destination_id
-      t.integer :job_id
-      t.integer :partner_id
+    create_table :trucker_rates, :id => false do |t|
+      t.integer :destination_id, :primary_key
+      t.integer :job_id, :primary_key
+      t.integer :partner_id, :primary_key
       t.float :rate
     end    
   end
