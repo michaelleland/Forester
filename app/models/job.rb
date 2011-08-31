@@ -3,7 +3,7 @@ class Job < ActiveRecord::Base
   has_many :tickets
   
   def logger
-    @logger =
+    @logger = Logger.new()
   end
   
 end
