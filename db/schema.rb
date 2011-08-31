@@ -20,6 +20,13 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.datetime "updated_at"
   end
 
+  create_table "load_details", :force => true do |t|
+    t.integer "ticket_id"
+    t.integer "species_id"
+    t.integer "measure_type"
+    t.float   "amount"
+  end
+
   create_table "logger_assignments", :force => true do |t|
     t.integer  "job_id"
     t.integer  "partner_id"
@@ -65,6 +72,11 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.datetime "updated_at"
   end
 
+  create_table "receipts_tickets", :id => false, :force => true do |t|
+    t.integer "receipt_id"
+    t.integer "ticket_id"
+  end
+
   create_table "tickets", :force => true do |t|
     t.integer  "destination_id"
     t.integer  "job_id"
@@ -79,6 +91,13 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.integer  "partner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "trucker_rates", :force => true do |t|
+    t.integer "destination_id"
+    t.integer "job_id"
+    t.integer "partner_id"
+    t.float   "rate"
   end
 
 end
