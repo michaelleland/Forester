@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
 
   create_table "jobs", :force => true do |t|
     t.string   "name"
+    t.string   "owner_id"
     t.float    "hfi_rate"
     t.boolean  "hfi_prime"
     t.datetime "created_at"
