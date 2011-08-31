@@ -7,6 +7,10 @@ class CreatePartners < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    Partner.create(:name => "Levanen, Inc")
+    Partner.create(:name => "Tapani Trucking")
+    
   end
 
   def self.down

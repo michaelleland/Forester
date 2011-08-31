@@ -5,11 +5,11 @@
 				<th>Ticket #</th>
 				<th>Date</th>
 				<th>Job</th>
-				<th>Logger</th>
-				<th>Landowner</th>
 				<th>Destination</th>
 				<th>Wood type</th>
 				<th>Load type</th>
+				<th>Species</th>
+				<th>Amount</th>
 				<th>Load pay</th>
 				<th>Action</th>
 			</tr>
@@ -26,13 +26,9 @@
 					<script> 
 						$(function() {
 							var jobs = [
-								"Joe Rhoades",
-								"Lone Bear",
-								"Durell",
-								"Esteb",
-								"Hazen Trust",
-								"Harder",
-								"Randy Johnson"
+								<% @jobs.each do |i| %>
+									<%= "'#{i.name}'," %>
+								<% end %>
 							];
 													
 							$('#job_name').autocomplete({ 
@@ -44,61 +40,13 @@
 					</script>
 				</td>
 				<td>
-					<input type="text" id="logger_name" name="logger_name" size="12" class="fields" />
-					<script> 
-						$(function() {
-							var loggers = [
-								"Tapani Underground",
-								"Stephenson Logging",
-								"Levanen Inc",
-								"Josh Gillette"
-							];
-													
-							$('#logger_name').autocomplete({ 
-								source: loggers,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
-				</td>
-				<td>
-					<input type="text" id="landowner_name" name="landowner_name" size="15" class="fields" />
-					<script> 
-						$(function() {
-							var owners = [
-								"Joe Rhoades",
-								"Feigley Road Partners LLC",
-								"John Durrell",
-								"Orville Esteb",
-								"Hazen Trust c/o Riverview Bank",
-								"Levy LLC",
-								"Randy Johnson",
-								"Josh Gillette"
-							];
-													
-							$('#landowner_name').autocomplete({ 
-								source: owners,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
-				</td>
-				<td>
 					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
 					<script> 
 						$(function() {
 							var destinations = [
-								"Weyco Oly",
-								"Weyco Export",
-								"Willis Enterprises",
-								"Simpson Mill 5",
-								"Rainestree",
-								"Merrill and Ring",
-								"TMI Forest Products",
-								"Weyco Hardwood",
-								"Pacific Fibre"
+								<% @destinations.each do |i| %>
+									<%= "'#{i.name}'," %>
+								<% end %>
 							];
 													
 							$('#destination_name').autocomplete({ 
@@ -111,9 +59,12 @@
 				</td>
 				<td>
 					<select name="wood_type">
-						<option value="Export">Export</option>
-						<option value="Pulp">Pulp</option>
-						<option value="Sawlogs">Sawlogs</option>
+						<option value="1">Sawlogs</option>
+						<option value="2">Export</option>
+						<option value="3">Pulp</option>
+						<option value="4">Mixed</option>
+						<option value="3">Specialty</option>
+						<option value="3">Habitat Logs</option>						
 					</select>
 				</td>
 				<td>
@@ -123,6 +74,18 @@
 					</select>
 				</td>
 				<td>
+					<select name="species">
+						<option value="1">DF</option>
+						<option value="2">WH</option>
+						<option value="3">RC</option>
+						<option value="4">RA</option>
+						<option value="5">OH</option>
+					</select>
+				</td>
+				<td>
+					<input type="text" size="8" name="load_amount" class="fields"/>
+				</td>
+				<td>
 					<input type="text" size="8" name="load_pay" class="fields"/>
 				</td>
 				<td>
@@ -130,7 +93,13 @@
 				</td>
 			</tr>
 			<tr>
-				<td id="Incredible_invisible_text">Tag!</td>				
+				<td id="Incredible_invisible_text">You</td>
+				<td id="Incredible_invisible_text">have</td>
+				<td id="Incredible_invisible_text">just</td>	
+				<td id="Incredible_invisible_text">been</td>
+				<td id="Incredible_invisible_text">tagged</td>
+				<td id="Incredible_invisible_text">by ME!</td>
+				<td><%= link_to "Add", "miltup", :remote => true%></td>			
 			</tr>
 				
 		</table>

@@ -9,6 +9,10 @@ class CreateLoggerAssignments < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    LoggerAssignment.create(:job_id => 1, :partner_id => 1, :rate_tonnage => 28.0)
+    LoggerAssignment.create(:job_id => 2, :partner_id => 1, :rate_tonnage => 28.0)
+    
   end
 
   def self.down

@@ -10,7 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110831001330) do
+ActiveRecord::Schema.define(:version => 20110831233334) do
+
+  create_table "destinations", :force => true do |t|
+    t.integer  "address_id"
+    t.integer  "contact_person_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "jobs", :force => true do |t|
     t.string   "name"
@@ -35,6 +43,14 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.float    "rate_mbf"
     t.float    "rate_percent"
     t.float    "rate_tonnage"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "owners", :force => true do |t|
+    t.integer  "address_id"
+    t.integer  "contact_person_id"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
