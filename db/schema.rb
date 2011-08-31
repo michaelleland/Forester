@@ -20,8 +20,9 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.datetime "updated_at"
   end
 
-  create_table "load_details", :force => true do |t|
+  create_table "load_details", :id => false, :force => true do |t|
     t.integer "ticket_id"
+    t.integer "primary_key"
     t.integer "species_id"
     t.integer "measure_type"
     t.float   "amount"
@@ -93,8 +94,9 @@ ActiveRecord::Schema.define(:version => 20110831001330) do
     t.datetime "updated_at"
   end
 
-  create_table "trucker_rates", :force => true do |t|
+  create_table "trucker_rates", :id => false, :force => true do |t|
     t.integer "destination_id"
+    t.integer "primary_key"
     t.integer "job_id"
     t.integer "partner_id"
     t.float   "rate"

@@ -5,7 +5,8 @@ class Job < ActiveRecord::Base
   attr_accessor :logger
   
   def logger
-    @logger = Partner.find(LoggerAssignment.find_by_job_id(self.id).partner_id)
+    @asg = LoggerAssignment.find_by_job_id(self.id)
+    @logger = Partner.find(@asg.partner_id)
   end
   
 end
