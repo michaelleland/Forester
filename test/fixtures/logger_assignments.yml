@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  job_id: 1
+  partner_id: 1
+  rate_mbf: 1.5
+  rate_percent: 1.5
+  rate_tonnage: 1.5
+
+two:
+  job_id: 1
+  partner_id: 1
+  rate_mbf: 1.5
+  rate_percent: 1.5
+  rate_tonnage: 1.5
