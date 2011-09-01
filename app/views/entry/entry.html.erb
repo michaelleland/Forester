@@ -1,6 +1,6 @@
 <section class='grid_12' id="data_entry">
 	<form action="/add_entry_row" method="post" data-remote="true">
-		<table>
+		<table id="entry_table">
 			<tr>
 				<th>Ticket #</th>
 				<th>Date</th>
@@ -92,16 +92,15 @@
 					<input type="submit" value="Submit" />
 				</td>
 			</tr>
-			<tr>
+			<tr id="filler_row">
 				<td id="Incredible_invisible_text">You</td>
 				<td id="Incredible_invisible_text">have</td>
 				<td id="Incredible_invisible_text">just</td>	
 				<td id="Incredible_invisible_text">been</td>
 				<td id="Incredible_invisible_text">tagged</td>
 				<td id="Incredible_invisible_text">by ME!</td>
-				<td><%= link_to "Add", "miltup", :remote => true%></td>			
+				<td><%= link_to "Add", {:controller => "page_controls", :action => "add_specie"}, :remote => true%></td>			
 			</tr>
-				
 		</table>
 	</form>
 </section>

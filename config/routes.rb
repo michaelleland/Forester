@@ -1,8 +1,11 @@
 Forester::Application.routes.draw do
- 
+
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => "index#index" 
+ 
+  #Routes for page modifying Ajax calls
+  match "/add_specie" => "page_controls#add_specie"
  
   match "/setup" => "setup#index"
   match "/reports" => "reports#index"
