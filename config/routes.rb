@@ -6,6 +6,7 @@ Forester::Application.routes.draw do
  
   #Routes for page modifying Ajax calls
   match "/add_specie" => "page_controls#add_specie"
+  match "/delete_specie" => "page_controls#delete_specie"
  
   match "/setup" => "setup#index"
   match "/reports" => "reports#index"

@@ -1,0 +1,16 @@
+// Amount of specie selectors, so that we know not to add too many of em
+n = $('.specie_selector').length
+amount = <%= Specie.all.count-2 %>
+
+if (n == 1) {
+	$('.specie_row').last().fadeOut();
+	setTimeout(function () { $('.specie_row').last().remove(); }, 600);
+	$('#delete_specie_button').fadeOut();
+}else if (n < amount) {
+	$('.specie_row').last().fadeOut();
+	setTimeout(function () { $('.specie_row').last().remove(); }, 600);
+} else if (n == amount){
+	$('.specie_row').last().fadeOut();
+	setTimeout(function () { $('.specie_row').last().remove(); }, 600);
+	$('#add_specie_button').fadeIn();
+}

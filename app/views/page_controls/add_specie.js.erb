@@ -1,5 +1,13 @@
 // Amount of specie selectors, so that we know not to add too many of em
 n = $('.specie_selector').length
+amount = <%= Specie.all.count-2 %>
 
-if (n > <%= Specie.all.count  %>)
-$('#filler_row').before('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><select name="species" class="specie_selector"><option value="1">DF</option><option value="2">WH</option><option value="3">RC</option><option value="4">RA</option><option value="5">OH</option></select></td><td><input type="text" size="8" name="load_amount" class="fields"/></td></tr>');
+if (n == 0) {
+	$('#filler_row').before('<tr class="specie_row"><td></td><td></td><td></td><td></td><td></td><td></td><td><select name="species" class="specie_selector"><option value="1">DF</option><option value="2">WH</option><option value="3">RC</option><option value="4">RA</option><option value="5">OH</option></select></td><td><input type="text" size="8" name="load_amount" class="fields"/></td></tr>');
+	$('#add_specie_button').after('<a href=\"/delete_specie \" data-remote=\"true\" id="delete_specie_button" >/Del</a>');
+} else if (n < amount) {
+	$('#filler_row').before('<tr class="specie_row"><td></td><td></td><td></td><td></td><td></td><td></td><td><select name="species" class="specie_selector"><option value="1">DF</option><option value="2">WH</option><option value="3">RC</option><option value="4">RA</option><option value="5">OH</option></select></td><td><input type="text" size="8" name="load_amount" class="fields"/></td></tr>');
+} else if (n == amount) {
+	$('#filler_row').before('<tr class="specie_row"><td></td><td></td><td></td><td></td><td></td><td></td><td><select name="species" class="specie_selector"><option value="1">DF</option><option value="2">WH</option><option value="3">RC</option><option value="4">RA</option><option value="5">OH</option></select></td><td><input type="text" size="8" name="load_amount" class="fields"/></td></tr>');
+	$('#add_specie_button').fadeOut();
+}
