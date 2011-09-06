@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110831235644) do
+ActiveRecord::Schema.define(:version => 20110906184812) do
 
   create_table "destinations", :force => true do |t|
     t.integer  "address_id"
@@ -29,12 +29,13 @@ ActiveRecord::Schema.define(:version => 20110831235644) do
     t.datetime "updated_at"
   end
 
-  create_table "load_details", :id => false, :force => true do |t|
-    t.integer "ticket_id"
-    t.integer "primary_key"
-    t.integer "species_id"
-    t.integer "measure_type"
-    t.float   "amount"
+  create_table "load_details", :force => true do |t|
+    t.integer  "ticked_id"
+    t.integer  "species_id"
+    t.integer  "measure_type"
+    t.float    "amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "logger_assignments", :force => true do |t|
