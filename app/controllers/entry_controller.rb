@@ -10,4 +10,13 @@ class EntryController < ApplicationController
   def add_entry_row
     
   end
+  
+  def ticket_entry
+    
+  end
+  
+  def payment_entry
+    
+  end  
+  
 end

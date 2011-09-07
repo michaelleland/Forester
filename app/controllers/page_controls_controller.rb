@@ -8,11 +8,4 @@ class PageControlsController < ApplicationController
     
   end
 
-  def ticket_entry
-    
-  end
-  
-  def payment_entry
-    
-  end
 end

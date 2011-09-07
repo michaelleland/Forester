@@ -7,8 +7,10 @@ Forester::Application.routes.draw do
   #Routes for page modifying Ajax calls
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
-  match "/ticket_entry" => "page_controls#ticket_entry"
-  match "/payment_entry" => "page_controls#payment_entry"
+  
+  #Kinda nav stoof
+  match "/ticket_entry" => "entry#ticket_entry"
+  match "/payment_entry" => "entry#payment_entry"
  
  
   match "/setup" => "setup#index"
