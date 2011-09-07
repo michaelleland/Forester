@@ -30,7 +30,7 @@ function change_content (target, tab) {
 			
 		}, 600);
 		
-	} else {
+	} else if (tab == 2) {
 		setTimeout(function() {
 			
 			$('#report_contents').fadeOut();
@@ -46,6 +46,25 @@ function change_content (target, tab) {
 					$('#'+target+"_nav").attr('class', 'selected');
 					
 					$('#report_contents').fadeIn();
+				}
+			});
+			
+				
+		}, 600);
+		
+	} else if (tab == 3) {
+		setTimeout(function() {
+			
+			$('#data_entry').fadeOut();
+			
+			$.ajax({
+				url: '/'+target,
+				cache: false,
+				success: function (html) {
+					$('#entry_contents').html(html);
+					$('#entry_contents').attr('style', 'display: none');
+					
+					$('#entry_contents').fadeIn();
 				}
 			});
 			

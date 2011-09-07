@@ -1,10 +1,10 @@
 <section class="grid_12" id="inputs_inner_nav">
 	<ul>
-		<li><%= link_to "Tickets", {:controller => "entry", :action => "ticket_entry"}, :remote => true %></li>
-		<li><%= link_to "Payments", {:controller => "entry", :action => "payment_entry"}, :remote => true %></li>
+		<li><a onclick="change_content('ticket_entry', 3);">Tickets</a></li>
+		<li><a onclick="change_content('payment_entry', 3);">Payments</a></li>
 	</ul>
 </section>
 
-<section class='grid_12' id="data_entry">
+<section class='grid_12' id="entry_contents">
 
 </section>
