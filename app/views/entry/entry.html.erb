@@ -74,12 +74,10 @@
 					</select>
 				</td>
 				<td>
-					<select name="species">
-						<option value="1">DF</option>
-						<option value="2">WH</option>
-						<option value="3">RC</option>
-						<option value="4">RA</option>
-						<option value="5">OH</option>
+					<select class="specie_selector" name="species">
+						<% Specie.all.each do |i| %>
+							<option value="<%= i.id %>"><%= i.code %></option>
+						<% end %>
 					</select>
 				</td>
 				<td>

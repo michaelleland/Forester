@@ -1,8 +1,8 @@
-// Amount of specie selectors, so that we know not to add too many of em
+// Amount of specie selectors, so that we know when there is only one left
 n = $('.specie_selector').length
-amount = <%= Specie.all.count-2 %>
+amount = <%= Specie.all.count %>
 
-if (n == 1) {
+if (n == 2) {
 	$('.specie_row').last().fadeOut();
 	setTimeout(function () { $('.specie_row').last().remove(); }, 600);
 	$('#delete_specie_button').fadeOut();
