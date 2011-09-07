@@ -85,10 +85,10 @@ body {
 
 /*Styling for navbar under tabs*/
 
-#inputs_inner_nav {
+#entries_inner_nav {
 	background: #deedf7;
 	
-	height: 18px;
+	height: 25px;
 	
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
@@ -100,12 +100,28 @@ body {
 	
 }
 
-#inputs_inner_nav ul {
+#entries_inner_nav ul {
+	margin-top: 3px;
 	float: left;
 }
 
-#inputs_inner_nav ul li {
+#entries_inner_nav ul li {
+	margin-left: 5px;
 	float: left;
+}
+
+.selected_entries_nav_item {
+	padding-left: 3px;
+	padding-right: 3px;
+	
+	margin-right: 3px:	
+	margin-left: 2px !important;
+	
+	background: #aed0ea;
+	
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	
 }
 
 /*a styles*/
@@ -124,7 +140,6 @@ a:hover {
 /*Contents styling*/
 #contents {
 	
-	height: 600px;
 }
 
 #ui-tabs-1 {
@@ -172,12 +187,38 @@ input, select {
 	padding-bottom: 10px;
 }
 
-#inactive_sub {
-	opacity: 0.25;
+#entry_contents {
+	
+	
 }
 
-#active_sub {
+#entry_form, #current_entries, #all_entries {
+	background: #deedf7;
+	
+	margin-top: 5px;
+	
+	border-radius: 5px;
+	-moz-border-radius: 5px; 
+	
+	border: solid 1px #aed0ea;
+}
 
+
+#entry_form {
+	height: 150px;
+	
+}
+
+#current_entries {
+	height: 100px;
+	
+}
+
+#all_entries {
+	height: 600px;
+	
+	margin-bottom: 10px;
+	
 }
 
 
@@ -300,7 +341,6 @@ input, select {
 }
 
 #tabs {
-	height: 1900px;
 }
 
 /* Entry page styling */
@@ -314,18 +354,13 @@ input, select {
 	margin: auto;
 }
 
-#submitted_rows {
-	display: block;
-	margin: auto;
-}
-
 table {
 	margin: auto;
 }
 
 /* Setup page styling */
 
-.selected {
+.selected_left_nav_item{
 	background: #DEEDD0;
 	width: 92%;
 	
