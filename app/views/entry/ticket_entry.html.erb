@@ -1,0 +1,106 @@
+<form action="/add_entry_row" method="post" data-remote="true">
+	<table id="entry_table">
+		<tr>
+			<th>Ticket #</th>
+			<th>Date</th>
+			<th>Job</th>
+			<th>Destination</th>
+			<th>Wood type</th>
+			<th>Load type</th>
+			<th>Species</th>
+			<th>Amount</th>
+			<th>Load pay</th>
+			<th>Action</th>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" name="ticket_no" size="5" class="fields"/>
+			</td>
+			<td>
+				<input type="text" name="date" id="date" size="7" class="fields"/>
+				<script> $('#date').datepicker()</script>
+			</td>
+			<td>
+				<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
+				<script> 
+					$(function() {
+						var jobs = [
+							<% @jobs.each do |i| %>
+								<%= "'#{i.name}'," %>
+							<% end %>
+						];
+												
+						$('#job_name').autocomplete({ 
+							source: jobs,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
+			<td>
+				<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
+				<script> 
+					$(function() {
+						var destinations = [
+							<% @destinations.each do |i| %>
+								<%= "'#{i.name}'," %>
+							<% end %>
+						];
+												
+						$('#destination_name').autocomplete({ 
+							source: destinations,
+							delay: 50,
+							autoFocus: true
+						});
+					});
+				</script>
+			</td>
+			<td>
+				<select name="wood_type">
+					<option value="1">Sawlogs</option>
+					<option value="2">Export</option>
+					<option value="3">Pulp</option>
+					<option value="4">Mixed</option>
+					<option value="3">Specialty</option>
+					<option value="3">Habitat Logs</option>						
+				</select>
+			</td>
+			<td>
+				<select name="load_type">
+					<option value="MBF">MBF</option>
+					<option value="Tonnage">Tonnage</option>
+				</select>
+			</td>
+			<td>
+				<select class="specie_selector" name="species">
+					<% Specie.all.each do |i| %>
+						<option value="<%= i.id %>"><%= i.code %></option>
+					<% end %>
+				</select>
+			</td>
+			<td>
+				<input type="text" size="8" name="load_amount" class="fields"/>
+			</td>
+			<td>
+				<input type="text" size="8" name="load_pay" class="fields"/>
+			</td>
+			<td>
+				<input type="submit" value="Submit" />
+			</td>
+		</tr>
+		<tr id="filler_row">
+			<td id="Incredible_invisible_text">You</td>
+			<td id="Incredible_invisible_text">have</td>
+			<td id="Incredible_invisible_text">just</td>	
+			<td id="Incredible_invisible_text">been</td>
+			<td id="Incredible_invisible_text">tagged</td>
+			<td id="Incredible_invisible_text">by ME!</td>
+			<td><%= link_to "Add", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
+		</tr>
+	</table>
+</form>
+
+<script>
+	$('#data_entry').
+</script>

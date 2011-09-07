@@ -83,6 +83,31 @@ body {
 	background: #EEEEEE url(/images/n3.png);
 }
 
+/*Styling for navbar under tabs*/
+
+#inputs_inner_nav {
+	background: #deedf7;
+	
+	height: 18px;
+	
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px; 
+	
+	border: solid 1px #aed0ea;
+	border-top: none;
+	
+}
+
+#inputs_inner_nav ul {
+	float: left;
+}
+
+#inputs_inner_nav ul li {
+	float: left;
+}
+
 /*a styles*/
 
 a {
