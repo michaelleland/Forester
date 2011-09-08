@@ -18,8 +18,24 @@
 	<% end %>
 	
 	<h3><a href="#">Add a Landowner</a></h3>
-	<div class="owners">
-
+	<div class="owners new">
+		<form>
+			<div class="accordion_left_column">
+				<div class="data_rows"><h4>Landowner:</h4></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20"/></div></div>
+				<div class="data_rows"><h4>Contact person:</h4></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="cp_name" name="owner_name" type="text" size="20"/></div></div>
+				<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <input id="cp_phone" name="cp_phone" type="text" size="20"/></div></div>
+				<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <input id="cp_email" name="cp_email" type="text" size="20"/></div></div>
+			</div>
+			<div class="accordion_right_column">
+				<div class="data_rows"><h4>Address:</h4></div>
+				<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <input id="address_street" name="address_street" type="text" size="20"/> </div></div>
+				<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <input id="address_city" name="address_city" type="text" size="20"/></div></div>
+				<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <input id="address_zip" name="address_zip" type="text" size="20"/> </div></div>
+				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" size="20"/> </div></div>
+			</div>
+		</form>
 	</div>
 	<script>
 		$('#owners').accordion();

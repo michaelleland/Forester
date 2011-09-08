@@ -18,6 +18,10 @@ body {
 	height: 60px;
 }
 
+.new {
+	height: 140px !important;
+}
+
 /*Header styling*/
 
 #header {

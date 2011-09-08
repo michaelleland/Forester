@@ -8,8 +8,8 @@ class CreateDestinations < ActiveRecord::Migration
       t.timestamps
     end
     
-    Destination.create(:name => "Pacific Fibre")
-    Destination.create(:name => "Weyco Hardwood")
+    Destination.create(:name => "Pacific Fibre", :contact_person_id => 5, :address_id => 5)
+    Destination.create(:name => "Weyco Hardwood", :contact_person_id => 6, :address_id => 6)
     
   end
 
