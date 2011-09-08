@@ -6,6 +6,11 @@ body {
   padding-bottom: 20px;
 }
 
+.jobs {
+	height: 60px;
+	
+}
+
 /*Header styling*/
 
 #header {
@@ -220,6 +225,37 @@ input, select {
 	margin-bottom: 10px;
 	
 }
+
+.data_rows {
+	
+	
+}
+
+.row_data {
+	float: left;
+}
+
+.row_headers {
+	width: 100px;
+	
+	float: left;
+	clear: left;
+}
+
+.floater {
+	float: right;
+}
+
+.accordion_right_column {
+	float: left;
+	width: 360px;
+}
+
+.accordion_left_column {
+	float: left;
+	width: 360px;
+}
+
 
 
 /*Content control styling*/

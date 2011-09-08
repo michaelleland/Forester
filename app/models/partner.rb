@@ -1,4 +1,7 @@
 class Partner < ActiveRecord::Base
+  has_one :contact_person
+  has_one :address
+  
   attr_accessor :rate_mbf, :rate_tonnage, :rate_percent, :hauling_rate
   
   def hauling_rate(job_id, destination_id)

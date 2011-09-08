@@ -16,16 +16,14 @@ class SetupController < ApplicationController
   end
 
   def sawmills
+    
   end
   
   def sawmill
     
   end
 
-  def loggers
-  end
-
-  def truckers
-  
+  def partners
+    
   end
 end

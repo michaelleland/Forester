@@ -19,7 +19,7 @@ Forester::Application.routes.draw do
   match "/add_entry_row" => "entry#add_entry_row", :via => "post"
  
   match "/landowners" => "setup#owners"
-  match "/loggers" => "setup#loggers"
+  match "/partners" => "setup#partners"
   match "/jobs" => "setup#jobs"
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
