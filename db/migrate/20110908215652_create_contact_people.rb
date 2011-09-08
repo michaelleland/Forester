@@ -10,6 +10,8 @@ class CreateContactPeople < ActiveRecord::Migration
     
     ContactPerson.create(:name => "Mikko Levanen", :phone_number => "360-408-3420", :email => "mikko@levanenlogging.com")
     ContactPerson.create(:name => "Tero Tapani", :phone_number => "360-433-2043", :email => "tero@tapanitrucking.com")
+    ContactPerson.create(:name => "Orville Esteb", :phone_number => "360-365-3443", :email => "steborville@gmail.com")
+    ContactPerson.create(:name => "Joe Rhoades", :phone_number => "360-903-9686", :email => "joe.rhoades@gmail.com")
     
   end
 

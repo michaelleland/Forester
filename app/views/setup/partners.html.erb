@@ -1,21 +1,22 @@
 <div class="grid_10" id="loggers">
 	<% Partner.all.each do |i| %>
 		<h3><a href="#"><%= i.name %></a></h3>	
-		<div class="jobs">
+		<div class="loggers">
 			<div class="accordion_left_column">
-				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <%= i.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Contact Person:</div><div class="row_data"> <%= i.contact_person.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <%= i.trucker.name %></div></div>
+				<div class="data_rows"><h4>Contact person:</h4></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <%= i.contact_person.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <%= i.contact_person.phone_number %></div></div>
+				<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <%= i.contact_person.email %></div></div>
 			</div>
 			<div class="accordion_right_column">
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <%= i.hfi_rate %> %</div></div>
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <%= if i.hfi_prime then "HFI" else "Other" end %></div></div>
-				<div class="data_rows"><div class="row_headers">Some:</div><div class="row_data"> Thing</div></div>
+				<div class="data_rows"><h4>Address:</h4></div>
+				<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <%= i.address.street %> </div></div>
+				<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <%= i.address.city %></div></div>
+				<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <%= i.address.zip_code %> </div></div>
 			</div>
 		</div>
 	<% end %>
-	
-	</div>
+
 	<h3><a href="#">Add a logger</a></h3>
 	<div class="loggers">
 	

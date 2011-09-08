@@ -1,36 +1,22 @@
 <div class="grid_10" id="owners">
-	<h3><a href="#">Joe Rhoades</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Feigley Road Partners LLC</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">John Durrell</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Orville Esteb</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Hazen Trust c/o Riverview Bank</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Levy LLC</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Randy Johnson</a></h3>
-	<div class="owners">
-
-	</div>
-	<h3><a href="#">Josh Gillette</a></h3>
-	<div class="owners">
-
-	</div>
+	<% Owner.all.each do |i| %>
+		<h3><a href="#"><%= i.name %></a></h3>	
+		<div class="owners">
+			<div class="accordion_left_column">
+				<div class="data_rows"><h4>Contact person:</h4></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <%= i.contact_person.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <%= i.contact_person.phone_number %></div></div>
+				<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <%= i.contact_person.email %></div></div>
+			</div>
+			<div class="accordion_right_column">
+				<div class="data_rows"><h4>Address:</h4></div>
+				<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <%= i.address.street %> </div></div>
+				<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <%= i.address.city %></div></div>
+				<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <%= i.address.zip_code %> </div></div>
+			</div>
+		</div>
+	<% end %>
+	
 	<h3><a href="#">Add a Landowner</a></h3>
 	<div class="owners">
 

@@ -8,8 +8,8 @@ class CreateOwners < ActiveRecord::Migration
       t.timestamps
     end
     
-    Owner.create(:name => "Orville Esteb")
-    Owner.create(:name => "Joe Rhoades")
+    Owner.create(:name => "Orville Esteb", :contact_person_id => 3, :address_id => 3)
+    Owner.create(:name => "Joe Rhoades", :contact_person_id => 4, :address_id => 4)
     
   end
 

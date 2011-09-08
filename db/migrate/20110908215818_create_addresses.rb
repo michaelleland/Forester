@@ -11,6 +11,8 @@ class CreateAddresses < ActiveRecord::Migration
     
     Address.create(:street => "202 SW 10th Avenue", :city => "Vancouver", :zip_code => "98545", :state => 48)
     Address.create(:street => "1 Tapani Rd", :city => "Battle Ground", :zip_code => "98604", :state => 48)
+    Address.create(:street => "34 SW Estebstate Rd", :city => "Battle Ground", :zip_code => "98604", :state => 48)
+    Address.create(:street => "52 NE Jussi Rhd", :city => "Battle Ground", :zip_code => "98604", :state => 48)
     
   end
 

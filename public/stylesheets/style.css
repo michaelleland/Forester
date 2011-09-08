@@ -8,7 +8,14 @@ body {
 
 .jobs {
 	height: 60px;
-	
+}
+
+.loggers {
+	height: 60px;
+}
+
+.owners {
+	height: 60px;
 }
 
 /*Header styling*/
@@ -231,6 +238,12 @@ input, select {
 	
 }
 
+.data_rows h4 {
+	width: 100px;
+	float: left;
+}
+
+
 .row_data {
 	float: left;
 }
@@ -242,18 +255,14 @@ input, select {
 	clear: left;
 }
 
-.floater {
-	float: right;
-}
-
 .accordion_right_column {
-	float: left;
-	width: 360px;
+	float: right;
+	width: 350px;
 }
 
 .accordion_left_column {
 	float: left;
-	width: 360px;
+	width: 350px;
 }
 
 

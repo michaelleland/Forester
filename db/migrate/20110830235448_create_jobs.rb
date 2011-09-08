@@ -9,8 +9,8 @@ class CreateJobs < ActiveRecord::Migration
       t.timestamps
     end
     
-    Job.create(:name => "Esteb-Kaski", :owner_id => 5, :hfi_rate => 3.0, :hfi_prime => true)
-    Job.create(:name => "Joe Rhoades", :owner_id => 4, :hfi_rate => 3.0, :hfi_prime => true)
+    Job.create(:name => "Esteb-Kaski", :owner_id => 1, :hfi_rate => 3.0, :hfi_prime => true)
+    Job.create(:name => "Joe Rhoades", :owner_id => 2, :hfi_rate => 3.0, :hfi_prime => true)
     
   end
 
