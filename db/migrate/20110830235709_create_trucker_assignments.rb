@@ -6,6 +6,10 @@ class CreateTruckerAssignments < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    TruckerAssignment.create(:job_id => 1, :partner_id => 2)
+    TruckerAssignment.create(:job_id => 2, :partner_id => 2)
+    
   end
 
   def self.down

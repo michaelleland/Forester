@@ -8,6 +8,10 @@ class CreateAddresses < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    Address.create(:street => "202 SW 10th Avenue", :city => "Vancouver", :zip_code => "98545", :state => 48)
+    Address.create(:street => "1 Tapani Rd", :city => "Battle Ground", :zip_code => "98604", :state => 48)
+    
   end
 
   def self.down

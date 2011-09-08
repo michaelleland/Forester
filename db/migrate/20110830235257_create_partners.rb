@@ -8,8 +8,8 @@ class CreatePartners < ActiveRecord::Migration
       t.timestamps
     end
     
-    Partner.create(:name => "Levanen, Inc")
-    Partner.create(:name => "Tapani Trucking")
+    Partner.create(:name => "Levanen, Inc", :contact_person_id => 1, :address_id => 1)
+    Partner.create(:name => "Tapani Trucking", :contact_person_id => 1, :address_id => 2)
     
   end
 
