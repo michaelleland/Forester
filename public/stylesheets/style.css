@@ -99,6 +99,8 @@ body {
 	background: #EEEEEE url(/images/n3.png);
 }
 
+#inner_nav
+
 /*Styling for navbar under tabs*/
 
 #entries_inner_nav {
@@ -156,6 +158,39 @@ a:hover {
 /*Contents styling*/
 #contents {
 	
+}
+
+#partner_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
+#owner_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+		
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+}
+
+#job_selector {
+	width: 200px;
+}
+
+#owner_selector {
+	width: 200px;
 }
 
 #ui-tabs-1 {
@@ -268,7 +303,6 @@ input, select {
 	float: left;
 	width: 350px;
 }
-
 
 
 /*Content control styling*/
@@ -425,6 +459,7 @@ table {
 }
 
 #inner_nav {
+	
 	background: #DEEDF7;
 	margin-top: 5px;
 	padding-top: 5px;
@@ -450,6 +485,11 @@ table {
 #ui-tabs-3 {
 	padding: 0px;
 }
+
+#ui-tabs-4 {
+	padding: 0px;
+}
+
 
 a:hover {
 	cursor: pointer;

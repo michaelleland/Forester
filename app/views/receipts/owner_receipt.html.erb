@@ -1,2 +1,15 @@
-<h1>Receipts#owner_receipt</h1>
-<p>Find me in app/views/receipts/owner_receipt.html.erb</p>
+<div class="grid_10" id="owner_receipt_selector">
+	<h4>Select an owner in a job: </h4>
+	<form>
+		<select id="owner_selector">
+			<option onclick="import_jobs(0)" value="0"> Select an owner </option>
+			<% Owner.all.each do |i| %>
+				<option onclick="import_jobs(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+			<% end %>
+		</select>
+		<select id="job_selector">
+			<option>No owner selected</option>
+		</select>
+		<input type="submit" value="Get receipt" />		
+	</form>	
+</div>

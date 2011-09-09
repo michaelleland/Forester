@@ -7,6 +7,7 @@ Forester::Application.routes.draw do
   #Routes for page modifying Ajax calls
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
+  match "/import_jobs/:id" => "page_controls#import_jobs"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -28,8 +29,9 @@ Forester::Application.routes.draw do
   
   match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
   
-  match "/owner_receipt" => "reports#owner_receipt"
-  match "/logger_receipt" => "reports#logger_receipt"
+  match "/owner_receipt" => "receipts#owner_receipt"
+  match "/partner_receipt" => "receipts#partner_receipt"  
+  
   match "/quarter_report" => "reports#quarter_receipt"
   
   # The priority is based upon order of creation:

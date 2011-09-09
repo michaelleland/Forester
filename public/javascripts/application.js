@@ -8,7 +8,7 @@ function change_content (target, tab) {
 	var target_div = ''
 	if (tab == 1) { target_div = '#setup_contents' } else if (tab == 2) { target_div = '#receipt_contents' } else if (tab == 3) { target_div = 'report_contents'};
 	
-	if (0 < tab < 4) {
+	if (tab == 1 || tab == 2 || tab == 3) {
 		
 		$(target_div).fadeOut();
 		
@@ -51,4 +51,14 @@ function change_content (target, tab) {
 			});	
 		}, 600);
 	}
+}
+
+function import_jobs(owner_id) {
+	$.ajax ({
+		url: '/import_jobs/'+owner_id,
+		cache: false,
+		success: function (html) {
+			$('#job_selector').html(html);
+		}		
+	})
 }
