@@ -2,7 +2,7 @@ class SetupController < ApplicationController
   layout nil
   
   def index
-    render :layout => "left_nav"
+    
   end
   
   def jobs

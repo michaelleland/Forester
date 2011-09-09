@@ -1,11 +1,5 @@
 Forester::Application.routes.draw do
 
-  get "receipts/owner_receipt"
-
-  get "receipts/logger_receipt"
-
-  get "receipts/trucker_receipt"
-
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => "index#index" 
@@ -18,10 +12,12 @@ Forester::Application.routes.draw do
   match "/ticket_entry" => "entry#ticket_entry"
   match "/payment_entry" => "entry#payment_entry"
  
- 
+  #Nav tab's stoof
   match "/setup" => "setup#index"
+  match "/receipts" => "receipts#index"
   match "/reports" => "reports#index"
   match "/entry" => "entry#entry"
+ 
   match "/add_entry_row" => "entry#add_entry_row", :via => "post"
  
   match "/landowners" => "setup#owners"

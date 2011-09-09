@@ -1,7 +1,20 @@
-<div id="setup_contents">
-	
+<div class="grid_2" id="inner_nav">
+	<ul>
+		<li id="jobs_nav"><a onclick="change_content('jobs', 1);">Jobs</a></li>
+		<li id="loggers_nav"><a onclick="change_content('partners', 1);">Loggers/Truckers</a></li>
+		<li id="landowners_nav"><a onclick="change_content('landowners', 1);">Landowners</a></li>
+		<li id="sawmills_nav"><a onclick="change_content('sawmills', 1);">Sawmills</a></li>
+	</ul>
 	
 	
 </div>
+
+<div id="setup_contents">
+	
+</div>
+
+<script>
+	change_content('jobs', 1);
+</script>
 
 <% set_active(1) %>
