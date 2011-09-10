@@ -62,3 +62,14 @@ function import_jobs(owner_id) {
 		}		
 	})
 }
+
+function import_jobs_of_partner(owner_id) {
+	$.ajax ({
+		var role = ""
+		url: '/import_jobs_of_partner/'+owner_id+'?role=',
+		cache: false,
+		success: function (html) {
+			$('#job_selector').html(html);
+		}		
+	})
+}
