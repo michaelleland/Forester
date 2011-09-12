@@ -16,21 +16,23 @@ class PageControlsController < ApplicationController
     end
   end
   
-  def import_jobs_of_partner
+  def import_jobs_of_logger
     if params[:id] != "0"
-      @t_asg = TruckerAssignment.find_all_by_partner_id(params[:id])
       @l_asg = LoggerAssignment.find_all_by_partner_id(params[:id])
       
-      @t_job_ids = @t_asg.collect {|i| i.job_id}.flatten
       @l_job_ids = @l_asg.collect {|i| i.job_id}.flatten
       
-      @t_job_ids.each do |i|
-        @trucker_jobs.push(Job.find(i))
-      end
+      @logger_jobs = Job.find(@l_job_ids)
+    end
+  end
+  
+  def import_jobs_of_trucker
+    if params[:id] != "0"
+      @t_asg = TruckerAssignment.find_all_by_partner_id(params[:id])
       
-      @l_job_ids.each do |i|
-        @logger_jobs.push(Job.find(i))
-      end
+      @t_job_ids = @t_asg.collect {|i| i.job_id}.flatten
+      
+      @trucker_jobs = Job.find(@t_job_ids)
     end
   end
   

@@ -1,0 +1,13 @@
+<% if params[:id] == "0" %>
+	<option>No trucker selected</option>
+<% else %>
+	<% unless @trucker_jobs.length == 0 %>
+		<option value="0">Select a job</option>
+		<% @trucker_jobs.each do |i| %>	
+			<option value="<%= i.id %>"><%= i.name %></option>
+		<% end %>
+	<% else %>
+		<option value="0">The trucker has no jobs</option>
+	<% end %>
+<% end %>
+		

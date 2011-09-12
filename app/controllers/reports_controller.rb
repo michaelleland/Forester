@@ -4,5 +4,13 @@ class ReportsController < ApplicationController
   def index
     
   end
-
+  
+  def quarterly_report
+    
+  end
+  
+  def export_database
+    
+  end
+  
 end

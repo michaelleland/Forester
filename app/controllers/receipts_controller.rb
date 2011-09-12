@@ -8,6 +8,11 @@ class ReceiptsController < ApplicationController
   def owner_receipt
   end
 
-  def partner_receipt
+  def logger_receipt
+  
+  end
+  
+  def trucker_receipt
+    
   end
 end

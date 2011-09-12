@@ -1,17 +1,15 @@
-<div class="grid_10" id="partner_receipt_selector">
-	<h4>Select a partner in a job: </h4>
+<div class="grid_10" id="logger_receipt_selector">
+	<h4>Select a logger in a job: </h4>
 	<form>
 		<select id="partner_selector">
-			<option onclick="import_jobs_of_partner(0)" value="0"> Select an partner </option>
+			<option onclick="import_jobs_of_partner(0, 1)" value="0"> Select a logger </option>
 			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_partner(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<option onclick="import_jobs_of_partner(<%= i.id %>, 1)" value="<% i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		<select id="job_selector">
-			<option>No owner selected</option>
+			<option>No logger selected</option>
 		</select>
-		<input id="partner_receipt_radio_1" type="radio" value="1" name="role" /> Trucker
-		<input id="partner_receipt_radio_2" type="radio" value="2" name="role" /> Logger
 		<input type="submit" value="Get receipt" />		
 	</form>	
 </div>

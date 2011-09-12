@@ -8,7 +8,8 @@ Forester::Application.routes.draw do
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
   match "/import_jobs/:id" => "page_controls#import_jobs"
-  match "/import_jobs_of_partner/:id" => "page_controls#import_jobs_of_partner"
+  match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
+  match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -31,9 +32,11 @@ Forester::Application.routes.draw do
   match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
   
   match "/owner_receipt" => "receipts#owner_receipt"
-  match "/partner_receipt" => "receipts#partner_receipt"  
+  match "/logger_receipt" => "receipts#logger_receipt"
+  match "/trucker_receipt" => "receipts#trucker_receipt"  
   
-  match "/quarter_report" => "reports#quarter_receipt"
+  match "/quarterly_report" => "reports#quarterly_report"
+  match "/export_database" => "reports#export_database"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

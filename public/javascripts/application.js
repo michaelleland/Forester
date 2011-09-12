@@ -6,7 +6,7 @@ $('nav').tabs();
 function change_content (target, tab) {
 	
 	var target_div = ''
-	if (tab == 1) { target_div = '#setup_contents' } else if (tab == 2) { target_div = '#receipt_contents' } else if (tab == 3) { target_div = 'report_contents'};
+	if (tab == 1) { target_div = '#setup_contents' } else if (tab == 2) { target_div = '#receipt_contents' } else if (tab == 3) { target_div = '#report_contents'};
 	
 	if (tab == 1 || tab == 2 || tab == 3) {
 		
@@ -63,10 +63,15 @@ function import_jobs(owner_id) {
 	})
 }
 
-function import_jobs_of_partner(owner_id) {
+function import_jobs_of_partner(owner_id, role) {
+	var url = '';
+	if (role == 1) {
+		url = '/import_jobs_of_logger/';
+	} else if (role == 2) {
+		url = '/import_jobs_of_trucker/';
+	}
 	$.ajax ({
-		var role = ""
-		url: '/import_jobs_of_partner/'+owner_id+'?role=',
+		url: url+owner_id,
 		cache: false,
 		success: function (html) {
 			$('#job_selector').html(html);
