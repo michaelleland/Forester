@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20110908215819) do
   end
 
   create_table "tickets", :force => true do |t|
+    t.date     "date"
     t.integer  "destination_id"
     t.integer  "job_id"
     t.integer  "number"

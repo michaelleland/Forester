@@ -312,17 +312,58 @@ input, select {
 	
 }
 
-#current_entries table td, #current_entries table th {
-	width: 60px;
-	
-}
-
 #all_entries {
 	height: 600px;
 	
 	margin-bottom: 10px;
 	
 }
+
+/*Entry page table stylings*/
+
+.table_headers {
+	font-weight: bold;
+}
+
+.ticket_no_headers {
+	width: 50px;
+}
+
+.date_headers {
+	width: 80px;
+}
+.job_headers {
+	width: 150px;
+}
+.destination_headers {
+	width: 150px;
+}
+
+.wood_type_headers {
+	width: 80px;
+}
+
+.load_type_headers {
+	width: 60px;
+}
+
+.species_headers {
+	width: 60px;
+}
+
+.amount_headers {
+	width: 60px;
+}
+
+.load_pay_headers {
+	width: 80px;
+}
+
+.action_headers {
+	width: 40px;
+}
+
+
 
 .data_rows {
 	
