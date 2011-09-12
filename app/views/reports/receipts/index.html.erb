@@ -1,0 +1,17 @@
+<div class="grid_2" id="inner_nav">
+	<ul>
+		<li id="owner_receipt_nav"><a onclick="change_content('owner_receipt', 2);">Owner</a></li>
+		<li id="logger_receipt_nav"><a onclick="change_content('logger_receipt', 2);">Logger</a></li>
+		<li id="trucker_receipt_nav"><a onclick="change_content('trucker_receipt', 2);">Trucker</a></li>
+	</ul>
+</div>
+
+<div id="receipt_contents">
+	
+</div>
+
+<script>
+	change_content('owner_receipt', 2);
+</script>
+
+<% set_active(2) %>

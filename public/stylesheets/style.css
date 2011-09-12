@@ -290,6 +290,11 @@ input, select {
 	
 	margin-top: 5px;
 	
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right 5px;
+	padding-bottom: 10px;
+	
 	border-radius: 5px;
 	-moz-border-radius: 5px; 
 	
@@ -304,6 +309,11 @@ input, select {
 
 #current_entries {
 	height: 100px;
+	
+}
+
+#current_entries table td, #current_entries table th {
+	width: 60px;
 	
 }
 

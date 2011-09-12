@@ -1,6 +1,9 @@
 class PageControlsController < ApplicationController
   layout nil
   
+  def all_entries
+   @tickets = Ticket.all 
+  end
   
   def add_specie
     
