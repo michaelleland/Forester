@@ -1,0 +1,146 @@
+<div id="entry_form">
+	<form action="/add_entry_row" method="post" data-remote="true">
+		<h4>New Entry</h4>
+		<table id="entry_table">
+			<tr>
+				<th>Ticket #</th>
+				<th>Date</th>
+				<th>Job</th>
+				<th>Destination</th>
+				<th>Wood type</th>
+				<th>Load type</th>
+				<th>Species</th>
+				<th>Amount</th>
+				<th>Load pay</th>
+				<th>Action</th>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" name="ticket_no" size="5" class="fields"/>
+				</td>
+				<td>
+					<input type="text" name="date" id="date" size="8" class="fields"/>
+					<script> $('#date').datepicker({dateFormat: 'yy-mm-dd'})</script>
+				</td>
+				<td>
+					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
+					<script> 
+						$(function() {
+							var jobs = [
+								<% @jobs.each do |i| %>
+									<%= "'#{i.name}'," %>
+								<% end %>
+							];
+													
+							$('#job_name').autocomplete({ 
+								source: jobs,
+								delay: 50,
+								autoFocus: true
+							});
+						});
+					</script>
+				</td>
+				<td>
+					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
+					<script> 
+						$(function() {
+							var destinations = [
+								<% @destinations.each do |i| %>
+									<%= "'#{i.name}'," %>
+								<% end %>
+							];
+													
+							$('#destination_name').autocomplete({ 
+								source: destinations,
+								delay: 50,
+								autoFocus: true
+							});
+						});
+					</script>
+				</td>
+				<td>
+					<select name="wood_type">
+						<% WoodType.all.each do |i| %>
+							<option value="<%= i.id %>"><%= i.name %></option>
+						<% end %>					
+					</select>
+				</td>
+				<td>
+					<select name="load_type">
+						<option value="MBF">MBF</option>
+						<option value="Tonnage">Tonnage</option>
+					</select>
+				</td>
+				<td>
+					<select class="specie_selector" name="species_1">
+						<% Specie.all.each do |i| %>
+							<option value="<%= i.id %>"><%= i.code %></option>
+						<% end %>
+					</select>
+				</td>
+				<td>
+					<input type="text" size="8" name="load_1_amount" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="8" name="load_pay" class="fields"/>
+				</td>
+				<td>
+					<input type="submit" value="Submit" onclick="refresh_all_entries()"/>
+				</td>
+			</tr>
+			<tr id="filler_row">
+				<td id="Incredible_invisible_text">You</td>
+				<td id="Incredible_invisible_text">have</td>
+				<td id="Incredible_invisible_text">just</td>	
+				<td id="Incredible_invisible_text">been</td>
+				<td id="Incredible_invisible_text">tagged</td>
+				<td id="Incredible_invisible_text">by ME!</td>
+				<td><%= link_to "Add", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div id="current_entries">
+	<h4>Current Entries</h4>
+	
+	<table>
+		<tr>
+			<th class="table_headers ticket_no_headers">Ticket #</th>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers species_headers">Species</th>
+			<th class="table_headers amount_headers">Amount</th>
+			<th class="table_headers load_pay_headers">Load pay</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
+	
+</div>
+
+<div id="all_entries">
+	<h4>All Entries</h4>
+	<table>
+		<tr>
+			<th class="table_headers ticket_no_headers">Ticket #</th>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers species_headers">Species</th>
+			<th class="table_headers amount_headers">Amount</th>
+			<th class="table_headers load_pay_headers">Load pay</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
+	
+	<script>
+		refresh_all_entries();
+	</script>
+</div>

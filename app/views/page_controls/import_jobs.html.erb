@@ -1,0 +1,9 @@
+<% if params[:id] == "0" %>
+	<option>No owner selected</option>
+<% else %>
+	<% @jobs.each do |i| %>
+		<option value="0">Select a job</option>
+		<option value="<%= i.id %>"><%= i.name %></option>
+	<% end %>
+<% end %>
+		

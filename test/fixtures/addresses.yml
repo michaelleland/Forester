@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  street: MyString
+  city: MyString
+  zip_code: MyString
+  state: 1
+
+two:
+  street: MyString
+  city: MyString
+  zip_code: MyString
+  state: 1

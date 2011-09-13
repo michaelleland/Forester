@@ -1,10 +1,16 @@
 class ReportsController < ApplicationController
-  layout "left_nav"
+  layout nil
   
-  def owner_receipt
+  def index
+    
   end
-
-  def logger_receipt
+  
+  def quarterly_report
+    
   end
-
+  
+  def export_database
+    
+  end
+  
 end

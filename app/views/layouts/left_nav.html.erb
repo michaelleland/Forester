@@ -1,15 +1,17 @@
 <div class="grid_2" id="inner_nav">
 	<% if $active == 1 %>
 		<ul>
-			<li class="selected"><a href="google.com" data-remote="true">Jobs</a></li>
-			<li><a href="google.com" data-remote="true">Loggers</a></li>
-			<li><a href="google.com" data-remote="true">Truckers</a></li>
-			<li><a href="google.com" data-remote="true">Landowners</a></li>
-			<li><a href="google.com" data-remote="true">Sawmills</a></li>
+			<li id="jobs_nav"><a onclick="change_content('jobs', 1);">Jobs</a></li>
+			<li id="loggers_nav"><a onclick="change_content('partners', 1);">Loggers/Truckers</a></li>
+			<li id="landowners_nav"><a onclick="change_content('landowners', 1);">Landowners</a></li>
+			<li id="sawmills_nav"><a onclick="change_content('sawmills', 1);">Sawmills</a></li>
 		</ul>
 	<% else %>
-	
-	
+		<ul>
+			<li id="owner_receipt_nav"><a onclick="change_content('owner_receipt', 2);">Owner Receipt</a></li>
+			<li id="logger_receipt_nav"><a onclick="change_content('logger_receipt', 2);">Logger Receipt</a></li>
+			<li id="quarter_report_nav"><a onclick="change_content('quarter_report', 2);">Quarter report</a></li>
+		</ul>
 	<% end %>
 </div>
 

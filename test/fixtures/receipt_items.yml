@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  item_data: MyString
+  receipt_id: 1
+  value: 1.5
+
+two:
+  item_data: MyString
+  receipt_id: 1
+  value: 1.5

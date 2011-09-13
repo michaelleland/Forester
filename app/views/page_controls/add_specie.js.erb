@@ -1,0 +1,17 @@
+// Amount of specie selectors, so that we know not to add too many of em
+var n = $('.specie_selector').length
+var next_n = n+1;
+var amount = <%= Specie.all.count-1 %>;
+
+if (n == 1) {
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td></td><td></td><td><select class="specie_selector" name=\"species_'+next_n+'\"><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %></select></td><td><input type="text" size="8" name=\"load_'+next_n+'_amount\" class="fields"/></td></tr>');
+	$('.specie_row').last().fadeIn();
+	$('#add_specie_button').after('<a href=\"/delete_specie \" data-remote=\"true\" id="delete_specie_button" > Del</a>');
+} else if (n < amount) {
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td></td><td></td><td><select class="specie_selector" name=\"species_'+next_n+'\"><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %></select></td><td><input type="text" size="8" name=\"load_'+next_n+'_amount\" class="fields"/></td></tr>');
+	$('.specie_row').last().fadeIn();
+} else if (n == amount) {
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td></td><td></td><td><select class="specie_selector" name=\"species_'+next_n+'\"><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %></select></td><td><input type="text" size="8" name=\"load_'+next_n+'_amount\" class="fields"/></td></tr>');
+	$('.specie_row').last().fadeIn();
+	$('#add_specie_button').fadeOut();
+}

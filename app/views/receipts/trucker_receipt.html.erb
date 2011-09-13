@@ -1,0 +1,15 @@
+<div class="grid_10" id="trucker_receipt_selector">
+	<h4>Select a trucker in a job: </h4>
+	<form>
+		<select id="partner_selector">
+			<option onclick="import_jobs_of_partner(0, 2)" value="0"> Select a trucker </option>
+			<% Partner.all.each do |i| %>
+				<option onclick="import_jobs_of_partner(<%= i.id %>, 2)" value="<% i.id %>"><%= i.name %></option>
+			<% end %>
+		</select>
+		<select id="job_selector">
+			<option>No trucker selected</option>
+		</select>
+		<input type="submit" value="Get receipt" />		
+	</form>	
+</div>

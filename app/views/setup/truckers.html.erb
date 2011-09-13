@@ -1,0 +1,32 @@
+<div class="grid_10" id="truckers">
+	<h3><a href="#">Levanen Inc</a></h3>
+	<div class="truckers">
+
+	</div>
+	<h3><a href="#">Van port</a></h3>
+	<div class="truckers">
+		
+	</div>
+	<h3><a href="#">Add a trucker</a></h3>
+	<div class="truckers">
+		<form>
+			<div class="input_row"><div class="label">Name:</div><div class="input_wrapper"><input type="text" name="trucker_name"/></div></div>
+			<div class="input_row"><div class="sub_header">Address:</div></div>
+			<div class="input_row"><div class="label">Street:</div><div class="input_wrapper"><input type="text" name="addrs_street"/></div></div>
+			<div class="input_row"><div class="label">City:</div><div class="input_wrapper"><input type="text" name="addrs_city"/></div></div>
+			<div class="input_row"><div class="label">State:</div><div class="input_wrapper"><input type="text" name="addrs_state"/></div></div>
+			<div class="input_row"><div class="label">ZIP:</div><div class="input_wrapper"><input type="text" name="addrs_zip"/></div></div>
+			<div class="input_row"><div class="sub_header">Contact person:</div></div>
+			<div class="input_row"><div class="label">Name:</div><div class="input_wrapper"><input type="text" name="cp_name"/></div></div>
+			<div class="input_row"><div class="label">Phone:</div><div class="input_wrapper"><input type="text" name="cp_phone"/></div></div>
+			<div class="input_row"><input type="submit" value="Add"/></div>
+		</form>
+	</div>
+	
+	<script>
+		$('#truckers').accordion();
+	</script>
+	
+</div>
+
+<% set_active(1) %>

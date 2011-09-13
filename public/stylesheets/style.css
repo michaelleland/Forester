@@ -5,18 +5,27 @@ body {
   height: auto;
   padding-bottom: 20px;
 }
+
+.jobs {
+	height: 60px;
+}
+
+.loggers {
+	height: 60px;
+}
+
+.owners {
+	height: 60px;
+}
+
+.new {
+	height: 140px !important;
+}
+
 /*Header styling*/
 
-#header	{
-	color: black;
-	height: 50px;
-	background: #d1d1d1;
-	-moz-border-radius: 8px 8px 0px 0px;
-	-webkit-border-radius: 8px 8px 0px 0px;
-	border-radius: 8px 8px 0px 0px;
-	margin-bottom: 0px;
-	margin-top: 3px;
-	padding-top: 8px;
+#header {
+	background: #F2F5F7;
 }
 
 /*Header buttons*/
@@ -89,7 +98,50 @@ body {
 #nav li a#active {
 	background: #EEEEEE url(/images/n3.png);
 }
+
+#inner_nav
+
+/*Styling for navbar under tabs*/
+
+#entries_inner_nav {
+	background: #deedf7;
 	
+	height: 25px;
+	
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px; 
+	
+	border: solid 1px #aed0ea;
+	border-top: none;
+	
+}
+
+#entries_inner_nav ul {
+	margin-top: 3px;
+	float: left;
+}
+
+#entries_inner_nav ul li {
+	margin-left: 5px;
+	float: left;
+}
+
+.selected_entries_nav_item {
+	padding-left: 3px;
+	padding-right: 3px;
+	
+	margin-right: 3px:	
+	margin-left: 2px !important;
+	
+	background: #aed0ea;
+	
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	
+}
+
 /*a styles*/
 
 a {
@@ -106,11 +158,90 @@ a:hover {
 /*Contents styling*/
 #contents {
 	
-	height: 600px;
+}
+
+#quarterly_report_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
+#export_database_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
+#logger_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+
+#trucker_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+		
+}
+#owner_receipt_selector {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+		
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;	
+}
+
+#job_selector {
+	width: 200px;
+}
+
+#partner_selector {
+	width: 200px;
+}
+
+#owner_selector {
+	width: 200px;
 }
 
 #ui-tabs-1 {
 	display: inline;
+}
+
+.grid_10 {
+	margin: 0px;
+	margin-top: 5px;
 }
 
 table {
@@ -149,12 +280,121 @@ input, select {
 	padding-bottom: 10px;
 }
 
-#inactive_sub {
-	opacity: 0.25;
+#entry_contents {
+	
+	
 }
 
-#active_sub {
+#entry_form, #current_entries, #all_entries {
+	background: #deedf7;
+	
+	margin-top: 5px;
+	
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right 5px;
+	padding-bottom: 10px;
+	
+	border-radius: 5px;
+	-moz-border-radius: 5px; 
+	
+	border: solid 1px #aed0ea;
+}
 
+
+#entry_form {
+	height: 150px;
+	
+}
+
+#current_entries {
+	height: 100px;
+	
+}
+
+#all_entries {
+	height: 600px;
+	
+	margin-bottom: 10px;
+	
+}
+
+/*Entry page table stylings*/
+
+.table_headers {
+	font-weight: bold;
+}
+
+.ticket_no_headers {
+	width: 50px;
+}
+
+.date_headers {
+	width: 80px;
+}
+.job_headers {
+	width: 150px;
+}
+.destination_headers {
+	width: 150px;
+}
+
+.wood_type_headers {
+	width: 80px;
+}
+
+.load_type_headers {
+	width: 60px;
+}
+
+.species_headers {
+	width: 60px;
+}
+
+.amount_headers {
+	width: 60px;
+}
+
+.load_pay_headers {
+	width: 80px;
+}
+
+.action_headers {
+	width: 40px;
+}
+
+
+
+.data_rows {
+	
+	
+}
+
+.data_rows h4 {
+	width: 100px;
+	float: left;
+}
+
+
+.row_data {
+	float: left;
+}
+
+.row_headers {
+	width: 100px;
+	
+	float: left;
+	clear: left;
+}
+
+.accordion_right_column {
+	float: right;
+	width: 350px;
+}
+
+.accordion_left_column {
+	float: left;
+	width: 350px;
 }
 
 
@@ -276,6 +516,9 @@ input, select {
   background-image: url(../img/24_col.gif);
 }
 
+#tabs {
+}
+
 /* Entry page styling */
 
 #Incredible_invisible_text {
@@ -287,18 +530,13 @@ input, select {
 	margin: auto;
 }
 
-#submitted_rows {
-	display: block;
-	margin: auto;
-}
-
 table {
 	margin: auto;
 }
 
 /* Setup page styling */
 
-.selected {
+.selected_left_nav_item{
 	background: #DEEDD0;
 	width: 92%;
 	
@@ -314,6 +552,7 @@ table {
 }
 
 #inner_nav {
+	
 	background: #DEEDF7;
 	margin-top: 5px;
 	padding-top: 5px;
@@ -340,6 +579,15 @@ table {
 	padding: 0px;
 }
 
+#ui-tabs-4 {
+	padding: 0px;
+}
+
+
+a:hover {
+	cursor: pointer;
+}
+
 ul {
 	list-style: none; 
 	margin-left: 0px;
@@ -347,4 +595,137 @@ ul {
 
 li {
 	margin-left: 15px;
+}
+
+.sub_header {
+	font-weight: bold;
+}
+
+.label {
+	clear: none;
+	float: left;
+	height: 25px;
+	width: 50px;
+	padding-top: 4px;
+	margin-right: 5px;
+}
+
+.input_wrapper {
+	float: left;
+	height: 25px;
+}
+
+.input_row {
+	width: 450px;
+	height: 32px;
+	clear: left;
+	float: left;
+}
+
+
+/* Report styles*/
+
+img#hfi_logo {
+	float: left;
+	width: 180px;
+	height: 180px;
+}
+
+#receipt_header {
+	float: left;
+	width: 450px;
+	padding-left: 150px;
+	font-size: 25px;
+}
+
+#hfi_address_box {
+	width: 450px;
+	padding-left: 150px;
+	padding-top: 50px;
+	float: left;
+	margin-bottom: 20px;
+}
+
+#details_box {
+	margin-top: 15px;
+	float: left;
+	width: 940px;
+}
+
+#details_box table th {
+	width: 180px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#details_box table td {
+	width: 180px;
+	text-align: center;
+	
+}
+
+#job_items_box {
+	margin-top: 5px;
+	float: left;
+}
+
+#payment_details_box {
+	margin-top: 5px;
+	float: left;
+}
+
+#payment_details_box table th {
+	font-weight: bold;
+	width: 200px;
+}
+
+#job_items_box table th {
+	font-weight: bold;
+	padding-left: 5px;
+	width: 150px;
+}
+
+#job_items_box table td {
+	padding-left: 5px;
+	width: 150px;
+}
+
+#job_items_box table th.lo {
+	width: 250px;
+}
+
+.to {
+	font-weight: bold;
+}
+
+.tp {
+	font-weight: bold;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.selector_label {
+	float: left;
+	width: 80px;
+}
+
+#landowner_payments {
+	margin: auto;
+	margin-bottom: 10px;
+	
+}
+
+#payment_details {
+	margin:auto;
+	
+}
+
+#page {
+	color: black;
+	width: 960px;
+	margin: auto;
+}
+
+hr {
+	margin-bottom: 10px;
 }

@@ -1,10 +1,48 @@
 Forester::Application.routes.draw do
-  match "/setup" => "setup#jobs"
-  match "/reports" => "reports#owner_receipt"
-  match "/entry" => "entry#entry"
-  match "/add_entry_row" => "entry#add_entry_row", :via => "post"
-  match "/job/:id" => "setup#job"
 
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  root :to => "index#index" 
+ 
+  #Routes for page modifying Ajax calls
+  match "/add_specie" => "page_controls#add_specie"
+  match "/delete_specie" => "page_controls#delete_specie"
+  match "/import_jobs/:id" => "page_controls#import_jobs"
+  match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
+  match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
+  
+  #Kinda nav stoof
+  match "/ticket_entry" => "entry#ticket_entry"
+  match "/payment_entry" => "entry#payment_entry"
+ 
+  #Nav tab's stoof
+  match "/setup" => "setup#index"
+  match "/receipts" => "receipts#index"
+  match "/reports" => "reports#index"
+  match "/entry" => "entry#entry"
+ 
+  #Entry page functions
+  match "/add_entry_row" => "entry#add_entry_row", :via => "post"
+  match "/all_entries" => "page_controls#all_entries"
+ 
+  match "/landowners" => "setup#owners"
+  match "/partners" => "setup#partners"
+  match "/jobs" => "setup#jobs"
+  match "/truckers" => "setup#truckers"
+  match "/sawmills" => "setup#sawmills"
+  
+  match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
+  
+  match "/owner_receipt" => "receipts#owner_receipt"
+  match "/logger_receipt" => "receipts#logger_receipt"
+  match "/trucker_receipt" => "receipts#trucker_receipt"  
+  
+  match "/quarterly_report" => "reports#quarterly_report"
+  match "/export_database" => "reports#export_database"
+  
+  #Setup page's news/edits
+  match "/new_job" => "setup#new_job"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -51,10 +89,6 @@ Forester::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  root :to => "index#index"
 
   # See how all your routes lay out with "rake routes"
 

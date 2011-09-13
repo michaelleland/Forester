@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  destination_id: 1
+  job_id: 1
+  payment_date: 2011-08-30
+  payment_no: 1
+
+two:
+  destination_id: 1
+  job_id: 1
+  payment_date: 2011-08-30
+  payment_no: 1

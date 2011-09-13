@@ -11,14 +11,19 @@
 		<%= csrf_meta_tag %>
 	</head>
 <body>
-	<header class="container_12">
-
+	<header class="container_12" style="background: #F2F5F7; -moz-border-radius: 5px; border-radius: 5px; margin-top: 15px; ">
+			<img style="float: left;" src="/images/HFI_logo.png" width="80" height="80"/>
+			<h1 style="float: left; font-size: 40px; padding-left: 15px;">Forester</h1>
+			<p class="notice"><%= notice %></p>
+			<p class="alert"><%= alert %></p>
+		</div>
 	</header>
 	<div class="container_12" id="tabs">
 		<ul>
-			<li><%= link_to "Entry", "entry" %></li>
-			<li><%= link_to "Setup", "setup" %></li>
-			<li><%= link_to "Reports", "reports" %></li>
+			<li><%= link_to "Entry", "entry" %> </li>
+			<li><%= link_to "Setup", "setup" %> </li>
+			<li><%= link_to "Receipts", "receipts" %> </li>
+			<li><%= link_to "Reports", "reports" %> </li>
 		</ul>
 	</div>
 	

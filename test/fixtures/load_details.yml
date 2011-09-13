@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  ticked_id: 1
+  species_id: 1
+  measure_type: 1
+  amount: 1.5
+
+two:
+  ticked_id: 1
+  species_id: 1
+  measure_type: 1
+  amount: 1.5
