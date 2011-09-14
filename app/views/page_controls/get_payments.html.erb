@@ -1,0 +1,7 @@
+<% unless @unpaid_payments.length == 0 %>
+	<% @unpaid_payments.each do |i| %>
+		<option value="<%= i.id %>">Payment from <%= Destination.find(i.destination_id).name %> on <%= i.payment_date %> | $ <%= i.total_payment %></option>
+	<% end %>
+<% else %>
+	<option value="0">No payments</option>
+<% end %>

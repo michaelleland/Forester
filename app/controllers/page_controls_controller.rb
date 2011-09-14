@@ -1,8 +1,31 @@
 class PageControlsController < ApplicationController
   layout nil
   
-  def all_entries
+  def all_ticket_entries
    @tickets = Ticket.all 
+  end
+  
+  def all_payment_entries
+   @payments = PaymentFromDestination.all
+  end
+  
+  def get_payments
+    @unpaid_payments = PaymentFromDestination.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "payment_date")
+  end
+  
+  def get_logger_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_logger(params[:id], false, :order => "number")
+    render "get_tickets.html.erb"
+  end
+  
+  def get_trucker_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_trucker(params[:id], false, :order => "number")
+    render "get_tickets.html.erb"
+  end
+  
+  def get_owner_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "number")
+    render "get_tickets.html.erb"
   end
   
   def add_specie
@@ -36,6 +59,12 @@ class PageControlsController < ApplicationController
       @t_job_ids = @t_asg.collect {|i| i.job_id}.flatten
       
       @trucker_jobs = Job.find(@t_job_ids)
+    end
+  end
+  
+  def import_jobs_of_owner
+    if params[:id] != "0"
+      @owner_jobs = Job.find_all_by_owner_id(params[:id])
     end
   end
   

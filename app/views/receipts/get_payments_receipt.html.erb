@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<title>Bye bye =)</title>
+	</head>
+	<body>
+		<script>
+			<% @string = "" %>
+			<% params[:payments].each {|i| if i == params[:payments].first then @string = @string + "payments[]=#{i}" else @string = @string + "&payments[]=#{i}" end  } %>
+			window.open('/get_owner_receipt/'+'?<%= @string %>');
+			window.open('/get_logger_receipt/'+'?<%= @string %>');
+			window.close();
+		</script>
+	</body>
+</html>

@@ -10,6 +10,33 @@ body {
 	height: 60px;
 }
 
+.rates {
+	height: 150px;
+}
+
+.rates .data_rows h4 {
+	width: 200px;
+}
+
+.rate_link {
+	clear: none !important;
+}
+
+.action_link {
+	float: left;
+	clear: left;
+	
+	text-decoration: underline;
+}
+
+.action_link:hover {
+	cursor: pointer;
+}
+
+.rates .accordion_left_column .row_headers {
+	width: 150px;
+}
+
 .loggers {
 	height: 60px;
 }
@@ -99,8 +126,14 @@ body {
 	background: #EEEEEE url(/images/n3.png);
 }
 
-#inner_nav
+.nav_group_header {
+	font-weight: bold;
+	font-style: italic;
+}
 
+.nav_group {
+	margin-left: 20px;
+}
 /*Styling for navbar under tabs*/
 
 #entries_inner_nav {
@@ -222,6 +255,75 @@ a:hover {
 	padding-left: 10px;
 	padding-bottom: 10px;	
 }
+
+#payments_to_receipt select {
+	width: 400px;
+}
+
+#tickets_select {
+	width: 400px;
+}
+
+#deductions_to_receipt_list select {
+	float: left;
+	width: 300px;
+}
+
+#deductions_to_receipt_list_values select {
+	float: left;
+	width: 100px;
+}
+
+#deductions_to_receipt select {
+	float: left;
+	width: 180px;
+}
+
+
+#owner_receipt_selector textarea {
+	float: left;
+	clear: left;
+	
+	width: 400px;
+}
+
+#input_row {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	float: left;
+	clear: left;
+}
+
+#middle_column {
+	float: left;
+	
+	margin: 0px 5px 0px 5px; 
+	width: 30px;
+	height: 60px;
+}
+
+#add_button {
+	width: 30px;
+	float: left;
+}
+
+#remove_button {
+	width: 30px;
+	float: left;
+	clear: left;
+}
+
+.deductions_in_select {
+	display: inline;
+	position: absolute;
+	right: 420px;
+}
+
+#owner_receipt_selector #submit {
+	float: left;
+	clear: left;
+}
+
 
 #job_selector {
 	width: 200px;
@@ -363,7 +465,25 @@ input, select {
 	width: 40px;
 }
 
+.tonnage_headers {
+	width: 60px;
+}
 
+.net_mbf_headers {
+	width: 60px;
+}
+
+.payment_headers {
+	width: 60px;
+}
+
+.tickets_headers {
+	width: 60px;
+}
+
+.payment_no_headers {
+	width: 70px;
+}
 
 .data_rows {
 	
@@ -652,16 +772,22 @@ img#hfi_logo {
 	width: 940px;
 }
 
-#details_box table th {
+#details_box .headers {
 	width: 180px;
-	text-align: center;
+	padding-right: 10px;
+	text-align: left;
+	
 	font-weight: bold;
 }
 
 #details_box table td {
+	height: 15px;
 	width: 180px;
-	text-align: center;
-	
+}
+
+#details_box .table_data {
+	width: 180px;
+	text-align: left;
 }
 
 #job_items_box {

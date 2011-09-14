@@ -19,12 +19,12 @@
 	
 	<h3><a href="#">Add a Landowner</a></h3>
 	<div class="owners new">
-		<form>
+		<form method="post" action="/new_owner" data-remote="true">
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Landowner:</h4></div>
 				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20"/></div></div>
 				<div class="data_rows"><h4>Contact person:</h4></div>
-				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="cp_name" name="owner_name" type="text" size="20"/></div></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="cp_name" name="cp_name" type="text" size="20"/></div></div>
 				<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <input id="cp_phone" name="cp_phone" type="text" size="20"/></div></div>
 				<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <input id="cp_email" name="cp_email" type="text" size="20"/></div></div>
 			</div>
