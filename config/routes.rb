@@ -55,22 +55,16 @@ Forester::Application.routes.draw do
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   
-<<<<<<< .merge_file_fjNOYB
-<<<<<<< HEAD
-=======
   #Get the thing!
   match "/export_the_thing" => "reports#export_the_thing"
   
->>>>>>> .merge_file_38Fevy
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"
   match "/new_rate/:id" => "setup#new_rate"
   match "/new_partner" => "setup#new_partner"
   match "/new_owner" => "setup#new_owner"
   match "/new_sawmill" => "setup#new_sawmill"
-  
-=======
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

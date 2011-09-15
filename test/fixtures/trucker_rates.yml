@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  destination_id: 1
+  job_id: 1
+  partner_id: 1
+  load_type: MyString
+  rate: 1.5
+
+two:
+  destination_id: 1
+  job_id: 1
+  partner_id: 1
+  load_type: MyString
+  rate: 1.5
