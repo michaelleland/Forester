@@ -46,7 +46,7 @@ function init_ticket_select () {
 
 function refresh_tickets (id) {
 	$.ajax ({
-		url: '/get_tickets/'+id,
+		url: '/get_logger_tickets/'+id,
 		cache: false,
 		success: function (html) {
 			$('#tickets_select').html(html);

@@ -1,26 +1,25 @@
 class CreatePaymentFromDestinations < ActiveRecord::Migration
   def self.up
     create_table :payment_from_destinations do |t|
+      t.integer :destination_id
       t.integer :job_id
       t.string :load_type
       t.date :payment_date
-<<<<<<< HEAD
       t.string :payment_num
       t.float :tonnage
-      t.boolean :paid_to_owner
-      t.boolean :paid_to_logger
-      t.boolean :paid_to_trucker
-=======
-      t.integer :payment_no
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
-
+      t.integer :tickets
+      t.float :total_payment
+      t.float :net_mbf
+      t.float :tonnage
+      t.integer :wood_type
+      
       t.timestamps
     end
     
-    PaymentFromDestination.create(:job_id => 1, :wood_type => 1,:load_type => "MBF", :payment_date => "15-09-2011", :payment_num => "1231421", :total_payment => 9703.5, :paid_to_owner => true, :paid_to_logger => false, :paid_to_trucker => false)
-    PaymentFromDestination.create(:job_id => 1, :wood_type => 2, :load_type => "MBF", :payment_date => "23-09-2011", :payment_num => "1231425", :total_payment => 5402.3, :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
-    PaymentFromDestination.create(:job_id => 1, :wood_type => 3, :load_type => "MBF", :payment_date => "30-09-2011", :payment_num => "1231455", :total_payment => 13023.1, :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
-    PaymentFromDestination.create(:job_id => 2, :wood_type => 2, :load_type => "MBF", :payment_date => "15-09-2011", :payment_num => "1231422", :total_payment => 9522.7, :paid_to_owner => true, :paid_to_logger => false, :paid_to_trucker => false)
+    PaymentFromDestination.create(:destination_id => 1, :job_id => 1, :wood_type => 1,:load_type => "MBF", :payment_date => "15-09-2011", :payment_no => "1231421", :tickets => 3, :total_payment => 9703.5, :net_mbf => 78.9)
+    PaymentFromDestination.create(:destination_id => 2, :job_id => 1, :wood_type => 2, :load_type => "MBF", :payment_date => "23-09-2011", :payment_no => "1231425", :tickets => 2, :total_payment => 5402.3, :net_mbf => 55.3)
+    PaymentFromDestination.create(:destination_id => 2, :job_id => 1, :wood_type => 3, :load_type => "MBF", :payment_date => "30-09-2011", :payment_no => "1231455", :tickets => 5, :total_payment => 13023.1, :net_mbf => 100.1)
+    PaymentFromDestination.create(:destination_id => 1, :job_id => 2, :wood_type => 2, :load_type => "MBF", :payment_date => "15-09-2011", :payment_no => "1231422", :tickets => 3, :total_payment => 9522.7, :net_mbf => 77.7)
   
   end
 

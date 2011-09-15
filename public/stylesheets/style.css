@@ -426,7 +426,6 @@ input, select {
 	
 }
 
-<<<<<<< HEAD
 /*Entry page table stylings*/
 
 .table_headers {
@@ -491,9 +490,6 @@ input, select {
 	width: 70px;
 }
 
-
-=======
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 .data_rows {
 	
 	
@@ -778,7 +774,7 @@ img#hfi_logo {
 #details_box {
 	margin-top: 15px;
 	float: left;
-	width: 500px;
+	width: 940px;
 }
 
 #details_box .headers {
@@ -822,7 +818,7 @@ img#hfi_logo {
 
 #job_items_box table td {
 	padding-left: 5px;
-	width: 100px;
+	width: 150px;
 }
 
 #job_items_box table th.lo {

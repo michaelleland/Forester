@@ -82,14 +82,16 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "payment_from_destinations", :force => true do |t|
+    t.integer  "destination_id"
     t.integer  "job_id"
     t.string   "load_type"
     t.date     "payment_date"
-    t.string   "payment_num"
+    t.string   "payment_no"
+    t.integer  "tickets"
+    t.float    "total_payment"
+    t.float    "net_mbf"
     t.float    "tonnage"
-    t.boolean  "paid_to_owner"
-    t.boolean  "paid_to_logger"
-    t.boolean  "paid_to_trucker"
+    t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -123,15 +125,21 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "tickets", :force => true do |t|
+<<<<<<< .merge_file_rGAX0K
 <<<<<<< HEAD
     t.date     "delivery_date"
 =======
 >>>>>>> 8160f58... Entry pages UC + newJob creation accordion
+=======
+    t.date     "date"
+>>>>>>> .merge_file_UVfO9H
     t.integer  "destination_id"
     t.integer  "job_id"
-    t.float    "load_pay"
     t.integer  "number"
-    t.integer  "payment_from_destination_id"
+    t.float    "value"
+    t.boolean  "paid_to_owner"
+    t.boolean  "paid_to_logger"
+    t.boolean  "paid_to_trucker"
     t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"

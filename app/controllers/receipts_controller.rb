@@ -29,7 +29,7 @@ class ReceiptsController < ApplicationController
       end     
     end
       
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
+    @deduction_items.collect {|i| @total = @total - i[1].to_f }
     
     @total = ((@total * 10**2).round.to_f / 10**2).to_s
     if (@total.length - (@total.index(".")+1)) < 2
@@ -43,18 +43,13 @@ class ReceiptsController < ApplicationController
   
   def get_logger_receipt
     @job = Job.find(params[:job_id])
-    
-    @tickets = Ticket.find(params[:tickets])    
-    
+    @tickets = Ticket.find(params[:tickets])
     @total = 0
-    @tickets.each {|i| @total = @total + i.value }    
+    @tickets.each {|i| @total = @total + i.value }
+    @total = (@total*100).round.to_f / 100
   end
   
   def trucker_receipt
-    
-  end
-  
-  def get_payments_receipt
     
   end
 end

@@ -1,15 +1,59 @@
 <div class="grid_10" id="trucker_receipt_selector">
-	<h4>Select a trucker in a job: </h4>
-	<form>
-		<select id="partner_selector">
-			<option onclick="import_jobs_of_partner(0, 2)" value="0"> Select a trucker </option>
+	<h4>Create a receipt for a trucker: </h4>
+	<h5>First, select trucker and a job: </h5>
+	<form action="/get_trucker_receipt" method="get" target="_blank">
+		<select id="partner_selector" name="logger_id">
+			<option onclick="import_jobs_of_trucker(0)" value="0"> Select a trucker </option>
 			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_partner(<%= i.id %>, 2)" value="<% i.id %>"><%= i.name %></option>
+				<option onclick="import_jobs_of_trucker(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
-		<select id="job_selector">
+		<select id="job_selector" name="job_id">
 			<option>No trucker selected</option>
 		</select>
-		<input type="submit" value="Get receipt" />		
+		
+		<h5>Select tickets to be paid to the trucker: </h5>
+		
+		<div id="tickets_to_receipt">
+			<select id="tickets_select" name="tickets[]" multiple="true" size="10">
+				<option value="0">No job selected</option>
+			</select>
+		</div>
+		
+		<h5>Select tickets to be paid to the logger: </h5>
+		
+		<input id="submit" type="submit" value="Get receipt" />		
 	</form>	
 </div>
+
+<script>
+
+function import_jobs_of_trucker(id) {
+	$.ajax ({
+		url: '/import_jobs_of_trucker/'+id,
+		cache: false,
+		success: function (html) {
+			$('#job_selector').html(html);
+			$('#tickets_select').html('<option value="0">No job selected</option>');
+		}		
+	});
+}
+
+function init_ticket_select () {
+	$('#tickets_select').html('<option value="0">No job selected</option>');
+}
+
+
+function refresh_tickets (id) {
+	$.ajax ({
+		url: '/get_trucker_tickets/'+id,
+		cache: false,
+		success: function (html) {
+			$('#tickets_select').html(html);
+		}		
+	})
+}
+
+
+	
+</script>
