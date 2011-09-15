@@ -5,7 +5,7 @@ class EntryController < ApplicationController
 
   end
   
-  def add_entry_row
+  def add_ticket_entry_row
     
     @species = [params[:species_1], params[:species_2], params[:species_3], params[:species_4], params[:species_5]]
     @species.delete_if {|x| x.nil?}    
@@ -27,8 +27,8 @@ class EntryController < ApplicationController
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
     
-    @ticket = Ticket.create(:date => params[:date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_no], :value => params[:load_pay])
-    LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_1_amount])
+    @ticket = Ticket.create(:date => params[:date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_no], :value => params[:load_pay],:wood_type => params[:wood_type])
+    LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :load_type => params[:load_type], :amount => params[:load_1_amount])
    
     unless params[:species_2].nil?
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_2_amount])
@@ -46,6 +46,13 @@ class EntryController < ApplicationController
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_5_amount])
     end
     
+  end
+  
+  def add_payment_entry_row
+    @destination = Destination.find_by_name(params[:destination_name])
+    @job = Job.find_by_name(params[:job_name])
+    
+    @pfd = PaymentFromDestination.create(:payment_date => params[:date], :payment_no => params[:payment_no], :destination_id => @destination.id, :job_id => @job.id, :load_type => params[:load_type], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:total_payment], :wood_type => params[:wood_type], :paid_to_owner => false)
   end
   
   def ticket_entry

@@ -1,5 +1,5 @@
 <div id="entry_form">
-	<form action="/add_entry_row" method="post" data-remote="true">
+	<form action="/add_payment_entry_row" method="post" data-remote="true">
 		<h4>New Entry</h4>
 		<table id="entry_table">
 			<tr>
@@ -8,16 +8,17 @@
 				<th>Destination</th>
 				<th>Wood type</th>
 				<th>Load type</th>
+				<th>Payment #</th>
 				<th>Tickets</th>
 				<th>Net MBF</th>
 				<th>Tons</th>
-				<th>Total Payment</th>
+				<th>Payment</th>
 				<th>Action</th>
 			</tr>
 			<tr>
 				<td>
 					<input type="text" name="date" id="date" size="7" class="fields"/>
-					<script> $('#date').datepicker()</script>
+					<script> $('#date').datepicker({ dateFormat: 'yy-mm-dd'})</script>
 				</td>
 				<td>
 					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
@@ -68,9 +69,17 @@
 						<option value="Tonnage">Tonnage</option>
 					</select>
 				</td>
-					<input type="text" size="3" name="tickets" class="fields"/>
 				<td>
-					<input type="text" size="8" name="gross_MBF" class="fields"/>
+					<input type="text" size="6" name="payment_no" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="5" name="tickets" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="5" name="net_mbf" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="5" name="tonnage" class="fields"/>
 				</td>
 				<td>
 					<input type="text" size="8" name="total_payment" class="fields"/>
@@ -86,9 +95,44 @@
 <div id="current_entries">
 	<h4>Current Entries</h4>
 	
+	<table>
+		<tr>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers payment_no_headers">Payment #</th>
+			<th class="table_headers tickets_headers">Tickets</th>
+			<th class="table_headers net_mbf_headers">Net MBF</th>
+			<th class="table_headers tonnage_headers">Tons</th>
+			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
 </div>
 
 <div id="all_entries">
 	<h4>All Entries</h4>
-	
+	<table>
+		<tr>
+			<th class="table_headers date_headers">Date</th>
+			<th class="table_headers job_headers">Job</th>
+			<th class="table_headers destination_headers">Destination</th>
+			<th class="table_headers wood_type_headers">Wood type</th>
+			<th class="table_headers load_type_headers">Load type</th>
+			<th class="table_headers payment_no_headers">Payment #</th>
+			<th class="table_headers tickets_headers">Tickets</th>
+			<th class="table_headers net_mbf_headers">Net MBF</th>
+			<th class="table_headers tonnage_headers">Tons</th>
+			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers action_headers">Action</th>
+		</tr>
+		
+	</table>
 </div>
+
+<script>
+	refresh_all_entries('payment');
+</script>

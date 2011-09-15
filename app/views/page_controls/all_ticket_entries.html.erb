@@ -1,0 +1,16 @@
+<% Ticket.all.each do |i| %>
+	<tr class="all_entries_row">
+		<td><%= i.number %></td>
+		<td><%= i.delivery_date %></td>
+		<td><%= Job.find(i.job_id).name %></td>	
+		<td><%= Destination.find(i.destination_id).name %></td>
+		<td><%= WoodType.find(i.wood_type).name %></td>
+		<td><%= i.load_details.first.load_type %></td>
+		<td><%= Specie.find(i.load_details.first.species_id).code %></td>
+		<td><%= i.load_details.first.amount %></td>
+		<td><%= i.load_pay %></td>
+		<td><input type="button" value="Edit"></td>
+	</tr>
+<% end %>
+
+

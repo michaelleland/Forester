@@ -1,8 +1,20 @@
 class PageControlsController < ApplicationController
   layout nil
   
-  def all_entries
+  def all_ticket_entries
    @tickets = Ticket.all 
+  end
+  
+  def all_payment_entries
+   @payments = PaymentFromDestination.all
+  end
+  
+  def get_payments
+    @unpaid_payments = PaymentFromDestination.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "payment_date")
+  end
+  
+  def get_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_logger(params[:id], false, :order => "number")
   end
   
   def add_specie

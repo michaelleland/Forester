@@ -22,26 +22,45 @@ Forester::Application.routes.draw do
   match "/entry" => "entry#entry"
  
   #Entry page functions
-  match "/add_entry_row" => "entry#add_entry_row", :via => "post"
-  match "/all_entries" => "page_controls#all_entries"
+  match "/add_ticket_entry_row" => "entry#add_ticket_entry_row", :via => "post"
+  match "/add_payment_entry_row" => "entry#add_payment_entry_row", :via => "post"
+  match "/all_ticket_entries" => "page_controls#all_ticket_entries"
+  match "/all_payment_entries" => "page_controls#all_payment_entries"
  
+  #Setup page's basic page calls
   match "/landowners" => "setup#owners"
   match "/partners" => "setup#partners"
   match "/jobs" => "setup#jobs"
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
+  match "/rates" => "setup#rates"
   
-  match "/printable_owner_receipt/:id" => "reports#printable_owner_receipt"
-  
+  #Receipt page's basic page calls
+  match "/payments_receipt" => "receipts#payments_receipt"
   match "/owner_receipt" => "receipts#owner_receipt"
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   
+  #Receipt page's "pull receipt" calls
+  match "/get_owner_receipt" => "receipts#get_owner_receipt"
+  match "/get_logger_receipt" => "receipts#get_logger_receipt"
+  match "/get_payments_receipt" => "receipts#get_payments_receipt"
+  
+  #The receipt modification pages functions
+  match "/add_deduction" => "receipts#add_deduction"
+  match "/get_payments/:id" => "page_controls#get_payments"
+  match "/get_tickets/:id" => "page_controls#get_tickets"
+  
+  #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"
+  match "/new_rate/:id" => "setup#new_rate"
+  match "/new_partner" => "setup#new_partner"
+  match "/new_owner" => "setup#new_owner"
+  match "/new_sawmill" => "setup#new_sawmill"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

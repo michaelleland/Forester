@@ -1,48 +1,23 @@
 <div class="grid_10" id="owner_receipt_selector">
-	<h4>Create a receipt for an owner: </h4>
-	<h5>First, select an owner and a job:</h5>
-	<form method="get" action="/get_owner_receipt" target="_blank">
-		<select id="owner_selector" name="owner_id">
-			<option onclick="import_jobs(0)" value="0"> Select an owner </option>
-			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
-			<% end %>
-		</select>
-		<select id="job_selector" name="job_id">
-			<option>No owner selected</option>
-		</select>
-		
-		<h5>Then, select payments to be included:</h5>
+	<h4>Create receipts for payments: </h4>
+	<h5>First, select a job:</h5>
+	<form method="get" action="/get_payments_receipt" target="_blank">		
+		<div id="jobs_selector_container">
+			<select id="partner_selector" name="logger_id">
+				<option onclick="refresh_payments(0)" value="0"> Select a job </option>
+				<% Job.all.each do |i| %>
+					<option onclick="refresh_payments(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<% end %>
+			</select>			
+		</div>		
 		
 		<div id="payments_to_receipt">
 			<select id="payments_select" name="payments[]" multiple="true" size="6">
-				<option value="0">No job selected</option>
+				<option value="0">Select a job</option>
 			</select>
 		</div>
 		
-		<h5>Add deductions</h5>
-		
-		<div id="deductions_to_receipt_list">
-			<select id="deductions_list" name="deductions_list[]" multiple="true" size="6">
-			</select>
-		</div>
-		
-		<div id="deductions_to_receipt_list_values">
-			<select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
-			</select>
-		</div>
-		
-		<div id="input_row">
-			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
-			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
-			<input type="button" value="Add deduction" onclick="add_new_deduction();"/>
-		</div>
-		
-		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
-		
-		<textarea rows="5"></textarea>
-		
-		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />		
+		<input id="submit" type="submit" value="Create receipt" />		
 	</form>	
 </div>
 
