@@ -123,7 +123,10 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "tickets", :force => true do |t|
+<<<<<<< HEAD
     t.date     "delivery_date"
+=======
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
     t.integer  "destination_id"
     t.integer  "job_id"
     t.float    "load_pay"

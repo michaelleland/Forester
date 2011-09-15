@@ -19,7 +19,7 @@
 	
 	<h3><a href="#">Add a Job</a></h3>
 	<div class="jobs new">
-		<form action="/new_job" data-remote="true" method="post">	
+		<form>	
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Job:</h4></div>
 				<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"> <input id="job_name" name="job_name" type="text" size="20"/></div></div>
@@ -31,7 +31,11 @@
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>General info:</h4></div>
 				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <input name="hfi_rate" type="text" size="4"/></div></div>
+<<<<<<< HEAD
 				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option value="1" >HFI</option> <option value="0" >Bank</option> </select></div></div>
+=======
+				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="prime"> <option>HFI</option> <option>Bank</option> </select></div></div>
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" /></div></div>
 			</div>
 		</form>

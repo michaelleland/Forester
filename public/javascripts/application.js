@@ -74,9 +74,9 @@ function refresh_all_entries (type) {
 		url: '/all_'+type+'_entries',
 		cache: false,
 		success: function (html) {
-			$('.all_entries_row').each(function () { $(this).remove()})
-			$('#all_entries table').append(html);
-		}
+			$$('#all_entries table tr').each(function () { this.remove()})
+			$('#all_entries table').html(html);
+		}		
 	})
 }
 

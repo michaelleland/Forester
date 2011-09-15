@@ -414,6 +414,11 @@ input, select {
 	
 }
 
+#current_entries table td, #current_entries table th {
+	width: 60px;
+	
+}
+
 #all_entries {
 	height: 600px;
 	
@@ -421,6 +426,7 @@ input, select {
 	
 }
 
+<<<<<<< HEAD
 /*Entry page table stylings*/
 
 .table_headers {
@@ -486,6 +492,8 @@ input, select {
 }
 
 
+=======
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 .data_rows {
 	
 	

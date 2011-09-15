@@ -4,11 +4,15 @@ class CreatePaymentFromDestinations < ActiveRecord::Migration
       t.integer :job_id
       t.string :load_type
       t.date :payment_date
+<<<<<<< HEAD
       t.string :payment_num
       t.float :tonnage
       t.boolean :paid_to_owner
       t.boolean :paid_to_logger
       t.boolean :paid_to_trucker
+=======
+      t.integer :payment_no
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 
       t.timestamps
     end

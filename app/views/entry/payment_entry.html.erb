@@ -1,6 +1,10 @@
 <div id="entry_form">
+<<<<<<< HEAD
 	<form action="/add_payment_entry_row" method="post" data-remote="true">
 		<h4>New Entry</h4>
+=======
+	<form action="/add_entry_row" method="post" data-remote="true">
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 		<table id="entry_table">
 			<tr>
 				<th>Date</th>
@@ -10,10 +14,15 @@
 				<th>Load type</th>
 				<th>Payment #</th>
 				<th>Tickets</th>
+<<<<<<< HEAD
 				<th>Net MBF</th>
 				<th>Tons</th>
 				<th>Payment</th>
 				<th>Action</th>
+=======
+				<th>Gross MBF</th>
+				<th>Total Payment</th>
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 			</tr>
 			<tr>
 				<td>
@@ -58,9 +67,12 @@
 				</td>
 				<td>
 					<select name="wood_type">
-						<% WoodType.all.each do |i| %>
-							<option value="<%= i.id %>"><%= i.name %></option>
-						<% end %>					
+						<option value="1">Sawlogs</option>
+						<option value="2">Export</option>
+						<option value="3">Pulp</option>
+						<option value="4">Mixed</option>
+						<option value="3">Specialty</option>
+						<option value="3">Habitat Logs</option>						
 					</select>
 				</td>
 				<td>
@@ -93,7 +105,6 @@
 </div>
 
 <div id="current_entries">
-	<h4>Current Entries</h4>
 	
 	<table>
 		<tr>
@@ -114,6 +125,7 @@
 </div>
 
 <div id="all_entries">
+<<<<<<< HEAD
 	<h4>All Entries</h4>
 	<table>
 		<tr>
@@ -131,6 +143,9 @@
 		</tr>
 		
 	</table>
+=======
+	
+>>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 </div>
 
 <script>
