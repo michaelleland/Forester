@@ -414,11 +414,6 @@ input, select {
 	
 }
 
-#current_entries table td, #current_entries table th {
-	width: 60px;
-	
-}
-
 #all_entries {
 	height: 600px;
 	

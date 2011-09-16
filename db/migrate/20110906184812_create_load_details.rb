@@ -13,6 +13,10 @@ class CreateLoadDetails < ActiveRecord::Migration
     LoadDetail.create(:ticket_id => 2, :species_id => 2, :load_type => "MBF", :amount => 12.3)
     LoadDetail.create(:ticket_id => 3, :species_id => 1, :load_type => "Tonnage", :amount => 25.3)
     LoadDetail.create(:ticket_id => 4, :species_id => 4, :load_type => "MBF", :amount => 7.4)
+    LoadDetail.create(:ticket_id => 5, :species_id => 3, :load_type => "Tonnage", :amount => 28.4)
+    LoadDetail.create(:ticket_id => 6, :species_id => 2, :load_type => "MBF", :amount => 8.6)
+    LoadDetail.create(:ticket_id => 7, :species_id => 1, :load_type => "Tonnage", :amount => 29.4)
+    LoadDetail.create(:ticket_id => 8, :species_id => 1, :load_type => "MBF", :amount => 8.2)
     
   end
 

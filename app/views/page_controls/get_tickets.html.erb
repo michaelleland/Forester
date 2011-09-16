@@ -1,6 +1,6 @@
 <% unless @tickets.length == 0 %>
 	<% @tickets.each do |i| %>
-		<option value="<%= i.id %>"> <%= "# #{i.number} | #{i.date} | $ #{i.value}" %> </option>
+		<option value="<%= i.id %>"> <%= "# #{i.number} | #{i.delivery_date} | $ #{i.value}" %> </option>
 	<% end %>
 <% else %>
 	<option value="0">No tickets</option>

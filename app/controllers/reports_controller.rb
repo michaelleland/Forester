@@ -15,16 +15,8 @@ class ReportsController < ApplicationController
   
   def export_the_thing
     @addresses = Address.all
-    @cps = ContactPerson.all
-    @destinations = Destination.all
-    @jobs = Job.all
-    @load_details = LoadDetail.all
-    @owners = Owner.all
-    @partners = Partner.all
-    @payments = PaymentFromDestination.all
-    @tickets = Ticket.all
     
-    @filu = File.open('addresses_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv', 'w') do |writer|
+    @filu = File.open("shared/system/exports/addresses_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv", "w") do |writer|
       writer.puts "id, street, city, zip code, state\n"
       @addresses.each do |i|
         writer.puts "#{i.id}, #{i.street}, #{i.city}, #{i.zip_code}, #{$states[i.state]}\n"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110912223032) do
+ActiveRecord::Schema.define(:version => 20110915221441) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
 
   create_table "jobs", :force => true do |t|
     t.string   "name"
-    t.integer  "owner_id"
+    t.string   "owner_id"
     t.float    "hfi_rate"
     t.boolean  "hfi_prime"
     t.datetime "created_at"
@@ -86,11 +86,11 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
     t.integer  "job_id"
     t.string   "load_type"
     t.date     "payment_date"
-    t.string   "payment_no"
+    t.string   "payment_num"
+    t.float    "tonnage"
     t.integer  "tickets"
     t.float    "total_payment"
     t.float    "net_mbf"
-    t.float    "tonnage"
     t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -125,22 +125,16 @@ ActiveRecord::Schema.define(:version => 20110912223032) do
   end
 
   create_table "tickets", :force => true do |t|
-<<<<<<< .merge_file_rGAX0K
-<<<<<<< HEAD
     t.date     "delivery_date"
-=======
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
-=======
-    t.date     "date"
->>>>>>> .merge_file_UVfO9H
     t.integer  "destination_id"
     t.integer  "job_id"
+    t.float    "load_pay"
     t.integer  "number"
-    t.float    "value"
+    t.integer  "wood_type"
     t.boolean  "paid_to_owner"
     t.boolean  "paid_to_logger"
     t.boolean  "paid_to_trucker"
-    t.integer  "wood_type"
+    t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

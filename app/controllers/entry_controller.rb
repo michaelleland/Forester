@@ -27,13 +27,8 @@ class EntryController < ApplicationController
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
     
-<<<<<<< HEAD
-    @ticket = Ticket.create(:date => params[:date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_no], :value => params[:load_pay],:wood_type => params[:wood_type])
+    @ticket = Ticket.create(:delivery_date => params[:date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_no], :value => params[:load_pay], :wood_type => params[:wood_type])
     LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :load_type => params[:load_type], :amount => params[:load_1_amount])
-=======
-    @ticket = Ticket.create(:destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_no], :value => params[:load_pay])
-    LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_1_amount])
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
    
     unless params[:species_2].nil?
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_2_amount])
