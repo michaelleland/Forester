@@ -1,0 +1,50 @@
+Addresses
+id, Street, City, Zip Code, State
+1, 202 SW 10th Ave, Vancouver, 98545, WA
+2, 1 SE Tapani Rd, Battle Ground, 98604, WA
+3, 34 SW Estebstate Rd, Battle Ground, 98604, WA
+4, 52 NE Jussi Rhd, Battle Ground, 98604, WA
+5, 20 NW Sawwy Ave, Yacolt, 98605, WA
+6, 96 NE Massive Blast Formation Ave, Battle Ground, 98604, WA
+
+Contact people
+id, Name, Phone Number, E-mail
+1, "Mikko Levanen", 360-408-3420, mikko@levanenlogging.com
+2, "Tero Tapani", 360-433-2043, tero@tapanitrucking.com
+3, "Orville Esteb", 360-365-3443, steborville@gmail.com
+4, "Joe Rhoades", 360-903-9686, joe.rhoades@gmail.com
+5, "Tom Sawyer", 360-866-7299, tom@pacificfibre.com
+6, "Maw Sill", 360-629-7455, maw.sill@weycohw.com
+
+Jobs
+id, Name, Owner, HFI Rate, HFI Prime
+1, "Esteb-Kaski", Orville Esteb, 3.0, true
+2, "Joe Rhoades", Joe Rhoades, 3.0, true
+
+Truckers & Loggers
+id, Name, Address id, Contact Person id
+1, "Levanen, Inc", 1, 1
+2, "Tapani Trucking", 2, 1
+
+Tickets
+id, Number, Delivery Date, Destination, Job Name, Wood Type, Load Type, Load Pay
+1, 2435, 2011-09-12, Pacific Fibre, Esteb-Kaski, Sawlogs, MBF, 2314.94
+2, 2437, 2011-09-13, Weyco Hardwood, Esteb-Kaski, Export, MBF, 2003.45
+3, 2901, 2011-09-13, Pacific Fibre, Joe Rhoades, Export, Tonnage, 1920.65
+4, 2905, 2011-09-15, Weyco Hardwood, Joe Rhoades, Pulp, MBF, 2304.54
+5, 2906, 2011-09-12, Pacific Fibre, Joe Rhoades, Pulp, Tonnage, 3240.88
+6, 2438, 2011-09-13, Weyco Hardwood, Esteb-Kaski, Export, MBF, 2976.12
+7, 2439, 2011-09-16, Pacific Fibre, Esteb-Kaski, Sawlogs, Tonnage, 2532.54
+8, 2907, 2011-09-11, Weyco Hardwood, Joe Rhoades, Sawlogs, MBF, 2109.94
+
+Payments
+id, Destination, Job Name, Wood Type, Load Type, Payment #, Number of tickets, Net MBF, Total Payment
+1, 2011-09-15, Pacific Fibre, Esteb-Kaski, Sawlogs, MBF, 1231421, 3, 78.9, 9703.5
+2, 2011-09-23, Weyco Hardwood, Esteb-Kaski, Export, MBF, 1231425, 2, 55.3, 5402.3
+3, 2011-09-30, Weyco Hardwood, Esteb-Kaski, Pulp, MBF, 1231455, 5, 100.1, 13023.1
+4, 2011-09-15, Pacific Fibre, Joe Rhoades, Export, MBF, 1231422, 3, 77.7, 9522.7
+
+Owners
+id, name, address id, contact person id
+1, Orville Esteb, 3, 3
+2, Joe Rhoades, 4, 4

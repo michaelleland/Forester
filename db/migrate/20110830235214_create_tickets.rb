@@ -4,7 +4,6 @@ class CreateTickets < ActiveRecord::Migration
       t.date :delivery_date
       t.integer :destination_id
       t.integer :job_id
-      t.float :load_pay
       t.integer :number
       t.integer :wood_type
       t.boolean :paid_to_owner
@@ -15,14 +14,14 @@ class CreateTickets < ActiveRecord::Migration
       t.timestamps
     end
     
-    Ticket.create(:delivery_date => "2011-09-12", :destination_id => 1, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2435, :load_pay => 2315.34, :wood_type => 1, :value => 2314.94) 
-    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 2, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2437, :load_pay => 2103.43, :wood_type => 2, :value => 2003.45)
-    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 1, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2901, :load_pay => 1915.34, :wood_type => 2, :value => 1920.65)
-    Ticket.create(:delivery_date => "2011-09-15", :destination_id => 2, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2905, :load_pay => 1785.98, :wood_type => 3, :value => 2304.54)
-    Ticket.create(:delivery_date => "2011-09-12", :destination_id => 1, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2906, :load_pay => 3425.87, :wood_type => 3, :value => 3240.88)
-    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 2, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2438, :load_pay => 1829.76, :wood_type => 2, :value => 2976.12)
-    Ticket.create(:delivery_date => "2011-09-16", :destination_id => 1, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2439, :load_pay => 2435.65, :wood_type => 1, :value => 2532.54)
-    Ticket.create(:delivery_date => "2011-09-11", :destination_id => 2, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2907, :load_pay => 2430.54, :wood_type => 1, :value => 2109.94)
+    Ticket.create(:delivery_date => "2011-09-12", :destination_id => 1, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2435, :wood_type => 1, :value => 2314.94) 
+    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 2, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2437, :wood_type => 2, :value => 2003.45)
+    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 1, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2901, :wood_type => 2, :value => 1920.65)
+    Ticket.create(:delivery_date => "2011-09-15", :destination_id => 2, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2905, :wood_type => 3, :value => 2304.54)
+    Ticket.create(:delivery_date => "2011-09-12", :destination_id => 1, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2906, :wood_type => 3, :value => 3240.88)
+    Ticket.create(:delivery_date => "2011-09-13", :destination_id => 2, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2438, :wood_type => 2, :value => 2976.12)
+    Ticket.create(:delivery_date => "2011-09-16", :destination_id => 1, :job_id => 1, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2439, :wood_type => 1, :value => 2532.54)
+    Ticket.create(:delivery_date => "2011-09-11", :destination_id => 2, :job_id => 2, :paid_to_logger => false, :paid_to_owner => false, :paid_to_trucker => false, :number => 2907, :wood_type => 1, :value => 2109.94)
     
   end
 

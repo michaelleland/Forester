@@ -61,12 +61,9 @@
 				</td>
 				<td>
 					<select name="wood_type">
-						<option value="1">Sawlogs</option>
-						<option value="2">Export</option>
-						<option value="3">Pulp</option>
-						<option value="4">Mixed</option>
-						<option value="3">Specialty</option>
-						<option value="3">Habitat Logs</option>						
+						<% WoodType.all.each do |i| %>
+							<option value="<%= i.id %>"><%= i.name %></option>
+						<% end %>					
 					</select>
 				</td>
 				<td>
@@ -76,7 +73,7 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" size="6" name="payment_no" class="fields"/>
+					<input type="text" size="6" name="payment_num" class="fields"/>
 				</td>
 				<td>
 					<input type="text" size="5" name="tickets" class="fields"/>

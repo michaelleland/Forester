@@ -56,7 +56,8 @@ Forester::Application.routes.draw do
   match "/export_database" => "reports#export_database"
   
   #Get the thing!
-  match "/export_the_thing" => "reports#export_the_thing"
+  match "/export_the_thing/:id" => "reports#export_the_thing"
+  match "/exported_report" => "reports#exported_report"
   
   #Setup page's news/edits
   match "/new_job" => "setup#new_job"

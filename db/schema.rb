@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
     t.date     "delivery_date"
     t.integer  "destination_id"
     t.integer  "job_id"
-    t.float    "load_pay"
     t.integer  "number"
     t.integer  "wood_type"
     t.boolean  "paid_to_owner"
