@@ -82,15 +82,20 @@ class ReportsController < ApplicationController
       
     end
     
-    @filename = "database_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-    @file_path = "shared/system/exports/#{@filename}"
-    
     File.open("#{@file_path}#{@filename}", "w") do |writer|
       
-      writer.puts "Addresses"
-      writer.puts "id, Street, City, Zip Code, State\n"
-      @addresses.each do |i|
-        writer.puts "#{i.id}, #{i.street}, #{i.city}, #{i.zip_code}, #{$states[i.state]}\n"
+      writer.puts @table_name
+      writer.puts @table_headers
+      if params[:id] == "1"
+        @jobs.each do |i|
+          writer.puts "#{i.name}, #{i.owner.name}, #{i.logger.name}, #{i.trucker.name}, #{i.hfi_rate}, #{i.logger.tonnage_rate}, #{i.logger.mbf_rate}, #{i.trucker.rate_mbf}, #{i.trucker.rate_tonnage}, #{i.trucker.rate_percent}"
+        end
+      end
+      if params[:id] == "2"
+          
+      end
+      if params[:id] == "3"
+          
       end
       
       writer.puts "\n"
