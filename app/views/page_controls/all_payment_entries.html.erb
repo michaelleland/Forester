@@ -1,14 +1,14 @@
 <% @payments.each do |i| %>
 	<tr class="all_entries_row">
 		<td><%= i.payment_date %></td>
-		<td><%= Job.find(i.job_id).name %></td>
-		<td><%= Destination.find(i.destination_id).name %></td>	
+		<td><%= i.job.name %></td>
+		<td><%= i.destination.name %></td>	
 		<td><%= WoodType.find(i.wood_type).name %></td>
 		<td><%= i.load_type %></td>
 		<td><%= i.payment_num %></td>
 		<td><%= i.tickets %></td>
-		<td><%= i.net_mbf %></td>
 		<td><%= i.tonnage %></td>
+		<td><%= i.net_mbf %></td>
 		<td><%= i.total_payment %></td>
 		<td><input type="button" value="Edit"></td>
 	</tr>

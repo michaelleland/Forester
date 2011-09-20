@@ -62,10 +62,10 @@ function import_jobs_of_owner(owner_id) {
 	})
 }
 
-$('#payments_select').change(function() {
+$('#tickets_select').change(function() {
 	if ($(this).val() != '0') {
 		var enabled = true
-		$('#payments_select option:selected').each(function() {
+		$('#tickets_select option:selected').each(function() {
 			if ($(this).text().indexOf('paid') != -1) {
 				enabled = false;
 				$('#submit').attr('disabled', 'disabled');

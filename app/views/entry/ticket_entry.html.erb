@@ -10,17 +10,20 @@
 				<th>Wood type</th>
 				<th>Load type</th>
 				<th>Species</th>
-				<th>Amount</th>
+				<th>Tonnage</th>
+				<th>MBF</th>
+				<th>Net MBF</th>
 				<th>Load pay</th>
 				<th>Action</th>
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="ticket_no" size="5" class="fields"/>
+					<input id="ticket_num" type="text" name="ticket_num" size="5" class="fields"/>
+					<script>$('#ticket_num').mask('9999', {placeholder: " "})</script>
 				</td>
 				<td>
-					<input type="text" name="date" id="date" size="8" class="fields"/>
-					<script> $('#date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#date').mask("9999-99-99"); </script>
+					<input type="text" name="delivery_date" id="delivery_date" size="8" class="fields"/>
+					<script> $('#delivery_date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#delivery_date').mask("9999-99-99", {placeholder: " "}); </script>
 				</td>
 				<td>
 					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
@@ -59,7 +62,7 @@
 					</script>
 				</td>
 				<td>
-					<select name="wood_type">
+					<select onchange="check_load_type();" name="wood_type">
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
 						<% end %>					
@@ -76,13 +79,20 @@
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
 						<% end %>
+						<option value="0">Pulp</option>
 					</select>
 				</td>
 				<td>
-					<input type="text" size="8" name="load_1_amount" class="fields"/>
+					<input type="text" size="8" name="tonnage" class="fields"/>
 				</td>
 				<td>
-					<input type="text" size="8" name="load_pay" class="fields"/>
+					<input id="load_1_mbf" type="text" size="8" onchange="refresh_net_mbf('load_1_mbf')" name="load_1_mbf" class="fields"/>
+				</td>
+				<td>
+					<input id="net_mbf" type="text" size="8" value="0" name="net_mbf" disabled="disabled" class="fields"/>
+				</td>
+				<td>
+					<input type="text" size="8" name="value" class="fields"/>
 				</td>
 				<td>
 					<input type="submit" value="Submit" />
@@ -113,7 +123,8 @@
 			<th style="width: 80px;">Wood type</th>
 			<th style="width: 60px;">Load type</th>
 			<th style="width: 60px;">Species</th>
-			<th style="width: 60px;">Amount</th>
+			<th style="width: 60px;">Net MBF</th>
+			<th style="width: 60px;">Tonnage</th>
 			<th style="width: 80px;">Load pay</th>
 			<th style="width: 40px;">Action</th>
 		</tr>
@@ -133,7 +144,8 @@
 			<th style="width: 80px;">Wood type</th>
 			<th style="width: 60px;">Load type</th>
 			<th style="width: 60px;">Species</th>
-			<th style="width: 60px;">Amount</th>
+			<th style="width: 60px;">Net MBF</th>
+			<th style="width: 60px;">Tonnage</th>
 			<th style="width: 80px;">Load pay</th>
 			<th style="width: 40px;">Action</th>
 		</tr>
@@ -143,5 +155,18 @@
 	
 	<script>
 		refresh_all_entries('ticket');
+		
+		function refresh_net_mbf(where_from) {
+			amount = 0;
+			
+			<% Specie.all.each do |i| %>
+				if (String(parseFloat($('#load_'+<%= i.id %>+'_mbf').attr('value'))) != "NaN") {
+					amount = amount + parseFloat($('#load_'+<%= i.id %>+'_mbf').attr('value'));
+				}
+			<% end %>
+			
+			$('#net_mbf').attr('value', amount);
+		}
+		
 	</script>
 </div>

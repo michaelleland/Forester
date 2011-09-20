@@ -6,6 +6,10 @@ class Partner < ActiveRecord::Base
     @hauling_rate = TruckerRates.find_by_job_id_and_destination_id_and_partner_id(job_id, destination_id, self.id).rate
   end
   
+  def hauling_rate_tonnage(job_id, destination_id)
+    @hauling_rate = TruckerRates.find_by_job_id_and_destination_id_and_partner_id(job_id, destination_id, self.id).rate
+  end
+  
   def rate_tonnage(job_id)
     @rate_tonnage = LoggerAssignment.find_by_job_id_and_partner_id(job_id, self.id).rate_tonnage
   end

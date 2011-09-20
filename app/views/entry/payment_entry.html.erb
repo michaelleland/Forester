@@ -11,17 +11,15 @@
 				<th>Load type</th>
 				<th>Payment #</th>
 				<th>Tickets</th>
+				<th>Tonnage</th>
 				<th>Net MBF</th>
-				<th>Tons</th>
-				<th>Payment</th>
-				<th>Action</th>
-				<th>Gross MBF</th>
 				<th>Total Payment</th>
+				<th>Action</th>
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="date" id="date" size="7" class="fields"/>
-					<script> $('#date').datepicker({ dateFormat: 'yy-mm-dd'})</script>
+					<input type="text" name="payment_date" id="date" size="7" class="fields"/>
+					<script> $('#date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#date').mask("9999-99-99", {placeholder: " "});</script>
 				</td>
 				<td>
 					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
@@ -79,10 +77,10 @@
 					<input type="text" size="5" name="tickets" class="fields"/>
 				</td>
 				<td>
-					<input type="text" size="5" name="net_mbf" class="fields"/>
+					<input type="text" size="5" name="tonnage" class="fields"/>
 				</td>
 				<td>
-					<input type="text" size="5" name="tonnage" class="fields"/>
+					<input type="text" size="5" name="net_mbf" class="fields"/>
 				</td>
 				<td>
 					<input type="text" size="8" name="total_payment" class="fields"/>
@@ -106,12 +104,11 @@
 			<th class="table_headers load_type_headers">Load type</th>
 			<th class="table_headers payment_no_headers">Payment #</th>
 			<th class="table_headers tickets_headers">Tickets</th>
-			<th class="table_headers net_mbf_headers">Net MBF</th>
-			<th class="table_headers tonnage_headers">Tons</th>
-			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers net_mbf_headers">Tonnage</th>
+			<th class="table_headers tonnage_headers">Net MBF</th>
+			<th class="table_headers payment_headers">Total Payment</th>
 			<th class="table_headers action_headers">Action</th>
-		</tr>
-		
+		</tr>		
 	</table>
 </div>
 
@@ -126,12 +123,11 @@
 			<th class="table_headers load_type_headers">Load type</th>
 			<th class="table_headers payment_no_headers">Payment #</th>
 			<th class="table_headers tickets_headers">Tickets</th>
-			<th class="table_headers net_mbf_headers">Net MBF</th>
-			<th class="table_headers tonnage_headers">Tons</th>
-			<th class="table_headers payment_headers">Payment</th>
+			<th class="table_headers net_mbf_headers">Tonnage</th>
+			<th class="table_headers tonnage_headers">Net MBF</th>
+			<th class="table_headers payment_headers">Total Payment</th>
 			<th class="table_headers action_headers">Action</th>
 		</tr>
-		
 	</table>
 </div>
 

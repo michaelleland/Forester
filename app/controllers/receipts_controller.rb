@@ -13,13 +13,54 @@ class ReceiptsController < ApplicationController
   end
   
   def get_owner_receipt
-    @payments = PaymentFromDestination.find(params[:payments])
+    @tickets = Ticket.find(params[:tickets])
     
-    @job = Job.find(@payments.first.job_id)
-    @owner = Owner.find(@job.owner_id)
+    @job = Job.find(@tickets.first.job_id)
+    @owner = @job.owner
+    
+    unless @job.logger.rate_percent(@job.id).nil?
+      @tickets.each do |i|
+        i.logger_value = round_to((i.value * (@job.logger.rate_percent / 100)), 2)
+        
+        i.trucker_value = 0
+        i.load_details.each do |j|
+          if j.load_type == "Tonnage"
+            i.trucker_value = i.trucker_value + (@job.trucker.hauling_rate(@job.id, i.destination_id) * j.tonnage)
+          else
+            i.trucker_value = i.trucker_value + (@job.trucker.hauling_rate(@job.id, i.destination_id) * j.mbfs)
+          end
+        end
+        
+        i.trucker_value = round_to(i.trucker_value, 2)
+        
+        i.hfi_value = round_to((@job.hfi_rate / 100 * i.value), 2)
+                
+        i.owner_value = round_to((i.value - i.logger_value - i.trucker_value - i.hfi_value), 2)
+      end
+    end
+    
+    unless @job.logger.rate_tonnage(@job.id).nil?
+      @tickets.each do |i|
+        
+        i.logger_value = 0
+        i.trucker_value = 0
+        i.load_details.each do |j|
+          if j.load_type == "Tonnage"
+            i.trucker_value = i.trucker_value + (@job.trucker.hauling_rate(@job.id, i.destination_id) * j.tonnage)
+          else
+            i.trucker_value = i.trucker_value + (@job.trucker.hauling_rate(@job.id, i.destination_id) * j.mbfs)
+          end
+          i.logger_value = i.logger_value + round_to((j.tonnage * @job.logger.rate_tonnage(@job.id)), 2)
+        end
+        
+        i.hfi_value = round_to((i.value * (@job.hfi_rate / 100)), 2)
+        
+      end
+    end
+        
         
     @total = 0 
-    @payments.collect {|i| @total = @total + i.total_payment}
+    @tickets.each {|i| @total = @total + i.value}
     
     @deduction_items = []
     
@@ -29,7 +70,12 @@ class ReceiptsController < ApplicationController
       end     
     end
       
-    @deduction_items.collect {|i| @total = @total - i[1].to_f }
+    @deduction_items.each {|i| @total = @total - i[1].to_f }
+    
+    
+    
+    
+    
     
     @total = ((@total * 10**2).round.to_f / 10**2).to_s
     if (@total.length - (@total.index(".")+1)) < 2

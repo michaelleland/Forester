@@ -50,7 +50,8 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
     t.integer  "ticket_id"
     t.integer  "species_id"
     t.string   "load_type"
-    t.float    "amount"
+    t.float    "tonnage"
+    t.float    "mbfs"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

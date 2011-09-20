@@ -4,19 +4,20 @@ class CreateLoadDetails < ActiveRecord::Migration
       t.integer :ticket_id
       t.integer :species_id
       t.string :load_type
-      t.float :amount
+      t.float :tonnage
+      t.float :mbfs
 
       t.timestamps
     end
     
-    LoadDetail.create(:ticket_id => 1, :species_id => 1, :load_type => "MBF", :amount => 9.8)
-    LoadDetail.create(:ticket_id => 2, :species_id => 2, :load_type => "MBF", :amount => 12.3)
-    LoadDetail.create(:ticket_id => 3, :species_id => 1, :load_type => "Tonnage", :amount => 25.3)
-    LoadDetail.create(:ticket_id => 4, :species_id => 4, :load_type => "MBF", :amount => 7.4)
-    LoadDetail.create(:ticket_id => 5, :species_id => 3, :load_type => "Tonnage", :amount => 28.4)
-    LoadDetail.create(:ticket_id => 6, :species_id => 2, :load_type => "MBF", :amount => 8.6)
-    LoadDetail.create(:ticket_id => 7, :species_id => 1, :load_type => "Tonnage", :amount => 29.4)
-    LoadDetail.create(:ticket_id => 8, :species_id => 1, :load_type => "MBF", :amount => 8.2)
+    LoadDetail.create(:ticket_id => 1, :species_id => 1, :load_type => "MBF", :mbfs => 9.8)
+    LoadDetail.create(:ticket_id => 2, :species_id => 2, :load_type => "MBF", :mbfs => 12.3)
+    LoadDetail.create(:ticket_id => 3, :species_id => 1, :load_type => "Tonnage", :tonnage => 25.3, :mbfs => 7.4)
+    LoadDetail.create(:ticket_id => 4, :species_id => 0, :load_type => "Tonnage", :tonnage => 23.1)
+    LoadDetail.create(:ticket_id => 5, :species_id => 0, :load_type => "Tonnage", :tonnage => 28.4)
+    LoadDetail.create(:ticket_id => 6, :species_id => 2, :load_type => "MBF", :mbfs => 8.6)
+    LoadDetail.create(:ticket_id => 7, :species_id => 1, :load_type => "Tonnage", :tonnage => 29.4, :mbfs => 8.5)
+    LoadDetail.create(:ticket_id => 8, :species_id => 1, :load_type => "MBF", :mbfs => 8.2)
     
   end
 
