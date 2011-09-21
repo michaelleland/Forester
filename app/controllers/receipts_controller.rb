@@ -232,8 +232,8 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    if @payment_num .nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @owner.id, @job.id, :order => "payment_num")
+    if @payment_num.nil?
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @trucker.id, @job.id, :order => "payment_num")
       unless @receipts.first.nil?
         @payment_num = @receipts.last.payment_num + 1
       else
@@ -311,7 +311,7 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
-    params[:deduction_list].each_with_index do |i, x|
+    params[:deductions_list].each_with_index do |i, x|
       @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
     end
     
@@ -329,7 +329,7 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
-    params[:deduction_list].each_with_index do |i, x|
+    params[:deductions_list].each_with_index do |i, x|
       @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
     end
     

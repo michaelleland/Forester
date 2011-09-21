@@ -131,20 +131,6 @@ function refresh_tickets (id) {
 	})
 }
 
-function select_all_deductions() {
-	var vals = []
-	$('#deductions_list option').each(function () {
-		vals.push($(this).attr('value'));
-	})
-	$('#deductions_list').val(vals);
-	
-	vals = []
-	$('#deductions_values option').each(function () {
-		vals.push(parseInt($(this).attr('value')));
-	})
-	$('#deductions_values').val(vals);
-}
-
 function init_ticket_select () {
 	$('#tickets_select').html('<option value="0">No job selected</option>');
 }

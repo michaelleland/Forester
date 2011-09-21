@@ -103,13 +103,15 @@
 							<td class="to" style="text-align: right;">+ $ <%= @total %> </td>
 						</tr>
 						
-						<tr>
-							<td id="Incredible_invisible_text">Lollerooo</td>
-						</tr>
-						
-						<tr>
-							<td><span style="font-weight: bold;">Notes:</span> <%= params[:notes]%></td>							
-						</tr>
+						<% unless params[:notes].nil? && params[:notes] == "" %>
+							<tr>
+								<td id="Incredible_invisible_text">Ooh, you got me!</td>
+							</tr>
+							
+							<tr>	
+								<td><span style="font-weight: bold;">Notes:</span> <%= params[:notes]%></td>							
+							</tr>
+						<% end %>
 					</table>
 				</div>
 			</div>
