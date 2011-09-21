@@ -12,6 +12,10 @@ class ReceiptsController < ApplicationController
     @receipt_item = ReceiptItem.create(:item_data => params[:data], :receipt_id => 0, :value => params[:deduction_amount])
   end
   
+  class Payment
+    attr_accessor :number, :value
+  end
+  
   def get_owner_receipt
     @tickets = Ticket.find(params[:tickets])
     
@@ -54,7 +58,7 @@ class ReceiptsController < ApplicationController
         end
         
         i.hfi_value = round_to((i.value * (@job.hfi_rate / 100)), 2)
-        
+      
       end
     end
         
@@ -71,11 +75,6 @@ class ReceiptsController < ApplicationController
     end
       
     @deduction_items.each {|i| @total = @total - i[1].to_f }
-    
-    
-    
-    
-    
     
     @total = ((@total * 10**2).round.to_f / 10**2).to_s
     if (@total.length - (@total.index(".")+1)) < 2

@@ -280,7 +280,7 @@ a:hover {
 }
 
 
-#owner_receipt_selector textarea {
+textarea {
 	float: left;
 	clear: left;
 	
@@ -319,7 +319,7 @@ a:hover {
 	right: 420px;
 }
 
-#owner_receipt_selector #submit {
+#submit {
 	float: left;
 	clear: left;
 }

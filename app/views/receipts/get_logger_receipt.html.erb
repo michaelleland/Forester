@@ -79,22 +79,3 @@
 			</div>
 	</body>
 </html>
-
-<script>
-function show_receipt_item_inputs () {
-	$('#show_new_receipt_item_inputs').parent().before('<tr> <td></td><td></td><td></td><td><input type="text" name="item_data" id="item_data" size="10" /></td><td style="text-align: right;"><select name="polarity_selector" id="polarity_selector"><option value="1">+</option><option value="0">-</option></td><td><input style="float: left;" name="amount" id="amount" size="5" /> <div style="float: left; clear: none;" class="action_link" onclick="add_the_receipt_item();">Add</div></td></tr>')
-	$('#show_new_receipt_item_inputs').fadeOut();	
-}
-
-function add_the_receipt_item () {
-	$.ajax ({
-		url: '/add_receipt_item',
-		cache: false,
-		success: function (html) {
-			$('.all_entries_row').each(function () { $(this).remove()})
-			$('#all_entries table').append(html);
-		}
-	})
-}
-	
-</script>

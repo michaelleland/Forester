@@ -20,9 +20,30 @@
 			</select>
 		</div>
 		
-		<h5>Select tickets to be paid to the logger: </h5>
+		<h5>Add deductions: </h5>
 		
-		<input id="submit" type="submit" value="Get receipt" />		
+		<div id="deductions_to_receipt_list">
+			<select id="deductions_list" name="deductions_list[]" multiple="true" size="6">
+			</select>
+		</div>
+		
+		<div id="deductions_to_receipt_list_values">
+			<select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
+			</select>
+		</div>
+		
+		<div id="input_row">
+			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
+			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
+			<input type="button" value="Add deduction" onclick="add_new_deduction();"/>
+		</div>
+		
+		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
+		
+		<textarea rows="5"></textarea>
+		
+		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />
+				
 	</form>	
 </div>
 
@@ -35,6 +56,8 @@ function import_jobs_of_trucker(id) {
 		success: function (html) {
 			$('#job_selector').html(html);
 			$('#tickets_select').html('<option value="0">No job selected</option>');
+			$('#submit').attr('disabled', 'disabled');
+			$('#submit').attr('value', 'No tickets selected');
 		}		
 	});
 }

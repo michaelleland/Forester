@@ -3,6 +3,7 @@ class CreateReceipts < ActiveRecord::Migration
     create_table :receipts do |t|
       t.integer :job_id
       t.integer :owner_id
+      t.integer :payment_num
       t.date :receipt_date
 
       t.timestamps

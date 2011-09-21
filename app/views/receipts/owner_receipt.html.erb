@@ -16,7 +16,7 @@
 		<h5>Then, select tickets to be paid:</h5>
 		
 		<div id="tickets_to_receipt">
-			<select id="tickets_select" name="tickets[]" multiple="true" size="6">
+			<select id="tickets_select" name="tickets[]" multiple="true" size="10">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
@@ -43,7 +43,7 @@
 		
 		<textarea rows="5"></textarea>
 		
-		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />		
+		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No tickets selected" />		
 	</form>	
 </div>
 
@@ -55,32 +55,20 @@ function import_jobs_of_owner(owner_id) {
 		cache: false,
 		success: function (html) {
 			$('#job_selector').html(html);
-			$('#payments_to_receipt select').html('<option value="0">No job selected</option>');
+			$('#tickets_select').html('<option value="0">No job selected</option>')
 			$('#submit').attr('disabled', 'disabled');
-			$('#submit').attr('value', 'No payments selected');
+			$('#submit').attr('value', 'No tickets selected');
 		}		
 	})
 }
 
 $('#tickets_select').change(function() {
-	if ($(this).val() != '0') {
-		var enabled = true
-		$('#tickets_select option:selected').each(function() {
-			if ($(this).text().indexOf('paid') != -1) {
-				enabled = false;
-				$('#submit').attr('disabled', 'disabled');
-				$('#submit').attr('value', 'No payments selected');
-				return false;
-			}			
-		});
-		
-		if (enabled) {
-			$('#submit').removeAttr('disabled');
-			$('#submit').attr('value', 'Create receipt');
-		}		
+	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
+		$('#submit').removeAttr('disabled');
+		$('#submit').attr('value', 'Create receipt');		
 	} else {
 		$('#submit').attr('disabled', 'disabled');
-		$('#submit').attr('value', 'No payments selected');
+		$('#submit').attr('value', 'No tickets selected');
 	}
 });
 
