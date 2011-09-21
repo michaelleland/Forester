@@ -903,8 +903,6 @@ img#hfi_logo {
 	
 	-moz-box-shadow: 0px 0px 10px #888;
 	
-	
-	
 }
 
 hr {
@@ -919,3 +917,14 @@ hr {
 	width: 940px;
 }
 
+.tickets_table_box table th {
+	font-weight: bold;
+}
+
+.dollars_td {
+	text-align: right;
+}
+
+.totals {
+	border-top: solid 1px black;
+}

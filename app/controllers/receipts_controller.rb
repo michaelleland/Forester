@@ -27,20 +27,38 @@ class ReceiptsController < ApplicationController
     
     #end utils
     
+    #Total vars declared and initialized
+    
+    @trucker_total = 0
+    @logger_total = 0 
+    @hfi_total = 0
+    @load_pay_total = 0
+    
+    @total = 0 #The final total after all those terrible calcs =)
+    @total_wo_deductions #Owners total without deductions.
+    
     @tickets = Ticket.find(params[:tickets])
     
     @job = Job.find(@tickets.first.job_id)
     @owner = @job.owner
     
+    #Load pay total calculation
+    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
+    
     #@receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", @owner.id, @job.id, :order => "payment_num")
     #@next_num = @receipts.last.payment_num + 1
     @next_num = 2
     
+    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
+    # put into @destinations var
     @destination_ids = @tickets.collect {|i| i.destination_id }
     @destination_ids = @destination_ids.uniq
     
     @destinations = Destination.find(@destination_ids)
     
+    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
+    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
+    # totals are also added up in the midst of all this. 
     @tickets.each do |j|
       @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
       if j.load_type == "MBF"
@@ -51,7 +69,10 @@ class ReceiptsController < ApplicationController
         end
       end
       
+      @trucker_total = @trucker_total + j.trucker_value
+      
       j.hfi_value = j.value * (@job.hfi_rate / 100)
+      @hfi_total = @hfi_total + j.hfi_value
       
       @destinations.each do |i|
         if j.destination_id == i.id
@@ -69,12 +90,13 @@ class ReceiptsController < ApplicationController
           end
         end
       end
+      
+      @logger_total = @logger_total + j.logger_value
+      
       j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
     end
     
-    @total = 0
     @tickets.each {|i| @total = @total + i.owner_value.to_f }
-    
     
     @total_wo_deductions = give_pennies(@total)
     

@@ -4,6 +4,22 @@
 	border: none;
 }
 
+#page_2 {
+	margin: 0px;
+	-moz-box-shadow: none;
+	border: none;
+}
+
+#page_3 {
+	margin: 0px;
+	-moz-box-shadow: none;
+	border: none;
+}
+
 #print_it_link {
+	display: none;
+}
+
+#save_it_link {
 	display: none;
 }
