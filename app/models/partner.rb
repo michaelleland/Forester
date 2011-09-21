@@ -10,17 +10,9 @@ class Partner < ActiveRecord::Base
     @hauling_rate = TruckerRates.find_by_job_id_and_destination_id_and_partner_id(job_id, destination_id, self.id).rate
   end
   
-  def rate_tonnage(job_id)
-    @rate_tonnage = LoggerAssignment.find_by_job_id_and_partner_id(job_id, self.id).rate_tonnage
-  end
-  
-  def rate_percent(job_id)
-    @rate_percent = @rate_tonnage = LoggerAssignment.find_by_job_id_and_partner_id(job_id, self.id).rate_percent
-  end
-  
-  def rate_mbf(job_id)
-    @rate_mbf = @rate_tonnage = LoggerAssignment.find_by_job_id_and_partner_id(job_id, self.id).rate_mbf
-  end
+  def logging_rate(destination_id, job_id)
+    @logging_rate = LoggerRate.find_by_job_id_and_destination_id_and_partner_id(job_id, destination_id, self.id).rate
+  end 
   
   def address
     @address = Address.find(self.address_id)

@@ -78,7 +78,6 @@
 								<td style="text-align: right;"> + $ <%= @total %> </td>
 							<% end %>
 						</tr>
-					<% @ac = ApplicationController.new %>
 					
 					<% @deduction_items.each do |i| %>
 							<tr>
@@ -177,6 +176,8 @@
 			</div>
 		</div>
 	</body>
+</html>
+
 <script>
 	function save_the_receipt () {
 		
@@ -194,6 +195,3 @@
 		});
 	}
 </script>
-
-
-</html>
