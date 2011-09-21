@@ -1,6 +1,6 @@
 <div class="grid_10" id="logger_receipt_selector">
 	<h4>Search for an old receipt </h4>
-	<form action="/get_logger_receipt" method="get" target="_blank">
+	<form id="search_form" action="/get_logger_receipt" method="get" target="_blank">
 		<h5>Select job:</h5>
 		<select id="job_selector">
 			<option onclick="init_type_select(); init_receipt_select();" value="0">Select a job</option>
@@ -19,11 +19,14 @@
 		
 		<h5>Select a receipt:</h5>
 		
-		<div id="tickets_to_receipt">
-			<select id="receipts_select" size="10">
+		<div id="receipts_to_receipt">
+			<select id="receipt_select" size="10" style="width: 200px;">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
+		
+		<input id="owner_type_hinput" type="hidden" name="owner_type" value="" />
+		<input id="receipt_id_hinput" type="hidden" name="receipt_id" value="" />
 		
 		<input id="submit" type="submit" value="Get receipt" />		
 	</form>	
@@ -32,12 +35,21 @@
 <script>
 
 function init_receipt_select () {
-	$('#receipts_select').html('<option value="0">No job selected</option>');
+	$('#receipt_select').html('<option value="0">No job selected</option>');
 }
 
 function init_type_select () {
 	$('#owner_type_selector').val('0');
-	$('#receipts_select').html('<option value="0">No owner type selected</option>');
+	$('#receipt_select').html('<option value="0">No owner type selected</option>');
+}
+
+function refresh_form_action () {
+	var type = $('#owner_type_selector').val();
+	var receipt_id = $('#receipt_select').val();
+	
+	$('#search_form').attr('action', '/get_old_receipt/')
+	$('#owner_type_hinput').attr('value', type)
+	$('#receipt_id_hinput').attr('value', receipt_id)
 }
 
 function refresh_receipts (type) {
@@ -47,7 +59,7 @@ function refresh_receipts (type) {
 		url: '/get_receipts/'+job_id+'?owner_type='+type,
 		cache: false,
 		success: function (html) {
-			$('#receipts_select').html(html);
+			$('#receipt_select').html(html);
 		}		
 	});
 }

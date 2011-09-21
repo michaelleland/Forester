@@ -14,7 +14,13 @@
 		
 		<div id="controls">
 			<div id="print_it_link" onclick="window.print()">Print the receipt</div>
-			<div id="save_it_link" onclick="save_the_receipt()">Save the receipt</div>
+			<% if @old.nil? %>
+				<% unless Receipt.find_by_job_id_and_owner_type_and_payment_num(@job.id, "landowner", @payment_num).nil? %>
+					<div id="save_it_link" onclick="save_the_receipt()">Save the receipt</div>
+				<% else %>
+					<div id="save_it_link" style="color: green; cursor: inherit;" >Receipt is saved</div>
+				<% end %>
+			<% end %>	
 		</div>
 		
 		<div class="page" id="page_1">
@@ -59,7 +65,7 @@
 						
 						<tr>
 							<td><%= @paymetn_num %></td>
-							<td><%= @time.strftime('%m/%d/%Y')%></td>
+							<td><%= @date_string %></td>
 							<td></td>
 							<td>Logging pay</td>
 							<td></td>
@@ -95,13 +101,13 @@
 							<td class="to" style="text-align: right;">+ $ <%= @total %> </td>
 						</tr>
 						
-						<% unless params[:notes].nil? && params[:notes] == "" %>
+						<% unless @notes.nil? || @notes == "" %>
 							<tr>
 								<td id="Incredible_invisible_text">Ooh, you got me!</td>
 							</tr>
 							
 							<tr>	
-								<td><span style="font-weight: bold;">Notes:</span> <%= params[:notes]%></td>							
+								<td><span style="font-weight: bold;">Notes:</span> <%= @notes %></td>							
 							</tr>
 						<% end %>
 			
@@ -175,24 +181,26 @@
 	</body>
 </html>
 
-<script>
-	function save_the_receipt () {
-		
-		<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
-		<% @deductions = ""; @deduction_items.each {|i| @deductions = "#{@deductions}&deductions_list[]=#{i[0]}"} %>
-		<% @values = ""; @deduction_items.each {|i| @values = "#{@values}&deductions_values[]=#{i[1]}"} %>
-		
-		var ids = '<%= @ids %>';
-		var values = '<%= @values %>';
-		var items =  '<%= @deductions %>';
-		var url = ids+'&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= params[:notes]%>'+values+items;
-		
-		$.ajax ({
-			url: 'save_logger_receipt/'+url,
-			cache: false,
-			success: function () {
-				
-			}
-		});
-	}
-</script>
+<% if @old.nil? %>
+	<script>
+		function save_the_receipt () {
+			
+			<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
+			<% @deductions = ""; @deduction_items.each {|i| @deductions = "#{@deductions}&deductions_list[]=#{i[0]}"} %>
+			<% @values = ""; @deduction_items.each {|i| @values = "#{@values}&deductions_values[]=#{i[1]}"} %>
+			
+			var ids = '<%= @ids %>';
+			var values = '<%= @values %>';
+			var items =  '<%= @deductions %>';
+			var url = ids+'&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= params[:notes]%>'+values+items;
+			
+			$.ajax ({
+				url: 'save_logger_receipt/'+url,
+				cache: false,
+				success: function () {
+					
+				}
+			});
+		}
+	</script>
+<% end %>
