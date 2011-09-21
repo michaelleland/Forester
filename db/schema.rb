@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "payment_num"
+    t.string   "notes"
     t.date     "receipt_date"
     t.datetime "created_at"
     t.datetime "updated_at"
