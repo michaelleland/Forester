@@ -1,8 +1,16 @@
 <div class="grid_10" id="logger_receipt_selector">
 	<h4>Search for an old receipt </h4>
-	<h5>Select logger/trucker and a job: </h5>
 	<form action="/get_logger_receipt" method="get" target="_blank">
-		<select id="partner_selector" name="logger_id">
+		<h5>Search receipt of: </h5>
+		<select id="owner_type_selector" name="owner_type">
+			<option onclick="" value="none"> Select owner type </option>
+			<option onclick="import_landowners()" value="landowner">Landowner</option>
+			<option onclick="import_loggers()" value="logger">Logger</option>
+			<option onclick="import_truckers()" value="trucker">Trucker</option>
+		</select>
+		
+		<h5> Select ticket's owner: </h5>
+		<select id="owner_selector" name="owner_id">
 			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
 			<% Partner.all.each do |i| %>
 				<option onclick="import_jobs_of_partner(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
@@ -42,12 +50,27 @@ function init_ticket_select () {
 
 function refresh_receipts (job_id, partner_id) {
 	$.ajax ({
-		url: '/get_partner_jobs/'+job_id+'?partner_id='+partner_id,
+		url: '/get_receipts/'+job_id+'?partner_id='+partner_id,
 		cache: false,
 		success: function (html) {
 			$('#receipts_select').html(html);
 		}		
 	});
 }
+
+function import_landowners () {
+	<% @html = ""; Owner.all.each {|i| @html = "#{@html}<option value=\"#{i.id}\">#{i.name}</option>"} %>
 	
+	var html = <%= @html.to_s %>;
+	
+	$('#owner_selector').html(html);	
+}
+
+function import_loggers () {
+	
+}
+
+function import_truckers () {
+	
+}	
 </script>

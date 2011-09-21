@@ -11,6 +11,7 @@ Forester::Application.routes.draw do
   match "/import_jobs_of_owner/:id" => "page_controls#import_jobs_of_owner"
   match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
+  match "/get_receipts" => "page_controls#get_receipts"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"

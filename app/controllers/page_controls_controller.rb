@@ -28,6 +28,10 @@ class PageControlsController < ApplicationController
     render "get_tickets.html.erb"
   end
   
+  def get_receipts
+    Receipt.find_all_by_job_id_and_partner_id
+  end
+  
   def add_specie
     
   end
