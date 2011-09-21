@@ -64,7 +64,7 @@
 						</tr>
 						
 						<tr>
-							<td><%= @paymetn_num %></td>
+							<td><%= @payment_num %></td>
 							<td><%= @date_string %></td>
 							<td></td>
 							<td>Logging pay</td>
@@ -192,7 +192,7 @@
 			var ids = '<%= @ids %>';
 			var values = '<%= @values %>';
 			var items =  '<%= @deductions %>';
-			var url = ids+'&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= params[:notes]%>'+values+items;
+			var url = ids+"&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
 				url: 'save_logger_receipt/'+url,
