@@ -45,11 +45,17 @@ class ReceiptsController < ApplicationController
     #Load pay total calculation
     @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
     
-    @next_num = 1
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @owner.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @next_num = @receipts.last.payment_num + 1
+    @payment_num = params[:payment_num]
+    
+    if @payment_num .nil?
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @owner.id, @job.id, :order => "payment_num")
+      unless @receipts.first.nil?
+        @payment_num = @receipts.last.payment_num + 1
+      else
+        @payment_num = 1
+      end
     end
+    
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
     # put into @destinations var
     @destination_ids = @tickets.collect {|i| i.destination_id }
@@ -146,6 +152,7 @@ class ReceiptsController < ApplicationController
     unless @receipts.first.nil?
       @next_num = @receipts.last.payment_num + 1
     end
+    
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
     # put into @destinations var
     @destination_ids = @tickets.collect {|i| i.destination_id }
@@ -223,10 +230,15 @@ class ReceiptsController < ApplicationController
     #Load pay total calculation
     @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
     
-    @next_num = 1
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @next_num = @receipts.last.payment_num + 1
+    @payment_num = params[:payment_num]
+    
+    if @payment_num .nil?
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @owner.id, @job.id, :order => "payment_num")
+      unless @receipts.first.nil?
+        @payment_num = @receipts.last.payment_num + 1
+      else
+        @payment_num = 1
+      end
     end
     
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
@@ -272,18 +284,38 @@ class ReceiptsController < ApplicationController
   def save_owner_receipt    
     @tickets = Ticket.find(params[:tickets])
     
-    @payment_num = 1
-    
-    @number_of_former_receipts_of_this_job = Receipt.find_all_by_job_id(@tickets.first.job_id).count
-    
-    unless @number_of_former_receipts_of_this_job.nil? && @number_of_former_receipts_of_this_job > 0
-      @payment_num = @payment_num + @number_of_former_receipts_of_this_job
-    end
+    @payment_num = params[:payment_num]
     
     @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "landowner", :receipt_date => Time.now.strftime("%Y-%m-%d"));
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_owner = true
+      i.save
+    end
+  end
+  
+    def save_logger_receipt    
+    @tickets = Ticket.find(params[:tickets])
+    
+    @payment_num = params[:payment_num]
+    
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"));
+    @tickets.each do |i|
+      @receipt.tickets.push(i)
+      i.paid_to_logger = true
+      i.save
+    end
+  end
+  
+    def save_trucker_receipt    
+    @tickets = Ticket.find(params[:tickets])
+    
+    @payment_num = params[:payment_num]
+    
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"));
+    @tickets.each do |i|
+      @receipt.tickets.push(i)
+      i.paid_to_trucker = true
       i.save
     end
   end

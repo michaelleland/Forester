@@ -11,7 +11,6 @@
 		<%= csrf_meta_tag %>
 	</head>	
 	<body>
-		
 		<div id="controls">
 			<div id="print_it_link" onclick="window.print()">Print the receipt</div>
 			<div id="save_it_link" onclick="save_the_receipt()">Save the receipt</div>
@@ -62,7 +61,7 @@
 						</tr>
 						
 						<tr>
-							<td><%= @next_num %></td>
+							<td><%= @payment_num %></td>
 							<td><%= @time.strftime('%m/%d/%Y')%></td>
 							<td></td>
 							<td>Trucking pay</td>
@@ -175,10 +174,10 @@
 		<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
 		
 		var ids = '<%= @ids %>';
-		var url = ids+'&logger_id=<%= @trucker.id %>';
+		var url = ids+'&logger_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>';
 		
 		$.ajax ({
-			url: 'save_logger_receipt/'+url,
+			url: 'save_trucker_receipt/'+url,
 			cache: false,
 			success: function () {
 				

@@ -60,6 +60,8 @@ Forester::Application.routes.draw do
   
   #Receipts saving call
   match "/save_owner_receipt" => "receipts#save_owner_receipt"
+  match "/save_logger_receipt" => "receipts#save_logger_receipt"
+  match "/save_trucker_receipt" => "receipts#save_trucker_receipt"
   
   #Get the thing!
   match "/export_the_thing/:id" => "reports#export_the_thing"
