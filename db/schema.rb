@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "receipts", :force => true do |t|
     t.integer  "job_id"
     t.integer  "owner_id"
+    t.integer  "payment_num"
     t.date     "receipt_date"
     t.datetime "created_at"
     t.datetime "updated_at"
