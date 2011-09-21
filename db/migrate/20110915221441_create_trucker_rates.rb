@@ -4,11 +4,17 @@ class CreateTruckerRates < ActiveRecord::Migration
       t.integer :destination_id
       t.integer :job_id
       t.integer :partner_id
-      t.string :load_type
       t.float :rate
-
+      # t.boolean is_percent. Can truckers be paid by percent?
+      
       t.timestamps
     end
+    
+    TruckerRate.create(:destination_id => 1, :job_id => 1, :partner_id => 2, :rate => 28.2)
+    TruckerRate.create(:destination_id => 1, :job_id => 2, :partner_id => 2, :rate => 22.0)
+    TruckerRate.create(:destination_id => 2, :job_id => 1, :partner_id => 2, :rate => 23.4)
+    TruckerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 2, :rate => 21.6)
+    
   end
 
   def self.down
