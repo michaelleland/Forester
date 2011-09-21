@@ -66,6 +66,16 @@ function init_ticket_select () {
 	$('#tickets_select').html('<option value="0">No job selected</option>');
 }
 
+$('#tickets_select').change(function() {
+	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
+		$('#submit').removeAttr('disabled');
+		$('#submit').attr('value', 'Create receipt');		
+	} else {
+		$('#submit').attr('disabled', 'disabled');
+		$('#submit').attr('value', 'No tickets selected');
+	}
+});
+
 
 function refresh_tickets (id) {
 	$.ajax ({
