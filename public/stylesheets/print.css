@@ -16,6 +16,10 @@
 	border: none;
 }
 
+#controls {
+	display: none;
+}
+
 #print_it_link {
 	display: none;
 }

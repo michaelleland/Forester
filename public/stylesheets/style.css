@@ -749,24 +749,6 @@ li {
 
 /* Receipt styles*/
 
-#print_it_link {
-	float: none;
-	
-	color: #777;
-	
-	padding-left: 105px;
-	
-	font-size: 20px;
-	margin: auto;
-	margin-top: 25px;
-	width: 200px;
-}
-
-#print_it_link:hover {
-	cursor: pointer;
-	color: #222;
-}
-
 img#hfi_logo {
 	float: left;
 	width: 180px;
@@ -881,7 +863,7 @@ img#hfi_logo {
 }
 
 #page_2 {
-	margin-top: 25px;
+	margin-top: 50px;
 }
 
 .page {
@@ -927,4 +909,49 @@ hr {
 
 .totals {
 	border-top: solid 1px black;
+}
+
+/*Control "bar" for printing/saving etc receipts */
+
+#controls {
+	width: 960px;
+	margin: auto;
+	margin-top: 25px;
+	
+	border: solid 1px #0088FF;
+	background: #22AAFF;
+	
+	-moz-border-radius: 5px;
+	
+	
+}
+
+#print_it_link {
+	float: none;
+	
+	color: #777;
+	
+	font-size: 20px;
+	margin: auto;
+	width: 200px;
+}
+
+#print_it_link:hover {
+	cursor: pointer;
+	color: #222;
+}
+
+#save_it_link {
+	float: none;
+	
+	color: #777;
+	
+	font-size: 20px;
+	margin: auto;
+	width: 200px;
+}
+
+#save_it_link:hover {
+	cursor: pointer;
+	color: #222;	
 }
