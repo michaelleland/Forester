@@ -201,6 +201,74 @@ class ReceiptsController < ApplicationController
     
   end
   
+  def get_trucker_receipt
+    #Some utility vars
+    @time = Time.now
+    @ac = ApplicationController.new
+    
+    #end utils
+    
+    #Total vars declared and initialized
+    
+    @trucker_total = 0     
+    @load_pay_total = 0
+    
+    @total = 0 #The final total after all those terrible calcs =)   
+    
+    @tickets = Ticket.find(params[:tickets])
+    
+    @job = Job.find(@tickets.first.job_id)
+    @trucker = @job.trucker
+    
+    #Load pay total calculation
+    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
+    
+    @next_num = 1
+    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
+    unless @receipts.first.nil?
+      @next_num = @receipts.last.payment_num + 1
+    end
+    
+    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
+    # put into @destinations var
+    @destination_ids = @tickets.collect {|i| i.destination_id }
+    @destination_ids = @destination_ids.uniq
+    
+    @destinations = Destination.find(@destination_ids)
+    
+    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
+    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
+    # totals are also added up in the midst of all this. 
+    @tickets.each do |j|
+      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @trucker.id, j.destination_id)
+      if j.load_type == "MBF"
+        j.trucker_value = @rate.rate * j.net_mbf
+      else
+        if j.load_type == "Tonnage"
+          j.trucker_value = @rate.rate * j.tonnage
+        end
+      end
+      
+      @trucker_total = @trucker_total + j.trucker_value
+      
+    end
+    
+    @tickets.each {|i| @load_pay_total = @load_pay_total + i.owner_value.to_f }
+    
+    @deduction_items = []
+    
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        @deduction_items.push([i, params[:deductions_values][x]])
+      end     
+    end
+    @total = @trucker_total
+      
+    @deduction_items.each {|i| @total = @total - i[1].to_f }
+    
+    @total = give_pennies(@trucker_total)
+  end
+  
   def save_owner_receipt    
     @tickets = Ticket.find(params[:tickets])
     
