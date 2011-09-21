@@ -1,29 +1,26 @@
 <div class="grid_10" id="logger_receipt_selector">
 	<h4>Search for an old receipt </h4>
 	<form action="/get_logger_receipt" method="get" target="_blank">
-		<h5>Search receipt of: </h5>
-		<select id="owner_type_selector" name="owner_type">
-			<option onclick="" value="none"> Select owner type </option>
-			<option onclick="import_landowners()" value="landowner">Landowner</option>
-			<option onclick="import_loggers()" value="logger">Logger</option>
-			<option onclick="import_truckers()" value="trucker">Trucker</option>
-		</select>
-		
-		<h5> Select ticket's owner: </h5>
-		<select id="owner_selector" name="owner_id">
-			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
-			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_partner(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+		<h5>Select job:</h5>
+		<select id="job_selector">
+			<option onclick="init_type_select(); init_receipt_select();" value="0">Select a job</option>
+			<% Job.all.each do |i| %>
+				<option onclick="init_type_select();" value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
-		<select id="job_selector" name="job_id">
-			<option>No logger selected</option>
+		
+		<h5>Get tickets of:</h5>
+		<select id="owner_type_selector">
+			<option onclick="init_receipt_select()" value="none"> Select owner type </option>
+			<option onclick="refresh_receipts('landowner')" value="landowner">Landowner</option>
+			<option onclick="refresh_receipts('logger')" value="logger">Logger</option>
+			<option onclick="refresh_receipts('trucker')" value="trucker">Trucker</option>
 		</select>
 		
 		<h5>Select a receipt:</h5>
 		
 		<div id="tickets_to_receipt">
-			<select id="receipts_select" name="receipt_id" size="10">
+			<select id="receipts_select" size="10">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
@@ -34,23 +31,20 @@
 
 <script>
 
-function import_jobs_of_partner(id) {
-	$.ajax ({
-		url: '/import_jobs_of_partner/'+id,
-		cache: false,
-		success: function (html) {
-			$('#job_selector').html(html);
-		}		
-	});
+function init_receipt_select () {
+	$('#receipts_select').html('<option value="0">No job selected</option>');
 }
 
-function init_ticket_select () {
-	$('#tickets_select').html('<option value="0">No job selected</option>');
+function init_type_select () {
+	$('#owner_type_selector').val('0');
+	$('#receipts_select').html('<option value="0">No owner type selected</option>');
 }
 
-function refresh_receipts (job_id, partner_id) {
+function refresh_receipts (type) {
+	var job_id = $('#job_selector').val();
+	
 	$.ajax ({
-		url: '/get_receipts/'+job_id+'?partner_id='+partner_id,
+		url: '/get_receipts/'+job_id+'?owner_type='+type,
 		cache: false,
 		success: function (html) {
 			$('#receipts_select').html(html);
@@ -58,19 +52,4 @@ function refresh_receipts (job_id, partner_id) {
 	});
 }
 
-function import_landowners () {
-	<% @html = ""; Owner.all.each {|i| @html = "#{@html}<option value=\"#{i.id}\">#{i.name}</option>"} %>
-	
-	var html = <%= @html.to_s %>;
-	
-	$('#owner_selector').html(html);	
-}
-
-function import_loggers () {
-	
-}
-
-function import_truckers () {
-	
-}	
 </script>

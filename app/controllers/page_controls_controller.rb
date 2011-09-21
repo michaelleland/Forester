@@ -29,7 +29,17 @@ class PageControlsController < ApplicationController
   end
   
   def get_receipts
-    Receipt.find_all_by_job_id_and_partner_id
+    @job = Job.find(params[:id])
+    @receipts = []
+    if params[:owner_type] == "landowner"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.owner.id, "landowner")
+    end
+    if params[:owner_type] == "logger"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.logger.id, "logger")
+    end
+    if params[:owner_type] == "trucker"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.trucker.id, "trucker")
+    end
   end
   
   def add_specie

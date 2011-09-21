@@ -45,9 +45,10 @@ class ReceiptsController < ApplicationController
     #Load pay total calculation
     @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
     
+    #This is "inherited" if we are pulling out an old receipt
     @payment_num = params[:payment_num]
     
-    if @payment_num .nil?
+    if @payment_num.nil?
       @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @owner.id, @job.id, :order => "payment_num")
       unless @receipts.first.nil?
         @payment_num = @receipts.last.payment_num + 1
@@ -147,10 +148,16 @@ class ReceiptsController < ApplicationController
     #Load pay total calculation
     @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
     
-    @next_num = 1
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @next_num = @receipts.last.payment_num + 1
+    #This is "inherited" if we are pulling out an old receipt
+    @payment_num = params[:payment_num]
+    
+    if @payment_num.nil?
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @logger.id, @job.id, :order => "payment_num")
+      unless @receipts.first.nil?
+        @payment_num = @receipts.last.payment_num + 1
+      else
+        @payment_num = 1
+      end
     end
     
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
@@ -230,6 +237,7 @@ class ReceiptsController < ApplicationController
     #Load pay total calculation
     @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
     
+    #This is "inherited" if we are pulling out an old receipt
     @payment_num = params[:payment_num]
     
     if @payment_num.nil?
@@ -293,8 +301,10 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
-    params[:deductions_list].each_with_index do |i, x|
-      @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+      end
     end
     
   end
@@ -304,15 +314,17 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_logger = true
       i.save
     end
     
-    params[:deductions_list].each_with_index do |i, x|
-      @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+      end
     end
     
   end
@@ -322,16 +334,17 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:trucker_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_trucker = true
       i.save
     end
     
-    params[:deductions_list].each_with_index do |i, x|
-      @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+      end
     end
-    
   end
 end
