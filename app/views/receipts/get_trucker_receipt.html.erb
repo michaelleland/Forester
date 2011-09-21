@@ -174,7 +174,7 @@
 		<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
 		
 		var ids = '<%= @ids %>';
-		var url = ids+'&logger_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>';
+		var url = ids+'&logger_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>&notes=<%= params[:notes]%>';
 		
 		$.ajax ({
 			url: 'save_trucker_receipt/'+url,

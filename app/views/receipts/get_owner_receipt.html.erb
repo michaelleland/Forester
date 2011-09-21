@@ -102,7 +102,14 @@
 							<td class="tp">Total to be paid </td>
 							<td class="to" style="text-align: right;">+ $ <%= @total %> </td>
 						</tr>
-			
+						
+						<tr>
+							<td id="Incredible_invisible_text">Lollerooo</td>
+						</tr>
+						
+						<tr>
+							<td><span style="font-weight: bold;">Notes:</span> <%= params[:notes]%></td>							
+						</tr>
 					</table>
 				</div>
 			</div>
@@ -184,7 +191,7 @@
 		<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
 		
 		var ids = '<%= @ids %>';
-		var url = ids+'&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>';
+		var url = ids+'&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>&notes=<%= params[:notes]%>';
 		
 		$.ajax ({
 			url: 'save_owner_receipt/'+url,
