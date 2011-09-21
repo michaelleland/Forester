@@ -747,7 +747,25 @@ li {
 }
 
 
-/* Report styles*/
+/* Receipt styles*/
+
+#print_it_link {
+	float: none;
+	
+	color: #777;
+	
+	padding-left: 105px;
+	
+	font-size: 20px;
+	margin: auto;
+	margin-top: 25px;
+	width: 200px;
+}
+
+#print_it_link:hover {
+	cursor: pointer;
+	color: #222;
+}
 
 img#hfi_logo {
 	float: left;
@@ -757,23 +775,34 @@ img#hfi_logo {
 
 #receipt_header {
 	float: left;
-	width: 450px;
-	padding-left: 150px;
+	width: 650px;
 	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+
+#receipt_tickets_header {
+	width: 940px;
+	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
 }
 
 #hfi_address_box {
-	width: 450px;
-	padding-left: 150px;
+	width: 300px;
+	padding-left: 30px;
 	padding-top: 50px;
 	float: left;
 	margin-bottom: 20px;
 }
 
 #details_box {
-	margin-top: 15px;
+	border-left: 1px solid black;
+	padding-left: 10px;
+	
+	margin-top: 50px;
 	float: left;
-	width: 940px;
+	width: 420px;
 }
 
 #details_box .headers {
@@ -811,17 +840,12 @@ img#hfi_logo {
 
 #job_items_box table th {
 	font-weight: bold;
-	padding-left: 5px;
-	width: 150px;
 }
 
-#job_items_box table td {
-	padding-left: 5px;
-	width: 150px;
-}
-
-#job_items_box table th.lo {
-	width: 250px;
+#job_items_box table {
+	margin: auto;
+	width: 920px;
+	
 }
 
 .to {
@@ -850,10 +874,37 @@ img#hfi_logo {
 	
 }
 
-#page {
+/* Individual page styles */
+
+#page_1 {
+	margin-top: 25px;
+}
+
+#page_2 {
+	margin-top: 25px;
+}
+
+.page {
+	
+	font-size: 16px;
+	
+	background: white;
+	
 	color: black;
+	
 	width: 960px;
+	height: 1242px;
+	
 	margin: auto;
+	
+	border: solid 1px black;
+	
+	padding: 25px;
+	
+	-moz-box-shadow: 0px 0px 10px #888;
+	
+	
+	
 }
 
 hr {

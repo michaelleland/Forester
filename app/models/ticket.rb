@@ -55,6 +55,10 @@ class Ticket < ActiveRecord::Base
     end
   end
   
+  def load_type
+    @load_type = self.load_details.first.load_type
+  end
+  
   def job
     @job = Job.find(self.job_id)
   end

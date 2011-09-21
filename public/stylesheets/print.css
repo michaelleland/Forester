@@ -1,0 +1,9 @@
+#page_1 {
+	margin: 0px;
+	-moz-box-shadow: none;
+	border: none;
+}
+
+#print_it_link {
+	display: none;
+}
