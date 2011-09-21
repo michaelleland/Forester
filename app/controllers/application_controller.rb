@@ -7,4 +7,21 @@ class ApplicationController < ActionController::Base
   def round_to(x, d)
     @rounded = (x * 10**d).round.to_f / 10**d
   end
+  
+  def give_pennies(x)
+    x = round_to(x, 2)
+    @as_string = x.to_s
+    
+    if (@as_string.length - @as_string.index('.')) < 3
+      @as_string = "#{@as_string}0"
+    else
+      if (@as_string.length - @as_string.index('.')) > 3
+        @as_string = @as_string[0, @as_string.index('.')+2]
+      end
+    end
+    
+    @as_string
+    
+  end
+  
 end
