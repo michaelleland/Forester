@@ -4,7 +4,11 @@ class ReceiptsController < ApplicationController
   def index
     
   end
-  
+ 
+  def search_receipt
+    
+  end
+ 
   def owner_receipt
   end
   

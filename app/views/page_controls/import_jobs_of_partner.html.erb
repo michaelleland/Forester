@@ -1,0 +1,9 @@
+<% if params[:id] == "0" %>
+	<option>No owner selected</option>
+<% else %>
+	<option onclick="refresh_receipts(0)" value="0">Select a job</option>
+	<% @jobs.each do |i| %>
+		<option value="<%= i.id %>" onclick="refresh_receipts(<%= i.id %>);"><%= i.name %></option>
+	<% end %>
+<% end %>
+		
