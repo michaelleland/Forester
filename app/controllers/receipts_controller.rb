@@ -21,7 +21,11 @@ class ReceiptsController < ApplicationController
   end
   
   def get_owner_receipt
+    #Some utility vars
     @time = Time.now
+    @ac = ApplicationController.new
+    
+    #end utils
     
     @tickets = Ticket.find(params[:tickets])
     

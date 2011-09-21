@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
   create_table "logger_assignments", :force => true do |t|
     t.integer  "job_id"
     t.integer  "partner_id"
+    t.boolean  "pay_the_trucker"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

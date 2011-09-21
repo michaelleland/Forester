@@ -108,16 +108,50 @@
 		
 		<div id="page_2" class="page">
 			<div id="receipt_tickets_header">Tickets</div>
-			<div id="tickets_table_box">
+			<div class="tickets_table_box">
 				<table>
 					<tr>
-						<th>Ticket #</th>
-						<th>Destination</th>
-						<th>Load Type</th>
+						<th>General</th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th>Portions</th>
 						<th></th>
 						<th></th>
 						<th></th>
 					</tr>
+					<tr>
+						<th>Ticket #</th>
+						<th>Destination</th>
+						<th>Load Type</th>
+						<th>Wood Type</th>
+						<th>Net MBF</th>
+						<th>Tonnage</th>
+						<th>Load pay</th>
+						<th>Trucker</th>
+						<th>Logger</th>
+						<th>HFI</th>
+						<th>Owner</th>
+					</tr>
+					
+					<% @tickets.each do |i| %>
+						<tr>
+							<th><%= i.number %></th>
+							<th><%= i.destination.name %></th>
+							<th><%= i.load_type %></th>
+							<th><%= i.wood_type %></th>
+							<th><%= i.net_mbf %></th>
+							<th><%= i.tonnage %></th>
+							<th><%= @ac.give_pennies(i.value) %></th>
+							<th><%= @ac.give_pennies(i.trucker_value) %></th>
+							<th><%= @ac.give_pennies(i.logger_value) %></th>
+							<th><%= @ac.give_pennies(i.hfi_value) %></th>
+							<th><%= @ac.give_pennies(i.owner_value) %></th>
+						</tr>					
+					<% end %>
 				</table>	
 			</div>
 		</div>
