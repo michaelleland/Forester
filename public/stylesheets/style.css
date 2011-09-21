@@ -915,6 +915,7 @@ hr {
 
 #controls {
 	width: 960px;
+	height: 60px;
 	margin: auto;
 	margin-top: 25px;
 	
@@ -922,7 +923,7 @@ hr {
 	background: #22AAFF;
 	
 	-moz-border-radius: 5px;
-	
+	text-align: center;
 	
 }
 

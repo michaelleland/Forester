@@ -57,6 +57,9 @@ Forester::Application.routes.draw do
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   
+  #Receipts saving call
+  match "/save_owner_receipt" => "receipts#save_owner_receipt"
+  
   #Get the thing!
   match "/export_the_thing/:id" => "reports#export_the_thing"
   match "/exported_report" => "reports#exported_report"
