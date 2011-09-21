@@ -264,6 +264,10 @@ a:hover {
 	width: 400px;
 }
 
+#receipts_select {
+	width: 400px;
+}
+
 #deductions_to_receipt_list select {
 	float: left;
 	width: 300px;

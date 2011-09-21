@@ -52,6 +52,7 @@ class PageControlsController < ApplicationController
       
       @jobs = @trucker_jobs + @logger_jobs
       @jobs.flatten!
+      @jobs.uniq!
       @jobs = @jobs.sort_by {|i| i.name } 
     end
   end
