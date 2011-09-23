@@ -11,6 +11,7 @@ Forester::Application.routes.draw do
   match "/import_jobs_of_owner/:id" => "page_controls#import_jobs_of_owner"
   match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
+  match "/get_receipts" => "page_controls#get_receipts"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -45,7 +46,7 @@ Forester::Application.routes.draw do
   #Receipt page's "pull receipt" calls
   match "/get_owner_receipt" => "receipts#get_owner_receipt"
   match "/get_logger_receipt" => "receipts#get_logger_receipt"
-  match "/get_logger_trucker" => "receipts#get_trucker_receipt"
+  match "/get_trucker_receipt" => "receipts#get_trucker_receipt"
   
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
@@ -60,6 +61,8 @@ Forester::Application.routes.draw do
   
   #Receipts saving call
   match "/save_owner_receipt" => "receipts#save_owner_receipt"
+  match "/save_logger_receipt" => "receipts#save_logger_receipt"
+  match "/save_trucker_receipt" => "receipts#save_trucker_receipt"
   
   #Get the thing!
   match "/export_the_thing/:id" => "reports#export_the_thing"
