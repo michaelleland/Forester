@@ -15,7 +15,7 @@
 		<div id="controls">
 			<div id="print_it_link" onclick="window.print()">Print the receipt</div>
 			<% if @old.nil? %>
-				<% unless Receipt.find_by_job_id_and_owner_type_and_payment_num(@job.id, "landowner", @payment_num).nil? %>
+				<% if Receipt.find_by_job_id_and_owner_type_and_payment_num(@job.id, "logger", @payment_num).nil? %>
 					<div id="save_it_link" onclick="save_the_receipt()">Save the receipt</div>
 				<% else %>
 					<div id="save_it_link" style="color: green; cursor: inherit;" >Receipt is saved</div>
