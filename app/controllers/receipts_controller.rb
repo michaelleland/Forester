@@ -162,7 +162,7 @@ class ReceiptsController < ApplicationController
     @payment_num = params[:payment_num]
     
     if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @logger.id, @job.id, :order => "payment_num")
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
       unless @receipts.first.nil?
         @payment_num = @receipts.last.payment_num + 1
       else
@@ -254,7 +254,7 @@ class ReceiptsController < ApplicationController
     @payment_num = params[:payment_num]
     
     if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("landowner", @trucker.id, @job.id, :order => "payment_num")
+      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
       unless @receipts.first.nil?
         @payment_num = @receipts.last.payment_num + 1
       else

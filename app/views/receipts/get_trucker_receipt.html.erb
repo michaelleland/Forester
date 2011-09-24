@@ -196,7 +196,7 @@
 			var ids = '<%= @ids %>';
 			var values = '<%= @values %>';
 			var items =  '<%= @deductions %>';
-			var url = ids+'&trucker_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>'+values+items;
+			var url = ids+"&trucker_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
 				url: 'save_trucker_receipt/'+url,

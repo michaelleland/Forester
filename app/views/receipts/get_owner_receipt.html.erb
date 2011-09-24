@@ -203,7 +203,7 @@
 			var ids = '<%= @ids %>';
 			var values = '<%= @values %>';
 			var items =  '<%= @deductions %>';
-			var url = ids+'&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>'+values+items;
+			var url = ids+"&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
 				url: 'save_owner_receipt/'+url,

@@ -5,7 +5,7 @@
 		<select id="partner_selector" name="logger_id">
 			<option onclick="import_jobs_of_trucker(0)" value="0"> Select a trucker </option>
 			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_trucker(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<option value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		<select id="job_selector" name="job_id">
@@ -42,12 +42,28 @@
 		
 		<textarea name="notes" rows="5"></textarea>
 		
-		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />
+		<input id="submit" disabled="disabled" type="submit" onclick="timed_init();" onmouseover="select_all_deductions()" value="No payments selected" />
 				
 	</form>	
 </div>
 
 <script>
+
+function timed_init() {
+	setTimeout(function() { 
+		$('#partner_selector').val('0');
+		$('#job_selector').html('<option value="0">No trucker selected</option>');
+		init_ticket_select();
+	}, 1000);
+}
+
+$('#partner_selector').change(function () {
+	import_jobs_of_trucker($(this).val());
+});
+
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
 
 function import_jobs_of_trucker(id) {
 	$.ajax ({

@@ -5,7 +5,7 @@
 		<select id="partner_selector" name="logger_id">
 			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
 			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_logger(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<option value="<% i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		<select id="job_selector" name="job_id">
@@ -61,6 +61,14 @@ function import_jobs_of_logger(id) {
 		}		
 	});
 }
+
+$('#partner_selector').change(function () {
+	import_jobs_of_logger($(this).val());
+});
+
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
 
 $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {

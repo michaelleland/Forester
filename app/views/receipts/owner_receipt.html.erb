@@ -5,7 +5,7 @@
 		<select id="owner_selector" name="owner_id">
 			<option onclick="import_jobs_of_owner(0)" value="0"> Select an owner </option>
 			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs_of_owner(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
+				<option value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		
@@ -61,6 +61,14 @@ function import_jobs_of_owner(owner_id) {
 		}		
 	})
 }
+
+$('#owner_selector').change(function () {
+	import_jobs_of_owner($(this).val());
+});
+
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
 
 $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
