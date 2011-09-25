@@ -93,7 +93,7 @@ class ReceiptsController < ApplicationController
       
       @destinations.each do |i|
         if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, @job.id, @job.logger.id)
+          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
           if @rate.rate_type == "MBF"
             j.logger_value = @rate.rate * j.net_mbf
           else
@@ -187,17 +187,17 @@ class ReceiptsController < ApplicationController
     @tickets.each do |j|      
       @destinations.each do |i|
         if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, @job.id, @job.logger.id)
-          unless @rate.is_percent?
-            if i.accepted_load_type == "MBF"
-              j.logger_value = @rate.rate * j.net_mbf
-            else
-              if i.accepted_load_type == "Tonnage"
-                j.logger_value = @rate.rate * j.tonnage
+          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @logger.id)
+          if @rate.rate_type == "MBF"
+            j.logger_value = @rate.rate * j.net_mbf
+          else
+            if @rate.rate_type == "Tonnage"
+              j.logger_value = @rate.rate * j.tonnage
+            else @rate.rate_type == "percent"
+              if 
+                j.logger_value = (@rate / 100) *j.value
               end
             end
-          else
-            j.logger_value = j.value * (@rate / 100)
           end
         end
       end
@@ -277,12 +277,16 @@ class ReceiptsController < ApplicationController
     # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
     # totals are also added up in the midst of all this. 
     @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @trucker.id, j.destination_id)
-      if j.load_type == "MBF"
+      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
+      if @rate.rate_type == "MBF"
         j.trucker_value = @rate.rate * j.net_mbf
       else
-        if j.load_type == "Tonnage"
+        if @rate.rate_type == "Tonnage"
           j.trucker_value = @rate.rate * j.tonnage
+        else 
+          if @rate.rate_type == "percent"
+            j.trucker_value = (@rate.rate / 100) * j.value
+          end
         end
       end
       

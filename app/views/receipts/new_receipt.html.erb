@@ -47,7 +47,7 @@
 		
 		<textarea name="notes" rows="5"></textarea>
 		
-		<input id="submit" disabled="true" onclick="init_the_page();" type="submit" value="No tickets selected" />		
+		<input id="submit" disabled="true" onclick="init_the_page();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />		
 	</form>	
 </div>
 
@@ -129,4 +129,35 @@ $('#owner_type_selector').change(function() {
 	
 });
 
+function add_new_deduction() {
+	var data = $('#deduction_data').attr('value');
+	var value = $('#deduction_value').attr('value');
+	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
+	
+	if (String(id) == "NaN") {
+		id = 1;
+	} else {
+		id = id +1;
+	}
+	
+	$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
+	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
+	$('#deduction_data').attr('value', '');
+	$('#deduction_value').attr('value', '');
+
+}
+
+function select_all_deductions() {
+	var vals = []
+	$('#deductions_list option').each(function () {
+		vals.push($(this).attr('value'));
+	})
+	$('#deductions_list').val(vals);
+	
+	vals = []
+	$('#deductions_values option').each(function () {
+		vals.push(parseFloat($(this).attr('value')));
+	})
+	$('#deductions_values').val(vals);
+}
 </script>
