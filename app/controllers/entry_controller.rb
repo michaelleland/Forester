@@ -36,25 +36,25 @@ class EntryController < ApplicationController
     
     @ticket = Ticket.create(:delivery_date => params[:delivery_date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => params[:value], :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
     unless params[:species_id] == 0
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :load_type => params[:load_type], :tonnage => params[:tonnage], :mbfs => params[:load_1_mbfs])  
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :tonnage => params[:tonnage], :mbfs => params[:load_1_mbfs])  
       
       unless params[:species_2].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_2_amount])
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :wood_type => params[:wood_type], :amount => params[:load_2_amount])
       end
     
       unless params[:species_3].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_3], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_3_amount])
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_3], :wood_type => params[:wood_type], :amount => params[:load_3_amount])
       end
     
       unless params[:species_4].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_4], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_4_amount])
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_4], :wood_type => params[:wood_type], :amount => params[:load_4_amount])
       end
     
       unless params[:specie_5].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :wood_type => params[:wood_type], :load_type => params[:load_type], :amount => params[:load_5_amount])
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :wood_type => params[:wood_type], :amount => params[:load_5_amount])
       end
     else
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :wood_type => params[:wood_type], :load_type => params[:load_type], :tonnage => params[:tonnage])
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :wood_type => params[:wood_type], :tonnage => params[:tonnage])
     end
   end
   
