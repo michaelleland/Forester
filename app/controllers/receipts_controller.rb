@@ -396,14 +396,18 @@ class ReceiptsController < ApplicationController
       
       @tickets.each do |j|
         @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-        if j.load_type == "MBF"
+        if @rate.rate_type == "MBF"
           j.trucker_value = @rate.rate * j.net_mbf
         else
-          if j.load_type == "Tonnage"
+          if @rate.rate_type == "Tonnage"
             j.trucker_value = @rate.rate * j.tonnage
+          else 
+            if @rate.rate_type == "percent"
+              j.trucker_value = (@rate.rate / 100) * j.value
+            end
           end
         end
-        
+          
         @trucker_total = @trucker_total + j.trucker_value
         
         j.hfi_value = j.value * (@job.hfi_rate / 100)
@@ -411,20 +415,21 @@ class ReceiptsController < ApplicationController
         
         @destinations.each do |i|
           if j.destination_id == i.id
-            @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, @job.id, @job.logger.id)
-            unless @rate.is_percent?
-              if i.accepted_load_type == "MBF"
-                j.logger_value = @rate.rate * j.net_mbf
-              else
-                if i.accepted_load_type == "Tonnage"
-                  j.logger_value = @rate.rate * j.tonnage
+            @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
+            if @rate.rate_type == "MBF"
+              j.logger_value = @rate.rate * j.net_mbf
+            else
+              if @rate.rate_type == "Tonnage"
+                j.logger_value = @rate.rate * j.tonnage
+              else @rate.rate_type == "percent"
+                if 
+                  j.logger_value = (@rate / 100) *j.value
                 end
               end
-            else
-              j.logger_value = j.value * (@rate / 100)
             end
           end
         end
+
         @logger_total = @logger_total + j.logger_value
       
         j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
@@ -436,9 +441,9 @@ class ReceiptsController < ApplicationController
       
       @deduction_items = []
       
-      unless params[:deductions_list].nil?
-        params[:deductions_list].each_with_index do |i, x|
-          @deduction_items.push([i, params[:deductions_values][x]])
+      unless @receipt.receipt_items.nil?
+        @receipt.receipt_items.each_with_index do |i|
+          @deduction_items.push([i.item_data, i.value])
         end     
       end
         
@@ -460,21 +465,21 @@ class ReceiptsController < ApplicationController
       @tickets.each do |j|      
         @destinations.each do |i|
           if j.destination_id == i.id
-            @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, @job.id, @job.logger.id)
-            unless @rate.is_percent?
-              if i.accepted_load_type == "MBF"
-                j.logger_value = @rate.rate * j.net_mbf
-              else
-                if i.accepted_load_type == "Tonnage"
-                  j.logger_value = @rate.rate * j.tonnage
+            @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
+            if @rate.rate_type == "MBF"
+              j.logger_value = @rate.rate * j.net_mbf
+            else
+              if @rate.rate_type == "Tonnage"
+                j.logger_value = @rate.rate * j.tonnage
+              else @rate.rate_type == "percent"
+                if 
+                  j.logger_value = (@rate / 100) *j.value
                 end
               end
-            else
-              j.logger_value = j.value * (@rate / 100)
             end
           end
         end
-        
+
         @logger_total = @logger_total + j.logger_value
         
       end
@@ -487,9 +492,9 @@ class ReceiptsController < ApplicationController
       
       @deduction_items = []
       
-      unless params[:deductions_list].nil?
-        params[:deductions_list].each_with_index do |i, x|
-          @deduction_items.push([i, params[:deductions_values][x]])
+      unless @receipt.receipt_items.nil?
+        @@receipt.receipt_items.each_with_index do |i|
+          @deduction_items.push([i.item_data, i.value])
         end     
       end
         
@@ -509,12 +514,16 @@ class ReceiptsController < ApplicationController
       @trucker = @job.trucker
       
       @tickets.each do |j|
-        @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @trucker.id, j.destination_id)
-        if j.load_type == "MBF"
+        @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
+        if @rate.rate_type == "MBF"
           j.trucker_value = @rate.rate * j.net_mbf
         else
-          if j.load_type == "Tonnage"
+          if @rate.rate_type == "Tonnage"
             j.trucker_value = @rate.rate * j.tonnage
+          else 
+            if @rate.rate_type == "percent"
+              j.trucker_value = (@rate.rate / 100) * j.value
+            end
           end
         end
         
@@ -526,9 +535,9 @@ class ReceiptsController < ApplicationController
       
       @deduction_items = []
       
-      unless params[:deductions_list].nil?
-        params[:deductions_list].each_with_index do |i, x|
-          @deduction_items.push([i, params[:deductions_values][x]])
+      unless @receipt.receipt_items.nil?
+        @@receipt.receipt_items.each_with_index do |i|
+          @deduction_items.push([i.item_data, i.value])
         end     
       end
       @total = @trucker_total
