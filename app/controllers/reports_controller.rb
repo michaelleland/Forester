@@ -112,7 +112,7 @@ class ReportsController < ApplicationController
       if params[:id] == "2"
         @tickets.each do |i|
           @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name}, #{i.job.name}, "
-          @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbfs}, #{i.value}\n"
+          @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value)}\n"
           writer.puts @puts
         end
       end
@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
         @payments.each do |i|
           @puts = "#{i.payment_date}, #{i.destination.name}, #{i.job.name}, #{i.payment_num}, "
           @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, "
-          @puts << "#{i.total_payment}"
+          @puts << "#{give_pennies(i.total_payment)}"
           writer.puts @puts
         end
       end
