@@ -304,10 +304,11 @@ class ReceiptsController < ApplicationController
       end     
     end
     @total = @trucker_total
+    @total_wo_deductions = @trucker_total
       
     @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@trucker_total)
+    @total = give_pennies(@total)
   end
   
   def save_owner_receipt    
@@ -531,20 +532,21 @@ class ReceiptsController < ApplicationController
         
       end
       
-      @tickets.each {|i| @load_pay_total = @load_pay_total + i.owner_value.to_f }
+      @tickets.each {|i| @load_pay_total = @load_pay_total + i.value.to_f }
       
       @deduction_items = []
       
       unless @receipt.receipt_items.nil?
-        @@receipt.receipt_items.each_with_index do |i|
+        @receipt.receipt_items.each_with_index do |i|
           @deduction_items.push([i.item_data, i.value])
         end     
       end
       @total = @trucker_total
+      @total_wo_deductions = @trucker_total
         
       @deduction_items.each {|i| @total = @total - i[1].to_f }
       
-      @total = give_pennies(@trucker_total)
+      @total = give_pennies(@total)
       
       render "get_trucker_receipt.html.erb"
     end
