@@ -6,7 +6,6 @@
 		<td><%= i.job.name %></td>	
 		<td><%= i.destination.name %></td>
 		<td><%= WoodType.find(i.wood_type).name %></td>
-		<td><%= i.load_details.first.load_type %></td>
 		<td><%= unless i.load_details.first.species_id == 0 then Specie.find(i.load_details.first.species_id).code else "PU" end %></td>
 		<td><%= i.net_mbf %></td>
 		<td><%= i.tonnage %></td>

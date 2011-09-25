@@ -79,7 +79,7 @@
 					<input type="text" id="tonnage" size="8" name="tonnage" disabled="true" class="fields"/>
 				</td>
 				<td>
-					<input id="load_1_mbf" type="text" size="8" disabled="true" onchange="refresh_net_mbf('load_1_mbf')" name="load_1_mbf" class="fields"/>
+					<input id="load_1_mbf" class="specie_mbfs" type="text" size="8" disabled="true" onchange="refresh_net_mbf('load_1_mbf')" name="load_1_mbf" class="fields"/>
 				</td>
 				<td>
 					<input id="net_mbf" type="text" size="8" value="0" name="net_mbf" disabled="true" class="fields"/>
@@ -97,7 +97,6 @@
 				<td id="Incredible_invisible_text">just</td>	
 				<td id="Incredible_invisible_text">been</td>
 				<td id="Incredible_invisible_text">tagged</td>
-				<td id="Incredible_invisible_text">by ME!</td>
 				<td><%= link_to "Add", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
 			</tr>
 		</table>
@@ -114,7 +113,6 @@
 			<th style="width: 100px;">Job</th>
 			<th style="width: 100px;">Destination</th>
 			<th style="width: 80px;">Wood type</th>
-			<th style="width: 60px;">Load type</th>
 			<th style="width: 60px;">Species</th>
 			<th style="width: 60px;">Net MBF</th>
 			<th style="width: 60px;">Tonnage</th>
@@ -135,7 +133,6 @@
 			<th style="width: 100px;">Job</th>
 			<th style="width: 100px;">Destination</th>
 			<th style="width: 80px;">Wood type</th>
-			<th style="width: 60px;">Load type</th>
 			<th style="width: 60px;">Species</th>
 			<th style="width: 60px;">Net MBF</th>
 			<th style="width: 60px;">Tonnage</th>
@@ -149,7 +146,7 @@
 	<script>
 	
 	$('#destination_name').change(function () {
-		$('#net_mbf').attr('disabled', 'true');
+		$('.specie_mbfs').each(function(){$(this).attr('disabled', 'true');});
 		$('#tonnage').attr('disabled', 'true');
 		
 		var job_name = $('#job_name').attr('value');
@@ -161,20 +158,16 @@
 				cache: false,
 				success: function (html) {
 					if (html == "MBF") {
-						$('#net_mbf').removeAttr('disabled');
+						$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
 					} else if (html == "Tonnage") {
 						$('#tonnage').removeAttr('disabled');
 					} else if (html == "Both") {
-						$('#net_mbf').removeAttr('disabled');
+						$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
 						$('#tonnage').removeAttr('disabled');
 					}
 				}
 			});
 		} 
-	});
-	
-	$('#tonnage').change(function () {
-		
 	});
 		refresh_all_entries('ticket');
 		
