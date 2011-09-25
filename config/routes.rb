@@ -12,7 +12,7 @@ Forester::Application.routes.draw do
   match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   match "/get_receipts/:id" => "page_controls#get_receipts"
-  match "/get_load_type/" => "page_controls#get_load_type"
+  match "/get_load_type/" => "page_controls#get_load_type" 
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -29,6 +29,7 @@ Forester::Application.routes.draw do
   match "/add_payment_entry_row" => "entry#add_payment_entry_row", :via => "post"
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
+  match "/delete_ticket_entry/:id" => "entry#delete_ticket_entry"
  
   #Setup page's basic page calls
   match "/landowners" => "setup#owners"
