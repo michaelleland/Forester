@@ -196,7 +196,7 @@
 			var url = ids+"&trucker_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
-				url: 'save_trucker_receipt/'+url,
+				url: '/save_trucker_receipt/'+url,
 				cache: false,
 				success: function () {
 					

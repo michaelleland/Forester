@@ -493,7 +493,7 @@ class ReceiptsController < ApplicationController
       @deduction_items = []
       
       unless @receipt.receipt_items.nil?
-        @@receipt.receipt_items.each_with_index do |i|
+        @receipt.receipt_items.each_with_index do |i|
           @deduction_items.push([i.item_data, i.value])
         end     
       end
