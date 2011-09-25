@@ -50,14 +50,38 @@ class SetupController < ApplicationController
     @ta = TruckerAssignment.find_by_job_id_and_partner_id(@job.id, @old_trucker.id)
     @ta.partner_id = @trucker.id
     @ta.save
+    
+    @content_type = 1
+    render "edit_whatever.js.erb"
   end
   
   def new_owner
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
-    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])
+    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
     @owner = Owner.create(:name => params[:owner_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
   end
-
+  
+  def edit_owner
+    @owner = Owner.find(params[:owner_id])
+    
+    @contact_person = @owner.contact_person
+    @address = @owner.address
+    
+    @contact_person.name = params[:cp_name]
+    @contact_person.phone_number = params[:cp_phone]
+    @contact_person.email = params[:cp_email]
+    @contact_person.save
+    
+    @address.street = params[:address_street]
+    @address.city = params[:address_city]
+    @address.zip_code = params[:address_zip]
+    @address.state = params[:address_state]
+    @address.save
+    
+    @content_type = 3
+    render "edit_whatever.js.erb"
+  end
+  
   def sawmills
     
   end
@@ -112,5 +136,8 @@ class SetupController < ApplicationController
     @address.zip_code = params[:address_zip]
     @address.state = params[:address_state]
     @address.save
+    
+    @content_type = 2
+    render "edit_whatever.js.erb"
   end
 end
