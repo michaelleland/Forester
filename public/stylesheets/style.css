@@ -147,8 +147,12 @@ body {
 	
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	
 	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	
 	-moz-border-radius-bottomright: 5px; 
+	-webkit-border-bottom-right-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	border-top: none;
@@ -176,6 +180,7 @@ body {
 	
 	border-radius: 4px;
 	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 	
 }
 
@@ -200,6 +205,7 @@ a:hover {
 #quarterly_report_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 4px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -213,6 +219,7 @@ a:hover {
 #export_database_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -226,6 +233,7 @@ a:hover {
 #logger_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -239,6 +247,7 @@ a:hover {
 #new_receipt_box {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -251,6 +260,7 @@ a:hover {
 #trucker_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -263,6 +273,7 @@ a:hover {
 #owner_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -419,6 +430,7 @@ input, select {
 	
 	border-radius: 5px;
 	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 }
@@ -689,6 +701,7 @@ table {
 	
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 #inner_nav {
@@ -699,6 +712,7 @@ table {
 	border: solid 1px #AED0EA;
 	
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
 
@@ -876,15 +890,14 @@ img#hfi_logo {
 
 #page_1 {
 	margin-top: 25px;
+	margin-bottom: 150px;
 }
 
 #page_2 {
-	-moz-transform:rotate(90deg);
 	
 }
 
 .page {
-	
 	font-size: 16px;
 	
 	background: white;
@@ -901,7 +914,7 @@ img#hfi_logo {
 	padding: 25px;
 	
 	-moz-box-shadow: 0px 0px 10px #888;
-	
+	-webkit-box-shadow: 0px 0px 10px #888;
 }
 
 .landscape_page {
@@ -922,7 +935,7 @@ img#hfi_logo {
 	padding: 25px;
 	
 	-moz-box-shadow: 0px 0px 10px #888;
-	
+	-webkit-box-shadow: 0px 0px 10px #888;
 }
 
 hr {
@@ -961,6 +974,7 @@ hr {
 	background: #22AAFF;
 	
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	text-align: center;
 	
 }

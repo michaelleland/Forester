@@ -1,30 +1,39 @@
 #page_1 {
 	margin: 0px;
 	-moz-box-shadow: none;
-	border: solid 1px black;
+	border: solid 1px white;
+	-moz-transform:rotate(-90deg);
+	-webkit-transform:rotate(-90deg);
+	-o-transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg);
 }
 
 #page_2 {
 	
-	width: 960px;
-	height: 1242px;
-	
-	-moz-transform:rotate(0deg);
+	-moz-transform:translate(0, -22em);
+	-webkit-transform:translate(0, -22em);
+	-o-transform:translate(0, -22em);
+	-ms-transform:translate(0, -22em);
 	
 	margin: 0px;
 	
+	height: 200px;
+	
 	-moz-box-shadow: none;
-	border: solid 1px black;
+	-webkit-box-shadow: none;
+	border: solid 1px white;
 	
 }
 
-.tickets_table_box {
-	-moz-transform:rotate(90deg);
+#receipt_tickets_header {
+	margin-bottom: 10px;
 }
 
 #page_3 {
 	margin: 0px;
 	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	
 	border: none;
 }
 
