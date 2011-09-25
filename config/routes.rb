@@ -78,7 +78,8 @@ Forester::Application.routes.draw do
   match "/new_owner" => "setup#new_owner"
   match "/new_sawmill" => "setup#new_sawmill"
   
-  match "/edit_rate" => "setup#edit_rate"
+  match "/edit_rate/:id" => "setup#edit_rate"
+  match "/delete_rate/:id" => "setup#delete_rate"
   match "/edit_job" => "setup#edit_job"
   match "/edit_owner" => "setup#edit_owner"
   match "/edit_partner" => "setup#edit_partner"

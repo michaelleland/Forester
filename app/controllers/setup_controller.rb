@@ -122,22 +122,6 @@ class SetupController < ApplicationController
     render "edit_whatever.js.erb"
   end
     
-  def rates
-    
-  end
-
-  def new_rate
-    @destination = Destination.find_by_name(params[:destination_name])
-    @job = Job.find(params[:id])
-    
-    if params[:type] == "logger"
-      @logger_rate = LoggerRate.create(:destination_id => @destination.id, :partner_id => @job.logger.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
-    end
-    if params[:type] == "trucker"
-      @trucker_rate = TruckerRate.create(:destination_id => @destination.id, :partner_id => @job.trucker.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
-    end
-  end
-  
   def partners
     
   end
@@ -173,4 +157,75 @@ class SetupController < ApplicationController
     @content_type = 2
     render "edit_whatever.js.erb"
   end
+  
+  def rates
+    
+  end
+
+  def new_rate
+    @destination = Destination.find_by_name(params[:destination_name])
+    @job = Job.find(params[:id])
+    
+    if params[:type] == "logger"
+      @logger_rate = LoggerRate.new(:destination_id => @destination.id, :partner_id => @job.logger.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
+      if @logger_rate.save
+        render :text => "#{@logger_rate.id}"
+      else
+        render :state => 13
+      end
+    end
+    if params[:type] == "trucker"
+      @trucker_rate = TruckerRate.new(:destination_id => @destination.id, :partner_id => @job.trucker.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
+      if @trucker_rate.save
+        render :text => "#{@trucker_rate.id}"
+      else
+        render :state => 13
+      end
+    end
+  end
+  
+  def delete_rate
+    if params[:type] == "logger"
+      @logger_rate = LoggerRate.find(params[:id])
+      if @logger_rate.delete
+        render :nothing => true
+      else
+        render :state => 13
+      end
+    end
+    if params[:type] == "trucker"
+      @trucker_rate = TruckerRate.find(params[:id])
+      if @trucker_rate.delete
+        render :nothing => true
+      else
+        render :state => 13
+      end
+    end
+  end
+  
+  def edit_rate
+    if params[:type] == "logger"
+      @logger_rate = LoggerRate.find(params[:id])
+      @logger_rate.rate = params[:rate]
+      @logger_rate.rate_type = params[:rate_type]
+      if @logger_rate.save
+        render :nothing => true
+      else
+        render :state => 13
+      end
+      
+    end
+    if params[:type] == "trucker"
+      @trucker_rate = TruckerRate.find(params[:id]);
+      @trucker_rate.rate = params[:rate]
+      @trucker_rate.rate_type = params[:rate_type]
+      if @trucker_rate.save
+        render :nothing => true
+      else
+        render :state => 13
+      end
+      
+    end
+  end
+  
 end

@@ -4,6 +4,7 @@ class CreateTruckerRates < ActiveRecord::Migration
       t.integer :destination_id
       t.integer :job_id
       t.integer :partner_id
+      t.integer :receipt_id
       t.float :rate
       t.string :rate_type
       

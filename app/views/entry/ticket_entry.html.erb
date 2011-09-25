@@ -61,7 +61,7 @@
 					</script>
 				</td>
 				<td>
-					<select onchange="check_load_type();" name="wood_type">
+					<select id="wood_type" name="wood_type">
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
 						<% end %>					
@@ -88,7 +88,7 @@
 					<input type="text" size="8" name="value" class="fields"/>
 				</td>
 				<td>
-					<input type="submit" value="Submit" />
+					<input type="button" value="Check" onclick="check_field_data();" />
 				</td>
 			</tr>
 			<tr id="filler_row">
@@ -144,6 +144,22 @@
 
 	
 	<script>
+	
+	function check_field_data() {
+		var values = [];
+		values.push($('ticket_num').attr('value'));
+		values.push($('delivery_date').attr('value'));
+		values.push($('job_name').attr('value'));
+		values.push($('destination_name').attr('value'));
+		values.push($('wood_type').val());
+		values.push($('destination_name').attr('value'));
+		if ($('#tonnage').attr('disabled') == undefined) {
+			
+		} else {
+			
+		}
+		values.push($('tonnage').attr('value'));
+	}
 	
 	$('#destination_name').change(function () {
 		$('.specie_mbfs').each(function(){$(this).attr('disabled', 'true');});
