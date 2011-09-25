@@ -85,10 +85,10 @@
 					<input id="net_mbf" type="text" size="8" value="0" name="net_mbf" disabled="true" class="fields"/>
 				</td>
 				<td>
-					<input type="text" size="8" name="value" class="fields"/>
+					<input id="value" type="text" size="8" name="value" class="fields"/>
 				</td>
 				<td>
-					<input type="button" value="Check" onclick="check_field_data();" />
+					<input id="check_button" type="button" value="Check" onclick="check_field_data();" />
 				</td>
 			</tr>
 			<tr id="filler_row">
@@ -147,18 +147,39 @@
 	
 	function check_field_data() {
 		var values = [];
-		values.push($('ticket_num').attr('value'));
-		values.push($('delivery_date').attr('value'));
-		values.push($('job_name').attr('value'));
-		values.push($('destination_name').attr('value'));
-		values.push($('wood_type').val());
-		values.push($('destination_name').attr('value'));
+		values.push([$('#ticket_num').attr('value'), 'Ticket number']);
+		values.push([$('#delivery_date').attr('value'), 'Delivery date']);
+		values.push([$('#job_name').attr('value'), 'Job']);
+		values.push([$('#destination_name').attr('value'), 'Destination']);
 		if ($('#tonnage').attr('disabled') == undefined) {
-			
+			values.push([$('#tonnage').attr('value'), 'Tonnage']);
 		} else {
-			
+			if ($('#net_mbf').attr('disabled') == undefined) {
+				values.push([$('#net_mbf').attr('value'), 'Net MBF']);
+			}
 		}
-		values.push($('tonnage').attr('value'));
+		values.push([$('#value').attr('value'), 'Ticket value']);
+		
+		$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
+		
+		var everything_ok = true;
+		
+		for (i=0;i<values.length;i++) {
+			if (values[i][0] == "") {
+				$('#feedback').append('<div>'+values[i][1]+' missing </div>');
+				everything_ok = false; 
+			}
+		}
+		
+		setTimeout(function() {
+			$('#feedback').fadeOut();
+			fadeRemove('#feedback')
+		}, 5000);
+		
+		if (everything_ok) {
+			$('#check_button').fadeOut();
+			fadeRemove('#check_button');
+		}	
 	}
 	
 	$('#destination_name').change(function () {
