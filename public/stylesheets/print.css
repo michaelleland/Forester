@@ -1,20 +1,25 @@
 #page_1 {
 	margin: 0px;
 	-moz-box-shadow: none;
-	border: none;
+	border: solid 1px black;
 }
 
 #page_2 {
 	
-	width: 1242px;
-	height: 960px;
+	width: 960px;
+	height: 1242px;
+	
+	-moz-transform:rotate(0deg);
 	
 	margin: 0px;
 	
 	-moz-box-shadow: none;
 	border: solid 1px black;
 	
-	-moz-transform:rotate(0deg);
+}
+
+.tickets_table_box {
+	-moz-transform:rotate(90deg);
 }
 
 #page_3 {
