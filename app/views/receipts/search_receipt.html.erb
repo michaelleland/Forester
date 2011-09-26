@@ -1,32 +1,32 @@
 <div class="grid_10" id="logger_receipt_selector">
 	<h4>Search for an old receipt </h4>
-	<form action="/get_logger_receipt" method="get" target="_blank">
-		<h5>Search receipt of: </h5>
-		<select id="owner_type_selector" name="owner_type">
-			<option onclick="" value="none"> Select owner type </option>
-			<option onclick="import_landowners()" value="landowner">Landowner</option>
-			<option onclick="import_loggers()" value="logger">Logger</option>
-			<option onclick="import_truckers()" value="trucker">Trucker</option>
-		</select>
-		
-		<h5> Select ticket's owner: </h5>
-		<select id="owner_selector" name="owner_id">
-			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
-			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_partner(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+	<form id="search_form" action="/get_logger_receipt" method="get" target="_blank">
+		<h5>Select job:</h5>
+		<select id="job_selector">
+			<option onclick="init_type_select(); init_receipt_select();" value="0">Select a job</option>
+			<% Job.all.each do |i| %>
+				<option onclick="init_type_select();" value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
-		<select id="job_selector" name="job_id">
-			<option>No logger selected</option>
+		
+		<h5>Get tickets of:</h5>
+		<select id="owner_type_selector">
+			<option onclick="init_receipt_select()" value="none"> Select owner type </option>
+			<option onclick="refresh_receipts('landowner')" value="landowner">Landowner</option>
+			<option onclick="refresh_receipts('logger')" value="logger">Logger</option>
+			<option onclick="refresh_receipts('trucker')" value="trucker">Trucker</option>
 		</select>
 		
 		<h5>Select a receipt:</h5>
 		
-		<div id="tickets_to_receipt">
-			<select id="receipts_select" name="receipt_id" size="10">
+		<div id="receipts_to_receipt">
+			<select id="receipt_select" size="10" style="width: 200px;">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
+		
+		<input id="owner_type_hinput" type="hidden" name="owner_type" value="" />
+		<input id="receipt_id_hinput" type="hidden" name="receipt_id" value="" />
 		
 		<input id="submit" type="submit" value="Get receipt" />		
 	</form>	
@@ -34,43 +34,34 @@
 
 <script>
 
-function import_jobs_of_partner(id) {
+function init_receipt_select () {
+	$('#receipt_select').html('<option value="0">No job selected</option>');
+}
+
+function init_type_select () {
+	$('#owner_type_selector').val('0');
+	$('#receipt_select').html('<option value="0">No owner type selected</option>');
+}
+
+function refresh_form_action () {
+	var type = $('#owner_type_selector').val();
+	var receipt_id = $('#receipt_select').val();
+	
+	$('#search_form').attr('action', '/get_old_receipt/')
+	$('#owner_type_hinput').attr('value', type)
+	$('#receipt_id_hinput').attr('value', receipt_id)
+}
+
+function refresh_receipts (type) {
+	var job_id = $('#job_selector').val();
+	
 	$.ajax ({
-		url: '/import_jobs_of_partner/'+id,
+		url: '/get_receipts/'+job_id+'?owner_type='+type,
 		cache: false,
 		success: function (html) {
-			$('#job_selector').html(html);
+			$('#receipt_select').html(html);
 		}		
 	});
 }
 
-function init_ticket_select () {
-	$('#tickets_select').html('<option value="0">No job selected</option>');
-}
-
-function refresh_receipts (job_id, partner_id) {
-	$.ajax ({
-		url: '/get_receipts/'+job_id+'?partner_id='+partner_id,
-		cache: false,
-		success: function (html) {
-			$('#receipts_select').html(html);
-		}		
-	});
-}
-
-function import_landowners () {
-	<% @html = ""; Owner.all.each {|i| @html = "#{@html}<option value=\"#{i.id}\">#{i.name}</option>"} %>
-	
-	var html = <%= @html.to_s %>;
-	
-	$('#owner_selector').html(html);	
-}
-
-function import_loggers () {
-	
-}
-
-function import_truckers () {
-	
-}	
 </script>

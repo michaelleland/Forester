@@ -5,7 +5,7 @@
 		<select id="partner_selector" name="logger_id">
 			<option onclick="import_jobs_of_logger(0)" value="0"> Select a logger </option>
 			<% Partner.all.each do |i| %>
-				<option onclick="import_jobs_of_logger(<%= i.id %>)" value="<% i.id %>"><%= i.name %></option>
+				<option value="<% i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		<select id="job_selector" name="job_id">
@@ -40,7 +40,7 @@
 		
 		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
 		
-		<textarea rows="5"></textarea>
+		<textarea name="notes" rows="5"></textarea>
 		
 		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />
 			
@@ -62,6 +62,14 @@ function import_jobs_of_logger(id) {
 	});
 }
 
+$('#partner_selector').change(function () {
+	import_jobs_of_logger($(this).val());
+});
+
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
+
 $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
 		$('#submit').removeAttr('disabled');
@@ -75,7 +83,6 @@ $('#tickets_select').change(function() {
 function init_ticket_select () {
 	$('#tickets_select').html('<option value="0">No job selected</option>');
 }
-
 
 function refresh_tickets (id) {
 	$.ajax ({

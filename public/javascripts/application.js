@@ -97,3 +97,17 @@ function add_the_rate(id) {
 		cache: false,
 	})
 }
+
+function select_all_deductions() {
+	var vals = []
+	$('#deductions_list option').each(function () {
+		vals.push($(this).attr('value'));
+	})
+	$('#deductions_list').val(vals);
+	
+	vals = []
+	$('#deductions_values option').each(function () {
+		vals.push(parseFloat($(this).attr('value')));
+	})
+	$('#deductions_values').val(vals);
+}

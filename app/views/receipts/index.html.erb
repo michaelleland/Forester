@@ -1,11 +1,7 @@
 <div class="grid_2" id="inner_nav">
 	<ul>
-		<li style="font-weight: bold; font-style: italic;">Create new</li>
-		<li id="owner_receipt_nav"><a style="margin-left: 5px;" onclick="change_content('owner_receipt', 2);">Owner</a></li>
-		<li id="logger_receipt_nav"><a style="margin-left: 5px;" onclick="change_content('logger_receipt', 2);">Logger</a></li>
-		<li id="trucker_receipt_nav"><a style="margin-left: 5px;" onclick="change_content('trucker_receipt', 2);">Trucker</a></li>
-		<li style="font-weight: bold; font-style: italic;">Old receipts</li>
-		<li id="search_receipt_nav"><a style="margin-left: 5px;" onclick="change_content('search_receipt', 2);">Search</a></li>
+		<li id="new_receipt_nav"><a onclick="change_content('new_receipt', 2);">New receipt</a></li>
+		<li id="search_receipt_nav"><a onclick="change_content('search_receipt', 2);">Old receipts</a></li>
 	</ul>
 </div>
 
@@ -14,7 +10,7 @@
 </div>
 
 <script>
-	change_content('owner_receipt', 2);
+	change_content('new_receipt', 2);
 </script>
 
 <% set_active(2) %>

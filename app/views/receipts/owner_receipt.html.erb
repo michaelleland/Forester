@@ -5,7 +5,7 @@
 		<select id="owner_selector" name="owner_id">
 			<option onclick="import_jobs_of_owner(0)" value="0"> Select an owner </option>
 			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs_of_owner(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
+				<option value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		
@@ -61,6 +61,14 @@ function import_jobs_of_owner(owner_id) {
 		}		
 	})
 }
+
+$('#owner_selector').change(function () {
+	import_jobs_of_owner($(this).val());
+});
+
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
 
 $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
@@ -129,20 +137,6 @@ function refresh_tickets (id) {
 			$('#tickets_select').html(html);
 		}		
 	})
-}
-
-function select_all_deductions() {
-	var vals = []
-	$('#deductions_list option').each(function () {
-		vals.push($(this).attr('value'));
-	})
-	$('#deductions_list').val(vals);
-	
-	vals = []
-	$('#deductions_values option').each(function () {
-		vals.push(parseInt($(this).attr('value')));
-	})
-	$('#deductions_values').val(vals);
 }
 
 function init_ticket_select () {
