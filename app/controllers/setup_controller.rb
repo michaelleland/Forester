@@ -39,8 +39,13 @@ class SetupController < ApplicationController
   def new_rate
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find(params[:id])
-    @trucker = @job.trucker
-    @tr = TruckerRate.create(:destination_id => @destination.id, :job_id => params[:id], :partner_id => @trucker.id, :load_type => params[:load_type], :rate => params[:rate])
+    
+    if params[:type] == "logger"
+      @logger_rate = LoggerRate.create(:destination_id => @destination.id, :partner_id => @job.logger.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
+    end
+    if params[:type] == "trucker"
+      @trucker_rate = TruckerRate.create(:destination_id => @destination.id, :partner_id => @job.trucker.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
+    end
   end
   
   def partners
