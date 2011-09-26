@@ -37,6 +37,10 @@ body {
 	width: 150px;
 }
 
+.rates .accordion_right_column .row_headers {
+	width: 150px;
+}
+
 .loggers {
 	height: 60px;
 }

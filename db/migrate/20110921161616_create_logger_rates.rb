@@ -5,15 +5,15 @@ class CreateLoggerRates < ActiveRecord::Migration
       t.integer :job_id
       t.integer :partner_id
       t.float :rate
-      t.boolean :is_percent #Does the same apply to truckers?
+      t.string :rate_type
 
       t.timestamps
     end
     
-    LoggerRate.create(:destination_id => 1, :job_id => 1, :partner_id => 1, :rate => 45.0, :is_percent => false)
-    LoggerRate.create(:destination_id => 1, :job_id => 2, :partner_id => 1, :rate => 43.0, :is_percent => false)
-    LoggerRate.create(:destination_id => 2, :job_id => 1, :partner_id => 1, :rate => 180.0, :is_percent => false)
-    LoggerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 1, :rate => 195.0, :is_percent => false)
+    LoggerRate.create(:destination_id => 1, :job_id => 1, :partner_id => 1, :rate => 45.0, :rate_type => "Tonnage")
+    LoggerRate.create(:destination_id => 1, :job_id => 2, :partner_id => 1, :rate => 43.0, :rate_type => "Tonnage")
+    LoggerRate.create(:destination_id => 2, :job_id => 1, :partner_id => 1, :rate => 180.0, :rate_type => "MBF")
+    LoggerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 1, :rate => 195.0, :rate_type => "MBF")
     
   end
 

@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
     t.integer  "job_id"
     t.integer  "partner_id"
     t.float    "rate"
-    t.boolean  "is_percent"
+    t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
     t.integer  "job_id"
     t.integer  "partner_id"
     t.float    "rate"
+    t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

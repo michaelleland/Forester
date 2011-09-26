@@ -10,17 +10,25 @@
 					<div class="data_rows" id="no_rate_data_for_<%= i.id %>"><div class="row_headers">No rate data</div></div>
 					<div class="action_link" id="add_rate_row_<%= i.id %>" onclick="show_rate_inputs(<%= i.id %>)">Add a rate</div>					
 				<% else %>
-					<% i.trucker_rates_details.each do |j| %>
-					   <div class="data_rows"><div class="row_headers"><%= Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <%= j.rate %> / <%= j.load_type %> </div></div>
+					<% @trds.each do |j| %>
+					   <div class="data_rows"><div class="row_headers"><%= Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <%= j.rate %> / <%= j.rate_type %> </div></div>
 					<% end %>
 					<div class="action_link" id="add_rate_row_<%= i.id %>" onclick="show_rate_inputs(<%= i.id %>)">Add a rate</div>
 				<% end %>
 			</div>
 			<div class="accordion_right_column">
-				<div class="data_rows"><h4>Logger logging rates:</h4></div><% @logger_details = i.logger_details %>
-				<div class="data_rows"><div class="row_headers">MBF rate:</div><div class="row_data"> <%= unless @logger_details.rate_mbf.nil? then "$ #{@logger_details.rate_mbf} / MBF" else "" end %></div></div>
-				<div class="data_rows"><div class="row_headers">Tonnage rate:</div><div class="row_data"> <%= unless @logger_details.rate_tonnage.nil? then "$ #{@logger_details.rate_tonnage} / Ton" else "" end %></div></div>
-				<div class="data_rows"><div class="row_headers">Percent rate:</div><div class="row_data"> <%= unless @logger_details.rate_percent.nil? then "#{@logger_details.rate_percent} %" else "" end %></div></div>
+				<div class="data_rows"><h4>Logger logging rates:</h4></div>
+				<div class="data_rows"><div class="row_headers">Logger name: </div><div class="row_data"> <%= i.logger.name %></div></div>
+				<% @lrds = i.logger_rates_details %>
+					<% if @lrds.length == 0 %>
+						<div class="data_rows" id="no_rate_data_for_<%= i.id %>"><div class="row_headers">No rate data</div></div>
+						<div class="action_link" id="add_rate_row_<%= i.id %>" onclick="show_rate_inputs(<%= i.id %>)">Add a rate</div>					
+					<% else %>
+						<% @lrds.each do |j| %>
+						   <div class="data_rows"><div class="row_headers"><%= Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <%= j.rate %> / <%= j.rate_type %> </div></div>
+						<% end %>
+					<div class="action_link" id="add_rate_row_<%= i.id %>" onclick="show_rate_inputs(<%= i.id %>)">Add a rate</div>
+				<% end %>
 			</div>
 		</div>
 	<% end %>
