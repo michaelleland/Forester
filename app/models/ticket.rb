@@ -29,7 +29,9 @@ class Ticket < ActiveRecord::Base
     @net_mbf = 0
     unless self.wood_type == 3
       self.load_details.each do |i|
-        @net_mbf = @net_mbf + i.mbfs
+        unless i.mbfs.nil?
+          @net_mbf = @net_mbf + i.mbfs
+        end
       end
     else
       return nil
@@ -41,7 +43,7 @@ class Ticket < ActiveRecord::Base
     unless self.wood_type == 3
       @total = 0
       self.load_details.each do |i|
-        if i.load_type == "Tonnage"
+        unless i.tonnage.nil?
           @total = @total + i.tonnage
         end
       end
@@ -69,6 +71,14 @@ class Ticket < ActiveRecord::Base
   
   def load_details
     @load_details = LoadDetail.find_all_by_ticket_id(self.id) 
+  end
+  
+  def trucker_rate
+    @trucker_rate = TruckerRate.find_by_destination_id_and_job_id_and_partner_id(self.destination_id, self.job_id, Job.find(self.job_id).trucker.id)
+  end
+  
+  def logger_rate
+    @logger_rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(self.destination_id, self.job_id, Job.find(self.job_id).logger.id)
   end
   
 end

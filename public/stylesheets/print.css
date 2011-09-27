@@ -5,9 +5,16 @@
 }
 
 #page_2 {
+	
+	width: 1242px;
+	height: 960px;
+	
 	margin: 0px;
+	
 	-moz-box-shadow: none;
-	border: none;
+	border: solid 1px black;
+	
+	-moz-transform:rotate(0deg);
 }
 
 #page_3 {

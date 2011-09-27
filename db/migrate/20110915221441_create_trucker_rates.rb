@@ -12,8 +12,8 @@ class CreateTruckerRates < ActiveRecord::Migration
     
     TruckerRate.create(:destination_id => 1, :job_id => 1, :partner_id => 2, :rate => 28.2, :rate_type => "Tonnage")
     TruckerRate.create(:destination_id => 1, :job_id => 2, :partner_id => 2, :rate => 22.0, :rate_type => "Tonnage")
-    TruckerRate.create(:destination_id => 2, :job_id => 1, :partner_id => 2, :rate => 23.4, :rate_type => "Tonnage")
-    TruckerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 2, :rate => 21.6, :rate_type => "Tonnage")
+    TruckerRate.create(:destination_id => 2, :job_id => 1, :partner_id => 2, :rate => 23.4, :rate_type => "MBF")
+    TruckerRate.create(:destination_id => 2, :job_id => 2, :partner_id => 2, :rate => 21.6, :rate_type => "MBF")
     
   end
 

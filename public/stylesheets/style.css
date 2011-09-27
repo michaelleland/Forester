@@ -780,7 +780,7 @@ img#hfi_logo {
 }
 
 #receipt_tickets_header {
-	width: 940px;
+	width: 1222px;
 	font-size: 25px;
 	font-family: Arial, Helvetica, sans-serif;
 	text-align: center;
@@ -879,7 +879,9 @@ img#hfi_logo {
 }
 
 #page_2 {
-	margin-top: 50px;
+	margin-top: 150px;
+	-moz-transform:rotate(90deg);
+	-moz-transform:scale(10%);
 }
 
 .page {
@@ -903,6 +905,27 @@ img#hfi_logo {
 	
 }
 
+.landscape_page {
+	
+	font-size: 16px;
+	
+	background: white;
+	
+	color: black;
+	
+	width: 1242px;
+	height: 960px;
+	
+	margin: auto;
+	
+	border: solid 1px black;
+	
+	padding: 25px;
+	
+	-moz-box-shadow: 0px 0px 10px #888;
+	
+}
+
 hr {
 	margin-bottom: 10px;
 }
@@ -912,19 +935,19 @@ hr {
 }
 
 .tickets_table_box table {
-	width: 940px;
+	width: 1230px;
 }
 
 .tickets_table_box table th {
 	font-weight: bold;
 }
 
-.dollars_td {
-	text-align: right;
+.tickets_table_box table td, .tickets_table_box table th {
+	border: solid 1px #BABABA;
 }
 
-.totals {
-	border-top: solid 1px black;
+.dollars_td {
+	text-align: right;
 }
 
 /*Control "bar" for printing/saving etc receipts */
