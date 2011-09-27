@@ -876,15 +876,14 @@ img#hfi_logo {
 
 #page_1 {
 	margin-top: 25px;
+	margin-bottom: 150px;
 }
 
 #page_2 {
-	-moz-transform:rotate(90deg);
 	
 }
 
 .page {
-	
 	font-size: 16px;
 	
 	background: white;
@@ -901,7 +900,6 @@ img#hfi_logo {
 	padding: 25px;
 	
 	-moz-box-shadow: 0px 0px 10px #888;
-	
 }
 
 .landscape_page {
