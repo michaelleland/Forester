@@ -879,9 +879,8 @@ img#hfi_logo {
 }
 
 #page_2 {
-	margin-top: 150px;
 	-moz-transform:rotate(90deg);
-	-moz-transform:scale(10%);
+	
 }
 
 .page {
