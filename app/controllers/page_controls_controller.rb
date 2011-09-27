@@ -42,6 +42,35 @@ class PageControlsController < ApplicationController
     end
   end
   
+  def get_load_type
+    @job = Job.find_by_name(params[:job_name])
+    @destination = Destination.find_by_name(params[:destination_name])
+    
+    @trucker_rate = TruckerRate.find_by_job_id_and_destination_id_and_partner_id(@job.id, @destination.id, @job.trucker.id)
+    @logger_rate = LoggerRate.find_by_job_id_and_destination_id_and_partner_id(@job.id, @destination.id, @job.logger.id)
+    
+    @answer = ""
+    
+    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
+      @answer = "MBF"
+    else
+      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
+      @answer = "Tonnage"
+      end
+    end
+    
+    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
+      @answer = "Both"
+    else
+      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
+      @answer = "Both"
+      end
+    end
+    
+    render :text => @answer
+    
+  end
+  
   def add_specie
     
   end
