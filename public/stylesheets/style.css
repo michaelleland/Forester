@@ -41,6 +41,17 @@ body {
 	width: 150px;
 }
 
+.bottom_row {
+	float: left;
+	
+	width: 600px;
+}
+
+.bottom_input_wrapper {
+	width: 45px;
+	margin: auto;
+}
+
 .loggers {
 	height: 60px;
 }
@@ -518,7 +529,8 @@ input, select {
 }
 
 .data_rows {
-	
+	width: 300px;
+	height: 22px;
 	
 }
 
