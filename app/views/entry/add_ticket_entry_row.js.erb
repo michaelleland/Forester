@@ -3,8 +3,8 @@ var date = '<%= params[:delivery_date] %>'
 var job_name = '<%= params[:job_name] %>'
 var destination_name = '<%= params[:destination_name] %>'
 var load_pay = '<%= params[:value] %>'
-<% @sp_str = ""; @species.each {|i| unless i == @species.first then @sp_str = "#{@sp_str}, #{i}" else @sp_str = "#{i}" end } %>
-
+<% @sp_str = ""; @specie_codes.each {|i| unless i == @specie_codes.first then @sp_str = "#{@sp_str}, #{i}" else @sp_str = "#{i}" end } %>
+<% if @sp_str == "" then @sp_str = "PU" end %>
 
 $('#current_entries tbody').append('<tr class="current_entries_row">')
 	$('#current_entries tbody').append('<td>'+ticket_no+'</td>')
@@ -13,8 +13,8 @@ $('#current_entries tbody').append('<tr class="current_entries_row">')
 	$('#current_entries tbody').append('<td>'+destination_name+'</td>')
 	$('#current_entries tbody').append('<td><%= WoodType.find(params[:wood_type]).name %></td>')
 	$('#current_entries tbody').append('<td><%= @sp_str %></td>')
-	$('#current_entries tbody').append('<td><%= @ticket.tonnage %></td>')
 	$('#current_entries tbody').append('<td><%= @ticket.net_mbf %></td>')
+	$('#current_entries tbody').append('<td><%= @ticket.tonnage %></td>')
 	$('#current_entries tbody').append('<td>'+load_pay+'</td>')
 	$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
 $('#current_entries tbody').append('</tr>')

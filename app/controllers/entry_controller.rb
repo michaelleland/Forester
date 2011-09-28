@@ -31,7 +31,7 @@ class EntryController < ApplicationController
       end
     end 
     
-    @species = []
+    @specie_codes = []
     
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
@@ -39,25 +39,25 @@ class EntryController < ApplicationController
     @ticket = Ticket.create(:delivery_date => params[:delivery_date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => params[:value], :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
     unless params[:wood_type] == "3"
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :tonnage => params[:tonnage], :mbfs => params[:load_1_mbfs])  
-      @species.push(Specie.find(params[:species_1]).code)
+      @specie_codes.push(Specie.find(params[:species_1]).code)
       unless params[:species_2].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :amount => params[:load_2_mbf])
-        @species.push(Specie.find(params[:species_2]).code)
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :mbfs => params[:load_2_mbfs])
+        @specie_codes.push(Specie.find(params[:species_2]).code)
       end
     
       unless params[:species_3].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_3], :amount => params[:load_3_mbf])
-        @species.push(Specie.find(params[:species_3]).code)
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_3], :mbfs => params[:load_3_mbfs])
+        @specie_codes.push(Specie.find(params[:species_3]).code)
       end
     
       unless params[:species_4].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_4], :amount => params[:load_4_mbf])
-        @species.push(Specie.find(params[:species_4]).code)
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_4], :mbfs => params[:load_4_mbfs])
+        @specie_codes.push(Specie.find(params[:species_4]).code)
       end
     
       unless params[:specie_5].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :amount => params[:load_5_mbf])
-        @species.push(Specie.find(params[:species_5]).code)
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :mbfs => params[:load_5_mbfs])
+        @specie_codes.push(Specie.find(params[:species_5]).code)
       end
     else
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :tonnage => params[:tonnage])
@@ -68,7 +68,7 @@ class EntryController < ApplicationController
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find_by_name(params[:job_name])
     
-    @pfd = PaymentFromDestination.create(:payment_date => params[:payment_date], :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :load_type => params[:load_type], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:total_payment], :wood_type => params[:wood_type])
+    @pfd = PaymentFromDestination.create(:payment_date => params[:payment_date], :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:total_payment], :wood_type => params[:wood_type])
   end
   
   def ticket_entry
