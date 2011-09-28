@@ -277,12 +277,16 @@ class ReceiptsController < ApplicationController
     # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
     # totals are also added up in the midst of all this. 
     @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @trucker.id, j.destination_id)
-      if j.load_type == "MBF"
+      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
+      if @rate.rate_type == "MBF"
         j.trucker_value = @rate.rate * j.net_mbf
       else
-        if j.load_type == "Tonnage"
+        if @rate.rate_type == "Tonnage"
           j.trucker_value = @rate.rate * j.tonnage
+        else 
+          if @rate.rate_type == "percent"
+            j.trucker_value = (@rate.rate / 100) * j.value
+          end
         end
       end
       

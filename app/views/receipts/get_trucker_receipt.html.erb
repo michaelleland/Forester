@@ -123,13 +123,12 @@
 		<br/>
 		
 		
-		<div id="page_2" class="page">
+		<div id="page_2" class="landscape_page">
 			<div id="receipt_tickets_header">Ticket details</div>
 			<div class="tickets_table_box">
 				<table>
 					<tr>
 						<th>General</th>
-						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -141,34 +140,32 @@
 					</tr>
 					<tr>
 						<th>Ticket #</th>
+						<th>Delivery Date</th>
 						<th>Destination</th>
-						<th>Load Type</th>
 						<th>Wood Type</th>
 						<th>MBF</th>
 						<th>Tons</th>
-						<th>per Ton</th>
-						<th>per MBF</th>
+						<th>Rate</th>						
 						<th>Load pay</th>
 						<th>Trucker</th>
 					</tr>
 					
 					<% @tickets.each do |i| %>
+						<% @rate = TruckerRate.find_by_destination_id_and_job_id_and_partner_id(i.destination_id, i.job_id, @trucker.id) %>
 						<tr>
 							<td><%= i.number %></td>
+							<td><%= i.delivery_date %></td>
 							<td><%= i.destination.name %></td>
-							<td><%= i.load_type %></td>
 							<td><%= WoodType.find(i.wood_type).name %></td>
 							<td><%= i.net_mbf %></td>
 							<td><%= i.tonnage %></td>
-							<td><%= if Destination.find(i.destination_id).accepted_load_type == "Tonnage" then @trucker.hauling_rate(i.destination_id, i.job_id) else "" end %></td>
-							<td><%= if Destination.find(i.destination_id).accepted_load_type == "MBF" then @trucker.hauling_rate(i.destination_id, i.job_id) else "" end %></td>
+							<td><%= "#{@rate.rate}/#{@rate.rate_type[0..2].upcase}" %></td>						
 							<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td>
 							<td class="dollars_td">$ <%= @ac.give_pennies(i.trucker_value) %></td>
 						</tr>					
 					<% end %>
 					
 					<tr>
-						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
