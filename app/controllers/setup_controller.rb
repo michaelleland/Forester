@@ -16,6 +16,42 @@ class SetupController < ApplicationController
     
   end
   
+  def new_job
+    @owner = Owner.find_by_name(params[:owner_name])
+    @logger = Partner.find_by_name(params[:logger_name])
+    @trucker = Partner.find_by_name(params[:trucker_name])
+    
+    @job = Job.create(:name => params[:job_name], :owner_id => @owner.id, :hfi_rate => params[:hfi_rate], :hfi_prime => params[:hfi_prime])
+    LoggerAssignment.create(:job_id => @job.id, :partner_id => @trucker.id, :pays_to_trucker => false)
+    TruckerAssignment.create(:job_id => @job.id, :partner_id => @trucker.id)
+  end
+  
+  def edit_job
+    @job = Job.find(params[:job_id])
+    
+    @old_owner = @job.owner
+    @old_logger = @job.logger
+    @old_trucker = @job.trucker
+    
+    @owner = Owner.find_by_name(params[:owner_name])
+    @logger = Partner.find_by_name(params[:logger_name])
+    @trucker = Partner.find_by_name(params[:trucker_name])
+    
+    @job.name = params[:job_name]
+    @job.owner_id = @owner.id
+    @job.hfi_rate = params[:hfi_rate]
+    @job.hfi_prime = params[:hfi_prime]
+    @job.save
+    
+    @la = LoggerAssignment.find_by_job_id_and_partner_id(@job.id, @old_logger.id)
+    @la.partner_id = @logger.id
+    @la.save
+    
+    @ta = TruckerAssignment.find_by_job_id_and_partner_id(@job.id, @old_trucker.id)
+    @ta.partner_id = @trucker.id
+    @ta.save
+  end
+  
   def new_owner
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
     @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])

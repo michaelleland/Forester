@@ -5,14 +5,14 @@
 			<div style="display: none;" id="job_name"><%= i.name %></div>
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Partners:</h4></div>
-				<div class="data_rows"><div class="row_headers">Landowner:</div><div id="owner_name" class="row_data"> <%= i.owner.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Logger:</div><div id="logger_name" class="row_data"> <%= i.logger.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Trucker:</div><div id="trucker_name" class="row_data"> <%= i.trucker.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Landowner: </div><div id="owner_name" class="row_data"><%= i.owner.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Logger: </div><div id="logger_name" class="row_data"><%= i.logger.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Trucker: </div><div id="trucker_name" class="row_data"><%= i.trucker.name %></div></div>
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>General info:</h4></div>
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div id="hfi_rate" class="row_data"><%= i.hfi_rate %></div><div>%</div></div>
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div id="prime_payer" class="row_data"> <%= if i.hfi_prime then "HFI" else "Bank" end %></div></div>
+				<div class="data_rows"><div class="row_headers">HFI-Rate: </div><div id="hfi_rate" class="row_data"><%= i.hfi_rate %></div><div>%</div></div>
+				<div class="data_rows"><div class="row_headers">Prime payer: </div><div id="prime_payer" class="row_data"><%= if i.hfi_prime then "HFI" else "Bank" end %></div></div>
 			</div>
 			<div class="bottom_row">
 				<div class="bottom_input_wrapper"><input type="button" value="Edit" onclick="edit_job(<%= i.id %>);" /></div>
@@ -22,7 +22,7 @@
 	
 	<h3><a href="#">Add a Job</a></h3>
 	<div class="jobs new">
-		<form>	
+		<form action="/new_job" method="post">	
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Job:</h4></div>
 				<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"> <input id="job_name" name="job_name" type="text" size="20"/></div></div>
@@ -51,9 +51,19 @@
 			
 			var place = '#'+id+'job'
 			
-			if ($(place+' #prime_payer').html() == 'Bank') {var hfi_prime = false; }
+			if ($('#'+id+'job').find('#prime_payer').html() == 'Bank') {hfi_prime = false; }
+			var option_1_select_status = "";
+			var option_2_select_status = "";
+			
+			if (hfi_prime) {
+				option_1_select_status = 'selected="true"';
+			} else {
+				option_2_select_status = 'selected="true"';
+			}
+			
 			
 			$(place).find('div').each(function() {$(this).fadeOut();});
+			
 			
 			var html = ""
 			
@@ -61,7 +71,7 @@
 			<form action="/edit_job" method="post" data-remote="true">\
 				<div class="accordion_left_column">\
 					<div class="data_rows"><h4>Job:</h4></div>\
-					<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"> <input id="job_name" name="job_name" type="text" size="20" value="'+job_name+'"  /></div></div>\
+					<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"><input id="job_name" name="job_name" type="text" size="20" value="'+job_name+'"  /></div></div>\
 					<div class="data_rows"><h4>Partners:</h4></div>\
 					<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20" value="'+owner_name+'" /></div></div>\
 					<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <input id="logger_name" name="logger_name" type="text" size="20" value="'+logger_name+'" /></div></div>\
@@ -70,9 +80,10 @@
 				<div class="accordion_right_column">\
 					<div class="data_rows"><h4>General info:</h4></div>\
 					<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <input name="hfi_rate" type="text" size="4" value="'+hfi_rate+'" /></div></div>\
-					<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option value="1" >HFI</option> <option value="0" >Bank</option> </select></div></div>\
+					<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option '+option_1_select_status+' value="1" >HFI</option> <option '+option_2_select_status+' value="0" >Bank</option> </select></div></div>\
 					<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" /></div></div>\
 				</div>\
+				<input type="hidden" name="job_id" value=\"'+id+' \" />\
 			</form>' 
 			
 			setTimeout(function() { $(place).append(html); }, 650);

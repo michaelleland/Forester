@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
   create_table "logger_assignments", :force => true do |t|
     t.integer  "job_id"
     t.integer  "partner_id"
-    t.boolean  "pay_the_trucker"
+    t.boolean  "pays_to_trucker"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -93,7 +93,6 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
   create_table "payment_from_destinations", :force => true do |t|
     t.integer  "destination_id"
     t.integer  "job_id"
-    t.string   "load_type"
     t.date     "payment_date"
     t.string   "payment_num"
     t.float    "tonnage"
