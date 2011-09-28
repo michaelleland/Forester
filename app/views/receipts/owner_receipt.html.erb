@@ -80,24 +80,6 @@ $('#tickets_select').change(function() {
 	}
 });
 
-function add_new_deduction() {
-	var data = $('#deduction_data').attr('value');
-	var value = $('#deduction_value').attr('value');
-	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
-	
-	if (String(id) == "NaN") {
-		id = 1;
-	} else {
-		id = id +1;
-	}
-	
-	$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
-	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
-	$('#deduction_data').attr('value', '');
-	$('#deduction_value').attr('value', '');
-
-}
-
 function add_deduction () {	
 	$('#deductions_select_list option:selected').each(function() {
 		var value = $(this).attr('value');
