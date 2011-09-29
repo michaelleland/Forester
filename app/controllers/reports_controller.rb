@@ -41,9 +41,10 @@ class ReportsController < ApplicationController
         unless i.wood_type == 3 
           unless j.mbfs.nil?
             @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfs
-          end
-          unless j.tonnage.nil?
-            @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnage
+          else
+            unless j.tonnage.nil?
+              @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnage
+            end
           end
         end
         if i.wood_type == 3 # WoodType with id = 3 is Pulp and it is always last in amounts the list
