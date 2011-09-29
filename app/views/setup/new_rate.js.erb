@@ -1,13 +1,13 @@
 <% if params[:type] == "logger" %>
-	$('#no_logger_rate_data_for_<%= @job.id %>').fadeOut();
-
-	$('#input_logger_data_row_<%= @job.id %>').fadeOut();
-	setTimeout(function(){ $('#input_logger_data_row_<%= @job.id %>').remove() });
-	$('#add_the_logger_rate_<%= @job.id %>').fadeOut();
-	setTimeout(function(){ $('#add_the_logger_rate_<%= @job.id %>').remove() });
-	$('#add_logger_rate_row_<%= @job.id %>').fadeIn();
-
-	$('#add_logger_rate_row_<%= @job.id %>').before('<div class="data_rows"><div class="row_headers"><%= Destination.find(@logger_rate.destination_id).name %>: </div><div class="row_data"> $ <%= @logger_rate.rate %> / <%= @logger_rate.rate_type %> </div></div>');
+		$('#no_logger_rate_data_for_<%= @job.id %>').fadeOut();
+	
+		$('#input_logger_data_row_<%= @job.id %>').fadeOut();
+		setTimeout(function(){ $('#input_logger_data_row_<%= @job.id %>').remove() });
+		$('#add_the_logger_rate_<%= @job.id %>').fadeOut();
+		setTimeout(function(){ $('#add_the_logger_rate_<%= @job.id %>').remove() });
+		$('#add_logger_rate_row_<%= @job.id %>').fadeIn();
+	
+		$('#add_logger_rate_row_<%= @job.id %>').before('<div id="<%= @logger_rate.id %>logger_rate" class="data_rows"><div class="row_headers"><%= Destination.find(@logger_rate.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= @logger_rate.rate %></span> / <span class="rate_type"><%= @logger_rate.rate_type %></span><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= @logger_rate.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= @logger_rate.id %>, 'trucker');">Del</div></div></div>');
 <% end %>
 <% if params[:type] == "trucker" %>
 		$('#no_trucker_rate_data_for_<%= @job.id %>').fadeOut();
@@ -18,5 +18,5 @@
 		setTimeout(function(){ $('#add_the_trucker_rate_<%= @job.id %>').remove() });
 		$('#add_trucker_rate_row_<%= @job.id %>').fadeIn();
 	
-		$('#add_trucker_rate_row_<%= @job.id %>').before('<div class="data_rows"><div class="row_headers"><%= Destination.find(@trucker_rate.destination_id).name %>: </div><div class="row_data"> $ <%= @trucker_rate.rate %> / <%= @trucker_rate.rate_type %> </div></div>');
+		$('#add_trucker_rate_row_<%= @job.id %>').before('<div id="<%= @trucker_rate.id %>trucker_rate" class="data_rows"><div class="row_headers"><%= Destination.find(@trucker_rate.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= @trucker_rate.rate %></span> / <span class="rate_type"><%= @trucker_rate.rate_type %></span><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= @trucker_rate.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= @trucker_rate.id %>, 'trucker');">Del</div></div></div>');
 <% end %>
