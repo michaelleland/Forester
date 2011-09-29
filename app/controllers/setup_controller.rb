@@ -24,6 +24,9 @@ class SetupController < ApplicationController
     @job = Job.create(:name => params[:job_name], :owner_id => @owner.id, :hfi_rate => params[:hfi_rate], :hfi_prime => params[:hfi_prime])
     LoggerAssignment.create(:job_id => @job.id, :partner_id => @trucker.id, :pays_to_trucker => false)
     TruckerAssignment.create(:job_id => @job.id, :partner_id => @trucker.id)
+    
+    @content_type = 1
+    render "new_whatever.js.erb"
   end
   
   def edit_job
@@ -50,22 +53,73 @@ class SetupController < ApplicationController
     @ta = TruckerAssignment.find_by_job_id_and_partner_id(@job.id, @old_trucker.id)
     @ta.partner_id = @trucker.id
     @ta.save
+    
+    @content_type = 1
+    render "edit_whatever.js.erb"
   end
   
   def new_owner
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
-    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])
+    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
     @owner = Owner.create(:name => params[:owner_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
+  
+    @content_type = 3
+    render "new_whatever.js.erb"
   end
-
+  
+  def edit_owner
+    @owner = Owner.find(params[:owner_id])
+    
+    @contact_person = @owner.contact_person
+    @address = @owner.address
+    
+    @contact_person.name = params[:cp_name]
+    @contact_person.phone_number = params[:cp_phone]
+    @contact_person.email = params[:cp_email]
+    @contact_person.save
+    
+    @address.street = params[:address_street]
+    @address.city = params[:address_city]
+    @address.zip_code = params[:address_zip]
+    @address.state = params[:address_state]
+    @address.save
+    
+    @content_type = 3
+    render "edit_whatever.js.erb"
+  end
+  
   def sawmills
     
   end
   
   def new_sawmill
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
-    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])
+    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state] )
     @sawmill = Destination.create(:name => params[:sawmill_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
+    
+    @content_type = 4
+    render "new_whatever.js.erb"
+  end
+    
+  def edit_sawmill
+    @sawmill = Destination.find(params[:sawmill_id])
+     
+    @contact_person = @sawmill.contact_person
+    @address = @sawmill.address
+    
+    @contact_person.name = params[:cp_name]
+    @contact_person.phone_number = params[:cp_phone]
+    @contact_person.email = params[:cp_email]
+    @contact_person.save
+    
+    @address.street = params[:address_street]
+    @address.city = params[:address_city]
+    @address.zip_code = params[:address_zip]
+    @address.state = params[:address_state]
+    @address.save
+    
+    @content_type = 4
+    render "edit_whatever.js.erb"
   end
     
   def rates
@@ -90,11 +144,33 @@ class SetupController < ApplicationController
   
   def new_partner
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
-    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip])
+    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
     @partner = Partner.create(:name => params[:partner_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
+    
+    @content_type = 2
+    render "new_whatever.js.erb"
   end
   
   def edit_partner
     @partner = Partner.find(params[:partner_id])
+    @partner.name = params[:partner_name]
+    @partner.save
+    
+    @contact_person = @partner.contact_person
+    @address = @partner.address
+    
+    @contact_person.name = params[:cp_name]
+    @contact_person.phone_number = params[:cp_phone]
+    @contact_person.email = params[:cp_email]
+    @contact_person.save
+    
+    @address.street = params[:address_street]
+    @address.city = params[:address_city]
+    @address.zip_code = params[:address_zip]
+    @address.state = params[:address_state]
+    @address.save
+    
+    @content_type = 2
+    render "edit_whatever.js.erb"
   end
 end

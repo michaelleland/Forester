@@ -60,11 +60,10 @@
 			} else {
 				option_2_select_status = 'selected="true"';
 			}
-			
-			
+						
 			$(place).find('div').each(function() {$(this).fadeOut();});
-			
-			
+			setTimeout(function() { $(place).find('div').each(function() {$(this).remove();}); }, 650);
+						
 			var html = ""
 			
 			html = '\
@@ -87,36 +86,41 @@
 			</form>' 
 			
 			setTimeout(function() { $(place).append(html); }, 650);
+			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); owner_autocomplete(id); logger_trucker_autocomplete(id);});}, 650);
+			
+			
 			
 		}
-	
-		$(function() {
+		
+		function owner_autocomplete(id) {
+			var place = '#'+id+'job';
 			var owners = [
 				<% Owner.all.each do |i| %>
 					<%= "'#{i.name}'," %>
 				<% end %>
 			];
 									
-			$('#owner_name').autocomplete({ 
+			$(place).contents().find('#owner_name').autocomplete({ 
 				source: owners,
 				delay: 50,
 				autoFocus: true
 			});
-		});
+		}
 		
-		$(function() {
+		function logger_trucker_autocomplete(id) {
+			var place = '#'+id+'job'
 			var partners = [
 				<% Partner.all.each do |i| %>
 					<%= "'#{i.name}'," %>
 				<% end %>
 			];
 									
-			$('#logger_name, #trucker_name').autocomplete({ 
+			$(place).contents().find('#logger_name, #trucker_name').autocomplete({ 
 				source: partners,
 				delay: 50,
 				autoFocus: true
 			});
-		});
+		}
 
 		$('#jobs').accordion();
 		$('#jobs_nav').attr('class', 'selected');

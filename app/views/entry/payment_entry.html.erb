@@ -76,10 +76,10 @@
 					<input type="text" size="5" name="net_mbf" class="fields"/>
 				</td>
 				<td>
-					<input type="text" size="10" name="total_payment" class="fields"/>
+					<input type="text" size="10" name="total_payment" class="fields" onmouseover="check_fields();" />
 				</td>
 				<td>
-					<input type="submit" value="Submit" />
+					<input disabled="true" type="submit" value="Submit" onmouseover="check_fields();" />
 				</td>
 			</tr>
 		</table>
@@ -123,5 +123,7 @@
 </div>
 
 <script>
+	
+
 	refresh_all_entries('payment');
 </script>

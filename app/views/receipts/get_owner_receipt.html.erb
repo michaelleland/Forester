@@ -221,7 +221,7 @@
 			var url = ids+"&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
-				url: 'save_owner_receipt/'+url,
+				url: '/save_owner_receipt/'+url,
 				cache: false,
 				success: function () {
 					

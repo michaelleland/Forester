@@ -74,9 +74,9 @@
 							<td>Trucking pay</td>
 							<td></td>
 							<% if @deduction_items.length == 0 %>
-								<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 100px;"> + $ <%= @total %> </div></td>
+								<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 100px;"> + $ <%= @ac.give_pennies(@total_wo_deductions) %> </div></td>
 							<% else %>
-								<td style="text-align: right;"> + $ <%= @total %> </td>
+								<td style="text-align: right;"> + $ <%= @ac.give_pennies(@total_wo_deductions) %> </td>
 							<% end %>
 						</tr>
 					<% @ac = ApplicationController.new %>
@@ -196,7 +196,7 @@
 			var url = ids+"&trucker_id=<%= @trucker.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
 			
 			$.ajax ({
-				url: 'save_trucker_receipt/'+url,
+				url: '/save_trucker_receipt/'+url,
 				cache: false,
 				success: function () {
 					
