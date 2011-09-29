@@ -22,6 +22,23 @@ body {
 	clear: none !important;
 }
 
+.rate_control_link_row {
+	width: 50px;
+	float: right;
+	clear: none;
+}
+
+.rate_control_link {
+	margin-left: 5px;
+	float: left;
+	clear: none;
+}
+
+.rate_control_link:hover {
+	cursor: pointer;
+	color: #666666;
+}
+
 .action_link {
 	float: left;
 	clear: left;
@@ -529,7 +546,7 @@ input, select {
 }
 
 .data_rows {
-	width: 300px;
+	width: 350px;
 	height: 22px;
 	
 }
