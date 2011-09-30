@@ -72,6 +72,12 @@ function import_jobs_of_partner(owner_id, role) {
 	})
 }
 
+function fadeRemove(element) {
+	setTimeout(function() {
+		$(element).remove();
+	}, 620);
+}
+
 function refresh_all_entries (type) {
 	$.ajax ({
 		url: '/all_'+type+'_entries',

@@ -1,6 +1,6 @@
 <% @tickets.each do |i| %>
 	<% @load_details = LoadDetail.find_all_by_ticket_id(i.id)%>
-	<tr class="all_entries_row">
+	<tr id="<%= i.id %>entry" class="all_entries_row">
 		<td><%= i.number %></td>
 		<td><%= i.delivery_date %></td>
 		<td><%= i.job.name %></td>	
@@ -10,7 +10,7 @@
 		<td><%= i.net_mbf %></td>
 		<td><%= i.tonnage %></td>
 		<td><%= i.value %></td>
-		<td><input type="button" value="Edit"></td>
+		<td><input type="button" value="delete" onclick="delete_ticket_entry(<%= i.id %>);"></td>
 	</tr>
 <% end %>
 

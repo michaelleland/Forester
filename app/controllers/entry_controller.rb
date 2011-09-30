@@ -81,6 +81,25 @@ class EntryController < ApplicationController
     @jobs = Job.all
     @loggers = Job.all.collect {|i| i.logger }.flatten.uniq
     @destinations = Destination.all
-  end  
+  end 
+  
+  def delete_ticket_entry
+    @ticket = Ticket.find(params[:id])
+    @ticket.load_details.each do |i|
+      i.delete
+    end
+    if @ticket.delete 
+      render :nothing => true
+    end
+  end
+  
+  def delete_payment_entry
+    @pfd = PaymentFromDestination.find(params[:id])
+    if @pfd.delete 
+      render :nothing => true
+    else
+      render :state => 13
+    end
+  end
   
 end

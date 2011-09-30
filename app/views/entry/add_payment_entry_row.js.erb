@@ -1,14 +1,15 @@
-$('#current_entries tbody').append('<tr>')
-	$('#current_entries tbody').append('<td><%= @pfd.payment_date %></td>')
-	$('#current_entries tbody').append('<td><%= @job.name %></td>')
-	$('#current_entries tbody').append('<td><%= @destination.name %></td>')
-	$('#current_entries tbody').append('<td><%= WoodType.find(params[:wood_type]).name %></td>')
-	$('#current_entries tbody').append('<td><%= @pfd.payment_num %></td>')
-	$('#current_entries tbody').append('<td><%= @pfd.tickets %></td>')
-	$('#current_entries tbody').append('<td><%= @pfd.tonnage %></td>')
-	$('#current_entries tbody').append('<td><%= @pfd.net_mbf %></td>')
-	$('#current_entries tbody').append('<td><%= @pfd.total_payment %></td>')
-	$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
-$('#current_entries tbody').append('</tr>')
+$('#current_entries tbody').append('\
+	<tr id="<%= @pfd.id %>entry"  class="current_entries_row">\
+		<td><%= @pfd.payment_date %></td>\
+		<td><%= @job.name %></td>\
+		<td><%= @destination.name %></td>\
+		<td><%= WoodType.find(params[:wood_type]).name %></td>\
+		<td><%= @pfd.payment_num %></td>\
+		<td><%= @pfd.tickets %></td>\
+		<td><%= @pfd.tonnage %></td>\
+		<td><%= @pfd.net_mbf %></td>\
+		<td><%= @pfd.total_payment %></td>\
+		<td><input type="button" value="Delete" onclick="delete_payment_entry(<%= @pfd.id %>)"/> </td>\
+	</tr>');
 
 refresh_all_entries('payment');

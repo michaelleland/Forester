@@ -6,18 +6,19 @@ var load_pay = '<%= params[:value] %>'
 <% @sp_str = ""; @specie_codes.each {|i| unless i == @specie_codes.first then @sp_str = "#{@sp_str}, #{i}" else @sp_str = "#{i}" end } %>
 <% if @sp_str == "" then @sp_str = "PU" end %>
 
-$('#current_entries tbody').append('<tr class="current_entries_row">')
-	$('#current_entries tbody').append('<td>'+ticket_no+'</td>')
-	$('#current_entries tbody').append('<td>'+date+'</td>')
-	$('#current_entries tbody').append('<td>'+job_name+'</td>')
-	$('#current_entries tbody').append('<td>'+destination_name+'</td>')
-	$('#current_entries tbody').append('<td><%= WoodType.find(params[:wood_type]).name %></td>')
-	$('#current_entries tbody').append('<td><%= @sp_str %></td>')
-	$('#current_entries tbody').append('<td><%= @ticket.net_mbf %></td>')
-	$('#current_entries tbody').append('<td><%= @ticket.tonnage %></td>')
-	$('#current_entries tbody').append('<td>'+load_pay+'</td>')
-	$('#current_entries tbody').append('<td><input type="button" value="Edit"/> </td>')
-$('#current_entries tbody').append('</tr>')
+$('#current_entries tbody').append('\
+	<tr id="<%= @ticket.id %>entry" class="current_entries_row">\
+		<td>'+ticket_no+'</td>\
+		<td>'+date+'</td>\
+		<td>'+job_name+'</td>\
+		<td>'+destination_name+'</td>\
+		<td><%= WoodType.find(params[:wood_type]).name %></td>\
+		<td><%= @sp_str %></td>\
+		<td><%= @ticket.net_mbf %></td>\
+		<td><%= @ticket.tonnage %></td>\
+		<td>'+load_pay+'</td>\
+		<td><input type="button" value="Delete" onclick="delete_ticket_entry(<%= @ticket.id %>)" /> </td>\
+	</tr>');
 
 $('input.fields').attr('value', '');
 $('input').first().focus();
