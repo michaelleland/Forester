@@ -91,6 +91,15 @@ class EntryController < ApplicationController
     if @ticket.delete 
       render :nothing => true
     end
-  end 
+  end
+  
+  def delete_payment_entry
+    @pfd = PaymentFromDestination.find(params[:id])
+    if @pfd.delete 
+      render :nothing => true
+    else
+      render :state => 13
+    end
+  end
   
 end

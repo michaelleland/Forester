@@ -30,6 +30,7 @@ Forester::Application.routes.draw do
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
   match "/delete_ticket_entry/:id" => "entry#delete_ticket_entry"
+  match "/delete_payment_entry/:id" => "entry#delete_payment_entry"
  
   #Setup page's basic page calls
   match "/landowners" => "setup#owners"
