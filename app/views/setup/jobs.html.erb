@@ -1,25 +1,28 @@
 <div class="grid_10" id="jobs">
 	<% Job.all.each do |i| %>
 		<h3><a href="#"><%= i.name %></a></h3>	
-		<div class="jobs">
+		<div id="<%= i.id %>job" class="jobs">
+			<div style="display: none;" id="job_name"><%= i.name %></div>
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Partners:</h4></div>
-				<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <%= i.owner.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <%= i.logger.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <%= i.trucker.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Landowner: </div><div id="owner_name" class="row_data"><%= i.owner.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Logger: </div><div id="logger_name" class="row_data"><%= i.logger.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Trucker: </div><div id="trucker_name" class="row_data"><%= i.trucker.name %></div></div>
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>General info:</h4></div>
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <%= i.hfi_rate %> %</div></div>
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <%= if i.hfi_prime then "HFI" else "Bank" end %></div></div>
-				<div class="data_rows"><div class="row_headers">Some:</div><div class="row_data"> Thing</div></div>
+				<div class="data_rows"><div class="row_headers">HFI-Rate: </div><div id="hfi_rate" class="row_data"><%= i.hfi_rate %></div><div>%</div></div>
+				<div class="data_rows"><div class="row_headers">Prime payer: </div><div id="prime_payer" class="row_data"><%= if i.hfi_prime then "HFI" else "Bank" end %></div></div>
+			</div>
+			<div class="bottom_row">
+				<div class="bottom_input_wrapper"><input type="button" value="Edit" onclick="edit_job(<%= i.id %>);" /></div>
 			</div>
 		</div>
 	<% end %>
 	
 	<h3><a href="#">Add a Job</a></h3>
 	<div class="jobs new">
-		<form>	
+		<form action="/new_job" method="post" data-remote="true">	
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Job:</h4></div>
 				<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"> <input id="job_name" name="job_name" type="text" size="20"/></div></div>
@@ -30,48 +33,95 @@
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>General info:</h4></div>
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <input name="hfi_rate" type="text" size="4"/></div></div>
-<<<<<<< HEAD
+				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div lass="row_data"> <input name="hfi_rate" type="text" size="4"/></div></div>
 				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option value="1" >HFI</option> <option value="0" >Bank</option> </select></div></div>
-=======
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="prime"> <option>HFI</option> <option>Bank</option> </select></div></div>
->>>>>>> 8160f58... Entry pages UC + newJob creation accordion
 				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" /></div></div>
 			</div>
 		</form>
-		
-		<script> 
-			$(function() {
-				var owners = [
-					<% Owner.all.each do |i| %>
-						<%= "'#{i.name}'," %>
-					<% end %>
-				];
-										
-				$('#owner_name').autocomplete({ 
-					source: owners,
-					delay: 50,
-					autoFocus: true
-				});
-			});
-			
-			$(function() {
-				var partners = [
-					<% Partner.all.each do |i| %>
-						<%= "'#{i.name}'," %>
-					<% end %>
-				];
-										
-				$('#logger_name, #trucker_name').autocomplete({ 
-					source: partners,
-					delay: 50,
-					autoFocus: true
-				});
-			});
-		</script>
 	</div>
 	
-	<script>
+	<script> 
+		function edit_job(id) {
+			var job_name = $('#'+id+'job').find('#job_name').html();
+			var owner_name = $('#'+id+'job').find('#owner_name').html();
+			var logger_name = $('#'+id+'job').find('#logger_name').html();
+			var trucker_name = $('#'+id+'job').find('#trucker_name').html();
+			var hfi_rate = parseFloat($('#'+id+'job').find('#hfi_rate').html());
+			var hfi_prime = true;
+			
+			var place = '#'+id+'job'
+			
+			if ($('#'+id+'job').find('#prime_payer').html() == 'Bank') {hfi_prime = false; }
+			var option_1_select_status = "";
+			var option_2_select_status = "";
+			
+			if (hfi_prime) {
+				option_1_select_status = 'selected="true"';
+			} else {
+				option_2_select_status = 'selected="true"';
+			}
+						
+			$(place).find('div').each(function() {$(this).fadeOut();});
+			setTimeout(function() { $(place).find('div').each(function() {$(this).remove();}); }, 650);
+						
+			var html = ""
+			
+			html = '\
+			<form action="/edit_job" method="post" data-remote="true">\
+				<div class="accordion_left_column">\
+					<div class="data_rows"><h4>Job:</h4></div>\
+					<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"><input id="job_name" name="job_name" type="text" size="20" value="'+job_name+'"  /></div></div>\
+					<div class="data_rows"><h4>Partners:</h4></div>\
+					<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20" value="'+owner_name+'" /></div></div>\
+					<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <input id="logger_name" name="logger_name" type="text" size="20" value="'+logger_name+'" /></div></div>\
+					<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <input id="trucker_name" name="trucker_name" type="text" size="20" value="'+trucker_name+'" /></div></div>\
+				</div>\
+				<div class="accordion_right_column">\
+					<div class="data_rows"><h4>General info:</h4></div>\
+					<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div class="row_data"> <input name="hfi_rate" type="text" size="4" value="'+hfi_rate+'" /></div></div>\
+					<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option '+option_1_select_status+' value="1" >HFI</option> <option '+option_2_select_status+' value="0" >Bank</option> </select></div></div>\
+					<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" /></div></div>\
+				</div>\
+				<input type="hidden" name="job_id" value=\"'+id+' \" />\
+			</form>' 
+			
+			setTimeout(function() { $(place).append(html); }, 650);
+			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); owner_autocomplete(id); logger_trucker_autocomplete(id);});}, 650);
+			
+			
+			
+		}
+		
+		function owner_autocomplete(id) {
+			var place = '#'+id+'job';
+			var owners = [
+				<% Owner.all.each do |i| %>
+					<%= "'#{i.name}'," %>
+				<% end %>
+			];
+									
+			$(place).contents().find('#owner_name').autocomplete({ 
+				source: owners,
+				delay: 50,
+				autoFocus: true
+			});
+		}
+		
+		function logger_trucker_autocomplete(id) {
+			var place = '#'+id+'job'
+			var partners = [
+				<% Partner.all.each do |i| %>
+					<%= "'#{i.name}'," %>
+				<% end %>
+			];
+									
+			$(place).contents().find('#logger_name, #trucker_name').autocomplete({ 
+				source: partners,
+				delay: 50,
+				autoFocus: true
+			});
+		}
+
 		$('#jobs').accordion();
 		$('#jobs_nav').attr('class', 'selected');
 	</script>

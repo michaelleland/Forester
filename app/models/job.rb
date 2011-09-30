@@ -24,8 +24,8 @@ class Job < ActiveRecord::Base
     @trucker_rates = TruckerRate.find_all_by_job_id_and_partner_id(self.id, self.trucker.id)
   end
   
-  def logger_details
-    @logger_details = LoggerAssignment.find_by_job_id(self.id)
+  def logger_rates_details
+    @logger_details = LoggerRate.find_all_by_job_id_and_partner_id(self.id, self.logger.id)
   end
   
 end

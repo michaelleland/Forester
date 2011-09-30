@@ -6,14 +6,27 @@
 		<link rel="stylesheet" href="/stylesheets/960.css" />
 		<link rel="stylesheet" href="/stylesheets/style.css" />
 		<link rel="stylesheet" href="/stylesheets/cupertino.css" />
+		<%= stylesheet_link_tag('print', :media => :print) %>
 		<%= javascript_include_tag :defaults %>
 		<%= csrf_meta_tag %>
 	</head>	
 	<body>
-		<div id="page">
+		
+		<div id="controls">
+			<div id="print_it_link" onclick="window.print()">Print the receipt</div>
+			<% if @old.nil? %>
+				<% if Receipt.find_by_job_id_and_owner_type_and_payment_num(@job.id, "landowner", @payment_num).nil? %>
+					<div id="save_it_link" onclick="save_the_receipt()">Save the receipt</div>
+				<% else %>
+					<div id="save_it_link" style="color: green; cursor: inherit;" >Receipt is saved</div>
+				<% end %>
+			<% end %>	
+		</div>
+			
+		<div class="page" id="page_1">
 			<div class="grid_10" id="landowner_payments">	
 				<img src="/images/HFI_logo.png" id="hfi_logo"/>
-				<div id="receipt_header">Landowner Payments</div>
+				<div id="receipt_header">Landowner Receipt</div>
 				
 				<div id="hfi_address_box">
 					<div class="address_rows">10 South Parkway Avenue Suite 201</div>
@@ -25,11 +38,11 @@
 				<div id="details_box">
 					<table>
 						<tr>
-							<td class="headers">Job name</td>
+							<td class="headers">Job</td>
 							<td class="table_data"><%= @job.name %></td>
 						</tr>
 						<tr>
-							<td class="headers">Logger name</td>
+							<td class="headers">Logger</td>
 							<td class="table_data"><%= @job.logger.name %></td>
 						</tr>
 						<tr>
@@ -59,22 +72,20 @@
 							<th style="text-align: right;">Amount</th>
 						</tr>
 						
-						<% @payments.each do |i| %>
-							<tr>
-								<td><%= i.payment_num %></td>
-								<td><%= i.payment_date %></td>
-								<td></td>
-								<td>Sawmill payment</td>
-								<td></td>
-								<% if @deduction_items.length == 0 && i == @payments.last %>
-									<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 65px;"> + $ <%= i.total_payment %> </div></td>
-								<% else %>
-									<td style="text-align: right;"> + $ <%= i.total_payment %> </td>
-								<% end %>
-							</tr>
-						<% end %>
-						
-						<% @deduction_items.each do |i| %>
+						<tr>
+							<td><%= @payment_num %></td>
+							<td><%= @date_string %></td>
+							<td></td>
+							<td>Total payment from sawmill</td>
+							<td></td>
+							<% if @deduction_items.length == 0 %>
+								<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 100px;"> + $ <%= @total_wo_deductions %> </div></td>
+							<% else %>
+								<td style="text-align: right;"> + $ <%= @total_wo_deductions %> </td>
+							<% end %>
+						</tr>
+					
+					<% @deduction_items.each do |i| %>
 							<tr>
 								<td></td>
 								<td></td>
@@ -82,9 +93,9 @@
 								<td><%= i[0] %></td>
 								<td></td>
 								<% if i == @deduction_items.last %>
-									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 65px;">- $ <%= i[1] %> </div></td>
+									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 100px;">- $ <%= @ac.give_pennies(i[1].to_i) %> </div></td>
 								<% else %>
-									<td style="text-align: right;"> - $ <%= i[1] %> </td>
+									<td style="text-align: right;"> - $ <%= @ac.give_pennies(i[1].to_i) %> </td>
 								<% end %>
 							</tr>
 						<% end %>
@@ -97,28 +108,125 @@
 							<td class="tp">Total to be paid </td>
 							<td class="to" style="text-align: right;">+ $ <%= @total %> </td>
 						</tr>
-			
+						
+						<% unless @notes.nil? || @notes == "" %>
+							<tr>
+								<td id="Incredible_invisible_text">Ooh, you got me!</td>
+							</tr>
+							
+							<tr>	
+								<td><span style="font-weight: bold;">Notes:</span> <%= @notes %></td>							
+							</tr>
+						<% end %>
 					</table>
 				</div>
 			</div>
+		</div>
+		
+		<br/>
+		
+		
+		<div id="page_2" class="landscape_page">
+			<div id="receipt_tickets_header">Ticket details</div>
+			<div class="tickets_table_box">
+				<table>
+					<tr>
+						<th>General</th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th>Trucker</th>
+						<th></th>
+						<th>Logger</th>
+						<th></th>
+						<th>HFI</th>
+						<th></th>
+						<th>Owner</th>
+					</tr>
+					<tr>
+						<th>Ticket #</th>
+						<th>Destination</th>
+						<th>Delivery date</th>
+						<th>Wood Type</th>
+						<th>MBF</th>
+						<th>Tons</th>
+						<th>Load pay</th>
+						<th>Rate</th>
+						<th>Pay</th>
+						<th>Rate</th>
+						<th>Pay</th>
+						<th>Rate</th>
+						<th>Pay</th>
+						<th>Pay</th>
+					</tr>
+					
+					<% @tickets.each do |i| %>
+					<% @tr = i.trucker_rate %>
+					<% @lr = i.logger_rate %>
+					
+						<tr>
+							<td><%= i.number %></td>
+							<td><%= i.destination.name %></td>
+							<td><%= i.delivery_date.strftime("%m/%d/%Y") %></td>
+							<td><%= WoodType.find(i.wood_type).name %></td>
+							<td class="dollars_td"><%= i.net_mbf %></td>
+							<td class="dollars_td"><%= i.tonnage %></td>
+							<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td>
+							<td class="dollars_td"><%= unless @tr.rate_type == "percent" then "#{@tr.rate}/#{@tr.rate_type[(0..2)].upcase}" else "#{@tr.rate} %}" end %></td>
+							<td class="dollars_td">$ <%= @ac.give_pennies(i.trucker_value) %></td>
+							<td class="dollars_td"><%= unless @lr.rate_type == "percent" then "#{@lr.rate}/#{@lr.rate_type[(0..2)].upcase}" else "#{@tr.rate} %}" end %></td>
+							<td class="dollars_td">$ <%= @ac.give_pennies(i.logger_value) %></td>
+							<td class="dollars_td"><%= "#{@job.hfi_rate} %" %></td>
+							<td class="dollars_td">$ <%= @ac.give_pennies(i.hfi_value) %></td>
+							<td class="dollars_td">$ <%= @ac.give_pennies(i.owner_value) %></td>
+						</tr>					
+					<% end %>
+					
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<th>Totals:</th>
+						<td class="dollars_td totals">$ <%= @ac.give_pennies(@load_pay_total) %></td>
+						<td></td>
+						<td class="dollars_td totals">$ <%= @ac.give_pennies(@trucker_total) %></td>
+						<td></td>
+						<td class="dollars_td totals">$ <%= @ac.give_pennies(@logger_total) %></td>						
+						<td></td>
+						<td class="dollars_td totals">$ <%= @ac.give_pennies(@hfi_total) %></td>
+						<td class="dollars_td totals" style="font-weight: bold;">$ <%= @total_wo_deductions %></td>
+					</tr>
+					
+				</table>	
+			</div>
+		</div>
 	</body>
 </html>
-
-<script>
-function show_receipt_item_inputs () {
-	$('#show_new_receipt_item_inputs').parent().before('<tr> <td></td><td></td><td></td><td><input type="text" name="item_data" id="item_data" size="10" /></td><td style="text-align: right;"><select name="polarity_selector" id="polarity_selector"><option value="1">+</option><option value="0">-</option></td><td><input style="float: left;" name="amount" id="amount" size="5" /> <div style="float: left; clear: none;" class="action_link" onclick="add_the_receipt_item();">Add</div></td></tr>')
-	$('#show_new_receipt_item_inputs').fadeOut();	
-}
-
-function add_the_receipt_item () {
-	$.ajax ({
-		url: '/add_receipt_item',
-		cache: false,
-		success: function (html) {
-			$('.all_entries_row').each(function () { $(this).remove()})
-			$('#all_entries table').append(html);
+<% if @old.nil? %>
+	<script>
+		function save_the_receipt () {
+			
+			<% @ids = ""; @tickets.each {|i| if i == @tickets.first then  @ids = "?tickets[]=#{i.id}" else @ids = "#{@ids}&tickets[]=#{i.id}" end} %>
+			<% @deductions = ""; @deduction_items.each {|i| @deductions = "#{@deductions}&deductions_list[]=#{i[0]}"} %>
+			<% @values = ""; @deduction_items.each {|i| @values = "#{@values}&deductions_values[]=#{i[1]}"} %>
+			
+			var ids = '<%= @ids %>';
+			var values = '<%= @values %>';
+			var items =  '<%= @deductions %>';
+			var url = ids+"&owner_id=<%= @owner.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
+			
+			$.ajax ({
+				url: '/save_owner_receipt/'+url,
+				cache: false,
+				success: function () {
+					
+				}
+			});
 		}
-	})
-}
-	
-</script>
+	</script>
+<% end %>

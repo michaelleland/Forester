@@ -5,7 +5,7 @@
 		<select id="owner_selector" name="owner_id">
 			<option onclick="import_jobs_of_owner(0)" value="0"> Select an owner </option>
 			<% Owner.all.each do |i| %>
-				<option onclick="import_jobs_of_owner(<%= i.id %>)" value="<%= i.id %>"><%= i.name %></option>
+				<option value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		
@@ -16,7 +16,7 @@
 		<h5>Then, select tickets to be paid:</h5>
 		
 		<div id="tickets_to_receipt">
-			<select id="tickets_select" name="tickets[]" multiple="true" size="6">
+			<select id="tickets_select" name="tickets[]" multiple="true" size="10">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
@@ -41,9 +41,9 @@
 		
 		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
 		
-		<textarea rows="5"></textarea>
+		<textarea name="notes" rows="5"></textarea>
 		
-		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No payments selected" />		
+		<input id="submit" disabled="disabled" type="submit" onmouseover="select_all_deductions()" value="No tickets selected" />		
 	</form>	
 </div>
 
@@ -55,52 +55,30 @@ function import_jobs_of_owner(owner_id) {
 		cache: false,
 		success: function (html) {
 			$('#job_selector').html(html);
-			$('#payments_to_receipt select').html('<option value="0">No job selected</option>');
+			$('#tickets_select').html('<option value="0">No job selected</option>')
 			$('#submit').attr('disabled', 'disabled');
-			$('#submit').attr('value', 'No payments selected');
+			$('#submit').attr('value', 'No tickets selected');
 		}		
 	})
 }
 
-$('#payments_select').change(function() {
-	if ($(this).val() != '0') {
-		var enabled = true
-		$('#payments_select option:selected').each(function() {
-			if ($(this).text().indexOf('paid') != -1) {
-				enabled = false;
-				$('#submit').attr('disabled', 'disabled');
-				$('#submit').attr('value', 'No payments selected');
-				return false;
-			}			
-		});
-		
-		if (enabled) {
-			$('#submit').removeAttr('disabled');
-			$('#submit').attr('value', 'Create receipt');
-		}		
-	} else {
-		$('#submit').attr('disabled', 'disabled');
-		$('#submit').attr('value', 'No payments selected');
-	}
+$('#owner_selector').change(function () {
+	import_jobs_of_owner($(this).val());
 });
 
-function add_new_deduction() {
-	var data = $('#deduction_data').attr('value');
-	var value = $('#deduction_value').attr('value');
-	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
-	
-	if (String(id) == "NaN") {
-		id = 1;
-	} else {
-		id = id +1;
-	}
-	
-	$('#deductions_list').append('<option value="'+id+'">'+data+'</option>');
-	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
-	$('#deduction_data').attr('value', '');
-	$('#deduction_value').attr('value', '');
+$('#job_selector').change(function () {
+	refresh_tickets($(this).val());
+});
 
-}
+$('#tickets_select').change(function() {
+	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
+		$('#submit').removeAttr('disabled');
+		$('#submit').attr('value', 'Create receipt');		
+	} else {
+		$('#submit').attr('disabled', 'disabled');
+		$('#submit').attr('value', 'No tickets selected');
+	}
+});
 
 function add_deduction () {	
 	$('#deductions_select_list option:selected').each(function() {
@@ -135,7 +113,7 @@ function remove_deduction () {
 
 function refresh_tickets (id) {
 	$.ajax ({
-		url: '/get_logger_tickets/'+id,
+		url: '/get_owner_tickets/'+id,
 		cache: false,
 		success: function (html) {
 			$('#tickets_select').html(html);
@@ -143,17 +121,7 @@ function refresh_tickets (id) {
 	})
 }
 
-function select_all_deductions() {
-	var vals = []
-	$('#deductions_list option').each(function () {
-		vals.push(parseInt($(this).attr('value')));
-	})
-	$('#deductions_list').val(vals);
-	
-	vals = []
-	$('#deductions_values option').each(function () {
-		vals.push(parseInt($(this).attr('value')));
-	})
-	$('#deductions_values').val(vals);
+function init_ticket_select () {
+	$('#tickets_select').html('<option value="0">No job selected</option>');
 }
 </script>

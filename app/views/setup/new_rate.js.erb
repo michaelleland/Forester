@@ -1,9 +1,0 @@
-$('#no_rate_data_for_<%= @job.id %>').fadeOut();
-
-$('#input_data_row_<%= @job.id %>').fadeOut();
-setTimeout(function(){ $('#input_data_row_<%= @job.id %>').remove() });
-$('#add_the_rate_<%= @job.id %>').fadeOut();
-setTimeout(function(){ $('#add_the_rate_<%= @job.id %>').remove() });
-$('#add_rate_row_<%= @job.id %>').fadeIn();
-
-$('#add_rate_row_<%= @job.id %>').before('<div class="data_rows"><div class="row_headers"><%= Destination.find(@tr.destination_id).name %>: </div><div class="row_data"> $ <%= @tr.rate %> / <%= @tr.load_type %> </div></div>');

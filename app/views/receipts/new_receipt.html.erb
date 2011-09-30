@@ -1,0 +1,163 @@
+<div class="grid_10" id="new_receipt_box">
+	<h4>Create a new receipt: </h4>
+	<form id="create_form" action="" method="get" target="_blank">
+		<h5>Select job:</h5>
+		<select id="job_selector">
+			<option onclick="init_type_select(); init_ticket_select();" value="0">Select a job</option>
+			<% Job.all.each do |i| %>
+				<option onclick="init_type_select();" value="<%= i.id %>"><%= i.name %></option>
+			<% end %>
+		</select>
+		
+		<h5>Create receipt for:</h5>
+		<select id="owner_type_selector">
+			<option onclick="init_ticket_select()" value="none"> Select owner type </option>
+			<option value="owner">Landowner</option>
+			<option value="logger">Logger</option>
+			<option value="trucker">Trucker</option>
+		</select>
+		
+		<h5>Select tickets:</h5>
+		
+		<div id="tickets_to_receipt">
+			<select multiple="true" id="tickets_select" name="tickets[]" size="10">
+				<option value="0">Select owner type</option>
+			</select>
+		</div>
+		
+		<h5>Add deductions: </h5>
+		
+		<div id="deductions_to_receipt_list">
+			<select id="deductions_list" name="deductions_list[]" multiple="true" size="6">
+			</select>
+		</div>
+		
+		<div id="deductions_to_receipt_list_values">
+			<select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
+			</select>
+		</div>
+		
+		<div id="input_row">
+			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
+			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
+			<input type="button" value="Add deduction" onclick="add_new_deduction();"/>
+		</div>
+		
+		<h5 style="float: left; clear: left;">Add notes as necessary</h5>
+		
+		<textarea name="notes" rows="5"></textarea>
+		
+		<input id="submit" disabled="true" onclick="init_the_page();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />		
+	</form>	
+</div>
+
+<script>
+
+$('#tickets_select').change(function() {
+	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
+		$('#submit').removeAttr('disabled');
+		$('#submit').attr('value', 'Create receipt');		
+	} else {
+		$('#submit').attr('disabled', 'disabled');
+		$('#submit').attr('value', 'No tickets selected');
+	}
+});
+
+function init_the_page() {
+	setTimeout(function() {
+		change_content('new_receipt', 2);
+	}, 1000);
+}
+
+function init_ticket_select () {
+	$('#tickets_select').html('<option value="0">Select owner type</option>');
+}
+
+function init_type_select () {
+	$('#owner_type_selector').val('0');
+	$('#tickets_select').html('<option value="0">Select owner type</option>');
+}
+
+function refresh_form_action () {
+	var type = $('#owner_type_selector').val();
+	var receipt_id = $('#receipt_select').val();
+	
+	$('#create_form').attr('action', '/get_'+type+'_receipt/')
+}
+
+function refresh_receipts (type) {
+	var job_id = $('#job_selector').val();
+	
+	$.ajax ({
+		url: '/get_receipts/'+job_id+'?owner_type='+type,
+		cache: false,
+		success: function (html) {
+			$('#receipt_select').html(html);
+		}		
+	});
+}
+
+$('#owner_type_selector').change(function() {
+	var id = $('#job_selector').val();
+	if ($(this).val() == "owner") {
+		$.ajax ({
+			url: '/get_owner_tickets/'+id,
+			cache: false,
+			success: function (html) {
+				$('#tickets_select').html(html);
+			}		
+		});
+	} else if ($(this).val() == "logger") {
+		$.ajax ({
+			url: '/get_logger_tickets/'+id,
+			cache: false,
+			success: function (html) {
+				$('#tickets_select').html(html);
+			}		
+		});
+	} else if ($(this).val() == "trucker") {
+		$.ajax ({
+			url: '/get_trucker_tickets/'+id,
+			cache: false,
+			success: function (html) {
+				$('#tickets_select').html(html);
+			}		
+		});
+	}
+	
+	refresh_form_action();
+	
+});
+
+function add_new_deduction() {
+	var data = $('#deduction_data').attr('value');
+	var value = $('#deduction_value').attr('value');
+	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
+	
+	if (String(id) == "NaN") {
+		id = 1;
+	} else {
+		id = id +1;
+	}
+	
+	$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
+	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
+	$('#deduction_data').attr('value', '');
+	$('#deduction_value').attr('value', '');
+
+}
+
+function select_all_deductions() {
+	var vals = []
+	$('#deductions_list option').each(function () {
+		vals.push($(this).attr('value'));
+	})
+	$('#deductions_list').val(vals);
+	
+	vals = []
+	$('#deductions_values option').each(function () {
+		vals.push(parseFloat($(this).attr('value')));
+	})
+	$('#deductions_values').val(vals);
+}
+</script>

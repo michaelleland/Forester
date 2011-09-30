@@ -1,18 +1,23 @@
 <div class="grid_10" id="partners">
 	<% Partner.all.each do |i| %>
 		<h3><a href="#"><%= i.name %></a></h3>	
-		<div class="partners">
+		<div id="<%= i.id %>partner" class="partners">
+			<div style="display: none;" id="partner_name"><%= i.name %></div>
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Contact person:</h4></div>
-				<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <%= i.contact_person.name %></div></div>
-				<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <%= i.contact_person.phone_number %></div></div>
-				<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <%= i.contact_person.email %></div></div>
+				<div class="data_rows"><div class="row_headers">Name:</div><div id="cp_name" class="row_data"><%= i.contact_person.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Phone:</div><div id="cp_phone" class="row_data"><%= i.contact_person.phone_number %></div></div>
+				<div class="data_rows"><div class="row_headers">E-mail:</div><div id="cp_email" class="row_data"><%= i.contact_person.email %></div></div>
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>Address:</h4></div>
-				<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <%= i.address.street %> </div></div>
-				<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <%= i.address.city %></div></div>
-				<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <%= i.address.zip_code %> </div></div>
+				<div class="data_rows"><div class="row_headers">Street:</div><div id="address_street" class="row_data"><%= i.address.street %> </div></div>
+				<div class="data_rows"><div class="row_headers">City: </div><div id="address_city" class="row_data"><%= i.address.city %></div></div>
+				<div class="data_rows"><div class="row_headers">Zip:</div><div id="address_zip" class="row_data"><%= i.address.zip_code %> </div></div>
+				<div class="data_rows"><div class="row_headers">State:</div><div id="address_state" class="row_data" align="<%= i.address.state %>"><%= $states[i.address.state] %></div></div>
+			</div>
+			<div class="bottom_row">
+				<div class="bottom_input_wrapper"><input type="button" value="Edit" onclick="edit_partner(<%= i.id %>);" /></div>
 			</div>
 		</div>
 	<% end %>
@@ -33,6 +38,16 @@
 				<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <input id="address_street" name="address_street" type="text" size="20"/> </div></div>
 				<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <input id="address_city" name="address_city" type="text" size="20"/></div></div>
 				<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <input id="address_zip" name="address_zip" type="text" size="20"/> </div></div>
+				<div class="data_rows">
+					<div class="row_headers">State:</div>
+					<div class="row_data"> 
+						<select id="address_state" name="address_state"> 
+							<% $states.each_with_index do |i, x| %>
+								<option value="<%= x %>"><%= i %></option>
+							<% end %>
+						</select>
+					</div>
+				</div>
 				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" size="20"/> </div></div>
 			</div>
 		</form>
@@ -40,6 +55,59 @@
 </div>
 
 <script>
+	
+	function edit_partner(id) {
+			var partner_name = $('#'+id+'partner').find('#partner_name').html();
+			var cp_name = $('#'+id+'partner').find('#cp_name').html();
+			var cp_phone = $('#'+id+'partner').find('#cp_phone').html();
+			var cp_email = $('#'+id+'partner').find('#cp_email').html();
+			var addr_street = $('#'+id+'partner').find('#address_street').html();
+			var addr_city = $('#'+id+'partner').find('#address_city').html();
+			var addr_zip = $('#'+id+'partner').find('#address_zip').html();
+			var addr_state = $('#'+id+'partner').find('#address_state').attr('align');
+			
+			var place = '#'+id+'partner'
+			
+			$(place).find('div').each(function() {$(this).fadeOut();});
+			setTimeout(function() { $(place).find('div').each(function() {$(this).remove();}); }, 650);
+			
+			
+			var html = ""
+			
+			html = '\
+				<form style="display: none;" method="post" action="/edit_partner" data-remote="true">\
+					<div class="accordion_left_column">\
+						<div class="data_rows"><h4>Logger / Trucker:</h4></div>\
+						<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="partner_name" name="partner_name" type="text" size="20" value="'+partner_name+'" /></div></div>\
+						<div class="data_rows"><h4>Contact person:</h4></div>\
+						<div class="data_rows"><div class="row_headers">Name:</div><div class="row_data"> <input id="cp_name" name="cp_name" type="text" size="20" value="'+cp_name+'" /></div></div>\
+						<div class="data_rows"><div class="row_headers">Phone:</div><div class="row_data"> <input id="cp_phone" name="cp_phone" type="text" size="20" value="'+cp_phone+'" /></div></div>\
+						<div class="data_rows"><div class="row_headers">E-mail:</div><div class="row_data"> <input id="cp_email" name="cp_email" type="text" size="20" value="'+cp_email+'" /></div></div>\
+					</div>\
+					<div class="accordion_right_column">\
+						<div class="data_rows"><h4>Address:</h4></div>\
+						<div class="data_rows"><div class="row_headers">Street:</div><div class="row_data"> <input id="address_street" name="address_street" type="text" size="20" value="'+addr_street+'" /> </div></div>\
+						<div class="data_rows"><div class="row_headers">City: </div><div class="row_data"> <input id="address_city" name="address_city" type="text" size="20" value="'+addr_city+'" /></div></div>\
+						<div class="data_rows"><div class="row_headers">Zip:</div><div class="row_data"> <input id="address_zip" name="address_zip" type="text" size="20" value="'+addr_zip+'" /> </div></div>\
+						<div class="data_rows">\
+							<div class="row_headers">State:</div>\
+							<div class="row_data">\
+								<select id="address_state" name="address_state">\
+									<% $states.each_with_index do |i, x| %>
+										<option value="<%= x %>"><%= i %></option>\
+									<% end %>
+								</select>\
+							</div>\
+						</div>\
+						<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" size="20"/> </div></div>\
+					<input type="hidden" name="partner_id" value=\"'+id+' \" />\
+				</form>'
+				
+			setTimeout(function() { $(place).append(html); }, 650);
+			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); }); }, 650);
+			setTimeout(function() { $('#'+id+'partner').find('#address_state').val(addr_state); }, 650);
+		}
+
 	$('#partners').accordion();
 	$('#partners_nav').attr('class', 'selected');
 </script>

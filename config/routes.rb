@@ -7,9 +7,12 @@ Forester::Application.routes.draw do
   #Routes for page modifying Ajax calls
   match "/add_specie" => "page_controls#add_specie"
   match "/delete_specie" => "page_controls#delete_specie"
+  match "/import_jobs_of_partner/:id" => "page_controls#import_jobs_of_partner"
   match "/import_jobs_of_owner/:id" => "page_controls#import_jobs_of_owner"
   match "/import_jobs_of_logger/:id" => "page_controls#import_jobs_of_logger"
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
+  match "/get_receipts/:id" => "page_controls#get_receipts"
+  match "/get_load_type/" => "page_controls#get_load_type" 
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -26,6 +29,8 @@ Forester::Application.routes.draw do
   match "/add_payment_entry_row" => "entry#add_payment_entry_row", :via => "post"
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
+  match "/delete_ticket_entry/:id" => "entry#delete_ticket_entry"
+  match "/delete_payment_entry/:id" => "entry#delete_payment_entry"
  
   #Setup page's basic page calls
   match "/landowners" => "setup#owners"
@@ -36,13 +41,17 @@ Forester::Application.routes.draw do
   match "/rates" => "setup#rates"
   
   #Receipt page's basic page calls
+  match "/new_receipt" => "receipts#new_receipt"
   match "/owner_receipt" => "receipts#owner_receipt"
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
+  match "/search_receipt" => "receipts#search_receipt"
   
   #Receipt page's "pull receipt" calls
   match "/get_owner_receipt" => "receipts#get_owner_receipt"
   match "/get_logger_receipt" => "receipts#get_logger_receipt"
+  match "/get_trucker_receipt" => "receipts#get_trucker_receipt"
+  match "/get_old_receipt/" => "receipts#get_old_receipt"
   
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
@@ -55,6 +64,11 @@ Forester::Application.routes.draw do
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
   
+  #Receipts saving call
+  match "/save_owner_receipt" => "receipts#save_owner_receipt"
+  match "/save_logger_receipt" => "receipts#save_logger_receipt"
+  match "/save_trucker_receipt" => "receipts#save_trucker_receipt"
+  
   #Get the thing!
   match "/export_the_thing/:id" => "reports#export_the_thing"
   match "/exported_report" => "reports#exported_report"
@@ -65,6 +79,14 @@ Forester::Application.routes.draw do
   match "/new_partner" => "setup#new_partner"
   match "/new_owner" => "setup#new_owner"
   match "/new_sawmill" => "setup#new_sawmill"
+  
+  match "/edit_rate/:id" => "setup#edit_rate"
+  match "/delete_rate/:id" => "setup#delete_rate"
+  match "/edit_job" => "setup#edit_job"
+  match "/edit_owner" => "setup#edit_owner"
+  match "/edit_partner" => "setup#edit_partner"
+  match "/edit_sawmill" => "setup#edit_sawmill"
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,16 +1,16 @@
 <% @tickets.each do |i| %>
 	<% @load_details = LoadDetail.find_all_by_ticket_id(i.id)%>
-	<tr class="all_entries_row">
+	<tr id="<%= i.id %>entry" class="all_entries_row">
 		<td><%= i.number %></td>
 		<td><%= i.delivery_date %></td>
-		<td><%= Job.find(i.job_id).name %></td>	
-		<td><%= Destination.find(i.destination_id).name %></td>
+		<td><%= i.job.name %></td>	
+		<td><%= i.destination.name %></td>
 		<td><%= WoodType.find(i.wood_type).name %></td>
-		<td><%= @load_details[0].load_type %></td>
-		<td><%= Specie.find(@load_details[0].species_id).code %></td>
-		<td><%= @load_details[0].amount %></td>
+		<td><%= unless i.load_details.first.species_id == 0 then Specie.find(i.load_details.first.species_id).code else "PU" end %></td>
+		<td><%= i.net_mbf %></td>
+		<td><%= i.tonnage %></td>
 		<td><%= i.value %></td>
-		<td><input type="button" value="Edit"></td>
+		<td><input type="button" value="delete" onclick="delete_ticket_entry(<%= i.id %>);"></td>
 	</tr>
 <% end %>
 

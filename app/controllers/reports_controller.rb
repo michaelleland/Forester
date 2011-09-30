@@ -32,17 +32,23 @@ class ReportsController < ApplicationController
     @amounts = []
     
     @species.length.times do
-      @amounts.push(0)
+      @amounts.push([0, 0])
     end
     @total_pulp = 0
     
     @tickets.each do |i|
       i.load_details.each do |j|
         unless i.wood_type == 3 
-          @amounts[j.species_id-1] = @amounts[j.species_id-1] + j.amount
+          unless j.mbfs.nil?
+            @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfs
+          else
+            unless j.tonnage.nil?
+              @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnage
+            end
+          end
         end
         if i.wood_type == 3 # WoodType with id = 3 is Pulp and it is always last in amounts the list
-          @total_pulp = @total_pulp + j.amount
+          @total_pulp = @total_pulp + j.tonnage
         end
       end
     end
@@ -50,7 +56,7 @@ class ReportsController < ApplicationController
     File.open("#{@file_path}#{@filename}", 'w') do |writer|
       writer.puts "Category, MBF, Tonnage\n"
       @species.each do |i|
-        writer.puts "#{i.code}, #{@amounts[i.id-1]}, 0\n"
+        writer.puts "#{i.code}, #{give_pennies(@amounts[i.id-1][0].to_f)}, #{give_pennies(@amounts[i.id-1][1].to_f)}\n"
       end
       writer.puts "Pulp, ,#{@total_pulp}"
     end
@@ -67,85 +73,58 @@ class ReportsController < ApplicationController
   
   def export_the_thing
     if params[:id] == "1"
+      @jobs = Job.all
+      
       @filename = "Jobs_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "shared/system/exports/#{@filename}"
-      
+      @file_path = "shared/system/exports/"
+      @table_name = "Jobs"
+      @table_headers = "Name, Owner Name, Logger Name, Trucker Name, HFI-rate (%), HFI-prime" 
     end
+    
     if params[:id] == "2"
-      @filename = "Tickets_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "shared/system/exports/#{@filename}"
+      @tickets = Ticket.all
       
+      @filename = "Tickets_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
+      @file_path = "shared/system/exports/"
+      @table_name = "Tickets"
+      
+      @table_headers = "Number, delivery Date, Destination Name, Job Name, Wood Type, Tonnage, Net MBF, Load Pay"      
     end
     if params[:id] == "3"
-      @filename = "Payments_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "shared/system/exports/#{@filename}"
+      @payments = PaymentFromDestination.all
       
+      @filename = "Payments_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
+      @file_path = "shared/system/exports/"
+      @table_name = "Payments"
+      @table_headers = "Date, Destination Name, Job Name, Payment #, Wood Type, Net MBF, Tonnage, Total Payment"      
     end
     
     File.open("#{@file_path}#{@filename}", "w") do |writer|
-      
       writer.puts @table_name
       writer.puts @table_headers
+      
       if params[:id] == "1"
         @jobs.each do |i|
-          writer.puts "#{i.name}, #{i.owner.name}, #{i.logger.name}, #{i.trucker.name}, #{i.hfi_rate}, #{i.logger.tonnage_rate}, #{i.logger.mbf_rate}, #{i.trucker.rate_mbf}, #{i.trucker.rate_tonnage}, #{i.trucker.rate_percent}"
+          @puts = "#{i.name}, #{i.owner.name}, #{i.logger.name}, #{i.trucker.name}, #{i.hfi_rate}, #{i.hfi_prime}\n"
+          writer.puts @puts
         end
       end
+      
       if params[:id] == "2"
-          
+        @tickets.each do |i|
+          @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name}, #{i.job.name}, "
+          @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value)}\n"
+          writer.puts @puts
+        end
       end
       if params[:id] == "3"
-          
+        @payments.each do |i|
+          @puts = "#{i.payment_date}, #{i.destination.name}, #{i.job.name}, #{i.payment_num}, "
+          @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, "
+          @puts << "#{give_pennies(i.total_payment)}"
+          writer.puts @puts
+        end
       end
-      
-      writer.puts "\n"
-      
-      writer.puts "Contact people"
-      writer.puts "id, Name, Phone Number, E-mail\n"
-      @contact_people.each do |i|
-        writer.puts "#{i.id}, \"#{i.name}\", #{i.phone_number}, #{i.email}\n"
-      end
-      
-      writer.puts "\n"
-      
-      writer.puts "Jobs"
-      writer.puts "id, Name, Owner, HFI Rate, HFI Prime\n"
-      @jobs.each do |i|
-        writer.puts "#{i.id}, \"#{i.name}\", #{Owner.find(i.owner_id).name}, #{i.hfi_rate}, #{i.hfi_prime}\n"
-      end
-      
-      writer.puts "\n"
-      
-      writer.puts "Truckers & Loggers"
-      writer.puts "id, Name, Address id, Contact Person id\n"
-      @partners.each do |i|
-        writer.puts "#{i.id}, \"#{i.name}\", #{i.address_id}, #{i.contact_person_id}\n"
-      end
-      
-      writer.puts "\n"
-      
-      writer.puts "Tickets"
-      writer.puts "id, Number, Delivery Date, Destination, Job Name, Wood Type, Load Type, Load Pay\n"
-      @tickets.each do |i|
-        writer.puts "#{i.id}, #{i.number}, #{i.delivery_date}, #{Destination.find(i.destination_id).name}, #{Job.find(i.job_id).name}, #{WoodType.find(i.wood_type).name}, #{i.load_details.first.load_type}, #{i.value}\n"
-      end
-      
-      writer.puts "\n"
-      
-      writer.puts "Payments"
-      writer.puts "id, Destination, Job Name, Wood Type, Load Type, Payment #, Number of tickets, Net MBF, Total Payment\n"
-      @payments.each do |i|
-        writer.puts "#{i.id}, #{i.payment_date}, #{Destination.find(i.destination_id).name}, #{Job.find(i.job_id).name}, #{WoodType.find(i.wood_type).name}, #{i.load_type}, #{i.payment_num}, #{i.tickets}, #{i.net_mbf}, #{i.total_payment}\n"
-      end
-      
-      writer.puts "\n"
-      
-      writer.puts "Owners" 
-      writer.puts "id, name, address id, contact person id\n"
-      @owners.each do |i|
-        writer.puts "#{i.id}, #{i.name}, #{i.address_id}, #{i.contact_person_id}\n"
-      end
-      
     end
     
     @file = File.open("#{@file_path}#{@filename}", "r")

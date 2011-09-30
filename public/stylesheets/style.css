@@ -22,6 +22,23 @@ body {
 	clear: none !important;
 }
 
+.rate_control_link_row {
+	width: 50px;
+	float: right;
+	clear: none;
+}
+
+.rate_control_link {
+	margin-left: 5px;
+	float: left;
+	clear: none;
+}
+
+.rate_control_link:hover {
+	cursor: pointer;
+	color: #666666;
+}
+
 .action_link {
 	float: left;
 	clear: left;
@@ -35,6 +52,21 @@ body {
 
 .rates .accordion_left_column .row_headers {
 	width: 150px;
+}
+
+.rates .accordion_right_column .row_headers {
+	width: 150px;
+}
+
+.bottom_row {
+	float: left;
+	
+	width: 600px;
+}
+
+.bottom_input_wrapper {
+	width: 45px;
+	margin: auto;
 }
 
 .loggers {
@@ -143,8 +175,12 @@ body {
 	
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	
 	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	
 	-moz-border-radius-bottomright: 5px; 
+	-webkit-border-bottom-right-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	border-top: none;
@@ -172,6 +208,7 @@ body {
 	
 	border-radius: 4px;
 	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 	
 }
 
@@ -196,6 +233,7 @@ a:hover {
 #quarterly_report_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 4px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -209,6 +247,7 @@ a:hover {
 #export_database_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -222,6 +261,7 @@ a:hover {
 #logger_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -232,9 +272,23 @@ a:hover {
 		
 }
 
+#new_receipt_box {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+	background: #deedf7;
+	
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+
 #trucker_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -247,6 +301,7 @@ a:hover {
 #owner_receipt_selector {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 	background: #deedf7;
@@ -261,6 +316,10 @@ a:hover {
 }
 
 #tickets_select {
+	width: 400px;
+}
+
+#receipts_select {
 	width: 400px;
 }
 
@@ -280,7 +339,7 @@ a:hover {
 }
 
 
-#owner_receipt_selector textarea {
+textarea {
 	float: left;
 	clear: left;
 	
@@ -319,7 +378,7 @@ a:hover {
 	right: 420px;
 }
 
-#owner_receipt_selector #submit {
+#submit {
 	float: left;
 	clear: left;
 }
@@ -399,6 +458,7 @@ input, select {
 	
 	border-radius: 5px;
 	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
 }
@@ -474,7 +534,7 @@ input, select {
 }
 
 .payment_headers {
-	width: 60px;
+	width: 90px;
 }
 
 .tickets_headers {
@@ -486,7 +546,8 @@ input, select {
 }
 
 .data_rows {
-	
+	width: 350px;
+	height: 22px;
 	
 }
 
@@ -669,6 +730,7 @@ table {
 	
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 #inner_nav {
@@ -679,6 +741,7 @@ table {
 	border: solid 1px #AED0EA;
 	
 	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
 
@@ -743,7 +806,7 @@ li {
 }
 
 
-/* Report styles*/
+/* Receipt styles*/
 
 img#hfi_logo {
 	float: left;
@@ -753,23 +816,34 @@ img#hfi_logo {
 
 #receipt_header {
 	float: left;
-	width: 450px;
-	padding-left: 150px;
+	width: 650px;
 	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+
+#receipt_tickets_header {
+	width: 1222px;
+	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
 }
 
 #hfi_address_box {
-	width: 450px;
-	padding-left: 150px;
+	width: 300px;
+	padding-left: 30px;
 	padding-top: 50px;
 	float: left;
 	margin-bottom: 20px;
 }
 
 #details_box {
-	margin-top: 15px;
+	border-left: 1px solid black;
+	padding-left: 10px;
+	
+	margin-top: 50px;
 	float: left;
-	width: 940px;
+	width: 420px;
 }
 
 #details_box .headers {
@@ -807,17 +881,12 @@ img#hfi_logo {
 
 #job_items_box table th {
 	font-weight: bold;
-	padding-left: 5px;
-	width: 150px;
 }
 
-#job_items_box table td {
-	padding-left: 5px;
-	width: 150px;
-}
-
-#job_items_box table th.lo {
-	width: 250px;
+#job_items_box table {
+	margin: auto;
+	width: 920px;
+	
 }
 
 .to {
@@ -846,12 +915,125 @@ img#hfi_logo {
 	
 }
 
-#page {
+/* Individual page styles */
+
+#page_1 {
+	margin-top: 25px;
+	margin-bottom: 150px;
+}
+
+#page_2 {
+	
+}
+
+.page {
+	font-size: 16px;
+	
+	background: white;
+	
 	color: black;
+	
 	width: 960px;
+	height: 1242px;
+	
 	margin: auto;
+	
+	border: solid 1px black;
+	
+	padding: 25px;
+	
+	-moz-box-shadow: 0px 0px 10px #888;
+	-webkit-box-shadow: 0px 0px 10px #888;
+}
+
+.landscape_page {
+	
+	font-size: 16px;
+	
+	background: white;
+	
+	color: black;
+	
+	width: 1242px;
+	height: 960px;
+	
+	margin: auto;
+	
+	border: solid 1px black;
+	
+	padding: 25px;
+	
+	-moz-box-shadow: 0px 0px 10px #888;
+	-webkit-box-shadow: 0px 0px 10px #888;
 }
 
 hr {
 	margin-bottom: 10px;
+}
+
+.tickets_table_box {
+	
+}
+
+.tickets_table_box table {
+	width: 1230px;
+}
+
+.tickets_table_box table th {
+	font-weight: bold;
+}
+
+.tickets_table_box table td, .tickets_table_box table th {
+	border: solid 1px #BABABA;
+}
+
+.dollars_td {
+	text-align: right;
+}
+
+/*Control "bar" for printing/saving etc receipts */
+
+#controls {
+	width: 960px;
+	height: 60px;
+	margin: auto;
+	margin-top: 25px;
+	
+	border: solid 1px #0088FF;
+	background: #22AAFF;
+	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	text-align: center;
+	
+}
+
+#print_it_link {
+	float: none;
+	
+	color: #777;
+	
+	font-size: 20px;
+	margin: auto;
+	width: 155px;
+}
+
+#print_it_link:hover {
+	cursor: pointer;
+	color: #222;
+}
+
+#save_it_link {
+	float: none;
+	
+	color: #777;
+	
+	font-size: 20px;
+	margin: auto;
+	width: 155px;
+}
+
+#save_it_link:hover {
+	cursor: pointer;
+	color: #222;	
 }

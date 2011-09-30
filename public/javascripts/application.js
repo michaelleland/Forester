@@ -3,6 +3,9 @@
 
 $('nav').tabs();
 
+var states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+
+
 function change_content (target, tab) {
 	
 	var target_div = ''
@@ -69,6 +72,12 @@ function import_jobs_of_partner(owner_id, role) {
 	})
 }
 
+function fadeRemove(element) {
+	setTimeout(function() {
+		$(element).remove();
+	}, 620);
+}
+
 function refresh_all_entries (type) {
 	$.ajax ({
 		url: '/all_'+type+'_entries',
@@ -77,23 +86,5 @@ function refresh_all_entries (type) {
 			$('.all_entries_row').each(function () { $(this).remove()})
 			$('#all_entries table').append(html);
 		}		
-	})
-}
-
-function show_rate_inputs (id) {
-	$('#add_rate_row_'+id).before('<div class="data_rows" id="input_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination"  /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="load_type" name="load_type"><option value="MBF">MBF</option><option value="Ton">Ton</option></select></div></div><div class="action_link rate_link" id="add_the_rate_'+id+'" onclick="add_the_rate('+id+')">Add</div>');
-	$('#add_rate_row_'+id).fadeOut();
-	
-	attach_autocomplete_to_input(id);	
-}
-
-function add_the_rate(id) {
-	var destination = $('#'+id+'_accordion #destination').attr('value')
-	var load_type = $('#'+id+'_accordion #load_type').attr('value')
-	var rate = $('#'+id+'_accordion #rate').attr('value')
-	
-	$.ajax ({
-		url: '/new_rate/'+id+'?destination_name='+destination+'&load_type='+load_type+'&rate='+rate,
-		cache: false,
 	})
 }

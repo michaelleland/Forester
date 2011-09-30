@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110915221441) do
+ActiveRecord::Schema.define(:version => 20110921161616) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "destinations", :force => true do |t|
     t.integer  "address_id"
     t.integer  "contact_person_id"
+    t.string   "accepted_load_type"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -49,8 +50,8 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "load_details", :force => true do |t|
     t.integer  "ticket_id"
     t.integer  "species_id"
-    t.string   "load_type"
-    t.float    "amount"
+    t.float    "tonnage"
+    t.float    "mbfs"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,9 +59,18 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "logger_assignments", :force => true do |t|
     t.integer  "job_id"
     t.integer  "partner_id"
-    t.float    "rate_mbf"
-    t.float    "rate_percent"
-    t.float    "rate_tonnage"
+    t.boolean  "pays_to_trucker"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "logger_rates", :force => true do |t|
+    t.integer  "destination_id"
+    t.integer  "job_id"
+    t.integer  "partner_id"
+    t.integer  "receipt_id"
+    t.float    "rate"
+    t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -84,7 +94,6 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "payment_from_destinations", :force => true do |t|
     t.integer  "destination_id"
     t.integer  "job_id"
-    t.string   "load_type"
     t.date     "payment_date"
     t.string   "payment_num"
     t.float    "tonnage"
@@ -107,6 +116,9 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
   create_table "receipts", :force => true do |t|
     t.integer  "job_id"
     t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "payment_num"
+    t.string   "notes"
     t.date     "receipt_date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -149,8 +161,9 @@ ActiveRecord::Schema.define(:version => 20110915221441) do
     t.integer  "destination_id"
     t.integer  "job_id"
     t.integer  "partner_id"
-    t.string   "load_type"
+    t.integer  "receipt_id"
     t.float    "rate"
+    t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

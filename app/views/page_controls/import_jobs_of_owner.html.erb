@@ -4,7 +4,7 @@
 	<% unless @owner_jobs.length == 0 %>
 		<option onclick="init_ticket_select();" value="0">Select a job</option>
 		<% @owner_jobs.each do |i| %>	
-			<option onclick="refresh_tickets(<%= i.id %>);" value="<%= i.id %>"><%= i.name %></option>
+			<option value="<%= i.id %>"><%= i.name %></option>
 		<% end %>
 	<% else %>
 		<option value="0">No jobs for owner</option>

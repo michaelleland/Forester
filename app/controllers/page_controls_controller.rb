@@ -28,6 +28,49 @@ class PageControlsController < ApplicationController
     render "get_tickets.html.erb"
   end
   
+  def get_receipts
+    @job = Job.find(params[:id])
+    @receipts = []
+    if params[:owner_type] == "landowner"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.owner.id, "landowner")
+    end
+    if params[:owner_type] == "logger"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.logger.id, "logger")
+    end
+    if params[:owner_type] == "trucker"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.trucker.id, "trucker")
+    end
+  end
+  
+  def get_load_type
+    @job = Job.find_by_name(params[:job_name])
+    @destination = Destination.find_by_name(params[:destination_name])
+    
+    @trucker_rate = TruckerRate.find_by_job_id_and_destination_id_and_partner_id(@job.id, @destination.id, @job.trucker.id)
+    @logger_rate = LoggerRate.find_by_job_id_and_destination_id_and_partner_id(@job.id, @destination.id, @job.logger.id)
+    
+    @answer = ""
+    
+    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
+      @answer = "MBF"
+    else
+      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
+      @answer = "Tonnage"
+      end
+    end
+    
+    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
+      @answer = "Both"
+    else
+      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
+      @answer = "Both"
+      end
+    end
+    
+    render :text => @answer
+    
+  end
+  
   def add_specie
     
   end
@@ -36,9 +79,24 @@ class PageControlsController < ApplicationController
     
   end
   
-  def import_jobs
+  def import_jobs_of_partner
     if params[:id] != "0"
-      @jobs = Job.find_all_by_owner_id(params[:id]) 
+      @l_asg = LoggerAssignment.find_all_by_partner_id(params[:id])
+      
+      @l_job_ids = @l_asg.collect {|i| i.job_id}.flatten
+      
+      @logger_jobs = Job.find(@l_job_ids)
+      
+      @t_asg = TruckerAssignment.find_all_by_partner_id(params[:id])
+      
+      @t_job_ids = @t_asg.collect {|i| i.job_id}.flatten
+      
+      @trucker_jobs = Job.find(@t_job_ids)
+      
+      @jobs = @trucker_jobs + @logger_jobs
+      @jobs.flatten!
+      @jobs.uniq!
+      @jobs = @jobs.sort_by {|i| i.name } 
     end
   end
   
