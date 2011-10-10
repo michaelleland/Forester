@@ -14,6 +14,10 @@ body {
 	height: 150px;
 }
 
+.tickets {
+	height: 90px;
+}
+
 .rates .data_rows h4 {
 	width: 200px;
 }

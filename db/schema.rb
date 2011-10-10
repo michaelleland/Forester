@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110921161616) do
+ActiveRecord::Schema.define(:version => 20110929184308) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
     t.string   "owner_id"
     t.float    "hfi_rate"
     t.boolean  "hfi_prime"
+    t.integer  "ticket_range_from"
+    t.integer  "ticket_range_to"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -109,6 +111,11 @@ ActiveRecord::Schema.define(:version => 20110921161616) do
     t.string   "item_data"
     t.integer  "receipt_id"
     t.float    "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "receipt_logger_rates", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
