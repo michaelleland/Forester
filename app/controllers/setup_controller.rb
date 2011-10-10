@@ -12,6 +12,13 @@ class SetupController < ApplicationController
     
   end
   
+  def tickets
+    
+    
+    
+    
+  end
+  
   def owners
     
   end

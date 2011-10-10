@@ -39,6 +39,7 @@ Forester::Application.routes.draw do
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
   match "/rates" => "setup#rates"
+  match "/tickets" => "setup#tickets"
   
   #Receipt page's basic page calls
   match "/new_receipt" => "receipts#new_receipt"
