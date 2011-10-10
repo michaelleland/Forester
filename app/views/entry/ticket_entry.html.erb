@@ -25,22 +25,7 @@
 					<script> $('#delivery_date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#delivery_date').mask("9999-99-99", {placeholder: " "}); </script>
 				</td>
 				<td>
-					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
-					<script> 
-						$(function() {
-							var jobs = [
-								<% @jobs.each do |i| %>
-									<%= "'#{i.name}'," %>
-								<% end %>
-							];
-													
-							$('#job_name').autocomplete({ 
-								source: jobs,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
+					<input disabled="true" type="text" id="job_name" name="job_name" size="12" class="fields"/>
 				</td>
 				<td>
 					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
@@ -269,6 +254,19 @@
 				$('#ticket_num').focus();
 			}, 1000);
 		});
+		
+		/* Inserts correct job when ticket is entered */
+		
+		$('#ticket_num').change(function() {
+			$.ajax({
+				url: '/get_job/'+$(this).attr('value'),
+				cache: false,
+				success: function (answer) {
+					$('#job_name').attr('value', answer)
+				}
+			})
+		})
+		
 		
 		/* Script to be run on every pageload */
 		refresh_all_entries('ticket');

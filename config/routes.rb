@@ -13,6 +13,8 @@ Forester::Application.routes.draw do
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   match "/get_receipts/:id" => "page_controls#get_receipts"
   match "/get_load_type/" => "page_controls#get_load_type" 
+  match "/get_job/:id" => "page_controls#get_job"
+  match "/edit_range/:id" => "page_controls#edit_range"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -39,7 +41,7 @@ Forester::Application.routes.draw do
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
   match "/rates" => "setup#rates"
-  match "/tickets" => "setup#tickets"
+  match "/ticket_ranges" => "setup#ticket_ranges"
   
   #Receipt page's basic page calls
   match "/new_receipt" => "receipts#new_receipt"

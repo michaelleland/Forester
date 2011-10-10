@@ -12,7 +12,7 @@ class SetupController < ApplicationController
     
   end
   
-  def tickets
+  def ticket_ranges
     
     
     

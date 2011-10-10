@@ -1,6 +1,29 @@
 class PageControlsController < ApplicationController
   layout nil
   
+  def edit_range
+    @job = Job.find(params[:id])
+    @job.ticket_range_from = params[:from].to_i
+    @job.ticket_range_to = params[:to].to_i
+    
+    if @job.save
+      render :nothing => true
+    else
+      render :state => 500, :nothing => true
+    end
+  end
+  
+  def get_job
+    @ticket_num = params[:id].to_i
+    Job.all.each do |i|
+      if i.ticket_range_from < @ticket_num &&  @ticket_num < i.ticket_range_to
+        render :text => i.name
+        return
+      end
+    end
+    render :text => "Invalid Ticket #"
+  end
+  
   def all_ticket_entries
    @tickets = Ticket.all 
   end
