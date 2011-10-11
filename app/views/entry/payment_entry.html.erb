@@ -18,7 +18,7 @@
 			<tr>
 				<td>
 					<input type="text" name="payment_date" id="date" size="7" class="fields"/>
-					<script> $('#date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#date').mask("9999-99-99", {placeholder: " "});</script>
+					<script> $('#date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#date').mask("99-99-9999", {placeholder: " "});</script>
 				</td>
 				<td>
 					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
@@ -39,22 +39,11 @@
 					</script>
 				</td>
 				<td>
-					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
-					<script> 
-						$(function() {
-							var destinations = [
-								<% @destinations.each do |i| %>
-									<%= "'#{i.name}'," %>
-								<% end %>
-							];
-													
-							$('#destination_name').autocomplete({ 
-								source: destinations,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
+					<select name="destination_name" id="destination_name">
+						<% @destinations.each do |i| %>
+							<option value="<%= i.name %>"><%= i.name %></option>
+						<% end %>
+					</select>
 				</td>
 				<td>
 					<select name="wood_type">

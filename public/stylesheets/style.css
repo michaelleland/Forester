@@ -1,7 +1,7 @@
 body {
   background: #f1f1f1;
   color: #333;
-  font-size: 11px;
+  font-size: 14px;
   height: auto;
   padding-bottom: 20px;
 }
@@ -469,18 +469,14 @@ input, select {
 
 
 #entry_form {
-	height: 150px;
 	
 }
 
 #current_entries {
-	height: 100px;
 	
 }
 
 #all_entries {
-	height: 600px;
-	
 	margin-bottom: 10px;
 	
 }

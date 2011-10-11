@@ -5,7 +5,6 @@
 			<tr>
 				<th>Ticket #</th>
 				<th>Date</th>
-				<th>Job</th>
 				<th>Destination</th>
 				<th>Wood type</th>
 				<th>Species</th>
@@ -18,42 +17,31 @@
 			<tr>
 				<td>
 					<input id="ticket_num" type="text" name="ticket_num" size="5" class="fields"/>
-					<script>$('#ticket_num').mask('9999', {placeholder: " "})</script>
+					<script>$('#ticket_num').mask('99999', {placeholder: ""})</script>
 				</td>
 				<td>
 					<input type="text" name="delivery_date" id="delivery_date" size="8" class="fields"/>
-					<script> $('#delivery_date').datepicker({ dateFormat: 'yy-mm-dd'}); $('#delivery_date').mask("9999-99-99", {placeholder: " "}); </script>
+					<script> $('#delivery_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#delivery_date').mask("99-99-9999", {placeholder: " "}); </script>
 				</td>
 				<td>
-					<input disabled="true" type="text" id="job_name" name="job_name" size="12" class="fields"/>
+					<select name="destination_name" id="destination_name" onfocusout="enable_load_fields()">
+						<option value="-1"></option>
+						<% @destinations.each do |i| %>
+							<option value="<%= i.name %>"><%= i.name %></option>
+						<% end %>
+					</select>
 				</td>
 				<td>
-					<input type="text" id="destination_name" name="destination_name" size="15" class="fields" />
-					<script> 
-						$(function() {
-							var destinations = [
-								<% @destinations.each do |i| %>
-									<%= "'#{i.name}'," %>
-								<% end %>
-							];
-													
-							$('#destination_name').autocomplete({ 
-								source: destinations,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
-				</td>
-				<td>
-					<select id="wood_type" name="wood_type">
+					<select id="wood_type" name="wood_type" onfocus="enable_load_fields();">
+						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
 						<% end %>					
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species_1">
+					<select class="specie_selector" name="species_1" id="species_1" onfocus="enable_load_fields();">
+						<option value="-1"></option>
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
 						<% end %>
@@ -61,29 +49,25 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" id="tonnage" size="8" name="tonnage" disabled="true" class="fields"/>
+					<input type="text" value="0" id="tonnage" size="4" name="tonnage" disabled="true" class="fields"/>
 				</td>
 				<td>
-					<input id="load_1_mbfs" class="specie_mbfs" type="text" size="8" disabled="true" onchange="refresh_net_mbf('load_1_mbfs')" name="load_1_mbfs" class="fields"/>
+					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" disabled="true" onchange="refresh_net_mbf('load_1_mbfs')" name="load_1_mbfs" class="fields"/>
 				</td>
 				<td>
-					<input id="net_mbf" type="text" size="8" value="0" name="net_mbf" disabled="true" class="fields"/>
+					<input id="net_mbf" type="text" size="4" value="0" name="net_mbf" disabled="true" class="fields"/>
 				</td>
 				<td>
 					<input id="value" type="text" size="8" name="value" class="fields"/>
 				</td>
 				<td>
-					<input  style="display: none;" id="submit_button" type="submit" value="Submit" onclick="change_button();" />
-					<input id="check_button" type="button" value="Check" onclick="check_field_data();" />
+					<input id="check_button" type="button" value="Submit" onclick="validated_submit()" />
 				</td>
 			</tr>
 			<tr id="filler_row">
-				<td id="Incredible_invisible_text">You</td>
-				<td id="Incredible_invisible_text">have</td>
-				<td id="Incredible_invisible_text">just</td>	
+				<td colspan="3" >Job: <span id="job_name"></span></td>	
 				<td id="Incredible_invisible_text">been</td>
-				<td id="Incredible_invisible_text">tagged</td>
-				<td><%= link_to "Add", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
+				<td colspan="3"><%= link_to "Add another specie", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
 			</tr>
 		</table>
 	</form>
@@ -94,10 +78,10 @@
 	
 	<table>
 		<tr>
-			<th style="width: 50px;">Ticket #</th>
-			<th style="width: 80px;">Date</th>
+			<th style="width: 60px;">Ticket #</th>
+			<th style="width: 100px;">Date</th>
 			<th style="width: 100px;">Job</th>
-			<th style="width: 100px;">Destination</th>
+			<th style="width: 150px;">Destination</th>
 			<th style="width: 80px;">Wood type</th>
 			<th style="width: 60px;">Species</th>
 			<th style="width: 60px;">Net MBF</th>
@@ -114,10 +98,10 @@
 	<h4>All Entries</h4>
 	<table>
 		<tr>
-			<th style="width: 50px;">Ticket #</th>
-			<th style="width: 80px;">Date</th>
+			<th style="width: 60px;">Ticket #</th>
+			<th style="width: 100px;">Date</th>
 			<th style="width: 100px;">Job</th>
-			<th style="width: 100px;">Destination</th>
+			<th style="width: 150px;">Destination</th>
 			<th style="width: 80px;">Wood type</th>
 			<th style="width: 60px;">Species</th>
 			<th style="width: 60px;">Net MBF</th>
@@ -131,6 +115,61 @@
 	
 	<script>
 		
+		function validated_submit() {
+			if (check_field_data()) {
+				var ticket_num = $('#ticket_num').attr('value');
+				var destination_name = $('#destination_name').val();
+				var job_name = $('#job_name').html();
+				var species = [$('#species_1').val()];
+				var loads = [$('#load_1_mbfs').attr('value')];
+				var delivery_date = $('#delivery_date').attr('value')
+				
+				if ($('#load_2_mbfs').attr('value') != undefined) {
+					loads.push($('#load_2_mbfs').attr('value'));
+					species.push($('#species_2').val());
+				}
+				if ($('#load_3_mbfs').attr('value') != undefined) {
+					loads.push($('#load_3_mbfs').attr('value'));
+					species.push($('#species_3').val());
+				}
+				if ($('#load_4_mbfs').attr('value') != undefined) {
+					loads.push($('#load_4_mbfs').attr('value'));
+					species.push($('#species_4').val());
+				}
+				if ($('#load_5_mbfs').attr('value') != undefined) {
+					loads.push($('#load_5_mbfs').attr('value'));
+					species.push($('#species_5').val());
+				}
+				
+				var wood_type = $('#wood_type').attr('value');
+				var tonnage = $('#tonnage').attr('value');
+				var value = $('#value').attr('value');
+				
+				var loads_string = "";
+				for (var i in loads) {
+					loads_string = loads_string+'&mbfs[]='+loads[i];
+				}
+				
+				var species_string = "";
+				for (var i in species) {
+					species_string = species_string+'&species[]='+species[i];
+				}
+				
+				var url = "";
+				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
+				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date;
+				
+				$.ajax ({
+					url: url,
+					cache: false,
+					method: 'POST',
+					success: function() {
+						
+					}
+				});
+			}
+		}
+		
 		/* At this point, this function makes sure that all fields have a value. Disabled fields are not included.
 		 * This is called by Check-button only. Does not validate the data in any way, yet.
 		 */
@@ -139,8 +178,9 @@
 			var values = [];
 			values.push([$('#ticket_num').attr('value'), 'Ticket number']);
 			values.push([$('#delivery_date').attr('value'), 'Delivery date']);
-			values.push([$('#job_name').attr('value'), 'Job']);
-			values.push([$('#destination_name').attr('value'), 'Destination']);
+			values.push([$('#destination_name :selected').text(), 'Destination']);
+			values.push([$('#wood_type :selected').text(), 'Wood Type']);
+			values.push([$('#species_1 :selected').text(), 'Specie']);
 			if ($('#tonnage').attr('disabled') == undefined) {
 				values.push([$('#tonnage').attr('value'), 'Tonnage']);
 			} else {
@@ -168,46 +208,34 @@
 				}, 620);
 			}, 3000);
 			
-			if (everything_ok) {
-				$('#check_button').attr('style', 'display: none;');
-				$('#submit_button').attr('style', 'display: block;');
-				$('#submit_button').focus();
-			}	
-		}
-		
-		function change_button () {
-			$('#submit_button').attr('style', 'display: none;');
-			$('#check_button').attr('style', 'display: block;');
+			return everything_ok;
 		}
 		
 		/* When destination fields value changes, this function enables Tonnage/MBf fields according to the  
 		 * trucker/logger rates in this job / destination combination. 
 		 */
-		
-		$('#destination_name').change(function () {
-			$('.specie_mbfs').each(function(){$(this).attr('disabled', 'true');});
-			$('#tonnage').attr('disabled', 'true');
+		function enable_load_fields() {
+			var job_name = $('#job_name').html();
+			var destination_name = $('#destination_name :selected').text();
 			
-			var job_name = $('#job_name').attr('value');
-			var destination_name = $('#destination_name').attr('value');
+			$('#tonnage').attr('disabled');
+			$('#load_1_mbfs').attr('disabled');
 			
-			if (job_name != "" && destination_name != "") {
-				$.ajax({
-					url: "/get_load_type/?job_name="+job_name+"&destination_name="+destination_name,
-					cache: false,
-					success: function (html) {
-						if (html == "MBF") {
-							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
-						} else if (html == "Tonnage") {
-							$('#tonnage').removeAttr('disabled');
-						} else if (html == "Both") {
-							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
-							$('#tonnage').removeAttr('disabled');
-						}
-					}
-				});
-			} 
-		});
+			$.ajax ({
+				url: '/get_load_type/?job_name='+job_name+'&destination_name='+destination_name,
+			 	cache: false,
+			 	success: function (answer) {
+			 		if (answer == "Tonnage") {
+			 			$('#tonnage').removeAttr('disabled');
+			 		} else if (answer == "MBF") {
+			 			$('#load_1_mbfs').removeAttr('disabled');
+			 		} else if (answer == "Both") {
+			 			$('#load_1_mbfs').removeAttr('disabled');
+			 			$('#tonnage').removeAttr('disabled');
+			 		}
+			 	}
+			 });
+		}
 		
 		/* All the load_1_mbf, load_2_mbf etc have onchange event ponting to this function.
 		 * This function takes values from those (they give themselves as parameter) and adds it up
@@ -262,11 +290,36 @@
 				url: '/get_job/'+$(this).attr('value'),
 				cache: false,
 				success: function (answer) {
-					$('#job_name').attr('value', answer)
+					$('#job_name').html(answer)
 				}
 			})
 		})
 		
+		// Recursively working infite timer
+		function checkIt () {
+			$('.specie_mbfs').each(function(){$(this).attr('disabled', 'true');});
+			$('#tonnage').attr('disabled', 'true');
+			
+			var job_name = $('#job_name').attr('value');
+			var destination_name = $('#destination_name').attr('value');
+			
+			if (job_name != "" && destination_name != "") {
+				$.ajax({
+					url: "/get_load_type/?job_name="+job_name+"&destination_name="+destination_name,
+					cache: false,
+					success: function (html) {
+						if (html == "MBF") {
+							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
+						} else if (html == "Tonnage") {
+							$('#tonnage').removeAttr('disabled');
+						} else if (html == "Both") {
+							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
+							$('#tonnage').removeAttr('disabled');
+						}
+					}
+				});
+			}
+		}
 		
 		/* Script to be run on every pageload */
 		refresh_all_entries('ticket');

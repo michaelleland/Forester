@@ -27,7 +27,7 @@ Forester::Application.routes.draw do
   match "/entry" => "entry#entry"
  
   #Entry page functions
-  match "/add_ticket_entry_row" => "entry#add_ticket_entry_row", :via => "post"
+  match "/add_ticket_entry_row/" => "entry#add_ticket_entry_row"
   match "/add_payment_entry_row" => "entry#add_payment_entry_row", :via => "post"
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
