@@ -492,7 +492,7 @@ input, select {
 }
 
 .date_headers {
-	width: 80px;
+	width: 100px;
 }
 .job_headers {
 	width: 150px;
@@ -526,15 +526,15 @@ input, select {
 }
 
 .tonnage_headers {
-	width: 60px;
+	width: 65px;
 }
 
 .net_mbf_headers {
-	width: 60px;
+	width: 80px;
 }
 
 .payment_headers {
-	width: 90px;
+	width: 110px;
 }
 
 .tickets_headers {
@@ -542,7 +542,7 @@ input, select {
 }
 
 .payment_no_headers {
-	width: 70px;
+	width: 80px;
 }
 
 .data_rows {

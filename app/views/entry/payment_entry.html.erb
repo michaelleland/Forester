@@ -8,38 +8,29 @@
 				<th>Job</th>
 				<th>Destination</th>
 				<th>Wood type</th>
-				<th>Payment #</th>
-				<th>Tickets</th>
-				<th>Tonnage</th>
-				<th>Net MBF</th>
-				<th>Total Payment</th>
+				<th>Pmnt #</th>
+				<th>Tckts</th>
+				<th>Tons</th>
+				<th>MBF</th>
+				<th>Amount</th>
 				<th>Action</th>
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="payment_date" id="date" size="7" class="fields"/>
+					<input type="text" name="payment_date" id="date" size="8" class="fields"/>
 					<script> $('#date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#date').mask("99-99-9999", {placeholder: " "});</script>
 				</td>
 				<td>
-					<input type="text" id="job_name" name="job_name" size="12" class="fields"/>
-					<script> 
-						$(function() {
-							var jobs = [
-								<% @jobs.each do |i| %>
-									<%= "'#{i.name}'," %>
-								<% end %>
-							];
-													
-							$('#job_name').autocomplete({ 
-								source: jobs,
-								delay: 50,
-								autoFocus: true
-							});
-						});
-					</script>
+					<select>
+						<option value="-1"></option>
+						<%= @jobs.each do |i| %>
+							<option value="<%= i.name %>"><%= i.name %></option>
+						<% end %>
+					</select>
 				</td>
 				<td>
 					<select name="destination_name" id="destination_name">
+						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.name %>"><%= i.name %></option>
 						<% end %>
@@ -47,25 +38,26 @@
 				</td>
 				<td>
 					<select name="wood_type">
+						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
 						<% end %>					
 					</select>
 				</td>
 				<td>
-					<input id="payment_num" type="text" size="6" name="payment_num" class="fields"/>
+					<input id="payment_num" type="text" size="7" name="payment_num" class="fields"/>
 				</td>
 				<td>
-					<input id="tickets" type="text" size="5" name="tickets" class="fields"/>
+					<input id="tickets" type="text" size="2" name="tickets" class="fields"/>
 				</td>
 				<td>
-					<input id="tonnage" type="text" size="5" name="tonnage" class="fields"/>
+					<input id="tonnage" type="text" size="4" name="tonnage" class="fields"/>
 				</td>
 				<td>
-					<input id="net_mbf" type="text" size="5" name="net_mbf" class="fields"/>
+					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields"/>
 				</td>
 				<td>
-					<input id="total_payment" type="text" size="10" name="total_payment" class="fields" />
+					<input id="total_payment" type="text" size="6" name="total_payment" class="fields" />
 				</td>
 				<td>
 					<input id="submit_button" type="submit" value="Submit" style="display: none;" onclick="change_button();"/>
