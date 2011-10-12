@@ -4,9 +4,11 @@ class PageControlsController < ApplicationController
   def get_job
     @ticket_num = params[:id].to_i
     Job.all.each do |i|
-      if i.ticket_range_from < @ticket_num &&  @ticket_num < i.ticket_range_to
-        render :text => i.name
-        return
+      i.ticket_ranges.each do |j|
+        if j.from <= @ticket_num && @ticket_num <= j.to
+          render :text => i.name
+          return
+        end
       end
     end
     render :text => "Invalid Ticket #"
