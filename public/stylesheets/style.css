@@ -27,7 +27,7 @@ body {
 }
 
 .rate_control_link_row {
-	width: 50px;
+	width: 60px;
 	float: right;
 	clear: none;
 }
@@ -40,6 +40,7 @@ body {
 
 .rate_control_link:hover {
 	cursor: pointer;
+	text-decoration: underline;
 	color: #666666;
 }
 
@@ -485,64 +486,6 @@ input, select {
 
 .table_headers {
 	font-weight: bold;
-}
-
-.ticket_no_headers {
-	width: 50px;
-}
-
-.date_headers {
-	width: 100px;
-}
-.job_headers {
-	width: 150px;
-}
-.destination_headers {
-	width: 150px;
-}
-
-.wood_type_headers {
-	width: 80px;
-}
-
-.load_type_headers {
-	width: 60px;
-}
-
-.species_headers {
-	width: 60px;
-}
-
-.amount_headers {
-	width: 60px;
-}
-
-.load_pay_headers {
-	width: 80px;
-}
-
-.action_headers {
-	width: 40px;
-}
-
-.tonnage_headers {
-	width: 65px;
-}
-
-.net_mbf_headers {
-	width: 80px;
-}
-
-.payment_headers {
-	width: 110px;
-}
-
-.tickets_headers {
-	width: 60px;
-}
-
-.payment_no_headers {
-	width: 80px;
 }
 
 .data_rows {
