@@ -64,7 +64,12 @@ class EntryController < ApplicationController
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find_by_name(params[:job_name])
     
-    @pfd = PaymentFromDestination.create(:payment_date => params[:payment_date], :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:total_payment], :wood_type => params[:wood_type])
+    @day = params[:payment_date][3..4]
+    @month = params[:payment_date][0..1]
+    @year = params[:payment_date][6..9]
+    
+    
+    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
   
   def ticket_entry

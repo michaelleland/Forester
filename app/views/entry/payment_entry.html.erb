@@ -17,11 +17,11 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="payment_date" id="date" size="8" class="fields"/>
-					<script> $('#date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#date').mask("99-99-9999", {placeholder: " "});</script>
+					<input type="text" name="payment_date" id="payment_date" size="8" class="fields"/>
+					<script> $('#payment_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#date').mask("99-99-9999", {placeholder: " "});</script>
 				</td>
 				<td>
-					<select>
+					<select id="job_name">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
 							<option value="<%= i.name %>"><%= i.name %></option>
@@ -37,7 +37,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="wood_type">
+					<select name="wood_type" id="wood_type">
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -57,11 +57,10 @@
 					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields"/>
 				</td>
 				<td>
-					<input id="total_payment" type="text" size="6" name="total_payment" class="fields" />
+					<input id="amount" type="text" size="6" name="amount" class="fields" />
 				</td>
 				<td>
-					<input id="submit_button" type="submit" value="Submit" style="display: none;" onclick="change_button();"/>
-					<input id="check_button" type="button" value="Check" onclick="check_field_data();" />
+					<input id="submit_button" type="button" value="Submit" onclick="validated_submit();"/>
 				</td>
 			</tr>
 		</table>
@@ -72,16 +71,16 @@
 	<h4>Current entries</h4>
 	<table>
 		<tr>
-			<th class="table_headers date_headers">Date</th>
-			<th class="table_headers job_headers">Job</th>
-			<th class="table_headers destination_headers">Destination</th>
-			<th class="table_headers wood_type_headers">Wood type</th>
-			<th class="table_headers payment_no_headers">Payment #</th>
-			<th class="table_headers tickets_headers">Tickets</th>
-			<th class="table_headers net_mbf_headers">Tonnage</th>
-			<th class="table_headers tonnage_headers">Net MBF</th>
-			<th class="table_headers payment_headers">Payment Total</th>
-			<th class="table_headers action_headers">Action</th>
+			<th class="table_headers" style="width: 100px;">Date</th>
+			<th class="table_headers" style="width: 120px;">Job</th>
+			<th class="table_headers" style="width: 150px;">Destination</th>
+			<th class="table_headers" style="width: 100px;">Wood type</th>
+			<th class="table_headers" style="width: 100px;">Pmnt #</th>
+			<th class="table_headers" style="width: 50px;">Tckts</th>
+			<th class="table_headers" style="width: 50px;">Tons</th>
+			<th class="table_headers" style="width: 50px;">NMBF</th>
+			<th class="table_headers" style="width: 80px;">Amount</th>
+			<th class="table_headers" style="width: 100px;">Action</th>
 		</tr>		
 	</table>
 </div>
@@ -90,82 +89,106 @@
 	<h4>All Entries</h4>
 	<table>
 		<tr>
-			<th class="table_headers date_headers">Date</th>
-			<th class="table_headers job_headers">Job</th>
-			<th class="table_headers destination_headers">Destination</th>
-			<th class="table_headers wood_type_headers">Wood type</th>
-			<th class="table_headers payment_no_headers">Payment #</th>
-			<th class="table_headers tickets_headers">Tickets</th>
-			<th class="table_headers net_mbf_headers">Tonnage</th>
-			<th class="table_headers tonnage_headers">Net MBF</th>
-			<th class="table_headers payment_headers">Total Payment</th>
-			<th class="table_headers action_headers">Action</th>
+			<th class="table_headers" style="width: 100px;">Date</th>
+			<th class="table_headers" style="width: 120px;">Job</th>
+			<th class="table_headers" style="width: 150px;">Destination</th>
+			<th class="table_headers" style="width: 100px;">Wood type</th>
+			<th class="table_headers" style="width: 100px;">Pmnt #</th>
+			<th class="table_headers" style="width: 50px;">Tckts</th>
+			<th class="table_headers" style="width: 50px;">Tons</th>
+			<th class="table_headers" style="width: 50px;">NMBF</th>
+			<th class="table_headers" style="width: 80px;">Amount</th>
+			<th class="table_headers" style="width: 100px;">Action</th>
 		</tr>
 	</table>
 </div>
 
 <script>
 	
-	function check_field_data() {
-			var values = [];
-			values.push([$('#date').attr('value'), 'Payment date']);
-			values.push([$('#payment_num').attr('value'), 'Payment number']);
-			values.push([$('#job_name').attr('value'), 'Job name']);
-			values.push([$('#destination_name').attr('value'), 'Destination name']);
-			values.push([$('#tickets').attr('value'), 'Number of tickets']);
-			values.push([$('#total_payment').attr('value'), 'Total payment']);
+	function validated_submit() {
+		if (check_field_data()) {
+			var payment_num = $('#payment_num').attr('value');
+			var destination_name = $('#destination_name :selected').text();
+			var job_name = $('#job_name :selected').text();
+			var net_mbf = $('#net_mbf').attr('value');
+			var date = $('#payment_date').attr('value');
+			var wood_type = $('#wood_type').val();
+			var tonnage = $('#tonnage').attr('value');
+			var amount = $('#amount').attr('value');
+			var tickets = $('#tickets').attr('value');
 			
-			$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
+			var url = "";
+			url = url+'/add_payment_entry_row/?payment_date='+date+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
+			url = url+'&tonnage='+tonnage+'&amount='+amount+'&payment_num='+payment_num+'&tickets='+tickets+'&net_mbf='+net_mbf;
 			
-			var everything_ok = true;
-			
-			for (i=0;i<values.length;i++) {
-				if (values[i][0] == "") {
-					$('#feedback').append('<div>'+values[i][1]+' missing </div>');
-					everything_ok = false;
+			$.ajax ({
+				url: url,
+				cache: false,
+				method: 'POST',
+				success: function() {
+					
 				}
+			});
+		}
+	}
+	
+	
+	function check_field_data() {
+		var values = [];
+		values.push([$('#payment_date').attr('value'), 'Payment date']);
+		values.push([$('#payment_num').attr('value'), 'Payment number']);
+		values.push([$('#job_name :selected').text(), 'Job']);
+		values.push([$('#destination_name :selected').text(), 'Destination']);
+		values.push([$('#wood_type :selected').text(), 'Wood type']);
+		values.push([$('#tickets').attr('value'), 'Number of tickets']);
+		values.push([$('#Amount').attr('value'), 'Amount']);
+		
+		if ($('#tonnage').attr('value') == "" && $('#net_mbf').attr('value') == "") {
+			values.push(["", 'Either MBF or Tonnage']);
+		}
+		
+		$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
+		
+		var everything_ok = true;
+		
+		for (i=0;i<values.length;i++) {
+			if (values[i][0] == "") {
+				$('#feedback').append('<div>'+values[i][1]+' missing </div>');
+				everything_ok = false;
 			}
-			
+		}
+		
+		setTimeout(function() {
+			$('#feedback').fadeOut();
 			setTimeout(function() {
-				$('#feedback').fadeOut();
-				setTimeout(function() {
-					$('#feedback').remove();
-				}, 620);
-			}, 3000);
-			
-			if (everything_ok) {
-				$('#check_button').attr('style', 'display: none;');
-				$('#submit_button').attr('style', 'display: block;');
-				$('#submit_button').focus();
-			}	
-		}
-	
-		function change_button () {
-			$('#submit_button').attr('style', 'display: none;');
-			$('#check_button').attr('style', 'display: block;');
-		}
-	
+				$('#feedback').remove();
+			}, 620);
+		}, 5000);
+		
+		return everything_ok;
+	}
+
 	/* Deletes a payment entry from both current and all entries and of course, from database*/
 		
-		function delete_payment_entry(id) {
-			if (confirm("Are you sure you want to delete this payment?")) {
-				$.ajax ({
-					url: "/delete_payment_entry/"+id,
-					cache: false,
-					success: function() {
-						$('#current_entries').find('#'+id+'entry').fadeOut();
-						setTimeout(function() {
-							$('#current_entries').find('#'+id+'entry').remove();
-						}, 620);
-					
-						$('#all_entries').find('#'+id+'entry').fadeOut();
-						setTimeout(function() {
-							$('#all_entries').find('#'+id+'entry').remove();
-						}, 620);
-					}
-				});
-			}	
-		}
+	function delete_payment_entry(id) {
+		if (confirm("Are you sure you want to delete this payment?")) {
+			$.ajax ({
+				url: "/delete_payment_entry/"+id,
+				cache: false,
+				success: function() {
+					$('#current_entries').find('#'+id+'entry').fadeOut();
+					setTimeout(function() {
+						$('#current_entries').find('#'+id+'entry').remove();
+					}, 620);
+				
+					$('#all_entries').find('#'+id+'entry').fadeOut();
+					setTimeout(function() {
+						$('#all_entries').find('#'+id+'entry').remove();
+					}, 620);
+				}
+			});
+		}	
+	}
 	
 	
 	/*Script which is run when page loads. Loads all_entries section with payment data*/
