@@ -14,7 +14,6 @@ Forester::Application.routes.draw do
   match "/get_receipts/:id" => "page_controls#get_receipts"
   match "/get_load_type/" => "page_controls#get_load_type" 
   match "/get_job/:id" => "page_controls#get_job"
-  match "/edit_range/:id" => "page_controls#edit_range"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -90,6 +89,9 @@ Forester::Application.routes.draw do
   match "/edit_partner" => "setup#edit_partner"
   match "/edit_sawmill" => "setup#edit_sawmill"
 
+  match "/edit_range/:id" => "setup#edit_range"
+  match "/new_range/:id" => "setup#new_range"
+  match "/delete_range/:id" => "setup#delete_range"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

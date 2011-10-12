@@ -4,62 +4,132 @@
 		<div id="<%= i.id %>job" class="tickets">
 			<div style="display: none;" id="job_name"><%= i.name %></div>
 			<div class="accordion_left_column">
-				<div class="data_rows"><h4>Ticket range:</h4></div>
-				<div class="data_rows"><div class="row_headers">From: </div><div id="range_from" class="row_data"><%= i.ticket_range_from %></div></div>
-				<div class="data_rows"><div class="row_headers">To: </div><div id="range_to" class="row_data"><%= i.ticket_range_to %></div></div>
-				<div class="action_link" id="edit_link" onclick="show_inputs(<%= i.id %>);">edit</div>
+				<div class="data_rows"><h4>Ticket ranges:</h4></div>
+				<% @last_n = 0 %>
+				<% i.ticket_ranges.each_with_index do |j, x| %>
+					<div id="<%= j.id %>range" class="data_rows">
+						<div class="row_headers">Range #<span class="range_nums"><%= x+1 %></span></div>
+						<span id="range_from"><%= j.from %></span> - 
+						<span id="range_to"><%= j.to %></span>
+						<span class="action_link" id="edit_link" onclick="show_edit_inputs(<%= j.id %>);">edit</span>
+						<span class="action_link" id="delete_link" onclick="delete_range(<%= j.id %>, <%= i.id %>, <%= (x+1) %>);">del</span>
+					</div>
+					<% @last_n = x+1 %>
+				<% end %>
+				<div class="action_link" id="add_range_link" onclick="show_add_inputs(<%= i.id %>);">add</div>
 			</div>
 			<div class="accordion_right_column"></div>
 		</div>
 	<% end %>
 	
 	<script>
-		
-		function show_inputs(id) {
-			var from = $('#'+id+'job').find('#range_from').html();
-			var to = $('#'+id+'job').find('#range_to').html();
+		function show_edit_inputs(id, n) {
+			var where_from = $('#'+id+'range');
+			var from = where_from.find('#range_from').html();
+			var to = where_from.find('#range_to').html();
 			
-			$('#'+id+'job').find('#range_from').fadeOut();
-			$('#'+id+'job').find('#range_to').fadeOut();
-			$('#'+id+'job').find('#edit_link').fadeOut();
+			where_from.find('#range_from').fadeOut();
+			where_from.find('#range_to').fadeOut();
+			where_from.find('#edit_link').fadeOut();
 			
 			setTimeout(function() {
-				$('#'+id+'job').find('#range_from').html('<input size="3" type="text" value="'+from+'" id="range_from_input" />');
-				$('#'+id+'job').find('#range_to').html('<input size="3" type="text" value="'+to+'" id="range_to_input" />');
-				$('#'+id+'job').find('#edit_link').html('save');
-				$('#'+id+'job').find('#edit_link').attr('onclick', 'edit_range('+id+');');
+				where_from.find('#range_from').html('<input size="3" type="text" value="'+from+'" id="range_from_input" />');
+				where_from.find('#range_to').html('<input size="3" type="text" value="'+to+'" id="range_to_input" />');
+				where_from.find('#edit_link').html('save');
+				where_from.find('#edit_link').attr('onclick', 'edit_range('+id+');');
 				
-				$('#'+id+'job').find('#edit_link').fadeIn();
-				$('#'+id+'job').find('#range_from').fadeIn();
-				$('#'+id+'job').find('#range_to').fadeIn();
+				where_from.find('#edit_link').fadeIn();
+				where_from.find('#range_from').fadeIn();
+				where_from.find('#range_to').fadeIn();
 			}, 620);
 			
 		}
 		
+		function show_add_inputs(job_id) {
+			var where_to = $('#'+job_id+'job').find('.data_rows').last();
+			var n = parseInt($('.range_nums').last().html());
+			var html = '<div id="" class="data_rows">\
+							<div class="row_headers">Range #'+(n+1)+'</div>\
+							<span id="range_from"><input size="3" type="text" id="range_from_input" /></span> - \
+							<span id="range_to"><input size="3" type="text" id="range_to_input" /></span>\
+							<span class="action_link" id="save_range_link" onclick="save_new_range('+job_id+')";>save</span>\
+						</div>'
+			$('#'+job_id+'job').find('#add_range_link').fadeOut();
+			where_to.after(html);
+		}
+		
 		function edit_range(id) {
-			var from = $('#'+id+'job').find('#range_from_input').attr('value');
-			var to = $('#'+id+'job').find('#range_to_input').attr('value');
+			var where_from = $('#'+id+'range');
+			var from = where_from.find('#range_from_input').attr('value');
+			var to = where_from.find('#range_to_input').attr('value');
 			
 			$.ajax({
 				url: '/edit_range/'+id+'?from='+from+'&to='+to,
 				cache: false,
 				success: function() {
-					$('#'+id+'job').find('#edit_link').fadeOut();
-					$('#'+id+'job').find('#range_from').fadeOut();
-					$('#'+id+'job').find('#range_to').fadeOut();
+					where_from.find('#edit_link').fadeOut();
+					where_from.find('#range_from').fadeOut();
+					where_from.find('#range_to').fadeOut();
 					
 					setTimeout(function() {
-						$('#'+id+'job').find('#range_from').html(from);
-						$('#'+id+'job').find('#range_to').html(to);
-						$('#'+id+'job').find('#edit_link').html('edit');
-						$('#'+id+'job').find('#edit_link').attr('onclick', 'show_inputs('+id+');');
+						where_from.find('#range_from').html(from);
+						where_from.find('#range_to').html(to);
+						where_from.find('#edit_link').html('edit');
+						where_from.find('#edit_link').attr('onclick', 'show_edit_inputs('+id+');');
 						
-						$('#'+id+'job').find('#edit_link').fadeIn();
-						$('#'+id+'job').find('#range_from').fadeIn();
-						$('#'+id+'job').find('#range_to').fadeIn();
+						where_from.find('#edit_link').fadeIn();
+						where_from.find('#range_from').fadeIn();
+						where_from.find('#range_to').fadeIn();
 					}, 620);
 				}
 			});
+		}
+		
+		function save_new_range(job_id) {
+			var where_from = $('#'+job_id+'job').find('.data_rows').last();
+			var from = where_from.find('#range_from_input').attr('value');
+			var to = where_from.find('#range_to_input').attr('value');
+			var url = '/new_range/'+job_id+'?&from='+from+'&to='+to;
+			$.ajax({
+				url: url,
+				cache: false,
+				success: function(tr_id) {
+					where_from.find('#save_range_link').fadeOut();
+					where_from.find('#range_from').fadeOut();
+					where_from.find('#range_to').fadeOut();
+					
+					setTimeout(function() {
+						where_from.find('#range_from').html(from);
+						where_from.find('#range_to').html(to);
+						where_from.find('#save_range_link').after('<span class="action_link" style="display: none;" id="delete_link" onclick="delete_range('+tr_id+');"> del</span>');
+						where_from.find('#save_range_link').after('<span class="action_link" style="display: none;" id="edit_link" onclick="show_edit_inputs('+tr_id+');">edit</span>');
+						where_from.find('#save_range_link').remove();
+						
+						$('#'+job_id+'job').find('#add_range_link').attr('onclick', 'show_add_inputs('+job_id+');');
+						$('#'+job_id+'job').find('#add_range_link').fadeIn();
+						where_from.find('#delete_link').fadeIn();
+						where_from.find('#edit_link').fadeIn();
+						where_from.find('#range_from').fadeIn();
+						where_from.find('#range_to').fadeIn();
+					}, 620);
+				}
+			});
+		}
+		
+		function delete_range(tr_id) {
+			if (confirm('Are you sure you want to delete this range?')) {
+				$.ajax({
+					url: '/delete_range/'+tr_id,
+					cache: false,
+					success: function() {
+						$('#'+tr_id+'range').fadeOut();
+						setTimeout(function() {
+							$('#'+tr_id+'range').remove();
+						}, 620);
+					}
+				});
+			}
+			
 		}
 		
 		$('#jobs').accordion();

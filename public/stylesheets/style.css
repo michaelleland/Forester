@@ -47,12 +47,12 @@ body {
 .action_link {
 	float: left;
 	clear: left;
-	
-	text-decoration: underline;
 }
 
 .action_link:hover {
+	color: #666666;
 	cursor: pointer;
+	text-decoration: underline;
 }
 
 .rates .accordion_left_column .row_headers {
@@ -560,6 +560,18 @@ input, select {
 
 #contentcontrol li a:hover {
 	color: black;
+}
+
+#edit_link {
+	float: none;
+}
+
+#save_range_link {
+	float: none;
+}
+
+#delete_link {
+	float: none;
 }
 
 /*sidebar styling*/
