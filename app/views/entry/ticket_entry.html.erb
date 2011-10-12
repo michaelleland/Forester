@@ -218,8 +218,8 @@
 			var job_name = $('#job_name').html();
 			var destination_name = $('#destination_name :selected').text();
 			
-			$('#tonnage').attr('disabled');
-			$('#load_1_mbfs').attr('disabled');
+			$('#tonnage').attr('disabled', 'true');
+			$('#load_1_mbfs').attr('disabled', 'true');
 			
 			$.ajax ({
 				url: '/get_load_type/?job_name='+job_name+'&destination_name='+destination_name,
