@@ -317,20 +317,20 @@ a:hover {
 }
 
 #payments_to_receipt select {
-	width: 400px;
+	width: 500px;
 }
 
 #tickets_select {
-	width: 400px;
+	width: 500px;
 }
 
 #receipts_select {
-	width: 400px;
+	width: 500px;
 }
 
 #deductions_to_receipt_list select {
 	float: left;
-	width: 300px;
+	width: 400px;
 }
 
 #deductions_to_receipt_list_values select {
@@ -480,6 +480,16 @@ input, select {
 #all_entries {
 	margin-bottom: 10px;
 	
+}
+
+#all_entries table tbody {
+	padding: 10px;
+	
+}
+
+#all_entries table {
+	border: 1px solid #BABABA;
+	background-color: white;
 }
 
 /*Entry page table stylings*/
@@ -653,6 +663,7 @@ input, select {
 }
 
 #tabs {
+	
 }
 
 /* Entry page styling */
@@ -686,6 +697,10 @@ table {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
+}
+
+h5 {
+	font-size: 14px;
 }
 
 #inner_nav {

@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
     
     @file = File.open("#{@file_path}#{@filename}", 'r')
     
-    send_data(@file.read, :type => "csv", :filename => @file_name)
+    send_data(@file.read, :type => "csv", :filename => @filename)
     
   end
   
