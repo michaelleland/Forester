@@ -477,8 +477,9 @@ input, select {
 	
 }
 
-#current_entries {
-	
+#current_entries table {
+	background-color: white;
+	border: solid 1px #BABABA;
 }
 
 #all_entries {

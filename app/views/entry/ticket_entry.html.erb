@@ -77,16 +77,16 @@
 	
 	<table>
 		<tr>
-			<th class="table_headers" style="width: 60px;">Ticket #</th>
+			<th class="table_headers" style="width: 70px;">Ticket #</th>
 			<th class="table_headers" style="width: 100px;">Date</th>
 			<th class="table_headers" style="width: 100px;">Job</th>
 			<th class="table_headers" style="width: 150px;">Destination</th>
-			<th class="table_headers" style="width: 80px;">Wood type</th>
+			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
 			<th class="table_headers" style="width: 65px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 40px;">Action</th>
+			<th class="table_headers" style="width: 70px;">Action</th>
 		</tr>
 		
 	</table>
@@ -97,16 +97,16 @@
 	<h4>All Entries</h4>
 	<table>
 		<tr>
-			<th class="table_headers" style="width: 60px;">Ticket #</th>
+			<th class="table_headers" style="width: 70px;">Ticket #</th>
 			<th class="table_headers" style="width: 100px;">Date</th>
 			<th class="table_headers" style="width: 100px;">Job</th>
 			<th class="table_headers" style="width: 150px;">Destination</th>
-			<th class="table_headers" style="width: 80px;">Wood type</th>
+			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
 			<th class="table_headers" style="width: 65px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 40px;">Action</th>
+			<th class="table_headers" style="width: 70px;">Action</th>
 		</tr>
 		
 	</table>
@@ -187,6 +187,7 @@
 					values.push([$('#net_mbf').attr('value'), 'Net MBF']);
 				}
 			}
+			
 			values.push([$('#value').attr('value'), 'Ticket value']);
 			
 			$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
@@ -322,6 +323,11 @@
 		
 		/* Script to be run on every pageload */
 		refresh_all_entries('ticket');
+		
+		function stripe_the_table() {
+			$('.all_entries_row:nth-child(2n)').css('background-color', '#E6E6E6');
+			$('.current_entries_row:nth-child(2n)').css('background-color', '#E6E6E6');
+		}
 		
 		
 	</script>
