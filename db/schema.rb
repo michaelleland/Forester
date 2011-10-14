@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
   create_table "destinations", :force => true do |t|
     t.integer  "address_id"
     t.integer  "contact_person_id"
+    t.string   "accepted_load_type"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -42,6 +43,8 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.string   "owner_id"
     t.float    "hfi_rate"
     t.boolean  "hfi_prime"
+    t.integer  "ticket_range_from"
+    t.integer  "ticket_range_to"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -49,8 +52,8 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
   create_table "load_details", :force => true do |t|
     t.integer  "ticket_id"
     t.integer  "species_id"
-    t.string   "load_type"
-    t.float    "amount"
+    t.float    "tonnage"
+    t.float    "mbfs"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,9 +61,7 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
   create_table "logger_assignments", :force => true do |t|
     t.integer  "job_id"
     t.integer  "partner_id"
-    t.float    "rate_mbf"
-    t.float    "rate_percent"
-    t.float    "rate_tonnage"
+    t.boolean  "pays_to_trucker"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -95,7 +96,6 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
   create_table "payment_from_destinations", :force => true do |t|
     t.integer  "destination_id"
     t.integer  "job_id"
-    t.string   "load_type"
     t.date     "payment_date"
     t.string   "payment_num"
     t.float    "tonnage"
@@ -123,6 +123,9 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
   create_table "receipts", :force => true do |t|
     t.integer  "job_id"
     t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "payment_num"
+    t.string   "notes"
     t.date     "receipt_date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -173,8 +176,9 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.integer  "destination_id"
     t.integer  "job_id"
     t.integer  "partner_id"
-    t.string   "load_type"
+    t.integer  "receipt_id"
     t.float    "rate"
+    t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

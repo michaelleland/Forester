@@ -16,6 +16,8 @@ class PageControlsController < ApplicationController
   
   def all_ticket_entries
    @tickets = Ticket.all 
+   @species = Specie.all
+   @woodtypes = WoodType.all
   end
   
   def all_payment_entries

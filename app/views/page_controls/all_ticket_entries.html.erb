@@ -1,12 +1,12 @@
 <% @tickets.each do |i| %>
-	<% @load_details = LoadDetail.find_all_by_ticket_id(i.id)%>
+	<% @load_details = LoadDetail.find_by_ticket_id(i.id)%>
 	<tr id="<%= i.id %>entry" class="all_entries_row">
 		<td><%= i.number %></td>
 		<td><%= i.delivery_date.strftime("%m-%d-%Y") %></td>
 		<td><%= i.job.name %></td>	
 		<td><%= i.destination.name %></td>
-		<td><%= WoodType.find(i.wood_type).name %></td>
-		<td><%= unless i.load_details.first.species_id == 0 then Specie.find(i.load_details.first.species_id).code else "PU" end %></td>
+		<td><%= @woodtypes[i.wood_type].name %></td>
+		<td><%= unless i.load_details.first.species_id == 0 then @species[@load_details.species_id].code else "PU" end %></td>
 		<td><%= i.net_mbf %></td>
 		<td><%= i.tonnage %></td>
 		<td><%= i.value %></td>

@@ -87,7 +87,7 @@ body {
 }
 
 .new {
-	height: 140px !important;
+	height: 160px !important;
 }
 
 /*Header styling*/
@@ -504,7 +504,7 @@ input, select {
 
 .data_rows {
 	width: 350px;
-	height: 22px;
+	height: 30px;
 	
 }
 
@@ -512,7 +512,6 @@ input, select {
 	width: 100px;
 	float: left;
 }
-
 
 .row_data {
 	float: left;
