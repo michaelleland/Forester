@@ -13,6 +13,7 @@ Forester::Application.routes.draw do
   match "/import_jobs_of_trucker/:id" => "page_controls#import_jobs_of_trucker"
   match "/get_receipts/:id" => "page_controls#get_receipts"
   match "/get_load_type/" => "page_controls#get_load_type" 
+  match "/get_job/:id" => "page_controls#get_job"
   
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
@@ -25,8 +26,8 @@ Forester::Application.routes.draw do
   match "/entry" => "entry#entry"
  
   #Entry page functions
-  match "/add_ticket_entry_row" => "entry#add_ticket_entry_row", :via => "post"
-  match "/add_payment_entry_row" => "entry#add_payment_entry_row", :via => "post"
+  match "/add_ticket_entry_row/" => "entry#add_ticket_entry_row"
+  match "/add_payment_entry_row/" => "entry#add_payment_entry_row"
   match "/all_ticket_entries" => "page_controls#all_ticket_entries"
   match "/all_payment_entries" => "page_controls#all_payment_entries"
   match "/delete_ticket_entry/:id" => "entry#delete_ticket_entry"
@@ -39,6 +40,7 @@ Forester::Application.routes.draw do
   match "/truckers" => "setup#truckers"
   match "/sawmills" => "setup#sawmills"
   match "/rates" => "setup#rates"
+  match "/ticket_ranges" => "setup#ticket_ranges"
   
   #Receipt page's basic page calls
   match "/new_receipt" => "receipts#new_receipt"
@@ -87,6 +89,9 @@ Forester::Application.routes.draw do
   match "/edit_partner" => "setup#edit_partner"
   match "/edit_sawmill" => "setup#edit_sawmill"
 
+  match "/edit_range/:id" => "setup#edit_range"
+  match "/new_range/:id" => "setup#new_range"
+  match "/delete_range/:id" => "setup#delete_range"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
