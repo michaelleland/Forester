@@ -14,50 +14,46 @@ class EntryController < ApplicationController
       end
     end
     
-    @species = [params[:species_1], params[:species_2], params[:species_3], params[:species_4], params[:species_5]]
-    @species.delete_if {|x| x.nil?}    
+    @species = params[:species]
+    @mbfs = params[:mbfs]
     
     if @species.length != @species.uniq.length
       render "duplicates.js.erb"
       return 
     end
     
-    @params = [params[:ticket_num], params[:load_1_amount], params[:job_name], params[:destination_name], params[:date], params[:load_pay]]
-    
-    @params.each do |i|
-      if i == ""
-        render "missing.js.erb"
-        return
-      end
-    end 
+    @day = params[:delivery_date][3..4]
+    @month = params[:delivery_date][0..1]
+    @year = params[:delivery_date][6..9]
     
     @specie_codes = []
     
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
     
-    @ticket = Ticket.create(:delivery_date => params[:delivery_date], :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => params[:value], :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
+    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => params[:value], :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
     unless params[:wood_type] == "3"
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_1], :tonnage => params[:tonnage], :mbfs => params[:load_1_mbfs])  
-      @specie_codes.push(Specie.find(params[:species_1]).code)
-      unless params[:species_2].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_2], :mbfs => params[:load_2_mbfs])
-        @specie_codes.push(Specie.find(params[:species_2]).code)
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
+      @specie_codes.push(Specie.find(@species[0]).code)
+      
+      unless @species[1].nil?
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[1], :mbfs => @mbfs[1])
+        @specie_codes.push(Specie.find(@species[1]).code)
       end
-    
-      unless params[:species_3].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_3], :mbfs => params[:load_3_mbfs])
-        @specie_codes.push(Specie.find(params[:species_3]).code)
+      
+      unless @species[2].nil?
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[2], :mbfs => @mbfs[2])
+        @specie_codes.push(Specie.find(@species[2]).code)
       end
-    
-      unless params[:species_4].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:species_4], :mbfs => params[:load_4_mbfs])
-        @specie_codes.push(Specie.find(params[:species_4]).code)
+      
+      unless @species[3].nil?
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[3], :mbfs => @mbfs[3])
+        @specie_codes.push(Specie.find(@species[3]).code)
       end
-    
-      unless params[:specie_5].nil?
-        LoadDetail.create(:ticket_id => @ticket.id, :species_id => params[:specie_5], :mbfs => params[:load_5_mbfs])
-        @specie_codes.push(Specie.find(params[:species_5]).code)
+      
+      unless @species[4].nil?
+        LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[4], :mbfs => @mbfs[4])
+        @specie_codes.push(Specie.find(@species[4]).code)
       end
     else
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :tonnage => params[:tonnage])
@@ -68,7 +64,12 @@ class EntryController < ApplicationController
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find_by_name(params[:job_name])
     
-    @pfd = PaymentFromDestination.create(:payment_date => params[:payment_date], :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:total_payment], :wood_type => params[:wood_type])
+    @day = params[:payment_date][3..4]
+    @month = params[:payment_date][0..1]
+    @year = params[:payment_date][6..9]
+    
+    
+    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
   
   def ticket_entry

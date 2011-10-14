@@ -1,6 +1,6 @@
 <% @payments.each do |i| %>
 	<tr id="<%= i.id %>entry" class="all_entries_row">
-		<td><%= i.payment_date %></td>
+		<td><%= i.payment_date.strftime("%m-%d-%Y") %></td>
 		<td><%= i.job.name %></td>
 		<td><%= i.destination.name %></td>	
 		<td><%= WoodType.find(i.wood_type).name %></td>
@@ -9,6 +9,13 @@
 		<td><%= i.tonnage %></td>
 		<td><%= i.net_mbf %></td>
 		<td><%= i.total_payment %></td>
-		<td><input type="button" value="Delete" onclick="delete_payment_entry(<%= i.id %>)"></td>
+		<td><input type="button" value="delete" onclick="delete_payment_entry(<%= i.id %>)"></td>
 	</tr>
 <% end %>
+
+<script>
+	function stripe_the_table() {
+		$('.all_entries_row:nth-child(2n)').css('background-color', '#E6E6E6')
+	}
+	stripe_the_table();
+</script>

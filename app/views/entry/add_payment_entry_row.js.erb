@@ -1,6 +1,6 @@
 $('#current_entries tbody').append('\
 	<tr id="<%= @pfd.id %>entry"  class="current_entries_row">\
-		<td><%= @pfd.payment_date %></td>\
+		<td><%= @pfd.payment_date.strftime("%m-%d-%Y") %></td>\
 		<td><%= @job.name %></td>\
 		<td><%= @destination.name %></td>\
 		<td><%= WoodType.find(params[:wood_type]).name %></td>\
@@ -9,7 +9,12 @@ $('#current_entries tbody').append('\
 		<td><%= @pfd.tonnage %></td>\
 		<td><%= @pfd.net_mbf %></td>\
 		<td><%= @pfd.total_payment %></td>\
-		<td><input type="button" value="Delete" onclick="delete_payment_entry(<%= @pfd.id %>)"/> </td>\
+		<td><input type="button" value="delete" onclick="delete_payment_entry(<%= @pfd.id %>)"/> </td>\
 	</tr>');
 
+$('input.fields').attr('value', '');
+$('#wood_type').val(-1);
+$('#destination_name').val(-1);
+$('#job_name').val(-1);
+$('input').first().focus();
 refresh_all_entries('payment');

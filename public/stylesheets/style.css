@@ -1,7 +1,7 @@
 body {
   background: #f1f1f1;
   color: #333;
-  font-size: 11px;
+  font-size: 14px;
   height: auto;
   padding-bottom: 20px;
 }
@@ -10,8 +10,16 @@ body {
 	height: 60px;
 }
 
+.jobs select {
+	width: 200px;
+}
+
 .rates {
 	height: 150px;
+}
+
+.tickets {
+	height: 90px;
 }
 
 .rates .data_rows h4 {
@@ -23,7 +31,7 @@ body {
 }
 
 .rate_control_link_row {
-	width: 50px;
+	width: 60px;
 	float: right;
 	clear: none;
 }
@@ -36,18 +44,19 @@ body {
 
 .rate_control_link:hover {
 	cursor: pointer;
+	text-decoration: underline;
 	color: #666666;
 }
 
 .action_link {
 	float: left;
 	clear: left;
-	
-	text-decoration: underline;
 }
 
 .action_link:hover {
+	color: #666666;
 	cursor: pointer;
+	text-decoration: underline;
 }
 
 .rates .accordion_left_column .row_headers {
@@ -78,7 +87,7 @@ body {
 }
 
 .new {
-	height: 140px !important;
+	height: 160px !important;
 }
 
 /*Header styling*/
@@ -311,21 +320,25 @@ a:hover {
 	padding-bottom: 10px;	
 }
 
-#payments_to_receipt select {
+#receipt_select {
 	width: 400px;
+}
+
+#payments_to_receipt select {
+	width: 500px;
 }
 
 #tickets_select {
-	width: 400px;
+	width: 500px;
 }
 
 #receipts_select {
-	width: 400px;
+	width: 500px;
 }
 
 #deductions_to_receipt_list select {
 	float: left;
-	width: 300px;
+	width: 400px;
 }
 
 #deductions_to_receipt_list_values select {
@@ -465,20 +478,27 @@ input, select {
 
 
 #entry_form {
-	height: 150px;
 	
 }
 
-#current_entries {
-	height: 100px;
-	
+#current_entries table {
+	background-color: white;
+	border: solid 1px #BABABA;
 }
 
 #all_entries {
-	height: 600px;
-	
 	margin-bottom: 10px;
 	
+}
+
+#all_entries table tbody {
+	padding: 10px;
+	
+}
+
+#all_entries table {
+	border: 1px solid #BABABA;
+	background-color: white;
 }
 
 /*Entry page table stylings*/
@@ -487,67 +507,9 @@ input, select {
 	font-weight: bold;
 }
 
-.ticket_no_headers {
-	width: 50px;
-}
-
-.date_headers {
-	width: 80px;
-}
-.job_headers {
-	width: 150px;
-}
-.destination_headers {
-	width: 150px;
-}
-
-.wood_type_headers {
-	width: 80px;
-}
-
-.load_type_headers {
-	width: 60px;
-}
-
-.species_headers {
-	width: 60px;
-}
-
-.amount_headers {
-	width: 60px;
-}
-
-.load_pay_headers {
-	width: 80px;
-}
-
-.action_headers {
-	width: 40px;
-}
-
-.tonnage_headers {
-	width: 60px;
-}
-
-.net_mbf_headers {
-	width: 60px;
-}
-
-.payment_headers {
-	width: 90px;
-}
-
-.tickets_headers {
-	width: 60px;
-}
-
-.payment_no_headers {
-	width: 70px;
-}
-
 .data_rows {
 	width: 350px;
-	height: 22px;
+	height: 30px;
 	
 }
 
@@ -555,7 +517,6 @@ input, select {
 	width: 100px;
 	float: left;
 }
-
 
 .row_data {
 	float: left;
@@ -617,6 +578,18 @@ input, select {
 
 #contentcontrol li a:hover {
 	color: black;
+}
+
+#edit_link {
+	float: none;
+}
+
+#save_range_link {
+	float: none;
+}
+
+#delete_link {
+	float: none;
 }
 
 /*sidebar styling*/
@@ -698,6 +671,7 @@ input, select {
 }
 
 #tabs {
+	
 }
 
 /* Entry page styling */
@@ -731,6 +705,10 @@ table {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
+}
+
+h5 {
+	font-size: 14px;
 }
 
 #inner_nav {

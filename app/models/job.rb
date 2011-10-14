@@ -1,6 +1,7 @@
 class Job < ActiveRecord::Base
   has_many :receipts
   has_many :tickets
+  has_many :ticket_ranges
   
   attr_accessor :logger
   attr_accessor :trucker

@@ -1,8 +1,23 @@
 class PageControlsController < ApplicationController
   layout nil
   
+  def get_job
+    @ticket_num = params[:id].to_i
+    Job.all.each do |i|
+      i.ticket_ranges.each do |j|
+        if j.from <= @ticket_num && @ticket_num <= j.to
+          render :text => i.name
+          return
+        end
+      end
+    end
+    render :text => "Invalid Ticket #"
+  end
+  
   def all_ticket_entries
    @tickets = Ticket.all 
+   @species = Specie.all
+   @woodtypes = WoodType.all
   end
   
   def all_payment_entries
@@ -51,22 +66,47 @@ class PageControlsController < ApplicationController
     
     @answer = ""
     
-    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
-      @answer = "MBF"
-    else
-      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
-      @answer = "Tonnage"
+    if @trucker_rate.nil? && @logger_rate.nil?
+      @answer = "No rates"
+    end
+    
+    if @trucker_rate.nil? && !@logger_rate.nil?
+      if @logger_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @logger_rate.rate_type == "Tonnage"
+          @answer == "Tonnage"
+        end
       end
     end
     
-    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
-      @answer = "Both"
-    else
-      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
-      @answer = "Both"
+    if !@trucker_rate.nil? && @logger_rate.nil?
+      if @trucker_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @trucker_rate.rate_type == "Tonnage"
+          @answer == "Tonnage"
+        end
       end
     end
     
+    unless @trucker_rate.nil? && @logger_rate.nil?
+      if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
+        @answer = "Tonnage"
+        end
+      end
+      
+      if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
+        @answer = "Both"
+      else
+        if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
+        @answer = "Both"
+        end
+      end
+    end    
     render :text => @answer
     
   end
