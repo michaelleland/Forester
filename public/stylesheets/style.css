@@ -10,6 +10,10 @@ body {
 	height: 60px;
 }
 
+.jobs select {
+	width: 200px;
+}
+
 .rates {
 	height: 150px;
 }
