@@ -66,22 +66,47 @@ class PageControlsController < ApplicationController
     
     @answer = ""
     
-    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
-      @answer = "MBF"
-    else
-      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
-      @answer = "Tonnage"
+    if @trucker_rate.nil? && @logger_rate.nil?
+      @answer = "No rates"
+    end
+    
+    if @trucker_rate.nil? && !@logger_rate.nil?
+      if @logger_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @logger_rate.rate_type == "Tonnage"
+          @answer == "Tonnage"
+        end
       end
     end
     
-    if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
-      @answer = "Both"
-    else
-      if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
-      @answer = "Both"
+    if !@trucker_rate.nil? && @logger_rate.nil?
+      if @trucker_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @trucker_rate.rate_type == "Tonnage"
+          @answer == "Tonnage"
+        end
       end
     end
     
+    unless @trucker_rate.nil? && @logger_rate.nil?
+      if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
+        @answer = "MBF"
+      else
+        if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "Tonnage"
+        @answer = "Tonnage"
+        end
+      end
+      
+      if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "Tonnage"
+        @answer = "Both"
+      else
+        if @trucker_rate.rate_type == "Tonnage" && @logger_rate.rate_type == "MBF"
+        @answer = "Both"
+        end
+      end
+    end    
     render :text => @answer
     
   end

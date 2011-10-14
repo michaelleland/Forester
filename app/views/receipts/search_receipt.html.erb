@@ -3,24 +3,24 @@
 	<form id="search_form" action="/get_logger_receipt" method="get" target="_blank">
 		<h5>Select job:</h5>
 		<select id="job_selector">
-			<option onclick="init_type_select(); init_receipt_select();" value="0">Select a job</option>
+			<option onclick="init_type_select(); init_receipt_select(); disable_get_receipt();" value="0">Select a job</option>
 			<% Job.all.each do |i| %>
-				<option onclick="init_type_select();" value="<%= i.id %>"><%= i.name %></option>
+				<option onclick="init_type_select(); disable_get_receipt();" value="<%= i.id %>"><%= i.name %></option>
 			<% end %>
 		</select>
 		
 		<h5>Get tickets of:</h5>
 		<select id="owner_type_selector">
-			<option onclick="init_receipt_select()" value="none"> Select owner type </option>
-			<option onclick="refresh_receipts('landowner')" value="landowner">Landowner</option>
-			<option onclick="refresh_receipts('logger')" value="logger">Logger</option>
-			<option onclick="refresh_receipts('trucker')" value="trucker">Trucker</option>
+			<option onclick="init_receipt_select(); disable_get_receipt();" value="none"> Select owner type </option>
+			<option onclick="refresh_receipts('landowner'); disable_get_receipt();" value="landowner">Landowner</option>
+			<option onclick="refresh_receipts('logger'); disable_get_receipt();" value="logger">Logger</option>
+			<option onclick="refresh_receipts('trucker'); disable_get_receipt();" value="trucker">Trucker</option>
 		</select>
 		
 		<h5>Select a receipt:</h5>
 		
-		<div id="receipts_to_receipt">
-			<select id="receipt_select" size="10" style="width: 200px;">
+		<div id="payments_to_receipt">
+			<select id="receipt_select" size="10">
 				<option value="0">No job selected</option>
 			</select>
 		</div>
@@ -28,11 +28,28 @@
 		<input id="owner_type_hinput" type="hidden" name="owner_type" value="" />
 		<input id="receipt_id_hinput" type="hidden" name="receipt_id" value="" />
 		
-		<input id="submit" type="submit" value="Get receipt" />		
+		<input id="submit" type="submit" disabled="true" value="No payments selected" />		
 	</form>	
 </div>
 
 <script>
+
+$('#receipt_select').change(function() {
+	if ($('#receipt_select :selected').val() != "0") {
+		enable_get_receipt();
+		refresh_form_action();
+	}
+})
+
+function enable_get_receipt() {
+	$('#submit').removeAttr('disabled');
+	$('#submit').attr('value', 'Get receipt');
+}
+
+function disable_get_receipt () {
+	$('#submit').attr('disabled', 'true');
+	$('#submit').attr('value', 'No payments selected');
+}
 
 function init_receipt_select () {
 	$('#receipt_select').html('<option value="0">No job selected</option>');

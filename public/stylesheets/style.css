@@ -320,6 +320,10 @@ a:hover {
 	padding-bottom: 10px;	
 }
 
+#receipt_select {
+	width: 400px;
+}
+
 #payments_to_receipt select {
 	width: 500px;
 }

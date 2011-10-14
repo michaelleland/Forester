@@ -205,7 +205,7 @@ class SetupController < ApplicationController
       if @logger_rate.save
         render :text => "#{@logger_rate.id}"
       else
-        render :state => 13
+        render :status => 500
       end
     end
     if params[:type] == "trucker"
@@ -213,7 +213,7 @@ class SetupController < ApplicationController
       if @trucker_rate.save
         render :text => "#{@trucker_rate.id}"
       else
-        render :state => 13
+        render :status => 500
       end
     end
   end
