@@ -12,6 +12,40 @@ class SetupController < ApplicationController
     
   end
   
+  def ticket_ranges
+    
+    
+    
+    
+  end
+  
+  def edit_range
+    @range = TicketRange.find(params[:id])
+    @range.from = params[:from]
+    @range.to = params[:to]
+    
+    if @range.save
+      render :nothing => true
+    else
+      render :status => 500, :nothing => true
+    end
+  end
+  
+  def new_range
+    @job = Job.find(params[:id])
+    
+    if @job.ticket_ranges.create(:from => params[:from], :to => params[:to])
+      render :text => @job.ticket_ranges.last.id
+    else
+      render :status => 500, :nothing => true
+    end
+  end
+  
+  def delete_range
+    TicketRange.find(params[:id].to_i).delete
+    render :nothing => true
+  end
+  
   def owners
     
   end
@@ -171,7 +205,7 @@ class SetupController < ApplicationController
       if @logger_rate.save
         render :text => "#{@logger_rate.id}"
       else
-        render :state => 13
+        render :status => 500
       end
     end
     if params[:type] == "trucker"
@@ -179,7 +213,7 @@ class SetupController < ApplicationController
       if @trucker_rate.save
         render :text => "#{@trucker_rate.id}"
       else
-        render :state => 13
+        render :status => 500
       end
     end
   end

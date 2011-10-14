@@ -5,7 +5,9 @@ class CreateJobs < ActiveRecord::Migration
       t.string :owner_id
       t.float :hfi_rate
       t.boolean :hfi_prime
-
+      t.integer :ticket_range_from
+      t.integer :ticket_range_to
+      
       t.timestamps
     end
     

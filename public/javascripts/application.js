@@ -84,7 +84,7 @@ function refresh_all_entries (type) {
 		cache: false,
 		success: function (html) {
 			$('.all_entries_row').each(function () { $(this).remove()})
-			$('#all_entries table').append(html);
+			$('#all_entries table tbody').append(html);
 		}		
 	})
 }

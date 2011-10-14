@@ -21,26 +21,119 @@
 	<% end %>
 	
 	<h3><a href="#">Add a Job</a></h3>
-	<div class="jobs new">
+	<div class="jobs new" id="new_job">
 		<form action="/new_job" method="post" data-remote="true">	
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Job:</h4></div>
 				<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"> <input id="job_name" name="job_name" type="text" size="20"/></div></div>
 				<div class="data_rows"><h4>Partners:</h4></div>
-				<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20"/></div></div>
-				<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <input id="logger_name" name="logger_name" type="text" size="20"/></div></div>
-				<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <input id="trucker_name" name="trucker_name" type="text" size="20"/></div></div>
+				<div class="data_rows">
+					<div class="row_headers">Landowner:</div>
+					<div class="row_data">
+						<select id="owner_name_select" name="owner_name">
+							<option value="-1"></option>
+							<% Owner.all.each do |i| %>
+								<option value="<%= i.name %>"><%= i.name %></option>
+							<% end %>
+						</select>
+					</div>
+				</div>
+				<div class="data_rows">
+					<div class="row_headers">Logger:</div>
+					<div class="row_data"> 
+						<select name="logger_name" id="logger_name_select">
+							<option value="-1"></option>
+							<% Partner.all.each do |i| %>
+								<option value="<%= i.name %>"><%= i.name %></option>
+							<% end %>
+						</select>
+					</div>
+				</div>
+				<div class="data_rows">
+					<div class="row_headers">Trucker:</div>
+					<div class="row_data">
+						<select name="trucker_name" id="trucker_name_select">
+							<option value="-1"></option>
+							<% Partner.all.each do |i| %>
+								<option value="<%= i.name %>"><%= i.name %></option>
+							<% end %>
+						</select>
+					</div>
+				</div>
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>General info:</h4></div>
-				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div lass="row_data"> <input name="hfi_rate" type="text" size="4"/></div></div>
-				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select name="hfi_prime"> <option value="1" >HFI</option> <option value="0" >Bank</option> </select></div></div>
-				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"> <input type="submit" value="Submit" /></div></div>
+				<div class="data_rows"><div class="row_headers">HFI-Rate:</div><div lass="row_data"> <input id="hfi_rate" name="hfi_rate" type="text" size="4"/></div></div>
+				<div class="data_rows"><div class="row_headers">Prime payer:</div><div class="row_data"> <select style="width: 70px;" id="hfi_prime" name="hfi_prime"> <option value="1" >HFI</option> <option value="0" >Bank</option> </select></div></div>
+				<div class="data_rows"><div class="row_headers">Action:</div><div class="row_data"><input type="button" id="submit" onclick="validated_submit();" value="Submit" /></div></div>
+				<div class="data_rows"><div id="feedback"></div></div>
 			</div>
 		</form>
 	</div>
 	
-	<script> 
+	<script>
+		
+		function validate_fields() {
+			var errors = []
+			var everything_ok = true
+			if ($('#owner_name_select').val() == "-1") {
+				errors.push('Owner is missing');
+				everything_ok = false;
+			}
+			if ($('#trucker_name_select').val() == "-1") {
+				errors.push('Trucker is missing');
+				everything_ok = false;
+			}
+			if ($('#logger_name_select').val() == "-1") {
+				errors.push('Logger is missing');
+				everything_ok = false;
+			}
+			if ($('#new_job #hfi_prime').attr('value') == "") {
+				errors.push('HFI-Rate is missing');
+				everything_ok = false;
+			}
+			
+			for (i=0;i<errors.length;i++) {
+				$('#feedback').append('<div style="color:red;">'+errors[i]+'</div>');
+			}
+			
+			setTimeout(function() {
+				$("#feedback").contents().each(function() {
+					$(this).fadeOut();
+				});
+				setTimeout(function() {
+					$("#feedback").contents().each(function() {
+						$(this).remove();
+					});	
+				}, 620);
+			}, 5000);
+			
+			return everything_ok
+		}
+	 
+	 	function validated_submit() {
+	 		if (validate_fields()) {
+	 			var job_name = $('#new_job #job_name').attr('value');
+	 			var owner_name = $('#new_job #owner_name_select').val();
+	 			var trucker_name = $('#new_job #trucker_name_select').val();
+	 			var logger_name = $('#new_job #logger_name_select').val();
+	 			var hfi_rate = $('#new_job #hfi_rate').attr('value');
+	 			var hfi_prime = $('#new_job #hfi_prime').val();
+	 			
+	 			var url = '/new_job/?job_name='+job_name+'&owner_name='+owner_name+'&trucker_name='+trucker_name+'&logger_name='+logger_name
+	 			url = url+'&hfi_rate='+hfi_rate+'&hfi_prime='+hfi_prime
+	 			
+	 			$.ajax ({
+					url: url,
+					cache: false,
+					method: 'POST',
+					success: function() {
+						
+					}
+				});
+	 		}
+	 	}
+	 
 		function edit_job(id) {
 			var job_name = $('#'+id+'job').find('#job_name').html();
 			var owner_name = $('#'+id+'job').find('#owner_name').html();
@@ -87,8 +180,6 @@
 			
 			setTimeout(function() { $(place).append(html); }, 650);
 			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); owner_autocomplete(id); logger_trucker_autocomplete(id);});}, 650);
-			
-			
 			
 		}
 		
