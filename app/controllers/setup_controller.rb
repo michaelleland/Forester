@@ -37,6 +37,10 @@ class SetupController < ApplicationController
         @overlapping_id = i.job_id
         break;
       end
+      if i.to <= @range.to && i.from >= @range.from
+        @overlapping_id = i.job_id
+        break;
+      end
     end
     
     if @overlapping_id == 0
@@ -49,11 +53,32 @@ class SetupController < ApplicationController
   
   def new_range
     @job = Job.find(params[:id])
+    @range = TicketRange.new(:from => params[:from], :to => params[:to])
     
-    if @job.ticket_ranges.create(:from => params[:from], :to => params[:to])
+    @all_ranges = TicketRange.all
+    @overlapping_id = 0
+    
+    @all_ranges.each do |i|
+      if i.from <= @range.to && @range.to <= i.to
+        @overlapping_id = i.job_id
+        break;
+      end
+      if i.from <= @range.from && @range.from <= i.to
+        @overlapping_id = i.job_id
+        break;
+      end
+      if i.to <= @range.to && i.from >= @range.from
+        @overlapping_id = i.job_id
+        break;
+      end
+    end
+    
+    if @overlapping_id == 0
+      @range.save
+      @job.ticket_ranges.push(@range)
       render :text => @job.ticket_ranges.last.id
     else
-      render :status => 500, :nothing => true
+      render :status => 306, :text => Job.find(@overlapping_id).name
     end
   end
   
