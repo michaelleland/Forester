@@ -28,27 +28,25 @@
 		<input id="owner_type_hinput" type="hidden" name="owner_type" value="" />
 		<input id="receipt_id_hinput" type="hidden" name="receipt_id" value="" />
 		
-		<input id="submit" type="submit" disabled="true" value="No payments selected" />		
+		<input id="submit_btn" type="submit" disabled="true" value="No payments selected" />		
 	</form>	
 </div>
 
 <script>
 
-$('#receipt_select').change(function() {
-	if ($('#receipt_select :selected').val() != "0") {
-		enable_get_receipt();
-		refresh_form_action();
-	}
-})
+function ready_to_submit () {
+	enable_get_receipt();
+	refresh_form_action();
+}
 
 function enable_get_receipt() {
-	$('#submit').removeAttr('disabled');
-	$('#submit').attr('value', 'Get receipt');
+	$('#submit_btn').removeAttr('disabled');
+	$('#submit_btn').attr('value', 'Get receipt');
 }
 
 function disable_get_receipt () {
-	$('#submit').attr('disabled', 'true');
-	$('#submit').attr('value', 'No payments selected');
+	$('#submit_btn').attr('disabled', 'true');
+	$('#submit_btn').attr('value', 'No payments selected');
 }
 
 function init_receipt_select () {

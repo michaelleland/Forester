@@ -1,6 +1,6 @@
 <% unless @receipts.length == 0 %>
 	<% @receipts.each do |i| %> 
-		<option onclick="refresh_form_action();" value="<%= i.id %>">Receipt for payment number <%= i.payment_num %></option>
+		<option onclick="ready_to_submit();"" value="<%= i.id %>">Receipt for payment number <%= i.payment_num %></option>
 	<% end %>
 <% else %>
 	<option value="0">No saved receipts</option>
