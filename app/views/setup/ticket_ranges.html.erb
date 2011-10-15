@@ -5,6 +5,7 @@
 			<div style="display: none;" id="job_name"><%= i.name %></div>
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Ticket Books:</h4></div>
+				<span style="display: none;" class="book_nums">0</span>
 				<% i.ticket_ranges.each_with_index do |j, x| %>
 					<div id="<%= j.id %>range" class="data_rows">
 						<div class="row_headers">Book #<span class="book_nums"><%= x+1 %></span></div>
@@ -45,9 +46,9 @@
 		
 		function show_add_inputs(job_id) {
 			var where_to = $('#'+job_id+'job').find('.data_rows').last();
-			var n = parseInt($('.book_nums').last().html());
-			var html = '<div id="" class="data_rows">\
-							<div class="row_headers">Book #'+(n+1)+'</div>\
+			var n = parseInt($('#'+job_id+'job').find('.book_nums').last().html());
+			var html = '<div class="data_rows">\
+							<div class="row_headers">Book #<span class="book_nums">'+(n+1)+'</span></div>\
 							<span id="range_from"><input size="3" type="text" id="range_from_input" /></span> - \
 							<span id="range_to"><input size="3" type="text" id="range_to_input" /></span>\
 							<span class="action_link" id="save_range_link" onclick="save_new_range('+job_id+')";>save</span>\
@@ -95,6 +96,7 @@
 					where_from.find('#save_range_link').fadeOut();
 					where_from.find('#range_from').fadeOut();
 					where_from.find('#range_to').fadeOut();
+					where_from.attr('id', tr_id+'range')
 					
 					setTimeout(function() {
 						where_from.find('#range_from').html(from);
