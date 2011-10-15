@@ -25,14 +25,15 @@ class SetupController < ApplicationController
     @range.to = params[:to]
     
     @all_ranges = TicketRange.all
+    @all_ranges.delete_if {|i| i == @range}
     @overlapping_id = 0
     
     @all_ranges.each do |i|
-      if i.from < @range.to && @range.to < i.to
+      if i.from <= @range.to && @range.to <= i.to
         @overlapping_id = i.job_id
         break;
       end
-      if i.from < @range.from && @range.from < i.to
+      if i.from <= @range.from && @range.from <= i.to
         @overlapping_id = i.job_id
         break;
       end
