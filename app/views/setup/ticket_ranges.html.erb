@@ -13,6 +13,7 @@
 						<span id="range_to"><%= j.to %></span>
 						<span class="action_link" id="edit_link" onclick="show_edit_inputs(<%= j.id %>);">edit</span>
 						<span class="action_link" id="delete_link" onclick="delete_range(<%= j.id %>, <%= i.id %>, <%= (x+1) %>);">del</span>
+						<span id="feedback"></span>
 					</div>
 				<% end %>
 				<div class="action_link" id="add_range_link" onclick="show_add_inputs(<%= i.id %>);">add</div>
@@ -80,6 +81,17 @@
 						where_from.find('#range_from').fadeIn();
 						where_from.find('#range_to').fadeIn();
 					}, 620);
+				},
+				statusCode: {
+					306: function(answer) {
+						where_from.find('#feedback').append('<span style="color: red;">Overlaps with range in job: '+answer['responseText']+'</span>');
+						setTimeout(function() {
+							where_from.find('#feedback').find('span').fadeOut();
+							setTimeout(function() {
+								where_from.find('#feedback').find('span').remove();
+							}, 620);
+						}, 5000);
+					}
 				}
 			});
 		}
@@ -112,6 +124,17 @@
 						where_from.find('#range_from').fadeIn();
 						where_from.find('#range_to').fadeIn();
 					}, 620);
+				},
+				statusCode: {
+					306: function(answer) {
+						where_from.find('#feedback').append('<span style="color: red;">Overlaps with range in job: '+answer['responseText']+'</span>');
+						setTimeout(function() {
+							where_from.find('#feedback').find('span').fadeOut();
+							setTimeout(function() {
+								where_from.find('#feedback').find('span').remove();
+							}, 620);
+						}, 5000);
+					}
 				}
 			});
 		}
