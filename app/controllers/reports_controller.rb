@@ -108,7 +108,12 @@ class ReportsController < ApplicationController
       @file_path = "shared/system/exports/"
       @table_name = "Tickets"
       
-      @table_headers = "Number, delivery Date, Destination Name, Job Name, Wood Type, Tonnage, Net MBF, Load Pay"      
+      @species = ""
+      Specie.all.each do |i|
+        @species = "#{@species}, #{i.code}"
+      end
+      
+      @table_headers = "Number, Delivery Date, Destination Name, Job Name, Wood Type#{@species}, Tonnage, Net MBF, Load Pay"      
     end
     if params[:id] == "3"
       @payments = PaymentFromDestination.all
@@ -132,8 +137,27 @@ class ReportsController < ApplicationController
       
       if params[:id] == "2"
         @tickets.each do |i|
+          @amounts = []
+          
+          Specie.all.each do
+            @amounts.push(0)
+          end
+          
+          i.load_details.each do |j|
+            unless j.mbfs.nil?
+              @amounts[j.species_id-1] = j.mbfs
+            else
+              @amounts[j.species_id-1] = 0
+            end
+          end
+          
+          @amounts_str = ""
+          @amounts.each do |j|
+            @amounts_str = "#{@amounts_str}, #{j}"
+          end
+          
           @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name}, #{i.job.name}, "
-          @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value)}"
+          @puts << "#{WoodType.find(i.wood_type).name}#{@amounts_str}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value)}"
           writer.puts @puts
         end
       end
