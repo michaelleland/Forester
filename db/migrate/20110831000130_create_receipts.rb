@@ -5,6 +5,7 @@ class CreateReceipts < ActiveRecord::Migration
       t.integer :owner_id
       t.string :owner_type
       t.integer :payment_num
+      t.integer :payment_total
       t.string :notes
       t.date :receipt_date
 

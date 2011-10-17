@@ -403,7 +403,7 @@ textarea {
 	right: 420px;
 }
 
-#submit {
+#submit_button {
 	float: left;
 	clear: left;
 }
@@ -857,6 +857,21 @@ img#hfi_logo {
 #job_items_box {
 	margin-top: 5px;
 	float: left;
+}
+
+#deduction_table_wrapper {
+	margin-top: 20px;
+	float: left;
+}
+
+#deduction_table_wrapper table {
+	margin: auto;
+	width: 920px;
+	
+}
+
+#deduction_table_wrapper table th {
+	font-weight: bold;
 }
 
 #payment_details_box {

@@ -1,0 +1,63 @@
+<div class="grid_10" id="new_statement_box">
+	<h4>Create a new receipt: </h4>
+	<form id="create_form" action="" method="get" target="_blank">
+		<h5>Select job:</h5>
+		<select id="job_selector">
+			<option value="0">Select a job</option>
+			<% Job.all.each do |i| %>
+				<option value="<%= i.id %>"><%= i.name %></option>
+			<% end %>
+		</select>
+		
+		<h5>Create receipt for:</h5>
+		<select id="owner_type_selector" style="float: left; margin-bottom: 10px;"> 
+			<option value="none"> </option>
+			<option value="owner">Landowner</option>
+			<option value="logger">Logger</option>
+			<option value="trucker">Trucker</option>
+		</select>
+		
+		<input id="submit_button" disabled="true" type="submit" value="No tickets selected" />		
+	</form>
+</div>
+
+<script>
+
+$('#job_selector').change(function() {
+	init_type_select();
+})
+
+function init_the_page() {
+	setTimeout(function() {
+		change_content('job_statement', 2);
+	}, 1000);
+}
+
+function init_type_select () {
+	$('#owner_type_selector').val('0');
+	$('#tickets_select').html('<option value="0">Select owner type</option>');
+}
+
+function refresh_form_action () {
+	var type = $('#owner_type_selector').val();
+	var job_id = $('#job_selector').val();
+	
+	$('#create_form').attr('action', '/get_statement/'+job_id+'?type='+type);
+}
+
+$('#owner_type_selector').change(function() {
+	if ($('#owner_type_selector') != "none") {
+		enable_button();
+		refresh_form_action();
+	}
+});
+
+function enable_button() {
+	$('#submit_button').removeAttr('disabled');
+}
+
+function disabled_button() {
+	$('#submit_button').attr('disabled', 'true');
+}
+
+</script>

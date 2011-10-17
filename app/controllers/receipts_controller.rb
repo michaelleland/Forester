@@ -4,7 +4,51 @@ class ReceiptsController < ApplicationController
   def index
     
   end
- 
+  
+  def new_statement
+    
+  end
+  
+  def get_statement
+    @job = Job.find(params[:id])
+    @receipts = @job.receipts
+    @ac = ApplicationController.new
+    @tickets = @job.tickets    
+    @owner_type = params[:type]
+    
+    if params[:type] == "owner"
+      @owner = @job.owner
+    end
+    if params[:type] == "logger"
+      @owner = @job.logger
+    end
+    if params[:type] == "trucker"
+      @owner = @job.trucker
+    end
+    
+    @total = 0
+    @receipts.each {|i| @total = @total + i.payment_total}
+    @total = @ac.give_pennies(@total)
+    
+    @deductions = []
+    @receipts.each do |i|
+      i.receipt_items.each do |j|
+        @deductions.push(j)
+      end
+    end
+    
+    @ded_total = 0
+    @deductions.each do |i|
+      @ded_total = @ded_total + i.value
+    end
+    
+  end
+  
+  
+  def search_statement
+    
+  end
+  
   def search_receipt
     
   end
@@ -316,7 +360,7 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "landowner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "landowner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_owner = true
@@ -328,7 +372,6 @@ class ReceiptsController < ApplicationController
         @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
       end
     end
-    
   end
   
     def save_logger_receipt    
@@ -336,7 +379,7 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_logger = true
@@ -356,7 +399,7 @@ class ReceiptsController < ApplicationController
     
     @payment_num = params[:payment_num]
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:trucker_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes]);
+    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:trucker_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
     @tickets.each do |i|
       @receipt.tickets.push(i)
       i.paid_to_trucker = true
