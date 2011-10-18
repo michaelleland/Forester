@@ -17,7 +17,7 @@
 			<option value="trucker">Trucker</option>
 		</select>
 		
-		<input id="submit_button" disabled="true" type="submit" value="No tickets selected" />		
+		<input id="submit_button" disabled="true" type="submit" value="No owner type selected" />		
 	</form>
 </div>
 
@@ -25,6 +25,7 @@
 
 $('#job_selector').change(function() {
 	init_type_select();
+	disable_button();
 })
 
 function init_the_page() {
@@ -46,18 +47,22 @@ function refresh_form_action () {
 }
 
 $('#owner_type_selector').change(function() {
-	if ($('#owner_type_selector') != "none") {
-		enable_button();
-		refresh_form_action();
+	if ($('#owner_type_selector') != "none" && $('#owner_type_selector :selected').val() != "0") {
+		if ($('#job_selector :selected').val() != "0") {
+			enable_button();
+			refresh_form_action();
+		}
 	}
 });
 
 function enable_button() {
 	$('#submit_button').removeAttr('disabled');
+	$('#submit_button').attr('value', 'Get statement');
 }
 
-function disabled_button() {
+function disable_button() {
 	$('#submit_button').attr('disabled', 'true');
+	$('#submit_button').attr('value', 'No owner type selected');
 }
 
 </script>

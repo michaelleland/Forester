@@ -15,6 +15,7 @@ class ReceiptsController < ApplicationController
     @ac = ApplicationController.new
     @tickets = @job.tickets    
     @owner_type = params[:type]
+    @owner
     
     if params[:type] == "owner"
       @owner = @job.owner
