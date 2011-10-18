@@ -5,6 +5,48 @@ class EntryController < ApplicationController
 
   end
   
+  def comparison
+    @tickets = Ticket.all
+    @payments = PaymentFromDestination.all
+    
+    @tickets_total = 0
+    @tickets_total_mbf = 0
+    @tickets_total_tonnage = 0
+    
+    @tickets.each do |i| 
+      @tickets_total = @tickets_total + i.value
+      @tickets_total_mbf = @tickets_total_mbf + i.net_mbf
+      @tickets_total_tonnage = @tickets_total_tonnage + i.tonnage
+    end
+    
+    @payments_total = 0
+    @payments_total_mbf = 0
+    @payments_total_tonnage = 0
+    
+    @payments.each do |i| 
+      @payments_total = @payments_total + i.total_payment
+      @payments_total_mbf = @payments_total_mbf + i.net_mbf
+      @payments_total_tonnage = @payments_total_tonnage + i.tonnnage
+    end
+    
+    @value_diff = @tickets_total - @payments_total
+    @mbf_diff = @tickets_total_mbf - @payments_total_mbf
+    @tonnage_diff = @tickets_total_tonnage - @payments_total_tonnage
+    
+    @tickets_total = give_pennies(@tickets_total)
+    @tickets_total_mbf = give_pennies(@tickets_total_mbf)
+    @tickets_total_tonnage = give_pennies(@tickets_total_tonnage)
+    
+    @payments_total = give_pennies(@payments_total)
+    @payments_total_mbf = give_pennies(@payments_total_mbf)
+    @payments_total_tonnage = give_pennies(@payments_total_tonnage)
+    
+    @value_diff = give_pennies(@value_diff)
+    @mbf_diff = give_pennies(@mbf_diff)
+    @tonnage_diff = give_pennies(@tonnage_diff)
+    
+  end
+  
   def add_ticket_entry_row
     @t_nums = Ticket.all.collect {|i| i.number}
     @t_nums.each do |i|

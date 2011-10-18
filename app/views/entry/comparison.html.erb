@@ -1,0 +1,28 @@
+<div id="comparison_wrapper">
+	<table>
+		<tr>
+			<th class="th">Type</th>
+			<th class="th">From Tickets</th>
+			<th class="th">From Payments</th>
+			<th class="th">Diff</th>
+		</tr>
+		<tr>
+			<td class="th">Payments</td>
+			<td>$ <%= @tickets_total %></td>
+			<td>$ <%= @payments_total %></td>
+			<td>$ <%= @value_diff %></td>
+		</tr>
+		<tr>
+			<td class="th">MBF</td>
+			<td><%= @tickets_total_mbf %></td>
+			<td><%= @payments_total_mbf %></td>
+			<td><%= @mbf_diff %></td>
+		</tr>
+		<tr>
+			<td class="th">Tons</td>
+			<td><%= @tickets_total_tonnage %></td>
+			<td><%= @payments_total_tonnage %></td>
+			<td><%= @tonnage_diff %></td>
+		</tr>
+	</table>	
+</div>

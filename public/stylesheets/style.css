@@ -18,6 +18,10 @@ body {
 	height: 150px;
 }
 
+.rates .rate_type_select {
+	width: 60px;
+}
+
 .tickets {
 	height: 120px;
 }
@@ -1041,4 +1045,49 @@ hr {
 #save_it_link:hover {
 	cursor: pointer;
 	color: #222;	
+}
+/*    ______________________________
+ *   |                              \
+ *   \         Comparison           |
+ *   |          Styling             \
+ *   \______________________________|
+ */
+
+#comparison_wrapper {
+	background: #deedf7;
+	
+	margin-top: 5px;
+	
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right 5px;
+	padding-bottom: 10px;
+	
+	border-radius: 5px;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	
+	border: solid 1px #aed0ea;
+}
+
+#comparison_wrapper table {
+	background-color: white;
+}
+
+#comparison_wrapper table th {
+	width: 150px;
+}
+
+#comparison_wrapper .th {
+	font-weight: bold;
+	text-align: left; !important
+}
+
+#comparison_wrapper table td {
+	border: 1px solid #BABABA;
+	text-align: right;
+}
+
+#comparison_wrapper table th {
+	border: 1px solid #BABABA;
 }

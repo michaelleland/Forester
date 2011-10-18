@@ -18,6 +18,7 @@ Forester::Application.routes.draw do
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
   match "/payment_entry" => "entry#payment_entry"
+  match "/comparison" => "entry#comparison"
  
   #Nav tab's stoof
   match "/setup" => "setup#index"

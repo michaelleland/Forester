@@ -13,7 +13,7 @@ class Ticket < ActiveRecord::Base
         end
       end
     else
-      return nil
+      return 0
     end
     @net_mbf
   end
@@ -27,7 +27,7 @@ class Ticket < ActiveRecord::Base
         end
       end
       if @total == 0
-        return nil
+        return 0
       else
         @total
       end

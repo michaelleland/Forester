@@ -51,15 +51,36 @@
 			});			
 		}
 		
+		<% @partners_str = "" %>
+		<% Partner.all.each do |i| %>
+			<% @partners_str = "#{@partners_str}<option value=\"#{i.name}\"\>#{i.name}</option>" %>
+		<% end %>
+		<% @partners_str = @partners_str %>
+				
 		function show_trucker_rate_inputs (id) {
-			$('#add_trucker_rate_row_'+id).before('<div class="data_rows" id="input_trucker_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination" /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="rate_type" name="rate_type"><option value="MBF">MBF</option><option value="Tonnage">Ton</option><option value="percent">%</option></select></div></div><div class="action_link rate_link" id="add_the_trucker_rate_'+id+'" onclick="add_the_rate('+id+', \'trucker\')">Add</div>');
+			$('#add_trucker_rate_row_'+id).before('\
+			<div class="data_rows" id="input_trucker_data_row_'+id+'">\
+				<div class="row_headers">\
+				\
+				</div>\
+				<div class="row_data">\
+					<select id="rate"><%= @partners_str %>\
+					</select>\
+					<input type="text" id="rate" name="rate" size="3" /> /\
+					<select id="rate_type" class="rate_type_select" name="rate_type">\
+						<option value="MBF">MBF</option>\
+						<option value="Tonnage">Ton</option>\
+						<option value="percent">%</option>\
+					</select>\
+				</div>\
+			</div>\
+			<div class="action_link rate_link" id="add_the_trucker_rate_'+id+'" onclick="add_the_rate('+id+', \'trucker\')">Add</div>');
+			
 			$('#add_trucker_rate_row_'+id).fadeOut();
-	
-			attach_autocomplete_to_input(id, 'trucker');	
 		}
 		
 		function show_logger_rate_inputs (id) {
-			$('#add_logger_rate_row_'+id).before('<div class="data_rows" id="input_logger_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination"  /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="rate_type" name="rate_type"><option value="MBF">MBF</option><option value="Tonnage">Ton</option><option value="percent">%</option></select></div></div><div class="action_link rate_link" id="add_the_logger_rate_'+id+'" onclick="add_the_rate('+id+', \'logger\')">Add</div>');
+			$('#add_logger_rate_row_'+id).before('<div class="data_rows" id="input_logger_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination"  /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="rate_type" class="rate_type_select" name="rate_type"><option value="MBF">MBF</option><option value="Tonnage">Ton</option><option value="percent">%</option></select></div></div><div class="action_link rate_link" id="add_the_logger_rate_'+id+'" onclick="add_the_rate('+id+', \'logger\')">Add</div>');
 			$('#add_logger_rate_row_'+id).fadeOut();
 	
 			attach_autocomplete_to_input(id, 'logger');	
