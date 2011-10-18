@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "payment_num"
-    t.integer  "payment_total"
+    t.float    "payment_total"
     t.string   "notes"
     t.date     "receipt_date"
     t.datetime "created_at"

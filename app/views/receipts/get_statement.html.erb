@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title><%= @owner.name %></title>
+		<title><%= %></title>
 		<link rel="stylesheet" href="/stylesheets/reset.css" />
 		<link rel="stylesheet" href="/stylesheets/text.css" />
 		<link rel="stylesheet" href="/stylesheets/960.css" />
@@ -112,7 +112,7 @@
 							<td></td>
 							<td></td>
 							<td class="tp">Deductions total </td>
-							<td class="to" style="text-align: right;"><span style="border-top: 1px black solid;">+ $ <%= @ac.give_pennies(@ded_total) %> </span></td>
+							<td class="to" style="text-align: right;"><span style="border-top: 1px black solid;">- $ <%= @ac.give_pennies(@ded_total) %> </span></td>
 						</tr>
 					</table>
 				</div>
@@ -196,10 +196,117 @@
 							<td class="dollars_td totals">$ <%= @ac.give_pennies(@logger_total) %></td>						
 							<td></td>
 							<td class="dollars_td totals">$ <%= @ac.give_pennies(@hfi_total) %></td>
-							<td class="dollars_td totals" style="font-weight: bold;">$ <%= @total_wo_deductions %></td>
+							<td class="dollars_td totals" style="font-weight: bold;">$ <%= @ac.give_pennies(@owner_total) %></td>
 						</tr>
 						
 					</table>
+				<% end %>
+				<% if @owner_type =="logger" %>
+					<table>
+						<tr>
+							<th>General</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th>Amounts</th>
+							<th></th>
+						</tr>
+						<tr>
+							<th>Ticket #</th>
+							<th>Delivery Date</th>
+							<th>Destination</th>
+							<th>Wood Type</th>
+							<th>MBF</th>
+							<th>Tons</th>
+							<th>Rate</th>
+							<th>Load Pay</th>
+							<th>Logger Pay</th>
+						</tr>
+						
+						<% @tickets.each do |i| %>
+							<% @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.destination_id, i.job_id, @logger.id) %>
+							<tr>
+								<td><%= i.number %></td>
+								<td><%= i.delivery_date.strftime("%m/%d/%Y") %></td>
+								<td><%= i.destination.name %></td>
+								<td><%= WoodType.find(i.wood_type).name %></td>
+								<td><%= i.net_mbf %></td>
+								<td><%= i.tonnage %></td>
+								<td><%= "#{@rate.rate}/#{@rate.rate_type[0..2].upcase}" %></td>
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td>
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.logger_value) %></td>
+							</tr>					
+						<% end %>
+						
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<th>Totals:</th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@load_pay_total) %></th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@logger_total) %></th>						
+						</tr>
+					</table>
+				<% end %>
+				<% if @owner_type =="trucker" %>
+					<table>
+						<tr>
+							<th>General</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th>Rates</th>
+							<th></th>
+							<th>Amounts</th>
+							<th></th>
+						</tr>
+						<tr>
+							<th>Ticket #</th>
+							<th>Delivery Date</th>
+							<th>Destination</th>
+							<th>Wood Type</th>
+							<th>MBF</th>
+							<th>Tons</th>
+							<th>Rate</th>						
+							<th>Load pay</th>
+							<th>Trucker</th>
+						</tr>
+						
+						<% @tickets.each do |i| %>
+							<% @rate = TruckerRate.find_by_destination_id_and_job_id_and_partner_id(i.destination_id, i.job_id, @trucker.id) %>
+							<tr>
+								<td><%= i.number %></td>
+								<td><%= i.delivery_date %></td>
+								<td><%= i.destination.name %></td>
+								<td><%= WoodType.find(i.wood_type).name %></td>
+								<td><%= i.net_mbf %></td>
+								<td><%= i.tonnage %></td>
+								<td><%= "#{@rate.rate}/#{@rate.rate_type[0..2].upcase}" %></td>						
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td>
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.trucker_value) %></td>
+							</tr>					
+						<% end %>
+						
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<th>Totals:</th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@load_pay_total) %></th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@trucker_total) %></th>						
+						</tr>
+					</table>
+				
 				<% end %>	
 			</div>
 		</div>

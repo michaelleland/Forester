@@ -4,14 +4,6 @@ class Ticket < ActiveRecord::Base
   
   attr_accessor :owner_value, :logger_value, :trucker_value, :hfi_value
   
-  def hfi_value
-    
-  end
-  
-  def owner_value
-    self.value - self.trucker_value - self.logger_value - self.hfi_value
-  end
-  
   def net_mbf
     @net_mbf = 0
     unless self.wood_type == 3

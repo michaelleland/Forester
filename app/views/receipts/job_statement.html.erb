@@ -10,7 +10,7 @@
 		</select>
 		
 		<h5>Create receipt for:</h5>
-		<select id="owner_type_selector" style="float: left; margin-bottom: 10px;"> 
+		<select id="owner_type_selector" style="float: left; margin-bottom: 10px;" name="type"> 
 			<option value="none"> </option>
 			<option value="owner">Landowner</option>
 			<option value="logger">Logger</option>
@@ -27,12 +27,6 @@ $('#job_selector').change(function() {
 	init_type_select();
 	disable_button();
 })
-
-function init_the_page() {
-	setTimeout(function() {
-		change_content('job_statement', 2);
-	}, 1000);
-}
 
 function init_type_select () {
 	$('#owner_type_selector').val('0');
