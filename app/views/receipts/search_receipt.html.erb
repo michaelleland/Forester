@@ -38,7 +38,7 @@ $('#owner_type_selector').change(function() {
 		init_receipt_select();
 		disable_get_receipt();
 	} else if ($('#owner_type_selector').val() == 'landowner') {
-		refresh_receipts('landowner');
+		refresh_receipts('owner');
 		disable_get_receipt();
 	} else if ($('#owner_type_selector').val() == 'logger') {
 		refresh_receipts('logger');

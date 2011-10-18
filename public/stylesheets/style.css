@@ -42,6 +42,10 @@ body {
 	width: 200px;
 }
 
+.data_rows .inputs {
+	width: 300px; !important
+}
+
 .rate_link {
 	clear: none !important;
 }
@@ -76,11 +80,19 @@ body {
 }
 
 .rates .accordion_left_column .row_headers {
-	width: 150px;
+	width: 180px;
+}
+
+.rates .accordion_left_column .row_headers select {
+	width: 180px;
 }
 
 .rates .accordion_right_column .row_headers {
-	width: 150px;
+	width: 180px;
+}
+
+.rates .accordion_right_column .row_headers select {
+	width: 180px;
 }
 
 .bottom_row {
@@ -95,11 +107,11 @@ body {
 }
 
 .loggers {
-	height: 60px;
+	height: 100px;
 }
 
 .owners {
-	height: 60px;
+	height: 150px;
 }
 
 .new {
