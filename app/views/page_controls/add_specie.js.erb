@@ -4,16 +4,16 @@ var next_n = n+1;
 var amount = <%= Specie.all.count-1 %>;
 
 if (n == 1) {
-	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input id=\"load_'+next_n+'_mbfs\" class="specie_mbfs"  type="text" size="4" onchange="refresh_net_mbf()" name=\"load_'+next_n+'_mbfs\" class="fields"/></td></tr>');
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input id=\"load_'+next_n+'_mbfs\" class="specie_mbfs"  type="text" size="4" onchange="refresh_net_mbf()" name=\"load_'+next_n+'_mbfs\" /></td></tr>');
 	
 	$('.specie_row').last().fadeIn();
 	$('#add_specie_button').after('<a href=\"/delete_specie \" data-remote=\"true\" id="delete_specie_button" > Del</a>');
 } else if (n < amount) {
-	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input class="specie_mbfs" id=\"load_'+next_n+'_mbfs\" onchange="refresh_net_mbf()" type="text" size="4" name=\"load_'+next_n+'_mbfs\" class="fields"/></td></tr>');
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input class="specie_mbfs" id=\"load_'+next_n+'_mbfs\" onchange="refresh_net_mbf()" type="text" size="4" name=\"load_'+next_n+'_mbfs\" /></td></tr>');
 	
 	$('.specie_row').last().fadeIn();
 } else if (n == amount) {
-	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input type="text" class="specie_mbfs" id=\"load_'+next_n+'_mbfs\" size="4" onchange="refresh_net_mbf()" name=\"load_'+next_n+'_mbfs\" class="fields"/></td></tr>');
+	$('#filler_row').before('<tr class="specie_row" style="display: none;"><td></td><td></td><td></td><td></td><td><select class="specie_selector" id=\"species_'+next_n+'\" name=\"species_'+next_n+'\"><option value="-1"></option><% Specie.all.each do |i| %><option value="<%= i.id %>"><%= i.code %></option><% end %><option value="0">Pulp</option></select></td><td></td><td><input type="text" class="specie_mbfs" id=\"load_'+next_n+'_mbfs\" size="4" onchange="refresh_net_mbf()" name=\"load_'+next_n+'_mbfs\" /></td></tr>');
 	
 	$('.specie_row').last().fadeIn();
 	$('#add_specie_button').fadeOut();

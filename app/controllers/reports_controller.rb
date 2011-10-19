@@ -55,9 +55,12 @@ class ReportsController < ApplicationController
     
       @my_tickets.each do |i|
         i.load_details.each do |j|
-          @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss
-          @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnnage
-          if i.wood_type == 3 &&  # WoodType with id = 3 is Pulp and it is always last in amounts the list
+          unless j.mbfss == 0
+            @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss
+          else
+            @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnnage
+          end
+          if i.wood_type == 3 && j.species_id == 0 # WoodType with id = 3 is Pulp and it is always last in amounts the list
             @total_pulp = @total_pulp + j.tonnage
           end
         end
