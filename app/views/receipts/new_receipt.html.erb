@@ -129,26 +129,36 @@ $('#owner_type_selector').change(function() {
 });
 
 $('#deduction_data').change(function() {
-	if ($(this).attr('value') != '' && $('#deduction_value').attr('value') != '') {
-		$('#add_ded_button').removeAttr('disabled');
+	if (isNaN(parseFloat($('#deduction_value').attr('value')))) {
+		if ($('#deduction_value').attr('value') == '') {
+			$('#add_ded_button').removeAttr('disabled');
+		}
 	} else {
-		$('#add_ded_button').attr('disabled', 'true');
+		if ($(this).attr('value') != '' && $('#deduction_value').attr('value') != '') {
+			$('#add_ded_button').removeAttr('disabled');
+		} else {
+			$('#add_ded_button').attr('disabled', 'true');
+		}
 	}
 })
 
-$('#deduction_data').focusout(function() {
-	if ($(this).attr('value') != '') {
-		$('#add_ded_button').removeAttr('disabled');
-	} else {
-		$('#add_ded_button').attr('disabled', 'true');
+$('#deduction_value').focusin(function() {
+	if ($(this).attr('value') == '') {
+		$(this).css('color', 'black');
 	}
 })
 
 $('#deduction_value').focusout(function() {
-	if ($(this).attr('value') != '' && $('#deduction_data').attr('value') != '') {
-		$('#add_ded_button').removeAttr('disabled');
-	} else {
+	if (isNaN(parseFloat($(this).attr('value')))) {
+		$(this).css('color', 'red');
 		$('#add_ded_button').attr('disabled', 'true');
+	} else {
+		$(this).css('color', 'black');
+		if ($(this).attr('value') != '' && $('#deduction_data').attr('value') != '') {
+		$('#add_ded_button').removeAttr('disabled');
+		} else {
+			$('#add_ded_button').attr('disabled', 'true');
+		}
 	}
 })
 
