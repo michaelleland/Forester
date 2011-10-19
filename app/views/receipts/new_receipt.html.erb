@@ -136,7 +136,15 @@ $('#deduction_data').change(function() {
 	}
 })
 
-$('#deduction_value').change(function() {
+$('#deduction_data').focusout(function() {
+	if ($(this).attr('value') != '') {
+		$('#add_ded_button').removeAttr('disabled');
+	} else {
+		$('#add_ded_button').attr('disabled', 'true');
+	}
+})
+
+$('#deduction_value').focusout(function() {
 	if ($(this).attr('value') != '' && $('#deduction_data').attr('value') != '') {
 		$('#add_ded_button').removeAttr('disabled');
 	} else {
@@ -159,7 +167,7 @@ function add_new_deduction() {
 	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
 	$('#deduction_data').attr('value', '');
 	$('#deduction_value').attr('value', '');
-	$('#add_ded_btn').attr('disabled', 'true');
+	$('#add_ded_button').attr('disabled', 'true');
 }
 
 function select_all_deductions() {
