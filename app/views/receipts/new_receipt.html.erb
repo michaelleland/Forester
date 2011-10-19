@@ -40,7 +40,7 @@
 		<div id="input_row">
 			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
 			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
-			<input type="button" value="Add deduction" onclick="add_new_deduction();"/>
+			<input type="button" id="add_ded_button" disabled="true" value="Add deduction" onclick="add_new_deduction();"/>
 		</div>
 		
 		<h5 style="float: left; clear: left;">Notes:</h5>
@@ -128,6 +128,22 @@ $('#owner_type_selector').change(function() {
 	refresh_form_action();
 });
 
+$('#deduction_data').change(function() {
+	if ($(this).attr('value') != '' && $('#deduction_value').attr('value') != '') {
+		$('#add_ded_button').removeAttr('disabled');
+	} else {
+		$('#add_ded_button').attr('disabled', 'true');
+	}
+})
+
+$('#deduction_value').change(function() {
+	if ($(this).attr('value') != '' && $('#deduction_data').attr('value') != '') {
+		$('#add_ded_button').removeAttr('disabled');
+	} else {
+		$('#add_ded_button').attr('disabled', 'true');
+	}
+})
+
 function add_new_deduction() {
 	var data = $('#deduction_data').attr('value');
 	var value = $('#deduction_value').attr('value');
@@ -136,14 +152,14 @@ function add_new_deduction() {
 	if (String(id) == "NaN") {
 		id = 1;
 	} else {
-		id = id +1;
+		id = id + 1;
 	}
-	
+
 	$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
 	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
 	$('#deduction_data').attr('value', '');
 	$('#deduction_value').attr('value', '');
-
+	$('#add_ded_btn').attr('disabled', 'true');
 }
 
 function select_all_deductions() {
