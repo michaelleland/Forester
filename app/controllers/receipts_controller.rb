@@ -13,7 +13,6 @@ class ReceiptsController < ApplicationController
     @job = Job.find(params[:id])
     @ac = ApplicationController.new
     @receipts
-    @tickets = @job.tickets
     @owner_type = params[:type]
     @owner
     
@@ -32,7 +31,11 @@ class ReceiptsController < ApplicationController
       @receipts = @job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
     end
     
-    @receipts.delete_if {|i| i==0 }
+    @receipts.delete_if {|i| i == 0 }
+    
+    @tickets = @receipts.collect {|i| i.tickets }
+    @tickets.flatten!
+    
     @total = 0
     @receipts.each {|i| @total = @total + i.payment_total}
     @total = @ac.give_pennies(@total)

@@ -46,8 +46,8 @@ class PageControlsController < ApplicationController
   def get_receipts
     @job = Job.find(params[:id])
     @receipts = []
-    if params[:owner_type] == "landowner"
-      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.owner.id, "landowner")
+    if params[:owner_type] == "owner"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.owner.id, "owner")
     end
     if params[:owner_type] == "logger"
       @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.logger.id, "logger")

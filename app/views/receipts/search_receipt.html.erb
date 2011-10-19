@@ -12,7 +12,7 @@
 		<h5>Get tickets of:</h5>
 		<select id="owner_type_selector">
 			<option value="none"></option>
-			<option value="landowner">Landowner</option>
+			<option value="owner">Landowner</option>
 			<option value="logger">Logger</option>
 			<option value="trucker">Trucker</option>
 		</select>
@@ -37,7 +37,7 @@ $('#owner_type_selector').change(function() {
 	if ($('#owner_type_selector').val() == 'none') {
 		init_receipt_select();
 		disable_get_receipt();
-	} else if ($('#owner_type_selector').val() == 'landowner') {
+	} else if ($('#owner_type_selector').val() == 'owner') {
 		refresh_receipts('owner');
 		disable_get_receipt();
 	} else if ($('#owner_type_selector').val() == 'logger') {
