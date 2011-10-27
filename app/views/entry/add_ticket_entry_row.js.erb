@@ -20,11 +20,18 @@ $('#current_entries tbody').append('\
 		<td><input type="button" value="delete" onclick="delete_ticket_entry(<%= @ticket.id %>)" /> </td>\
 	</tr>');
 
+$('.specie_row').each(function(){
+	$(this).fadeOut();
+	setTimeout(function() {
+		$(this).remove();
+	}, 620);
+});
+
 $('input.fields').attr('value', '');
 $('#tonnage').attr('value', '0');
 $('#load_1_mbfs').attr('value', '0');
 $('#net_mbf').attr('value', '0');
-$('#job_name').val(-1);
+$('#job_name').html('');
 $('#destination_name').val(-1);
 $('#wood_type').val(-1);
 $('#species_1').val(-1);

@@ -18,6 +18,7 @@ Forester::Application.routes.draw do
   #Kinda nav stoof
   match "/ticket_entry" => "entry#ticket_entry"
   match "/payment_entry" => "entry#payment_entry"
+  match "/comparison" => "entry#comparison"
  
   #Nav tab's stoof
   match "/setup" => "setup#index"
@@ -48,12 +49,14 @@ Forester::Application.routes.draw do
   match "/logger_receipt" => "receipts#logger_receipt"
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   match "/search_receipt" => "receipts#search_receipt"
+  match "/job_statement" => "receipts#job_statement"
   
   #Receipt page's "pull receipt" calls
   match "/get_owner_receipt" => "receipts#get_owner_receipt"
   match "/get_logger_receipt" => "receipts#get_logger_receipt"
   match "/get_trucker_receipt" => "receipts#get_trucker_receipt"
   match "/get_old_receipt/" => "receipts#get_old_receipt"
+  match "/get_statement/:id" => "receipts#get_statement"
   
   #The receipt modification pages functions
   match "/add_deduction" => "receipts#add_deduction"
@@ -88,7 +91,7 @@ Forester::Application.routes.draw do
   match "/edit_owner" => "setup#edit_owner"
   match "/edit_partner" => "setup#edit_partner"
   match "/edit_sawmill" => "setup#edit_sawmill"
-
+  
   match "/edit_range/:id" => "setup#edit_range"
   match "/new_range/:id" => "setup#new_range"
   match "/delete_range/:id" => "setup#delete_range"

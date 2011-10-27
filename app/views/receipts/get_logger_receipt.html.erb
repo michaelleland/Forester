@@ -189,7 +189,7 @@
 			var ids = '<%= @ids %>';
 			var values = '<%= @values %>';
 			var items =  '<%= @deductions %>';
-			var url = ids+"&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items;
+			var url = ids+"&logger_id=<%= @logger.id %>&payment_num=<%= @payment_num %>&notes=<%= @notes %>"+values+items+'&payment_total=<%= @total %>';
 			
 			$.ajax ({
 				url: '/save_logger_receipt/'+url,

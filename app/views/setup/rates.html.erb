@@ -50,25 +50,61 @@
 				autoFocus: true
 			});			
 		}
-		
+				
 		function show_trucker_rate_inputs (id) {
-			$('#add_trucker_rate_row_'+id).before('<div class="data_rows" id="input_trucker_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination" /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="rate_type" name="rate_type"><option value="MBF">MBF</option><option value="Tonnage">Ton</option><option value="percent">%</option></select></div></div><div class="action_link rate_link" id="add_the_trucker_rate_'+id+'" onclick="add_the_rate('+id+', \'trucker\')">Add</div>');
+			$('#add_trucker_rate_row_'+id).before('\
+			<div class="data_rows" id="input_trucker_data_row_'+id+'">\
+				<div class="row_headers inputs">\
+				<select id="destination">\
+					<option value="none"> </option>\
+					<% Destination.all.each do |i| %>\
+						<option value="<%= i.name %>"><%= i.name %></option>\
+					<% end %>\
+				</select>\
+				</div>\
+				<div class="row_data">\
+					<input type="text" id="rate" name="rate" size="3" /> /\
+					<select id="rate_type" class="rate_type_select" name="rate_type">\
+						<option value="MBF">MBF</option>\
+						<option value="Tonnage">Ton</option>\
+						<option value="percent">%</option>\
+					</select>\
+				</div>\
+			</div>\
+			<div class="action_link rate_link" id="add_the_trucker_rate_'+id+'" onclick="add_the_rate('+id+', \'trucker\')">Add</div>');
+			
 			$('#add_trucker_rate_row_'+id).fadeOut();
-	
-			attach_autocomplete_to_input(id, 'trucker');	
 		}
 		
 		function show_logger_rate_inputs (id) {
-			$('#add_logger_rate_row_'+id).before('<div class="data_rows" id="input_logger_data_row_'+id+'"><div class="row_headers"><input type="text" id="destination"  /></div><div class="row_data"><input type="text" id="rate" name="rate" size="3" /> / <select id="rate_type" name="rate_type"><option value="MBF">MBF</option><option value="Tonnage">Ton</option><option value="percent">%</option></select></div></div><div class="action_link rate_link" id="add_the_logger_rate_'+id+'" onclick="add_the_rate('+id+', \'logger\')">Add</div>');
+			$('#add_logger_rate_row_'+id).before('\
+			<div class="data_rows" id="input_logger_data_row_'+id+'">\
+				<div class="row_headers inputs">\
+				<select id="destination">\
+					<option value="none"> </option>\
+					<% Destination.all.each do |i| %>\
+						<option value="<%= i.name %>"><%= i.name %></option>\
+					<% end %>\
+				</select>\
+				</div>\
+				<div class="row_data">\
+					<input type="text" id="rate" name="rate" size="3" /> /\
+					<select id="rate_type" class="rate_type_select" name="rate_type">\
+						<option value="MBF">MBF</option>\
+						<option value="Tonnage">Ton</option>\
+						<option value="percent">%</option>\
+					</select>\
+				</div>\
+			</div>\
+			<div class="action_link rate_link" id="add_the_logger_rate_'+id+'" onclick="add_the_rate('+id+', \'logger\')">Add</div>');
+			
 			$('#add_logger_rate_row_'+id).fadeOut();
-	
-			attach_autocomplete_to_input(id, 'logger');	
 		}
 
 		function add_the_rate(id, type) {
-			var destination = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #destination').attr('value')
-			var rate_type = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate_type').attr('value')
-			var rate = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate').attr('value')
+			var destination = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #destination').val();
+			var rate_type = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate_type').attr('value');
+			var rate = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate').attr('value');
 			
 			$.ajax ({
 				url: '/new_rate/'+id+'?destination_name='+destination+'&rate_type='+rate_type+'&rate='+rate+'&type='+type,
@@ -85,11 +121,19 @@
 						</div>\
 					</div>'
 					
+					if (type == 'logger') {
+						$('#no_logger_rate_data_for_'+id).fadeOut();
+					} else if (type == 'trucker') {
+						$('#no_trucker_rate_data_for_'+id).fadeOut();
+					}
+					
+					
 					$('#input_'+type+'_data_row_'+id).fadeOut();
 					$('#add_the_'+type+'_rate_'+id).fadeOut();
 					$('#add_'+type+'_rate_row_'+id).fadeIn();
 					$('#add_'+type+'_rate_row_'+id).before(html);
 					$('#'+response_text+type+'_rate').fadeIn();
+					
 					
 					setTimeout(function() {
 						$('#input_'+type+'_data_row_'+id).remove();
@@ -114,7 +158,7 @@
 			}
 			
 			var html = '\
-				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option></select></div>\
+				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select class="rate_type_select" id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option></select></div>\
 				<div class="rate_control_link_row" style="display: none;">\
 					<div class="rate_control_link" onclick="edit_the_rate('+id+', \''+type+'\');">Save</div>\
 				</div>\

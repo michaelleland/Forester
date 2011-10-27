@@ -8,4 +8,13 @@ class PaymentFromDestination < ActiveRecord::Base
     @job = Job.find(self.job_id)
   end
   
+  def tonnnage
+    unless self.tonnage.nil?
+      self.tonnage
+    else
+      0
+    end
+    
+  end
+  
 end

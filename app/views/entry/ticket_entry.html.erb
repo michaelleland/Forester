@@ -51,7 +51,7 @@
 					<input type="text" value="0" id="tonnage" size="4" name="tonnage" disabled="true" class="fields"/>
 				</td>
 				<td>
-					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" disabled="true" onchange="refresh_net_mbf('load_1_mbfs')" name="load_1_mbfs" class="fields"/>
+					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" disabled="true" name="load_1_mbfs"/>
 				</td>
 				<td>
 					<input id="net_mbf" type="text" size="4" value="0" name="net_mbf" disabled="true" class="fields"/>
@@ -78,12 +78,12 @@
 	<table>
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
-			<th class="table_headers" style="width: 100px;">Date</th>
-			<th class="table_headers" style="width: 100px;">Job</th>
+			<th class="table_headers" style="width: 90px;">Date</th>
+			<th class="table_headers" style="width: 140px;">Job</th>
 			<th class="table_headers" style="width: 150px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
-			<th class="table_headers" style="width: 65px;">NMBF</th>
+			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
 			<th class="table_headers" style="width: 70px;">Action</th>
@@ -98,12 +98,12 @@
 	<table>
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
-			<th class="table_headers" style="width: 100px;">Date</th>
-			<th class="table_headers" style="width: 100px;">Job</th>
+			<th class="table_headers" style="width: 90px;">Date</th>
+			<th class="table_headers" style="width: 140px;">Job</th>
 			<th class="table_headers" style="width: 150px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
-			<th class="table_headers" style="width: 65px;">NMBF</th>
+			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
 			<th class="table_headers" style="width: 70px;">Action</th>
@@ -237,24 +237,50 @@
 			 });
 		}
 		
-		/* All the load_1_mbf, load_2_mbf etc have onchange event ponting to this function.
-		 * This function takes values from those (they give themselves as parameter) and adds it up
-		 * and puts it  to net_mbf field.
- 		 */
-		
-		
-		function refresh_net_mbf(where_from) {
-			amount = 0;
+		$('#load_1_mbfs').change(function() {
+			var total = 0
+			$('.specie_mbfs').each(function() {
+				total = total + parseFloat($(this).attr('value'));
+			});
 			
-			<% Specie.all.each do |i| %>
-				if (String(parseFloat($('#load_'+<%= i.id %>+'_mbf').attr('value'))) != "NaN") {
-					amount = amount + parseFloat($('#load_'+<%= i.id %>+'_mbf').attr('value'));
-				}
-			<% end %>
-			
-			$('#net_mbf').attr('value', amount);
-		}
+			$('#net_mbf').attr('value', total);
+		})
 		
+		$('#load_2_mbfs').change(function() {
+			var total = 0
+			$('.specie_mbfs').each(function() {
+				total = total + parseFloat($(this).attr('value'));
+			});
+			
+			$('#net_mbf').attr('value', total);
+		})
+		
+		$('#load_3_mbfs').change(function() {
+			var total = 0
+			$('.specie_mbfs').each(function() {
+				total = total + parseFloat($(this).attr('value'));
+			});
+			
+			$('#net_mbf').attr('value', total);
+		})
+		
+		$('#load_4_mbfs').change(function() {
+			var total = 0
+			$('.specie_mbfs').each(function() {
+				total = total + parseFloat($(this).attr('value'));
+			});
+			
+			$('#net_mbf').attr('value', total);
+		})
+		
+		$('#load_5_mbfs').change(function() {
+			var total = 0
+			$('.specie_mbfs').each(function() {
+				total = total + parseFloat($(this).attr('value'));
+			});
+			
+			$('#net_mbf').attr('value', total);
+		})
 		/* Deletes a ticket entry from both current and all entries and of course, from database*/
 		
 		function delete_ticket_entry(id) {

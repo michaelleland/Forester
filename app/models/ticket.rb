@@ -4,27 +4,6 @@ class Ticket < ActiveRecord::Base
   
   attr_accessor :owner_value, :logger_value, :trucker_value, :hfi_value
   
-  #def logger_value
-  #  @logger = Job.find(self.job_id).logger
-  #  @asg = LoggerAssignment.find_by_job_id(self.job_id)
-  #  
-  #  unless @asg.rate_mbf.nil? && self.load_details.first.load_type == "MBF"
-  #    @logger_value = @asg.rate_mbf * self.load_details.
-  #  end
-  #end
-  
-  #def trucker_value
-    
-  #end
-  
-  #def hfi_value
-    
-  #end
-  
-  #def owner_value
-  #  self.value - self.trucker_value - self.logger_value - self.hfi_value
-  #end
-  
   def net_mbf
     @net_mbf = 0
     unless self.wood_type == 3
@@ -34,7 +13,7 @@ class Ticket < ActiveRecord::Base
         end
       end
     else
-      return nil
+      return 0
     end
     @net_mbf
   end
@@ -48,7 +27,7 @@ class Ticket < ActiveRecord::Base
         end
       end
       if @total == 0
-        return nil
+        return 0
       else
         @total
       end
