@@ -61,7 +61,7 @@ class EntryController < ApplicationController
     
     if @species.length != @species.uniq.length
       render "duplicates.js.erb"
-      return 
+      return
     end
     
     @day = params[:delivery_date][3..4]
