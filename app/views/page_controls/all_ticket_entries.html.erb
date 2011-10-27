@@ -9,7 +9,7 @@
 		<td><%= unless i.load_details.first.species_id == 0 then @species[@load_details.first.species_id-1].code else "PU" end %></td>
 		<td><%= i.net_mbf %></td>
 		<td><%= i.tonnage %></td>
-		<td class="currency"><%= @ac.give_pennies(i.value.to_i) %></td>
+		<td class="currency"><%= @ac.give_pennies(i.value) %></td>
 		<td><input type="button" value="delete" onclick="delete_ticket_entry(<%= i.id %>);"></td>
 	</tr>
 <% end %>

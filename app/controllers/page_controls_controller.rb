@@ -22,7 +22,8 @@ class PageControlsController < ApplicationController
   end
   
   def all_payment_entries
-   @payments = PaymentFromDestination.all
+    @ac = ApplicationController.new
+    @payments = PaymentFromDestination.all
   end
   
   def get_payments
