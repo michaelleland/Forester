@@ -531,6 +531,11 @@ input, select {
 
 /*Entry page table stylings*/
 
+.currency {
+	text-align: right;
+	padding-right: 10px;
+}
+
 .table_headers {
 	font-weight: bold;
 }

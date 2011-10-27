@@ -15,6 +15,7 @@ class PageControlsController < ApplicationController
   end
   
   def all_ticket_entries
+   @ac = ApplicationController.new
    @tickets = Ticket.all[0..100] 
    @species = Specie.all
    @woodtypes = WoodType.all
