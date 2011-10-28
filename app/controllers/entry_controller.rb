@@ -109,7 +109,6 @@ class EntryController < ApplicationController
     @month = params[:payment_date][0..1]
     @year = params[:payment_date][6..9]
     
-    
     @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
   
@@ -126,10 +125,28 @@ class EntryController < ApplicationController
   end 
   
   def save_edited_ticket_entry
+    @ticket = Ticket.find(params[:id])
+    @ticket.number = params[:ticket_num]
+    @ticket.delivery_date = params[:delivery_date]
+    @ticket.job_id = params[:job_id]
+    @ticket.destination_id = params[:destination_id]
+    @ticket.wood_type = params[:wood_type_id]
+    @ticket.value = params[:value]
     
+    @ticket.load_details.each_with_index do |i, x|
+      i.species_id = params[:species][x]
+      i.tonnage = params[:tons][x]
+      i.mbfs = params[:mbfs][x]
+      unless i.save
+        render :status => 306, :nothing => true
+      end
+    end
     
-    
-    
+    unless @ticket.save
+      render :status => 306, :nothing => true
+    else
+      render :status => 200, :nothing => true
+    end
   end
   
   def save_edited_payment_entry

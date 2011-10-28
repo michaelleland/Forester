@@ -9,7 +9,7 @@
 		<td id="tonnage"><%= i.tonnage %></td>
 		<td id="net_mbf"><%= i.net_mbf %></td>
 		<td class="currency" id="total_payment"><%= @ac.give_pennies(i.total_payment) %></td>
-		<td><input type="button" value="delete" onclick="show_payment_inputs(<%= i.id %>)"></td>
+		<td><input type="button" value="edit" onclick="show_payment_inputs(<%= i.id %>)"></td>
 	</tr>
 <% end %>
 

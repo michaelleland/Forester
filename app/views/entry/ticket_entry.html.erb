@@ -375,15 +375,6 @@
 						
 						var counterr = 2;
 						
-						where_from.find('#species').html('\
-							<select id="species_'+counter+'_select">\
-								<% Specie.all.each do |i| %>\
-									<option value="<%= i.id %>"><%= i.code %></option>\
-								<% end %>\
-								<option value="0">PU</option>\
-							</select>\
-						');
-						
 						var mbf_width = $('#all_entries th:nth-child(7)').width()-10;
 						var tonnage_width = $('#all_entries th:nth-child(8)').width()-10;
 						var bg_color = where_from.css('background-color');
@@ -395,12 +386,21 @@
 						tonnage.html('\
 							<input type="text" id="load_1_mbf" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
 						');
+						
+						where_from.find('#species').html('\
+							<select id="species_1_select">\
+								<% Specie.all.each do |i| %>
+									<option value="<%= i.id %>"><%= i.code %></option>\
+								<% end %>
+								<option value="0">PU</option>\
+							</select>\
+						');
 										
 						where_from.find('#species option').each(function() {
 							if ($(this).html() == species[(counterr-2)]) {
 								$(this).attr('selected', 'true');
 							}
-						});	
+						});
 						
 						$.each(species, function() {
 							if (this != species[0]) {
@@ -448,40 +448,42 @@
 		
 		function edit_ticket_entry(id) {
 			var where_from = $('#'+id+'entry')
+			var serows = $('.'+id+'_species_edit_row');
 			
-			var ticket_num = where_from.find('#ticket_number').val();
-			var delivery_date = where_from.find('#delivery_date').val();
+			var ticket_num = where_from.find('#ticket_number').find('input').val();
+			var delivery_date = where_from.find('#delivery_date').find('input').val();
 			var job_id = where_from.find('#job_name_select').val();
-			var sawmill_id = where_from.find('#sawmill_name_select').val();
+			var destination_id = where_from.find('#destination_name_select').val();
 			var wood_type_id = where_from.find('#wood_type_select').val();
-			var species_1 = where_from.find('#species_1').val();
-			var species_2 = where_from.find('#species_2').val();
-			var species_3 = where_from.find('#species_3').val();
-			var species_4 = where_from.find('#species_4').val();
-			var species_5 = where_from.find('#species_5').val();
-			var load_1_mbfs = where_from.find('#load_1_mbfs').val();
-			var load_2_mbfs = where_from.find('#load_2_mbfs').val();
-			var load_3_mbfs = where_from.find('#load_3_mbfs').val();
-			var load_4_mbfs = where_from.find('#load_4_mbfs').val();
-			var load_5_mbfs = where_from.find('#load_5_mbfs').val();
+			var species_1 = where_from.find('#species_1_select').val();
+			var species_2 = serows.find('#species_2_select').val();
+			var species_3 = serows.find('#species_3_select').val();
+			var species_4 = serows.find('#species_4_select').val();
+			var species_5 = serows.find('#species_5_select').val();
+			var load_1_mbf = where_from.find('#load_1_mbf').val();
+			var load_2_mbf = serows.find('#load_2_mbf').val();
+			var load_3_mbf = serows.find('#load_3_mbf').val();
+			var load_4_mbf = serows.find('#load_4_mbf').val();
+			var load_5_mbf = serows.find('#load_5_mbf').val();
 			var load_1_tons = where_from.find('#load_1_tons').val();
-			var load_2_tons = where_from.find('#load_2_tons').val();
-			var load_3_tons = where_from.find('#load_3_tons').val();
-			var load_4_tons = where_from.find('#load_4_tons').val();
-			var load_5_tons = where_from.find('#load_5_tons').val();
+			var load_2_tons = serows.find('#load_2_tons').val();
+			var load_3_tons = serows.find('#load_3_tons').val();
+			var load_4_tons = serows.find('#load_4_tons').val();
+			var load_5_tons = serows.find('#load_5_tons').val();
+			var value = where_from.find('#load_pay').find('input').val();
 			
 			var url = "/save_edited_ticket_entry/"+id+"?ticket_num="+ticket_num+"&delivery_date="+delivery_date;
-			url = url+"&job_id="+job_id+"&sawmill_id"+"&wood_type_id="+wood_type_id+"&species[]="+species_1;
+			url = url+"&job_id="+job_id+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id+"&species[]="+species_1;
 			url = url+"&species[]="+species_2+"&species[]="+species_3+"&species[]="+species_4+"&species[]="+species_5;
-			url = url+"&mbfs[]="+load_1_mbfs+"&mbfs[]="+load_2_mbfs+"&mbfs[]="+load_3_mbfs+"&mbfs[]="+load_4_mbfs;
-			url = url+"&mbfs[]="+load_5_mbfs+"&tons[]="+load_1_tons+"&tons[]="+load_2_tons+"&tons[]="+load_3_tons;
-			url = url+"&mbfs[]="+load_4_mbfs+"&tons[]="+load_5_tons;
+			url = url+"&mbfs[]="+load_1_mbf+"&mbfs[]="+load_2_mbf+"&mbfs[]="+load_3_mbf+"&mbfs[]="+load_4_mbf;
+			url = url+"&mbfs[]="+load_5_mbf+"&tons[]="+load_1_tons+"&tons[]="+load_2_tons+"&tons[]="+load_3_tons;
+			url = url+"&mbfs[]="+load_4_tons+"&tons[]="+load_5_tons+"&value="+value;
 			
 			$.ajax ({
 				url: url,
 				cache: false,
 				success: function() {
-					refresh_all_entries();
+					refresh_all_entries('ticket');
 				}
 			});	
 		}
