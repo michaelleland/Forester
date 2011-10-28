@@ -44,7 +44,6 @@ class EntryController < ApplicationController
     @value_diff = give_pennies(@value_diff)
     @mbf_diff = give_pennies(@mbf_diff)
     @tonnage_diff = give_pennies(@tonnage_diff)
-    
   end
   
   def add_ticket_entry_row
@@ -126,23 +125,15 @@ class EntryController < ApplicationController
     @destinations = Destination.all
   end 
   
-  def delete_ticket_entry
-    @ticket = Ticket.find(params[:id])
-    @ticket.load_details.each do |i|
-      i.delete
-    end
-    if @ticket.delete 
-      render :nothing => true
-    end
+  def save_edited_ticket_entry
+    
+    
+    
+    
   end
   
-  def delete_payment_entry
-    @pfd = PaymentFromDestination.find(params[:id])
-    if @pfd.delete 
-      render :nothing => true
-    else
-      render :state => 13
-    end
+  def save_edited_payment_entry
+   
   end
   
 end
