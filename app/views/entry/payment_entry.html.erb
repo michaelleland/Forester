@@ -168,26 +168,109 @@
 		return everything_ok;
 	}
 
-	/* Deletes a payment entry from both current and all entries and of course, from database*/
+	function show_payment_inputs(id) {
+		var where_from = $('#'+id+'entry');
+		var delivery_date = where_from.find('#delivery_date');
+		var job_name = where_from.find('#job_name').html();
+		var destination_name = where_from.find('#destination_name').html();
+		var wood_type = where_from.find('#wood_type').html();
+		var payment_num = where_from.find('#payment_num');
+		var tickets = where_from.find('#tickets');
+		var net_mbf = where_from.find('#net_mbf');
+		var tonnage = where_from.find('#tonnage');
+		var total_payment = where_from.find('#total_payment');
 		
-	function delete_payment_entry(id) {
-		if (confirm("Are you sure you want to delete this payment?")) {
-			$.ajax ({
-				url: "/delete_payment_entry/"+id,
-				cache: false,
-				success: function() {
-					$('#current_entries').find('#'+id+'entry').fadeOut();
-					setTimeout(function() {
-						$('#current_entries').find('#'+id+'entry').remove();
-					}, 620);
-				
-					$('#all_entries').find('#'+id+'entry').fadeOut();
-					setTimeout(function() {
-						$('#all_entries').find('#'+id+'entry').remove();
-					}, 620);
+		where_from.find('td').fadeOut();
+		
+		var counter = 1;
+		
+		setTimeout(function() {
+			where_from.find('td').each(function() {
+				var value = $(this).html();
+				var width = $('#all_entries th:nth-child('+counter+')').width();
+				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+				where_from.find('td').fadeIn();
+				counter++;
+			});
+			
+			// Following  blocks "overwrite" some of the fields of previous loop
+			
+			//The button for saving
+			where_from.find('td').last().html('<input type="button" value="save" onclick="edit_payment_entry('+id+')" />');
+			
+			//Select for job name
+			where_from.find('#job_name').html('\
+			<select id="job_name_select">\
+				<% Job.all.each do |i| %>
+					<option value="<%= i.id %>"><%= i.name %></option>\
+				<% end %>
+			</select>\
+			');
+			
+			//Setting the previous job name as default selection
+			where_from.find('#job_name option').each(function() {
+				if ($(this).html() == job_name) {
+					$(this).attr('selected', 'true');
 				}
 			});
-		}	
+			
+			//Same for Destinations
+			where_from.find('#destination_name').html('\
+			<select id="destination_name_select">\
+				<% Destination.all.each do |i| %>
+					<option value="<%= i.id %>"><%= i.name %></option>\
+				<% end %>
+			</select>\
+			');
+			
+			where_from.find('#destination_name option').each(function() {
+				if ($(this).html() == destination_name) {
+					$(this).attr('selected', 'true');
+				}
+			});
+			
+			//And wood types
+			where_from.find('#wood_type').html('\
+			<select id="wood_type_select">\
+				<% WoodType.all.each do |i| %>
+					<option value="<%= i.id %>"><%= i.name %></option>\
+				<% end %>
+			</select>\
+			');
+			
+			where_from.find('#wood_type option').each(function() {
+				if ($(this).html() == wood_type) {
+					$(this).attr('selected', 'true');
+				}
+			});
+		}, 620);
+		
+	}
+	
+	function edit_payment_entry(id) {
+		var where_from = $('#'+id+'entry')
+		
+		var delivery_date = where_from.find('#delivery_date').find('input').val();
+		var job_id = where_from.find('#job_name_select').val();
+		var destination_id = where_from.find('#destination_name_select').val();
+		var wood_type_id = where_from.find('#wood_type_select').val();
+		var payment_num = where_from.find('#payment_num').find('input').val();
+		var tickets = where_from.find('#tickets').find('input').val();
+		var tonnage = where_from.find('#tonnage').find('input').val();
+		var mbf = where_from.find('#net_mbf').find('input').val();
+		var total_payment = where_from.find('#total_payment').find('input').val();
+		
+		var url = "/save_edited_payment_entry/"+id+"?delivery_date="+delivery_date+"&job_id="+job_id;
+		url = url+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id+"&payment_num="+payment_num;
+		url = url+"&tickets="+tickets+"&tons="+tonnage+"&mbf="+mbf+"&total_payment="+total_payment;
+		
+		$.ajax ({
+			url: url,
+			cache: false,
+			success: function() {
+				refresh_all_entries('payment');
+			}
+		});	
 	}
 	
 	

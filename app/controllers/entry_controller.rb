@@ -102,6 +102,7 @@ class EntryController < ApplicationController
   end
   
   def add_payment_entry_row
+    @ac = ApplicationController.new
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find_by_name(params[:job_name])
     
@@ -150,7 +151,19 @@ class EntryController < ApplicationController
   end
   
   def save_edited_payment_entry
-   
+    @payment = PaymentFromDestination.find(params[:id])
+    @payment.job_id = params[:job_id]
+    @payment.destination_id = params[:destination_id]
+    @payment.wood_type = params[:wood_type_id]
+    @payment.tickets = params[:tickets]
+    @payment.tonnage = params[:tonnage]
+    @payment.net_mbf = params[:mbf]
+    @payment.total_payment = params[:total_payment]
+    
+    unless @payment.save
+      render :status => 306, :nothing => true
+    else
+      render :status => 200, :nothing => true
+    end
   end
-  
 end

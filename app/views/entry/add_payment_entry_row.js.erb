@@ -8,7 +8,7 @@ $('#current_entries tbody').append('\
 		<td id="tickets"><%= @pfd.tickets %></td>\
 		<td id="tonnage"><%= @pfd.tonnage %></td>\
 		<td id="net_mbf"><%= @pfd.net_mbf %></td>\
-		<td id="total_payment"><%= @pfd.total_payment %></td>\
+		<td class="currency" id="total_payment"><%= @ac.give_pennies(@pfd.total_payment) %></td>\
 		<td><input type="button" value="delete" onclick="show_payment_inputs(<%= @pfd.id %>)"/> </td>\
 	</tr>');
 
