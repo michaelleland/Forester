@@ -4,7 +4,6 @@ var job_name = '<%= params[:job_name] %>'
 var destination_name = '<%= params[:destination_name] %>'
 var load_pay = '<%= params[:value] %>'
 <% @sp_str = ""; @specie_codes.each {|i| unless i == @specie_codes.first then @sp_str = "#{@sp_str}, #{i}" else @sp_str = "#{i}" end } %>
-<% @code_str = ""; @species.each {|i| unless i == @species.first then @code_str = "#{@code_str},#{i}" else @code_str = "#{i}" end } %>
 
 <% if @sp_str == "" then @sp_str = "PU" end %>
 
@@ -14,8 +13,8 @@ $('#current_entries tbody').append('\
 		<td id="delivery_date">'+date+'</td>\
 		<td id="job_name">'+job_name+'</td>\
 		<td id="destination_name">'+destination_name+'</td>\
-		<td id="wood_type" type_id="<%= i.wood_type %>"><%= WoodType.find(params[:wood_type]).name %></td>\
-		<td id="species" species_ids="<%= @code_str %>"><%= @sp_str %></td>\
+		<td id="wood_type" type_id="<%= @ticket.wood_type %>"><%= WoodType.find(params[:wood_type]).name %></td>\
+		<td id="species"><%= @sp_str %></td>\
 		<td id="net_mbf"><%= @ticket.net_mbf %></td>\
 		<td id="tonnage"><%= @ticket.tonnage %></td>\
 		<td id="load_pay">'+load_pay+'</td>\

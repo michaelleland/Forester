@@ -121,7 +121,7 @@ class PageControlsController < ApplicationController
       end
     end
     
-    unless @trucker_rate.nil? && @logger_rate.nil?
+    if !@trucker_rate.nil? && !@logger_rate.nil?
       if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
         @answer = "MBF"
       else
