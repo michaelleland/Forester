@@ -9,6 +9,11 @@ class EntryController < ApplicationController
     @tickets = Ticket.all
     @payments = PaymentFromDestination.all
     
+    @tickets_in_payments = 0
+    @payments.each do |i|
+      @tickets_in_payments = @tickets_in_payments + i.tickets
+    end
+    
     @tickets_total = 0
     @tickets_total_mbf = 0
     @tickets_total_tonnage = 0
