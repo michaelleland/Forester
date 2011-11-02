@@ -24,5 +24,11 @@
 			<td><%= @payments_total_tonnage %></td>
 			<td><%= @tonnage_diff %></td>
 		</tr>
+		<tr>
+			<td class="th">Tickets</td>
+			<td><%= @tickets.count %></td>
+			<td><%= @tickets_in_payments %></td>
+			<td><%= @tickets.count - @tickets_in_payments %></td>
+		</tr>
 	</table>	
 </div>
