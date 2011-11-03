@@ -19,6 +19,23 @@ class ApplicationController < ActionController::Base
         @as_string = @as_string[0, @as_string.index('.')+2]
       end
     end
+    @split_arr = @as_string.split('.')
+    
+    @integers = @split_arr[0]
+    @length = @integers.length
+    if @length > 3 && @length < 7
+      @integers.reverse!
+      @integers.insert(3, ',')
+      @integers.reverse!
+    end
+    if @length > 6
+      @integers.reverse!
+      @integers.insert(3, ',')
+      @integers.insert(7, ',')
+      @integers.reverse!
+    end
+    
+    @as_string = "#{@integers}.#{@split_arr[1]}"
     
     @as_string
     

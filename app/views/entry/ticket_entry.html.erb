@@ -26,7 +26,7 @@
 					<select name="destination_name" id="destination_name" onfocusout="enable_load_fields()">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= i.name %></option>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>

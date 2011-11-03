@@ -52,6 +52,8 @@ class EntryController < ApplicationController
   end
   
   def add_ticket_entry_row
+    @ac = ApplicationController.new
+    
     @t_nums = Ticket.all.collect {|i| i.number}
     @t_nums.each do |i|
       if params[:ticket_num] == i.to_s

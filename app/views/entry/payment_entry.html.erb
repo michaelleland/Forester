@@ -24,7 +24,7 @@
 					<select id="job_name">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
-							<option value="<%= i.name %>"><%= i.name %></option>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -32,7 +32,7 @@
 					<select name="destination_name" id="destination_name">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= i.name %></option>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
