@@ -79,8 +79,8 @@
 			<th class="table_headers" style="width: 50px;">Tckts</th>
 			<th class="table_headers" style="width: 50px;">Tons</th>
 			<th class="table_headers" style="width: 50px;">NMBF</th>
-			<th class="table_headers" style="width: 80px;">Amount</th>
-			<th class="table_headers" style="width: 100px;">Action</th>
+			<th class="table_headers" style="width: 100px;">Amount</th>
+			<th class="table_headers" style="width: 60px;">Action</th>
 		</tr>		
 	</table>
 </div>
@@ -97,8 +97,8 @@
 			<th class="table_headers" style="width: 50px;">Tckts</th>
 			<th class="table_headers" style="width: 50px;">Tons</th>
 			<th class="table_headers" style="width: 50px;">NMBF</th>
-			<th class="table_headers" style="width: 80px;">Amount</th>
-			<th class="table_headers" style="width: 100px;">Action</th>
+			<th class="table_headers" style="width: 100px;">Amount</th>
+			<th class="table_headers" style="width: 60px;">Action</th>
 		</tr>
 	</table>
 </div>
@@ -170,7 +170,7 @@
 
 	function show_payment_inputs(id) {
 		var where_from = $('#'+id+'entry');
-		var delivery_date = where_from.find('#delivery_date');
+		var payment_date = where_from.find('#payment_date');
 		var job_name = where_from.find('#job_name').html();
 		var destination_name = where_from.find('#destination_name').html();
 		var wood_type = where_from.find('#wood_type').html();
@@ -250,7 +250,7 @@
 	function edit_payment_entry(id) {
 		var where_from = $('#'+id+'entry')
 		
-		var delivery_date = where_from.find('#delivery_date').find('input').val();
+		var payment_date = where_from.find('#payment_date').find('input').val();
 		var job_id = where_from.find('#job_name_select').val();
 		var destination_id = where_from.find('#destination_name_select').val();
 		var wood_type_id = where_from.find('#wood_type_select').val();
@@ -260,7 +260,7 @@
 		var mbf = where_from.find('#net_mbf').find('input').val();
 		var total_payment = where_from.find('#total_payment').find('input').val();
 		
-		var url = "/save_edited_payment_entry/"+id+"?delivery_date="+delivery_date+"&job_id="+job_id;
+		var url = "/save_edited_payment_entry/"+id+"?payment_date="+payment_date+"&job_id="+job_id;
 		url = url+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id+"&payment_num="+payment_num;
 		url = url+"&tickets="+tickets+"&tons="+tonnage+"&mbf="+mbf+"&total_payment="+total_payment;
 		

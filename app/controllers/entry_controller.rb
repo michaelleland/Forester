@@ -131,9 +131,17 @@ class EntryController < ApplicationController
   end 
   
   def save_edited_ticket_entry
+    @raw_date = params[:delivery_date]
+    
+    @day = @raw_date[3..4]
+    @month = @raw_date[0..1]
+    @year = @raw_date[6..9]
+    
+    @delivery_date = "#{@year}-#{@month}-#{@day}"
+    
     @ticket = Ticket.find(params[:id])
     @ticket.number = params[:ticket_num]
-    @ticket.delivery_date = params[:delivery_date]
+    @ticket.delivery_date = @delivery_date
     @ticket.job_id = params[:job_id]
     @ticket.destination_id = params[:destination_id]
     @ticket.wood_type = params[:wood_type_id]
@@ -156,9 +164,18 @@ class EntryController < ApplicationController
   end
   
   def save_edited_payment_entry
+    @raw_date = params[:payment_date]
+    
+    @day = @raw_date[3..4]
+    @month = @raw_date[0..1]
+    @year = @raw_date[6..9]
+    
+    @payment_date = "#{@year}-#{@month}-#{@day}"
+    
     @payment = PaymentFromDestination.find(params[:id])
     @payment.job_id = params[:job_id]
     @payment.destination_id = params[:destination_id]
+    @payment.payment_date = @payment_date
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
     @payment.tonnage = params[:tonnage]
