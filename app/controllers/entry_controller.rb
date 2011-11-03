@@ -9,6 +9,11 @@ class EntryController < ApplicationController
     @tickets = Ticket.all
     @payments = PaymentFromDestination.all
     
+    @tickets_in_payments = 0
+    @payments.each do |i|
+      @tickets_in_payments = @tickets_in_payments + i.tickets
+    end
+    
     @tickets_total = 0
     @tickets_total_mbf = 0
     @tickets_total_tonnage = 0
@@ -44,7 +49,6 @@ class EntryController < ApplicationController
     @value_diff = give_pennies(@value_diff)
     @mbf_diff = give_pennies(@mbf_diff)
     @tonnage_diff = give_pennies(@tonnage_diff)
-    
   end
   
   def add_ticket_entry_row
@@ -61,7 +65,7 @@ class EntryController < ApplicationController
     
     if @species.length != @species.uniq.length
       render "duplicates.js.erb"
-      return 
+      return
     end
     
     @day = params[:delivery_date][3..4]
@@ -103,13 +107,13 @@ class EntryController < ApplicationController
   end
   
   def add_payment_entry_row
+    @ac = ApplicationController.new
     @destination = Destination.find_by_name(params[:destination_name])
     @job = Job.find_by_name(params[:job_name])
     
     @day = params[:payment_date][3..4]
     @month = params[:payment_date][0..1]
     @year = params[:payment_date][6..9]
-    
     
     @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
@@ -126,23 +130,45 @@ class EntryController < ApplicationController
     @destinations = Destination.all
   end 
   
-  def delete_ticket_entry
+  def save_edited_ticket_entry
     @ticket = Ticket.find(params[:id])
-    @ticket.load_details.each do |i|
-      i.delete
+    @ticket.number = params[:ticket_num]
+    @ticket.delivery_date = params[:delivery_date]
+    @ticket.job_id = params[:job_id]
+    @ticket.destination_id = params[:destination_id]
+    @ticket.wood_type = params[:wood_type_id]
+    @ticket.value = params[:value]
+    
+    @ticket.load_details.each_with_index do |i, x|
+      i.species_id = params[:species][x]
+      i.tonnage = params[:tons][x]
+      i.mbfs = params[:mbfs][x]
+      unless i.save
+        render :status => 306, :nothing => true
+      end
     end
-    if @ticket.delete 
-      render :nothing => true
-    end
-  end
-  
-  def delete_payment_entry
-    @pfd = PaymentFromDestination.find(params[:id])
-    if @pfd.delete 
-      render :nothing => true
+    
+    unless @ticket.save
+      render :status => 306, :nothing => true
     else
-      render :state => 13
+      render :status => 200, :nothing => true
     end
   end
   
+  def save_edited_payment_entry
+    @payment = PaymentFromDestination.find(params[:id])
+    @payment.job_id = params[:job_id]
+    @payment.destination_id = params[:destination_id]
+    @payment.wood_type = params[:wood_type_id]
+    @payment.tickets = params[:tickets]
+    @payment.tonnage = params[:tonnage]
+    @payment.net_mbf = params[:mbf]
+    @payment.total_payment = params[:total_payment]
+    
+    unless @payment.save
+      render :status => 306, :nothing => true
+    else
+      render :status => 200, :nothing => true
+    end
+  end
 end

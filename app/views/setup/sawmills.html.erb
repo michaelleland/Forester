@@ -1,7 +1,7 @@
 <div class="grid_10" id="sawmills">
 	<% Destination.all.each do |i| %>
 		<h3><a href="#"><%= i.name %></a></h3>	
-		<div id="<%= i.id %>sawmill" class="partners">
+		<div id="<%= i.id %>sawmill" class="sawmills">
 			<div style="display: none;" id="sawmill_name"><%= i.name %></div>	
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Contact person:</h4></div>

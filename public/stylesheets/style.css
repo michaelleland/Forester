@@ -15,23 +15,27 @@ body {
 }
 
 .rates {
-	height: 150px;
+	height: 210px;
 }
 
 .rates .rate_type_select {
 	width: 60px;
 }
 
+.sawmills {
+	height: 200px;
+}
+
 .tickets {
-	height: 120px;
+	height: 200px;
 }
 
 .tickets .accordion_left_column {
-	width: 750px;
+	width: 740px;
 }
 
 .tickets .accordion_left_column .data_rows {
-	width: 740px;
+	width: 730px;
 }
 
 .tickets .accordion_right_column {
@@ -115,7 +119,7 @@ body {
 }
 
 .new {
-	height: 160px !important;
+	height: 180px !important;
 }
 
 /*Header styling*/
@@ -502,10 +506,6 @@ input, select {
 	-webkit-border-radius: 5px;
 	
 	border: solid 1px #aed0ea;
-}
-
-
-#entry_form {
 	
 }
 
@@ -530,6 +530,11 @@ input, select {
 }
 
 /*Entry page table stylings*/
+
+.currency {
+	text-align: right;
+	padding-right: 10px;
+}
 
 .table_headers {
 	font-weight: bold;

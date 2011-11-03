@@ -14,14 +14,45 @@ class PageControlsController < ApplicationController
     render :text => "Invalid Ticket #"
   end
   
+  def get_load_details
+    @ticket = Ticket.find(params[:id])
+    @species = ""
+    @mbfs = ""
+    @tons = ""
+    
+    @ticket.load_details.each do |i|
+      if @species == ""
+        @species = "#{Specie.find(i.species_id).code}"
+      else
+        @species = "#{@species},#{Specie.find(i.species_id).code}"
+      end 
+      
+      if @mbfs == ""
+        @mbfs = "#{i.mbfs}"
+      else
+        @mbfs = "#{@mbfs},#{i.mbfs}"
+      end
+      
+      if @tons == ""
+        @tons = "#{i.tonnage}"
+      else
+        @tons = "#{@tons},#{i.tonnage}"
+      end
+    end
+    
+    render :text => "#{@species};#{@mbfs};#{@tons}"
+  end
+  
   def all_ticket_entries
+   @ac = ApplicationController.new
    @tickets = Ticket.all[0..100] 
    @species = Specie.all
    @woodtypes = WoodType.all
   end
   
   def all_payment_entries
-   @payments = PaymentFromDestination.all
+    @ac = ApplicationController.new
+    @payments = PaymentFromDestination.all
   end
   
   def get_payments
@@ -90,7 +121,7 @@ class PageControlsController < ApplicationController
       end
     end
     
-    unless @trucker_rate.nil? && @logger_rate.nil?
+    if !@trucker_rate.nil? && !@logger_rate.nil?
       if @trucker_rate.rate_type == "MBF" && @logger_rate.rate_type == "MBF"
         @answer = "MBF"
       else

@@ -79,8 +79,8 @@
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
 			<th class="table_headers" style="width: 90px;">Date</th>
-			<th class="table_headers" style="width: 140px;">Job</th>
-			<th class="table_headers" style="width: 150px;">Destination</th>
+			<th class="table_headers" style="width: 160px;">Job</th>
+			<th class="table_headers" style="width: 170px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
 			<th class="table_headers" style="width: 60px;">NMBF</th>
@@ -99,8 +99,8 @@
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
 			<th class="table_headers" style="width: 90px;">Date</th>
-			<th class="table_headers" style="width: 140px;">Job</th>
-			<th class="table_headers" style="width: 150px;">Destination</th>
+			<th class="table_headers" style="width: 160px;">Job</th>
+			<th class="table_headers" style="width: 170px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
 			<th class="table_headers" style="width: 60px;">Species</th>
 			<th class="table_headers" style="width: 60px;">NMBF</th>
@@ -281,26 +281,210 @@
 			
 			$('#net_mbf').attr('value', total);
 		})
-		/* Deletes a ticket entry from both current and all entries and of course, from database*/
 		
-		function delete_ticket_entry(id) {
-			if (confirm("Are you sure you want to delete this ticket?")) {
-				$.ajax ({
-					url: "/delete_ticket_entry/"+id,
-					cache: false,
-					success: function() {
-						$('#current_entries').find('#'+id+'entry').fadeOut();
-						setTimeout(function() {
-							$('#current_entries').find('#'+id+'entry').remove();
-						}, 620);
-					
-						$('#all_entries').find('#'+id+'entry').fadeOut();
-						setTimeout(function() {
-							$('#all_entries').find('#'+id+'entry').remove();
-						}, 620);
+		function show_ticket_inputs(id) {
+			var where_from = $('#'+id+'entry');
+			var ticket_number = where_from.find('#ticket_number');
+			var delivery_date = where_from.find('#delivery_date');
+			var job_name = where_from.find('#job_name').html();
+			var destination_name = where_from.find('#destination_name').html();
+			var wood_type = where_from.find('#wood_type').html();
+			var species_1 = where_from.find('#species').html();
+			var net_mbf = where_from.find('#net_mbf');
+			var tonnage = where_from.find('#tonnage');
+			var load_pay = where_from.find('#load_pay');
+			
+			where_from.find('td').fadeOut();
+			
+			var counter = 1;
+			
+			setTimeout(function() {
+				
+				where_from.find('td').each(function() {
+					var value = $(this).html();
+					var width = $('#all_entries th:nth-child('+counter+')').width();
+					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+					where_from.find('td').fadeIn();
+					counter++;
+				});
+				
+				// Following  blocks "overwrite" some of the fields of previous loop
+				
+				//The button for saving
+				where_from.find('td').last().html('<input type="button" value="save" onclick="edit_ticket_entry('+id+')" />');
+				
+				//Select for job name
+				where_from.find('#job_name').html('\
+				<select id="job_name_select">\
+					<% Job.all.each do |i| %>
+						<option value="<%= i.id %>"><%= i.name %></option>\
+					<% end %>
+				</select>\
+				');
+				
+				//Setting the previous job name as default selection
+				where_from.find('#job_name option').each(function() {
+					if ($(this).html() == job_name) {
+						$(this).attr('selected', 'true');
 					}
 				});
-			}	
+				
+				//Same for Destinations
+				where_from.find('#destination_name').html('\
+				<select id="destination_name_select">\
+					<% Destination.all.each do |i| %>
+						<option value="<%= i.id %>"><%= i.name %></option>\
+					<% end %>
+				</select>\
+				');
+				
+				where_from.find('#destination_name option').each(function() {
+					if ($(this).html() == destination_name) {
+						$(this).attr('selected', 'true');
+					}
+				});
+				
+				//And wood types
+				where_from.find('#wood_type').html('\
+				<select id="wood_type_select">\
+					<% WoodType.all.each do |i| %>
+						<option value="<%= i.id %>"><%= i.name %></option>\
+					<% end %>
+				</select>\
+				');
+				
+				where_from.find('#wood_type option').each(function() {
+					if ($(this).html() == wood_type) {
+						$(this).attr('selected', 'true');
+					}
+				});
+				
+				var species;
+				var mbfs;
+				var tons;
+				
+				$.ajax({
+					url: '/get_load_details/'+id,
+					cache: false,
+					success: function(data) {
+						var arr = data.split(';');
+						species = arr[0].split(',');
+						mbfs = arr[1].split(',');
+						tons = arr[2].split(',');
+						
+						var counterr = 2;
+						
+						var mbf_width = $('#all_entries th:nth-child(7)').width()-10;
+						var tonnage_width = $('#all_entries th:nth-child(8)').width()-10;
+						var bg_color = where_from.css('background-color');
+						
+						net_mbf.html('\
+							<input type="text" id="load_1_mbf" value="'+mbfs[0]+'" style="width: '+mbf_width+'px;" />\
+						');
+						
+						tonnage.html('\
+							<input type="text" id="load_1_mbf" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
+						');
+						
+						where_from.find('#species').html('\
+							<select id="species_1_select">\
+								<% Specie.all.each do |i| %>
+									<option value="<%= i.id %>"><%= i.code %></option>\
+								<% end %>
+								<option value="0">PU</option>\
+							</select>\
+						');
+										
+						where_from.find('#species option').each(function() {
+							if ($(this).html() == species[(counterr-2)]) {
+								$(this).attr('selected', 'true');
+							}
+						});
+						
+						$.each(species, function() {
+							if (this != species[0]) {
+								where_from.after('\
+								<tr class="'+id+'_species_edit_row" style="background-color: '+bg_color+';" >\
+									<td></td>\
+									<td></td>\
+									<td></td>\
+									<td></td>\
+									<td></td>\
+									<td>\
+										<select id="species_'+counterr+'_select">\
+											<% Specie.all.each do |i| %>\
+												<option value="<%= i.id %>"><%= i.code %></option>\
+											<% end %>\
+											<option value="0">PU</option>\
+										</select>\
+									</td>\
+									<td>\
+										<input type="text" id="load_'+counterr+'_mbf" value="'+mbfs[(counterr-1)]+'" style="width: '+mbf_width+'px;" />\
+									</td>\
+									<td>\
+										<input type="text" id="load_'+counterr+'_tons" value="'+tons[(counterr-1)]+'" style="width: '+tonnage_width+'px;" />\
+									</td>\
+									<td></td>\
+									<td></td>\
+								</tr>\
+								');
+								
+								$('.'+id+'_species_edit_row').find('#species_'+counterr+'_select option').each(function() {
+									if ($(this).html() == species[(counterr-1)]) {
+										$(this).attr('selected', 'true');
+									}
+								});
+								
+								counterr++;
+								
+							}
+						});
+					}
+				});
+			}, 620);
+			
+		}
+		
+		function edit_ticket_entry(id) {
+			var where_from = $('#'+id+'entry')
+			var serows = $('.'+id+'_species_edit_row');
+			
+			var ticket_num = where_from.find('#ticket_number').find('input').val();
+			var delivery_date = where_from.find('#delivery_date').find('input').val();
+			var job_id = where_from.find('#job_name_select').val();
+			var destination_id = where_from.find('#destination_name_select').val();
+			var wood_type_id = where_from.find('#wood_type_select').val();
+			var species_1 = where_from.find('#species_1_select').val();
+			var species_2 = serows.find('#species_2_select').val();
+			var species_3 = serows.find('#species_3_select').val();
+			var species_4 = serows.find('#species_4_select').val();
+			var species_5 = serows.find('#species_5_select').val();
+			var load_1_mbf = where_from.find('#load_1_mbf').val();
+			var load_2_mbf = serows.find('#load_2_mbf').val();
+			var load_3_mbf = serows.find('#load_3_mbf').val();
+			var load_4_mbf = serows.find('#load_4_mbf').val();
+			var load_5_mbf = serows.find('#load_5_mbf').val();
+			var load_1_tons = where_from.find('#load_1_tons').val();
+			var load_2_tons = serows.find('#load_2_tons').val();
+			var load_3_tons = serows.find('#load_3_tons').val();
+			var load_4_tons = serows.find('#load_4_tons').val();
+			var load_5_tons = serows.find('#load_5_tons').val();
+			var value = where_from.find('#load_pay').find('input').val();
+			
+			var url = "/save_edited_ticket_entry/"+id+"?ticket_num="+ticket_num+"&delivery_date="+delivery_date;
+			url = url+"&job_id="+job_id+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id+"&species[]="+species_1;
+			url = url+"&species[]="+species_2+"&species[]="+species_3+"&species[]="+species_4+"&species[]="+species_5;
+			url = url+"&mbfs[]="+load_1_mbf+"&mbfs[]="+load_2_mbf+"&mbfs[]="+load_3_mbf+"&mbfs[]="+load_4_mbf;
+			url = url+"&mbfs[]="+load_5_mbf+"&tons[]="+load_1_tons+"&tons[]="+load_2_tons+"&tons[]="+load_3_tons;
+			url = url+"&mbfs[]="+load_4_tons+"&tons[]="+load_5_tons+"&value="+value;
+			
+			$.ajax ({
+				url: url,
+				cache: false,
+				success: function() {
+					refresh_all_entries('ticket');
+				}
+			});	
 		}
 		
 		$(document).ready(function() {
