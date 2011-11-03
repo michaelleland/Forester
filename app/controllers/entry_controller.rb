@@ -37,18 +37,6 @@ class EntryController < ApplicationController
     @value_diff = @tickets_total - @payments_total
     @mbf_diff = @tickets_total_mbf - @payments_total_mbf
     @tonnage_diff = @tickets_total_tonnage - @payments_total_tonnage
-    
-    @tickets_total = give_pennies(@tickets_total)
-    @tickets_total_mbf = give_pennies(@tickets_total_mbf)
-    @tickets_total_tonnage = give_pennies(@tickets_total_tonnage)
-    
-    @payments_total = give_pennies(@payments_total)
-    @payments_total_mbf = give_pennies(@payments_total_mbf)
-    @payments_total_tonnage = give_pennies(@payments_total_tonnage)
-    
-    @value_diff = give_pennies(@value_diff)
-    @mbf_diff = give_pennies(@mbf_diff)
-    @tonnage_diff = give_pennies(@tonnage_diff)
   end
   
   def add_ticket_entry_row
