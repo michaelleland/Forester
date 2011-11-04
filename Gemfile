@@ -21,8 +21,6 @@ gem 'whenever', :require => false
 #For easy DB backups, we use backup!
 gem 'backup'
 
-gem 'devise'
-
 #Packaging DB export files
 gem 'zipruby'
 
