@@ -26,7 +26,7 @@
 					<select name="destination_name" id="destination_name" onfocusout="enable_load_fields()">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= i.name %></option>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -86,7 +86,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 70px;">Action</th>
+			<th class="table_headers" style="width: 60px;">Action</th>
 		</tr>
 		
 	</table>
@@ -106,7 +106,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 70px;">Action</th>
+			<th class="table_headers" style="width: 60px;">Action</th>
 		</tr>
 		
 	</table>

@@ -37,21 +37,11 @@ class EntryController < ApplicationController
     @value_diff = @tickets_total - @payments_total
     @mbf_diff = @tickets_total_mbf - @payments_total_mbf
     @tonnage_diff = @tickets_total_tonnage - @payments_total_tonnage
-    
-    @tickets_total = give_pennies(@tickets_total)
-    @tickets_total_mbf = give_pennies(@tickets_total_mbf)
-    @tickets_total_tonnage = give_pennies(@tickets_total_tonnage)
-    
-    @payments_total = give_pennies(@payments_total)
-    @payments_total_mbf = give_pennies(@payments_total_mbf)
-    @payments_total_tonnage = give_pennies(@payments_total_tonnage)
-    
-    @value_diff = give_pennies(@value_diff)
-    @mbf_diff = give_pennies(@mbf_diff)
-    @tonnage_diff = give_pennies(@tonnage_diff)
   end
   
   def add_ticket_entry_row
+    @ac = ApplicationController.new
+    
     @t_nums = Ticket.all.collect {|i| i.number}
     @t_nums.each do |i|
       if params[:ticket_num] == i.to_s
@@ -131,9 +121,17 @@ class EntryController < ApplicationController
   end 
   
   def save_edited_ticket_entry
+    @raw_date = params[:delivery_date]
+    
+    @day = @raw_date[3..4]
+    @month = @raw_date[0..1]
+    @year = @raw_date[6..9]
+    
+    @delivery_date = "#{@year}-#{@month}-#{@day}"
+    
     @ticket = Ticket.find(params[:id])
     @ticket.number = params[:ticket_num]
-    @ticket.delivery_date = params[:delivery_date]
+    @ticket.delivery_date = @delivery_date
     @ticket.job_id = params[:job_id]
     @ticket.destination_id = params[:destination_id]
     @ticket.wood_type = params[:wood_type_id]
@@ -156,9 +154,18 @@ class EntryController < ApplicationController
   end
   
   def save_edited_payment_entry
+    @raw_date = params[:payment_date]
+    
+    @day = @raw_date[3..4]
+    @month = @raw_date[0..1]
+    @year = @raw_date[6..9]
+    
+    @payment_date = "#{@year}-#{@month}-#{@day}"
+    
     @payment = PaymentFromDestination.find(params[:id])
     @payment.job_id = params[:job_id]
     @payment.destination_id = params[:destination_id]
+    @payment.payment_date = @payment_date
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
     @payment.tonnage = params[:tonnage]

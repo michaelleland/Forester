@@ -8,27 +8,27 @@
 		</tr>
 		<tr>
 			<td class="th">Payments</td>
-			<td>$ <%= @tickets_total %></td>
-			<td>$ <%= @payments_total %></td>
-			<td>$ <%= @value_diff %></td>
+			<td>$ <%= give_pennies @tickets_total %></td>
+			<td>$ <%= give_pennies @payments_total %></td>
+			<td>$ <%= give_pennies @value_diff %></td>
 		</tr>
 		<tr>
 			<td class="th">MBF</td>
-			<td><%= @tickets_total_mbf %></td>
-			<td><%= @payments_total_mbf %></td>
-			<td><%= @mbf_diff %></td>
+			<td><%= give_decimals @tickets_total_mbf %></td>
+			<td><%= give_decimals @payments_total_mbf %></td>
+			<td><%= give_decimals @mbf_diff %></td>
 		</tr>
 		<tr>
 			<td class="th">Tons</td>
-			<td><%= @tickets_total_tonnage %></td>
-			<td><%= @payments_total_tonnage %></td>
-			<td><%= @tonnage_diff %></td>
+			<td><%= give_decimals @tickets_total_tonnage %></td>
+			<td><%= give_decimals @payments_total_tonnage %></td>
+			<td><%= give_decimals @tonnage_diff %></td>
 		</tr>
 		<tr>
 			<td class="th">Tickets</td>
-			<td><%= @tickets.count %></td>
-			<td><%= @tickets_in_payments %></td>
-			<td><%= @tickets.count - @tickets_in_payments %></td>
+			<td><%= give_decimals @tickets.count %></td>
+			<td><%= give_decimals @tickets_in_payments %></td>
+			<td><%= give_decimals (@tickets.count - @tickets_in_payments) %></td>
 		</tr>
 	</table>	
 </div>
