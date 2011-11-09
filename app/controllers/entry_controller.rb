@@ -176,4 +176,19 @@ class EntryController < ApplicationController
       render :status => 200, :nothing => true
     end
   end
+
+  def delete_ticket
+    @ticket = Ticket.find(params[:id])
+    @ticket.delete
+    
+    render :nothing => true
+  end
+
+  def delete_payment
+    @payment = PaymentFromDestination.find(params[:id])
+    @payment.delete
+    
+    render :nothing => true
+  end
+
 end

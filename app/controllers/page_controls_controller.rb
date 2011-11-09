@@ -22,9 +22,17 @@ class PageControlsController < ApplicationController
     
     @ticket.load_details.each do |i|
       if @species == ""
-        @species = "#{Specie.find(i.species_id).code}"
+        if i.species_id == 0
+          @species = "PU"
+        else
+          @species = "#{Specie.find(i.species_id).code}"
+        end
       else
-        @species = "#{@species},#{Specie.find(i.species_id).code}"
+        if i.species_id == 0
+          @species = "#{@species},PU}"
+        else
+          @species = "#{@species},#{Specie.find(i.species_id).code}"
+        end
       end 
       
       if @mbfs == ""

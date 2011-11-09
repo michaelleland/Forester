@@ -303,7 +303,7 @@
 				where_from.find('td').each(function() {
 					var value = $(this).html();
 					var width = $('#all_entries th:nth-child('+counter+')').width();
-					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
 					where_from.find('td').fadeIn();
 					counter++;
 				});
@@ -311,13 +311,13 @@
 				// Following  blocks "overwrite" some of the fields of previous loop
 				
 				//The button for saving
-				where_from.find('td').last().html('<input type="button" value="save" onclick="edit_ticket_entry('+id+')" />');
+				where_from.find('td').last().html('<input type="button" value="save" style="width: 90px;" onclick="edit_ticket_entry('+id+')" />');
 				
 				//Select for job name
 				where_from.find('#job_name').html('\
 				<select id="job_name_select">\
 					<% Job.all.each do |i| %>
-						<option value="<%= i.id %>"><%= i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>
 				</select>\
 				');
@@ -333,7 +333,7 @@
 				where_from.find('#destination_name').html('\
 				<select id="destination_name_select">\
 					<% Destination.all.each do |i| %>
-						<option value="<%= i.id %>"><%= i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>
 				</select>\
 				');

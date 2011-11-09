@@ -188,7 +188,7 @@
 			where_from.find('td').each(function() {
 				var value = $(this).html();
 				var width = $('#all_entries th:nth-child('+counter+')').width();
-				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
 				where_from.find('td').fadeIn();
 				counter++;
 			});
@@ -196,7 +196,7 @@
 			// Following  blocks "overwrite" some of the fields of previous loop
 			
 			//The button for saving
-			where_from.find('td').last().html('<input type="button" value="save" onclick="edit_payment_entry('+id+')" />');
+			where_from.find('td').last().html('<input type="button" value="save" style="width:90px;" onclick="edit_payment_entry('+id+')" />');
 			
 			//Select for job name
 			where_from.find('#job_name').html('\
@@ -273,6 +273,18 @@
 		});	
 	}
 	
+	function delete_payment(id) {
+			if (confirm("Do you really want to delete this payment?")) {
+				$.ajax({
+					url: "/delete_payment/"+id,
+					cache: false,
+					success: function() {
+						$('#all_entries').find('#'+id+'entry').fadeOut();
+						$('#current_entries').find('#'+id+'entry').fadeOut();
+					}
+				});
+			}
+		}
 	
 	/*Script which is run when page loads. Loads all_entries section with payment data*/
 	
