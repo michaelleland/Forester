@@ -274,9 +274,36 @@
 			url: url,
 			cache: false,
 			success: function() {
+				hide_inputs_from_current_entries(id);
 				refresh_all_entries('payment');
 			}
-		});	
+		});
+	}
+	
+	function hide_inputs_from_current_entries(id) {
+		var where_from = $('#current_entries #'+id+'entry');
+		
+		where_from.children().each(function() {
+			$(this).contents().fadeOut();
+			
+			var inputs_value = $(this).find('input').val(); 
+			var selects_value = $(this).find('select :selected').text();
+			
+			if (inputs_value == "" || inputs_value == undefined) {
+				$(this).html(selects_value);
+			}
+			if (selects_value == "" || selects_value == undefined) {
+				$(this).html(inputs_value);
+			}
+		});
+		
+		where_from.children().last().html('\
+		<input type="button" value="edit" onclick="show_payment_inputs('+id+');">\
+		<input type="button" value="del" onclick="delete_payment('+id+')">');
+		
+		setTimeout(function() {
+			where_from.children().fadeIn();
+		}, 620);
 	}
 	
 	function delete_payment(id) {
