@@ -103,7 +103,7 @@ class EntryController < ApplicationController
     @month = params[:payment_date][0..1]
     @year = params[:payment_date][6..9]
     
-    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => params[:@destination_id], :job_id => params[:job_id], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
+    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => params[:destination_id], :job_id => params[:job_id], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
   
   def ticket_entry

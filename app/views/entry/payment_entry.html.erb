@@ -108,7 +108,7 @@
 	function validated_submit() {
 		if (check_field_data()) {
 			var payment_num = $('#payment_num').attr('value');
-			var destination_id = $('#destination_id').val();
+			var destination_id = $('#destination_name').val();
 			var job_id = $('#job_name').val();
 			var net_mbf = $('#net_mbf').attr('value');
 			var date = $('#payment_date').attr('value');
@@ -125,8 +125,14 @@
 				url: url,
 				cache: false,
 				method: 'POST',
-				success: function() {
-					
+				success: function(html) {
+					$('#current_entries tbody').append(html);
+					$('input.fields').attr('value', '');
+					$('#wood_type').val(-1);
+					$('#destination_name').val(-1);
+					$('#job_name').val(-1);
+					$('input').first().focus();
+					refresh_all_entries('payment');
 				}
 			});
 		}
