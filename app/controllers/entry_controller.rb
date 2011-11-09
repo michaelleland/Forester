@@ -98,14 +98,12 @@ class EntryController < ApplicationController
   
   def add_payment_entry_row
     @ac = ApplicationController.new
-    @destination = Destination.find_by_name(params[:destination_name])
-    @job = Job.find_by_name(params[:job_name])
     
     @day = params[:payment_date][3..4]
     @month = params[:payment_date][0..1]
     @year = params[:payment_date][6..9]
     
-    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
+    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => params[:@destination_id], :job_id => params[:job_id], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
   end
   
   def ticket_entry

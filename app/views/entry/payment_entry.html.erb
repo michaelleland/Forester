@@ -24,7 +24,7 @@
 					<select id="job_name">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>
+							<option value="<%= i.id %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -32,7 +32,7 @@
 					<select name="destination_name" id="destination_name">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>
+							<option value="<%= i.id %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -108,8 +108,8 @@
 	function validated_submit() {
 		if (check_field_data()) {
 			var payment_num = $('#payment_num').attr('value');
-			var destination_name = $('#destination_name :selected').text();
-			var job_name = $('#job_name :selected').text();
+			var destination_id = $('#destination_id').val();
+			var job_id = $('#job_name').val();
 			var net_mbf = $('#net_mbf').attr('value');
 			var date = $('#payment_date').attr('value');
 			var wood_type = $('#wood_type').val();
@@ -118,7 +118,7 @@
 			var tickets = $('#tickets').attr('value');
 			
 			var url = "";
-			url = url+'/add_payment_entry_row/?payment_date='+date+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
+			url = url+'/add_payment_entry_row/?payment_date='+date+'&destination_id='+destination_id+'&job_id='+job_id+'&wood_type='+wood_type
 			url = url+'&tonnage='+tonnage+'&amount='+amount+'&payment_num='+payment_num+'&tickets='+tickets+'&net_mbf='+net_mbf;
 			
 			$.ajax ({
@@ -202,7 +202,7 @@
 			where_from.find('#job_name').html('\
 			<select id="job_name_select">\
 				<% Job.all.each do |i| %>
-					<option value="<%= i.id %>"><%= i.name %></option>\
+					<option value="<%= i.id %>"><%= shorten i.name %></option>\
 				<% end %>
 			</select>\
 			');
@@ -218,7 +218,7 @@
 			where_from.find('#destination_name').html('\
 			<select id="destination_name_select">\
 				<% Destination.all.each do |i| %>
-					<option value="<%= i.id %>"><%= i.name %></option>\
+					<option value="<%= i.id %>"><%= shorten i.name %></option>\
 				<% end %>
 			</select>\
 			');
