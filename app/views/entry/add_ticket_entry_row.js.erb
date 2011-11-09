@@ -17,7 +17,8 @@ $('#current_entries tbody').append('\
 		<td id="net_mbf"><%= @ticket.net_mbf %></td>\
 		<td id="tonnage"><%= @ticket.tonnage %></td>\
 		<td id="load_pay"><%= @ac.give_pennies(@ticket.value)%></td>\
-		<td><input type="button" value="delete" onclick="show_ticket_inputs(<%= @ticket.id %>)" /> </td>\
+		<td><input type="button" value="delete" onclick="show_ticket_inputs(<%= @ticket.id %>)" /> \
+		<input type="button" value="del" onclick="delete_ticket(<%= @ticket.id %>)"></td>\
 	</tr>');
 
 $('.specie_row').each(function(){

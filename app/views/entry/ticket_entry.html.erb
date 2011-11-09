@@ -86,7 +86,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 100px;">Action</th>
 		</tr>
 		
 	</table>
@@ -106,7 +106,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 100px;">Action</th>
 		</tr>
 		
 	</table>
@@ -526,6 +526,19 @@
 							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
 							$('#tonnage').removeAttr('disabled');
 						}
+					}
+				});
+			}
+		}
+		
+		function delete_ticket(id) {
+			if (confirm("Do you really want to delete this ticket?")) {
+				$.ajax({
+					url: "/delete_ticket/"+id,
+					cache: false,
+					success: function() {
+						$('#all_entries').find('#'+id+'entry').fadeOut();
+						$('#current_entries').find('#'+id+'entry').fadeOut();
 					}
 				});
 			}

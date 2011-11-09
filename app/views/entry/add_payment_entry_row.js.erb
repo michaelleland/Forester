@@ -9,7 +9,8 @@ $('#current_entries tbody').append('\
 		<td id="tonnage"><%= @pfd.tonnage %></td>\
 		<td id="net_mbf"><%= @pfd.net_mbf %></td>\
 		<td class="currency" id="total_payment"><%= @ac.give_pennies(@pfd.total_payment) %></td>\
-		<td><input type="button" value="delete" onclick="show_payment_inputs(<%= @pfd.id %>)"/> </td>\
+		<td><input type="button" value="delete" onclick="show_payment_inputs(<%= @pfd.id %>)"/> \
+		<input type="button" value="del" onclick="delete_payment(<%= @pfd.id %>)"></td>\
 	</tr>');
 
 $('input.fields').attr('value', '');

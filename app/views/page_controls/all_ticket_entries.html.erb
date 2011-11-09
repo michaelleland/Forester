@@ -11,7 +11,8 @@
 		<td id="net_mbf"><%= i.net_mbf %></td>
 		<td id="tonnage"><%= i.tonnage %></td>
 		<td class="currency" id="load_pay"><%= @ac.give_pennies(i.value) %></td>
-		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= i.id %>);"></td>
+		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= i.id %>);"> 
+		<input type="button" value="del" onclick="delete_ticket(<%= i.id %>)"></td>
 	</tr>
 <% end %>
 
