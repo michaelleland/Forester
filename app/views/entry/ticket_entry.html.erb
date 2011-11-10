@@ -162,8 +162,26 @@
 					url: url,
 					cache: false,
 					method: 'POST',
-					success: function() {
+					success: function(html) {
+						$('#current_entries tbody').append(html);
+						$('.specie_row').each(function() {
+							$(this).fadeOut();
+							setTimeout(function() {
+								$(this).remove();
+							}, 620);
+						});
 						
+						$('input.fields').attr('value', '');
+						$('#tonnage').attr('value', '0');
+						$('#load_1_mbfs').attr('value', '0');
+						$('#net_mbf').attr('value', '0');
+						$('#job_name').html('');
+						$('#destination_name').val(-1);
+						$('#wood_type').val(-1);
+						$('#species_1').val(-1);
+						$('input').first().focus();
+						
+						refresh_all_entries('ticket');		
 					}
 				});
 			}
@@ -482,9 +500,36 @@
 				url: url,
 				cache: false,
 				success: function() {
+					hide_inputs_from_current_entries(id);
 					refresh_all_entries('ticket');
 				}
 			});	
+		}
+		
+		function hide_inputs_from_current_entries(id) {
+			var where_from = $('#current_entries #'+id+'entry');
+			
+			where_from.children().each(function() {
+				$(this).contents().fadeOut();
+				
+				var inputs_value = $(this).find('input').val(); 
+				var selects_value = $(this).find('select :selected').text();
+				
+				if (inputs_value == "" || inputs_value == undefined) {
+					$(this).html(selects_value);
+				}
+				if (selects_value == "" || selects_value == undefined) {
+					$(this).html(inputs_value);
+				}
+			});
+			
+			where_from.children().last().html('\
+			<input type="button" value="edit" onclick="show_ticket_inputs('+id+');">\
+			<input type="button" value="del" onclick="delete_ticket('+id+')">');
+			
+			setTimeout(function() {
+				where_from.children().fadeIn();
+			}, 620);
 		}
 		
 		$(document).ready(function() {
