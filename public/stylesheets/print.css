@@ -1,5 +1,7 @@
 #page_1 {
 	margin: 0px;
+	margin-top: -140px;
+	margin-left: 145px;
 	-moz-box-shadow: none;
 	border: solid 1px white;
 	-moz-transform:rotate(-90deg);
@@ -9,16 +11,8 @@
 }
 
 #page_2 {
-	
-	-moz-transform:translate(0, -22em);
-	-webkit-transform:translate(0, -22em);
-	-o-transform:translate(0, -22em);
-	-ms-transform:translate(0, -22em);
-	
 	margin: 0px;
-	
-	height: 200px;
-	
+	margin-top: -370px;
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
 	border: solid 1px white;
@@ -31,9 +25,24 @@
 
 #page_3 {
 	margin: 0px;
+	margin-top: -50px;
+	
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
 	
+	border: solid 1px white;
+	border: none;
+}
+
+#page_4 {
+	
+	margin: 0px;
+	margin-top: -50px;
+	
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	
+	border: solid 1px white;
 	border: none;
 }
 

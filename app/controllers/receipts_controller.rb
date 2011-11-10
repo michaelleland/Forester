@@ -417,6 +417,23 @@ class ReceiptsController < ApplicationController
     @deduction_items.each {|i| @total = @total - i[1].to_f }
     
     @total = give_pennies(@total)
+    
+    @pages = []
+    
+    @tickets_count = @tickets.length
+    @pages_count = @tickets_count/44
+    if @tickets_count%44 != 0
+      @pages_count = @pages_count+1
+    end
+    
+    @counter = 0
+    @pages_count.times do
+      @pages.push(@counter)
+      @counter = @counter+44
+    end
+    
+    
+    
   end
   
   def save_owner_receipt    
