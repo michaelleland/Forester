@@ -162,26 +162,8 @@
 					url: url,
 					cache: false,
 					method: 'POST',
-					success: function(html) {
-						$('#current_entries tbody').append(html);
-						$('.specie_row').each(function() {
-							$(this).fadeOut();
-							setTimeout(function() {
-								$(this).remove();
-							}, 620);
-						});
-						
-						$('input.fields').attr('value', '');
-						$('#tonnage').attr('value', '0');
-						$('#load_1_mbfs').attr('value', '0');
-						$('#net_mbf').attr('value', '0');
-						$('#job_name').html('');
-						$('#destination_name').val(-1);
-						$('#wood_type').val(-1);
-						$('#species_1').val(-1);
-						$('input').first().focus();
-						
-						refresh_all_entries('ticket');		
+					success: function() {
+	
 					}
 				});
 			}
@@ -401,7 +383,7 @@
 						');
 						
 						tonnage.html('\
-							<input type="text" id="load_1_mbf" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
+							<input type="text" id="load_1_tons" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
 						');
 						
 						where_from.find('#species').html('\
@@ -422,7 +404,7 @@
 						$.each(species, function() {
 							if (this != species[0]) {
 								where_from.after('\
-								<tr class="'+id+'_species_edit_row" style="background-color: '+bg_color+';" >\
+								<tr class="'+id+'_species_edit_row species_edit_rows" style="background-color: '+bg_color+';" >\
 									<td></td>\
 									<td></td>\
 									<td></td>\

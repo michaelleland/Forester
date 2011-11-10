@@ -100,8 +100,6 @@ class EntryController < ApplicationController
     else
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :tonnage => params[:tonnage])
     end
-    
-    render "add_ticket_entry_row.html.erb"
   end
   
   def add_payment_entry_row
