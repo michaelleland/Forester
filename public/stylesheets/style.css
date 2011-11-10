@@ -897,6 +897,11 @@ img#hfi_logo {
 	float: left;
 }
 
+#job_items_box td span {
+	position: relative;
+	left: 10px;
+}
+
 #deduction_table_wrapper {
 	margin-top: 20px;
 	float: left;
