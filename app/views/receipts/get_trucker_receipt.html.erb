@@ -119,11 +119,9 @@
 			</div>
 		</div>
 		
-		<br/>
-		
 		<% @pages.each_with_index do |i, x| %>
 			<div id="page_<%= x+2 %>" class="landscape_page">
-				<div id="receipt_tickets_header">Ticket details</div>
+				<div id="receipt_tickets_header">Ticket details <span>page <%= x+1 %> / <%= @pages.length %></span></div>
 				<div class="tickets_table_box">
 					<table>
 						<tr>
@@ -149,6 +147,9 @@
 							<th>Trucker</th>
 						</tr>
 						
+						<% @page_load_pay_total = 0 -%>
+						<% @page_trucker_pay_total = 0 -%>
+						
 						<% @tickets[i, 44].each do |i| %>
 							<% @rate = TruckerRate.find_by_destination_id_and_job_id_and_partner_id(i.destination_id, i.job_id, @trucker.id) %>
 							<tr>
@@ -156,14 +157,15 @@
 								<td><%= i.delivery_date %></td>
 								<td><%= shorten i.destination.name %></td>
 								<td><%= WoodType.find(i.wood_type).name %></td>
-								<td><%= i.net_mbf %></td>
+								<td><%= @ac.give_pennies i.net_mbf %></td>
 								<td><%= i.tonnage %></td>
 								<td><%= "#{@rate.rate}/#{@rate.rate_type[0..2].upcase}" %></td>						
-								<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td>
-								<td class="dollars_td">$ <%= @ac.give_pennies(i.trucker_value) %></td>
-							</tr>					
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.value) %></td> <% @page_load_pay_total = @page_load_pay_total + i.value -%>
+								<td class="dollars_td">$ <%= @ac.give_pennies(i.trucker_value) %></td> <% @page_trucker_pay_total = @page_trucker_pay_total + i.trucker_value -%>
+							</tr>			
 						<% end %>
 						
+						<% if i == @pages.last %>
 						<tr>
 							<td></td>
 							<td></td>
@@ -171,10 +173,34 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<th>Totals:</th>
-							<th class="dollars_td totals">$ <%= @ac.give_pennies(@load_pay_total) %></th>
-							<th class="dollars_td totals">$ <%= @ac.give_pennies(@trucker_total) %></th>						
+							<th>Page totals:</th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies @page_load_pay_total %></th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies @page_trucker_pay_total %></th>
 						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<th>Grand totals:</th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@load_pay_total) %></th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies(@trucker_total) %></th>
+						</tr>
+						<% else %>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<th>Page totals:</th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies @page_load_pay_total %></th>
+							<th class="dollars_td totals">$ <%= @ac.give_pennies @page_trucker_pay_total %></th>
+						</tr>
+						<% end %>					
 					</table>	
 				</div>
 			</div>

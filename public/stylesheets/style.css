@@ -857,6 +857,10 @@ img#hfi_logo {
 	text-align: center;
 }
 
+#receipt_tickets_header span {
+	float: right;
+}
+
 #hfi_address_box {
 	width: 300px;
 	padding-left: 30px;

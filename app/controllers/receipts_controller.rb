@@ -128,6 +128,21 @@ class ReceiptsController < ApplicationController
     attr_accessor :number, :value
   end
   
+  require 'base64'
+  
+  def get_pdf_receipt
+    @url = params[:url]
+    
+    @kit = PDFKit.new(Base64.decode64(@url))
+    
+    @filename = "#{Time.now.strftime("%Y%m%d-%H%M%S")}owner.pdf"
+    @filepath = "#{Rails.root}/public/pdfs/#{@filename}"
+    @file = File.open(@filepath, 'w')
+    @kit.to_file(@file.path)
+    @file = File.open(@filepath, 'r') 
+    send_data(@file.read, :type => "pdf", :filename => @filename)
+  end
+  
   def get_owner_receipt
     #Some utility vars
     @date_string = Time.now.strftime('%m/%d/%Y')

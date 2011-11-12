@@ -39,6 +39,14 @@ module Forester
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     
-    config.middleware.use "PDFKit::Middleware", :print_media_type => true
+    #PDFKit configs
+    
+    PDFKit.configure do |config|
+      config.default_options = {
+        :page_size => 'letter',
+        :orientation => 'landscape'
+      }    
+    end
+    
   end
 end
