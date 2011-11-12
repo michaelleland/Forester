@@ -464,9 +464,9 @@
 			var where_from;
 			
 			if (current) {
-				var where_from = $('#current_entries').find('#'+id+'entry')
+				var where_from = $('#current_entries').find('#'+id+'entry');
 			} else {
-				var where_from = $('#all_entries').find('#'+id+'entry')
+				var where_from = $('#all_entries').find('#'+id+'entry');
 			}
 			
 			var serows = $('.'+id+'_species_edit_row');
@@ -504,17 +504,44 @@
 				url: url,
 				cache: false,
 				success: function() {
-					fade_out_from_current_entries(id);
+					fade_out_from_current_entries(id, current);
 					refresh_all_entries('ticket');
 				}
 			});	
 		}
 				
-		function fade_out_from_current_entries(id) {
+		function fade_out_from_current_entries(id, current) {
 			var where_from = $('#current_entries').find('#'+id+'entry');
 			
-			where_from.children().fadeOut();
+			if (current) {
+				where_from.children().each(function() {
+					$(this).contents().fadeOut();
+					
+					var inputs_value = $(this).find('input').val(); 
+					var selects_value = $(this).find('select :selected').text();
+					
+					if (inputs_value == "" || inputs_value == undefined) {
+						$(this).html(selects_value);
+					}
+					if (selects_value == "" || selects_value == undefined) {
+						$(this).html(inputs_value);
+					}
+				});
+				
+				where_from.children().last().html('\
+				<input type="button" value="edit" onclick="show_ticket_inputs('+id+', true);">\
+				<input type="button" value="del" onclick="delete_ticket('+id+')">');
+				
+				setTimeout(function() {
+					where_from.children().fadeIn();
+				}, 620);
+			} else {
+				where_from.children().fadeOut();
+			}
 		}
+		
+		
+		
 		
 		$(document).ready(function() {
 			setTimeout(function () {
