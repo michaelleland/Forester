@@ -42,6 +42,7 @@ module Forester
     #PDFKit configs
     
     PDFKit.configure do |config|
+      config.wkhtmltopdf = "/usr/bin/wkhtmltopdf"
       config.default_options = {
         :page_size => 'letter',
         :orientation => 'landscape'
