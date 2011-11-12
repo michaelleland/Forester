@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   
   def exported_report
     @filename = "quarterly_report_#{params[:year]}_#{params[:quarter]}.csv"
-    @file_path = "../shared/system/exports/"
+    @file_path = "../../shared/system/exports/"
     if params[:quarter] == "1"
       @tickets = Ticket.find(:all, :conditions => "delivery_date>'#{(params[:year].to_i-1)}-12-31' AND delivery_date<'#{params[:year]}-04-01'")
     else
@@ -90,7 +90,7 @@ class ReportsController < ApplicationController
       @jobs = Job.all
       
       @filename = "Jobs_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "../shared/system/exports/"
+      @file_path = "../../shared/system/exports/"
       @table_name = "Jobs"
       @table_headers = "Name, Owner Name, Logger Name, Trucker Name, HFI-rate (%), HFI-prime" 
     end
@@ -99,7 +99,7 @@ class ReportsController < ApplicationController
       @tickets = Ticket.all
       
       @filename = "Tickets_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "shared/system/exports/"
+      @file_path = "../../shared/system/exports/"
       @table_name = "Tickets"
       
       @species = ""
@@ -113,7 +113,7 @@ class ReportsController < ApplicationController
       @payments = PaymentFromDestination.all
       
       @filename = "Payments_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "shared/system/exports/"
+      @file_path = "../../shared/system/exports/"
       @table_name = "Payments"
       @table_headers = "Date, Destination Name, Job Name, Payment #, Wood Type, Net MBF, Tonnage, Total Payment"      
     end
