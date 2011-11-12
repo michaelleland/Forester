@@ -34,6 +34,8 @@ Forester::Application.routes.draw do
   match "/all_payment_entries" => "page_controls#all_payment_entries"
   match "/save_edited_ticket_entry/:id" => "entry#save_edited_ticket_entry"
   match "/save_edited_payment_entry/:id" => "entry#save_edited_payment_entry"
+  match "/delete_ticket/:id" => "entry#delete_ticket"
+  match "/delete_payment/:id" => "entry#delete_payment"
   
   #Setup page's basic page calls
   match "/landowners" => "setup#owners"
@@ -65,6 +67,8 @@ Forester::Application.routes.draw do
   match "/get_owner_tickets/:id" => "page_controls#get_owner_tickets"
   match "/get_logger_tickets/:id" => "page_controls#get_logger_tickets"
   match "/get_trucker_tickets/:id" => "page_controls#get_trucker_tickets"
+  match "/get_pdf_receipt" => "receipts#get_pdf_receipt"
+  
   
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"

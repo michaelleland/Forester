@@ -45,13 +45,45 @@
 		
 		<h5 style="float: left; clear: left;">Notes:</h5>
 		
-		<textarea name="notes" rows="5"></textarea>
+		<textarea id="notes" name="notes" rows="5"></textarea>
 		
-		<input id="submit_button" disabled="true" onclick="init_the_page();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />		
+		<input id="submit_button" disabled="true" onclick="get_pdf_receipt();init_the_page();" onmouseover="select_all_deductions();" type="button" value="No tickets selected" />		
 	</form>	
 </div>
 
 <script>
+
+function get_pdf_receipt() {
+	var tickets = $('#tickets_select').val();
+	var owner = $('#owner_type_selector').val();
+	var url = 'http://localhost/get_'+owner+'_receipt/?';
+	
+	$.each(tickets, function(index, value) {
+		if (value == tickets[0]) {
+			url = url+"tickets[]="+value;
+		} else {
+			url = url+"&tickets[]="+value;
+		}
+	});
+	
+	var deductions = $('#deductions_list').val();
+	
+	$.each(deductions, function(index, value) {
+		url = url+"&deductions_list[]="+value;
+	});
+	
+	var deductions_values = $('#deductions_values').val();
+	
+	$.each(deductions_values, function(index, value) {
+		url = url+"&deductions_values[]="+value;
+	});
+	
+	var notes = $('#notes').val();
+	
+	url = url + "&notes="+notes;
+	
+	window.location = '/get_pdf_receipt/?url='+Base64.encode(url);
+}
 
 $('#job_selector').change(function() {
 	init_type_select(); 

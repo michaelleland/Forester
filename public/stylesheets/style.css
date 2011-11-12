@@ -32,7 +32,7 @@ body {
 }
 
 .rates {
-	height: 210px;
+	height: 250px;
 }
 
 .rates .rate_type_select {
@@ -101,19 +101,19 @@ body {
 }
 
 .rates .accordion_left_column .row_headers {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_left_column .row_headers select {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_right_column .row_headers {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_right_column .row_headers select {
-	width: 180px;
+	width: 150px;
 }
 
 .bottom_row {
@@ -857,6 +857,10 @@ img#hfi_logo {
 	text-align: center;
 }
 
+#receipt_tickets_header span {
+	float: right;
+}
+
 #hfi_address_box {
 	width: 300px;
 	padding-left: 30px;
@@ -895,6 +899,11 @@ img#hfi_logo {
 #job_items_box {
 	margin-top: 5px;
 	float: left;
+}
+
+#job_items_box td span {
+	position: relative;
+	left: 10px;
 }
 
 #deduction_table_wrapper {
@@ -1001,6 +1010,7 @@ img#hfi_logo {
 	height: 960px;
 	
 	margin: auto;
+	margin-top: 150px;
 	
 	border: solid 1px black;
 	

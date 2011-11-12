@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
   end
   
   def give_pennies(x)
+    if x<0
+      @negative = true
+      x = x.abs
+    end
+    
     x = round_to(x, 2)
     @as_string = x.to_s
     
@@ -36,6 +41,10 @@ class ApplicationController < ActionController::Base
     end
     
     @as_string = "#{@integers}.#{@split_arr[1]}"
+    
+    if @negative
+      @as_string = "-#{@as_string}"
+    end
     
     @as_string
     

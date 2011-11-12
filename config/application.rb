@@ -38,5 +38,16 @@ module Forester
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    #PDFKit configs
+    
+    PDFKit.configure do |config|
+      config.wkhtmltopdf = "/usr/bin/wkhtmltopdf"
+      config.default_options = {
+        :page_size => 'letter',
+        :orientation => 'landscape'
+      }    
+    end
+    
   end
 end

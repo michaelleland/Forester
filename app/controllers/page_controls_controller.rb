@@ -22,9 +22,17 @@ class PageControlsController < ApplicationController
     
     @ticket.load_details.each do |i|
       if @species == ""
-        @species = "#{Specie.find(i.species_id).code}"
+        if i.species_id == 0
+          @species = "PU"
+        else
+          @species = "#{Specie.find(i.species_id).code}"
+        end
       else
-        @species = "#{@species},#{Specie.find(i.species_id).code}"
+        if i.species_id == 0
+          @species = "#{@species},PU}"
+        else
+          @species = "#{@species},#{Specie.find(i.species_id).code}"
+        end
       end 
       
       if @mbfs == ""
@@ -34,9 +42,9 @@ class PageControlsController < ApplicationController
       end
       
       if @tons == ""
-        @tons = "#{i.tonnage}"
+        @tons = "#{i.tonnnage}"
       else
-        @tons = "#{@tons},#{i.tonnage}"
+        @tons = "#{@tons},#{i.tonnnage}"
       end
     end
     
@@ -45,7 +53,7 @@ class PageControlsController < ApplicationController
   
   def all_ticket_entries
    @ac = ApplicationController.new
-   @tickets = Ticket.all[0..100] 
+   @tickets = Ticket.all[0..200] 
    @species = Specie.all
    @woodtypes = WoodType.all
   end

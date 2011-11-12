@@ -4,16 +4,16 @@
 	<form action="/add_entry_row" method="post" data-remote="true">
 		<table id="entry_table">
 			<tr>
-				<th>Date</th>
-				<th>Job</th>
-				<th>Destination</th>
-				<th>Wood type</th>
-				<th>Pmnt #</th>
-				<th>Tckts</th>
-				<th>Tons</th>
-				<th>MBF</th>
-				<th>Amount</th>
-				<th>Action</th>
+				<th class="table_headers">Date</th>
+				<th class="table_headers">Job</th>
+				<th class="table_headers">Destination</th>
+				<th class="table_headers">Wood type</th>
+				<th class="table_headers">Pmnt #</th>
+				<th class="table_headers">Tckts</th>
+				<th class="table_headers">Tons</th>
+				<th class="table_headers">MBF</th>
+				<th class="table_headers">Amount</th>
+				<th class="table_headers">Action</th>
 			</tr>
 			<tr>
 				<td>
@@ -24,7 +24,7 @@
 					<select id="job_name">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>
+							<option value="<%= i.id %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -32,7 +32,7 @@
 					<select name="destination_name" id="destination_name">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>
+							<option value="<%= i.id %>"><%= shorten i.name %></option>
 						<% end %>
 					</select>
 				</td>
@@ -80,7 +80,7 @@
 			<th class="table_headers" style="width: 50px;">Tons</th>
 			<th class="table_headers" style="width: 50px;">NMBF</th>
 			<th class="table_headers" style="width: 100px;">Amount</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>		
 	</table>
 </div>
@@ -98,7 +98,7 @@
 			<th class="table_headers" style="width: 50px;">Tons</th>
 			<th class="table_headers" style="width: 50px;">NMBF</th>
 			<th class="table_headers" style="width: 100px;">Amount</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>
 	</table>
 </div>
@@ -108,8 +108,8 @@
 	function validated_submit() {
 		if (check_field_data()) {
 			var payment_num = $('#payment_num').attr('value');
-			var destination_name = $('#destination_name :selected').text();
-			var job_name = $('#job_name :selected').text();
+			var destination_id = $('#destination_name').val();
+			var job_id = $('#job_name').val();
 			var net_mbf = $('#net_mbf').attr('value');
 			var date = $('#payment_date').attr('value');
 			var wood_type = $('#wood_type').val();
@@ -118,15 +118,21 @@
 			var tickets = $('#tickets').attr('value');
 			
 			var url = "";
-			url = url+'/add_payment_entry_row/?payment_date='+date+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
+			url = url+'/add_payment_entry_row/?payment_date='+date+'&destination_id='+destination_id+'&job_id='+job_id+'&wood_type='+wood_type
 			url = url+'&tonnage='+tonnage+'&amount='+amount+'&payment_num='+payment_num+'&tickets='+tickets+'&net_mbf='+net_mbf;
 			
 			$.ajax ({
 				url: url,
 				cache: false,
 				method: 'POST',
-				success: function() {
-					
+				success: function(html) {
+					$('#current_entries tbody').append(html);
+					$('input.fields').attr('value', '');
+					$('#wood_type').val(-1);
+					$('#destination_name').val(-1);
+					$('#job_name').val(-1);
+					$('input').first().focus();
+					refresh_all_entries('payment');
 				}
 			});
 		}
@@ -158,6 +164,11 @@
 			}
 		}
 		
+		if (!validate_date($('#payment_date').val())) {
+			$('#feedback').append('<div>Invalid date</div>');
+			everything_ok = false;
+		}
+		
 		setTimeout(function() {
 			$('#feedback').fadeOut();
 			setTimeout(function() {
@@ -168,8 +179,18 @@
 		return everything_ok;
 	}
 
-	function show_payment_inputs(id) {
-		var where_from = $('#'+id+'entry');
+	function show_payment_inputs(id, current) {
+		var where_from;
+		var boolean_as_string = "";
+		
+		if (current) {
+			where_from = $('#current_entries').find('#'+id+'entry');
+			boolean_as_string = "true";
+		} else {
+			where_from = $('#all_entries').find('#'+id+'entry');
+			boolean_as_string = "false";
+		}
+		
 		var payment_date = where_from.find('#payment_date');
 		var job_name = where_from.find('#job_name').html();
 		var destination_name = where_from.find('#destination_name').html();
@@ -188,7 +209,7 @@
 			where_from.find('td').each(function() {
 				var value = $(this).html();
 				var width = $('#all_entries th:nth-child('+counter+')').width();
-				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
 				where_from.find('td').fadeIn();
 				counter++;
 			});
@@ -196,13 +217,13 @@
 			// Following  blocks "overwrite" some of the fields of previous loop
 			
 			//The button for saving
-			where_from.find('td').last().html('<input type="button" value="save" onclick="edit_payment_entry('+id+')" />');
+			where_from.find('td').last().html('<input type="button" value="save" style="width:106px;" onclick="edit_payment_entry('+id+', '+boolean_as_string+')" />');
 			
 			//Select for job name
 			where_from.find('#job_name').html('\
 			<select id="job_name_select">\
 				<% Job.all.each do |i| %>
-					<option value="<%= i.id %>"><%= i.name %></option>\
+					<option value="<%= i.id %>"><%= shorten i.name %></option>\
 				<% end %>
 			</select>\
 			');
@@ -218,7 +239,7 @@
 			where_from.find('#destination_name').html('\
 			<select id="destination_name_select">\
 				<% Destination.all.each do |i| %>
-					<option value="<%= i.id %>"><%= i.name %></option>\
+					<option value="<%= i.id %>"><%= shorten i.name %></option>\
 				<% end %>
 			</select>\
 			');
@@ -244,11 +265,15 @@
 				}
 			});
 		}, 620);
-		
 	}
 	
-	function edit_payment_entry(id) {
-		var where_from = $('#'+id+'entry')
+	function edit_payment_entry(id, current) {
+		var where_from;
+		if (current) {
+			where_from = $('#current_entries').find('#'+id+'entry');
+		} else {
+			where_from = $('#all_entries').find('#'+id+'entry');
+		}
 		
 		var payment_date = where_from.find('#payment_date').find('input').val();
 		var job_id = where_from.find('#job_name_select').val();
@@ -268,11 +293,54 @@
 			url: url,
 			cache: false,
 			success: function() {
+				fade_out_from_current_entries(id, current);
 				refresh_all_entries('payment');
 			}
-		});	
+		});
 	}
 	
+	function fade_out_from_current_entries(id, current) {
+		var where_from = $('#current_entries').find('#'+id+'entry');
+		
+		if (current) {
+			where_from.children().each(function() {
+				$(this).contents().fadeOut();
+				
+				var inputs_value = $(this).find('input').val(); 
+				var selects_value = $(this).find('select :selected').text();
+				
+				if (inputs_value == "" || inputs_value == undefined) {
+					$(this).html(selects_value);
+				}
+				if (selects_value == "" || selects_value == undefined) {
+					$(this).html(inputs_value);
+				}
+			});
+			
+			where_from.children().last().html('\
+			<input type="button" value="edit" onclick="show_ticket_inputs('+id+');">\
+			<input type="button" value="del" onclick="delete_ticket('+id+')">');
+			
+			setTimeout(function() {
+				where_from.children().fadeIn();
+			}, 620);
+		} else {
+			where_from.children().fadeOut();
+		}
+	}
+	
+	function delete_payment(id) {
+			if (confirm("Do you really want to delete this payment?")) {
+				$.ajax({
+					url: "/delete_payment/"+id,
+					cache: false,
+					success: function() {
+						$('#all_entries').find('#'+id+'entry').fadeOut();
+						$('#current_entries').find('#'+id+'entry').fadeOut();
+					}
+				});
+			}
+		}
 	
 	/*Script which is run when page loads. Loads all_entries section with payment data*/
 	

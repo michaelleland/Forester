@@ -78,7 +78,7 @@
 	<table>
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
-			<th class="table_headers" style="width: 90px;">Date</th>
+			<th class="table_headers" style="width: 110px;">Date</th>
 			<th class="table_headers" style="width: 160px;">Job</th>
 			<th class="table_headers" style="width: 170px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
@@ -86,7 +86,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>
 		
 	</table>
@@ -98,7 +98,7 @@
 	<table>
 		<tr>
 			<th class="table_headers" style="width: 70px;">Ticket #</th>
-			<th class="table_headers" style="width: 90px;">Date</th>
+			<th class="table_headers" style="width: 110px;">Date</th>
 			<th class="table_headers" style="width: 160px;">Job</th>
 			<th class="table_headers" style="width: 170px;">Destination</th>
 			<th class="table_headers" style="width: 90px;">Wood type</th>
@@ -106,7 +106,7 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 60px;">Action</th>
+			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>
 		
 	</table>
@@ -163,7 +163,7 @@
 					cache: false,
 					method: 'POST',
 					success: function() {
-						
+	
 					}
 				});
 			}
@@ -201,6 +201,11 @@
 				}
 			}
 			
+			if (!validate_date($('#delivery_date').val())) {
+				$('#feedback').append('<div>Invalid date</div>');
+				everything_ok = false;
+			}
+			
 			setTimeout(function() {
 				$('#feedback').fadeOut();
 				setTimeout(function() {
@@ -216,7 +221,7 @@
 		 */
 		function enable_load_fields() {
 			var job_name = $('#job_name').html();
-			var destination_name = $('#destination_name :selected').text();
+			var destination_name = $('#destination_name').val();
 			
 			$('#tonnage').attr('disabled', 'true');
 			$('#load_1_mbfs').attr('disabled', 'true');
@@ -282,8 +287,18 @@
 			$('#net_mbf').attr('value', total);
 		})
 		
-		function show_ticket_inputs(id) {
-			var where_from = $('#'+id+'entry');
+		function show_ticket_inputs(id, current) {
+			var where_from;
+			var boolean_as_string = "";
+			
+			if (current) {
+				where_from = $('#current_entries').find('#'+id+'entry');
+				boolean_as_string = "true";
+			} else {
+				where_from = $('#all_entries').find('#'+id+'entry');
+				boolean_as_string = "false";
+			}
+			
 			var ticket_number = where_from.find('#ticket_number');
 			var delivery_date = where_from.find('#delivery_date');
 			var job_name = where_from.find('#job_name').html();
@@ -303,7 +318,7 @@
 				where_from.find('td').each(function() {
 					var value = $(this).html();
 					var width = $('#all_entries th:nth-child('+counter+')').width();
-					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-10)+'px;" />');
+					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
 					where_from.find('td').fadeIn();
 					counter++;
 				});
@@ -311,13 +326,13 @@
 				// Following  blocks "overwrite" some of the fields of previous loop
 				
 				//The button for saving
-				where_from.find('td').last().html('<input type="button" value="save" onclick="edit_ticket_entry('+id+')" />');
+				where_from.find('td').last().html('<input type="button" value="save" style="width: 106px;" onclick="edit_ticket_entry('+id+', '+boolean_as_string+')" />');
 				
 				//Select for job name
 				where_from.find('#job_name').html('\
 				<select id="job_name_select">\
 					<% Job.all.each do |i| %>
-						<option value="<%= i.id %>"><%= i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>
 				</select>\
 				');
@@ -333,7 +348,7 @@
 				where_from.find('#destination_name').html('\
 				<select id="destination_name_select">\
 					<% Destination.all.each do |i| %>
-						<option value="<%= i.id %>"><%= i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>
 				</select>\
 				');
@@ -383,7 +398,7 @@
 						');
 						
 						tonnage.html('\
-							<input type="text" id="load_1_mbf" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
+							<input type="text" id="load_1_tons" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
 						');
 						
 						where_from.find('#species').html('\
@@ -404,7 +419,7 @@
 						$.each(species, function() {
 							if (this != species[0]) {
 								where_from.after('\
-								<tr class="'+id+'_species_edit_row" style="background-color: '+bg_color+';" >\
+								<tr class="'+id+'_species_edit_row species_edit_rows" style="background-color: '+bg_color+';" >\
 									<td></td>\
 									<td></td>\
 									<td></td>\
@@ -445,8 +460,15 @@
 			
 		}
 		
-		function edit_ticket_entry(id) {
-			var where_from = $('#'+id+'entry')
+		function edit_ticket_entry(id, current) {
+			var where_from;
+			
+			if (current) {
+				var where_from = $('#current_entries').find('#'+id+'entry');
+			} else {
+				var where_from = $('#all_entries').find('#'+id+'entry');
+			}
+			
 			var serows = $('.'+id+'_species_edit_row');
 			
 			var ticket_num = where_from.find('#ticket_number').find('input').val();
@@ -482,10 +504,44 @@
 				url: url,
 				cache: false,
 				success: function() {
+					fade_out_from_current_entries(id, current);
 					refresh_all_entries('ticket');
 				}
 			});	
 		}
+				
+		function fade_out_from_current_entries(id, current) {
+			var where_from = $('#current_entries').find('#'+id+'entry');
+			
+			if (current) {
+				where_from.children().each(function() {
+					$(this).contents().fadeOut();
+					
+					var inputs_value = $(this).find('input').val(); 
+					var selects_value = $(this).find('select :selected').text();
+					
+					if (inputs_value == "" || inputs_value == undefined) {
+						$(this).html(selects_value);
+					}
+					if (selects_value == "" || selects_value == undefined) {
+						$(this).html(inputs_value);
+					}
+				});
+				
+				where_from.children().last().html('\
+				<input type="button" value="edit" onclick="show_ticket_inputs('+id+', true);">\
+				<input type="button" value="del" onclick="delete_ticket('+id+')">');
+				
+				setTimeout(function() {
+					where_from.children().fadeIn();
+				}, 620);
+			} else {
+				where_from.children().fadeOut();
+			}
+		}
+		
+		
+		
 		
 		$(document).ready(function() {
 			setTimeout(function () {
@@ -526,6 +582,19 @@
 							$('.specie_mbfs').each(function(){$(this).removeAttr('disabled');});
 							$('#tonnage').removeAttr('disabled');
 						}
+					}
+				});
+			}
+		}
+		
+		function delete_ticket(id) {
+			if (confirm("Do you really want to delete this ticket?")) {
+				$.ajax({
+					url: "/delete_ticket/"+id,
+					cache: false,
+					success: function() {
+						$('#all_entries').find('#'+id+'entry').fadeOut();
+						$('#current_entries').find('#'+id+'entry').fadeOut();
 					}
 				});
 			}

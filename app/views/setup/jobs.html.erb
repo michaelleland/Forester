@@ -165,9 +165,9 @@
 					<div class="data_rows"><h4>Job:</h4></div>\
 					<div class="data_rows"><div class="row_headers">Job name:</div><div class="row_data"><input id="job_name" name="job_name" type="text" size="20" value="'+job_name+'"  /></div></div>\
 					<div class="data_rows"><h4>Partners:</h4></div>\
-					<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data"> <input id="owner_name" name="owner_name" type="text" size="20" value="'+owner_name+'" /></div></div>\
-					<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data"> <input id="logger_name" name="logger_name" type="text" size="20" value="'+logger_name+'" /></div></div>\
-					<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data"> <input id="trucker_name" name="trucker_name" type="text" size="20" value="'+trucker_name+'" /></div></div>\
+					<div class="data_rows"><div class="row_headers">Landowner:</div><div class="row_data" id="owner_input""></div></div>\
+					<div class="data_rows"><div class="row_headers">Logger:</div><div class="row_data" id="logger_input"></div></div>\
+					<div class="data_rows"><div class="row_headers">Trucker:</div><div class="row_data" id="trucker_input"></div></div>\
 				</div>\
 				<div class="accordion_right_column">\
 					<div class="data_rows"><h4>General info:</h4></div>\
@@ -178,8 +178,55 @@
 				<input type="hidden" name="job_id" value=\"'+id+' \" />\
 			</form>' 
 			
-			setTimeout(function() { $(place).append(html); }, 650);
-			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); owner_autocomplete(id); logger_trucker_autocomplete(id);});}, 650);
+			setTimeout(function() { 
+				$(place).append(html); 
+				
+				var where_from = $(place);
+				
+				where_from.find('#owner_input').html('\
+					<select id="owner_name_select" name="owner_name">\
+						<% Owner.all.each do |i| %>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+						<% end %>
+					</select>\
+				');
+				
+				where_from.find('#owner_name_select option').each(function() {
+					if ($(this).html() == owner_name) {
+						$(this).attr('selected', 'true');
+					}
+				});
+				
+				where_from.find('#logger_input').html('\
+					<select id="logger_name_select" name="logger_name">\
+						<% Partner.all.each do |i| %>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+						<% end %>
+					</select>\
+				');
+				
+				where_from.find('#logger_name_select option').each(function() {
+					if ($(this).html() == logger_name) {
+						$(this).attr('selected', 'true');
+					}
+				});
+				
+				where_from.find('#trucker_input').html('\
+					<select id="trucker_name_select" name="trucker_name">\
+						<% Partner.all.each do |i| %>
+							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+						<% end %>
+					</select>\
+				');
+				
+				where_from.find('#trucker_name_select option').each(function() {
+					if ($(this).html() == trucker_name) {
+						$(this).attr('selected', 'true');
+					}
+				});
+			}, 650);
+			
+			setTimeout(function() { $(place).contents().each(function() { $(this).fadeIn(); });}, 650);
 			
 		}
 		

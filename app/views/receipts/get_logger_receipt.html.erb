@@ -70,7 +70,7 @@
 							<td>Logging pay</td>
 							<td></td>
 							<% if @deduction_items.length == 0 %>
-								<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 100px;"> + $ <%= @total_wo_deductions %> </div></td>
+								<td style="text-align: right;"><div style="float: right; border-bottom: solid 1px black; width: 110px;"> + $ <%= @total_wo_deductions %> </div></td>
 							<% else %>
 								<td style="text-align: right;"> + $ <%= @total_wo_deductions %> </td>
 							<% end %>
@@ -85,7 +85,7 @@
 								<td><%= i[0] %></td>
 								<td></td>
 								<% if i == @deduction_items.last %>
-									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 100px;">- $ <%= @ac.give_pennies(i[1].to_i) %> </div></td>
+									<td style="text-align: right;"> <div style="float: right; border-bottom: solid 1px black; width: 110px;">- $ <%= @ac.give_pennies(i[1].to_i) %> </div></td>
 								<% else %>
 									<td style="text-align: right;"> - $ <%= @ac.give_pennies(i[1].to_i) %> </td>
 								<% end %>
@@ -151,7 +151,7 @@
 						<tr>
 							<td><%= i.number %></td>
 							<td><%= i.delivery_date.strftime("%m/%d/%Y") %></td>
-							<td><%= i.destination.name %></td>
+							<td><%= shorten i.destination.name %></td>
 							<td><%= WoodType.find(i.wood_type).name %></td>
 							<td><%= i.net_mbf %></td>
 							<td><%= i.tonnage %></td>

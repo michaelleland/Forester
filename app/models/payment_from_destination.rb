@@ -17,4 +17,13 @@ class PaymentFromDestination < ActiveRecord::Base
     
   end
   
+  def net_mbff
+    if self.net_mbf.nil?
+      0
+    else
+      self.net_mbf
+    end
+  end
+  
+  
 end

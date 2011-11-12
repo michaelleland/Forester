@@ -30,7 +30,7 @@ class EntryController < ApplicationController
     
     @payments.each do |i| 
       @payments_total = @payments_total + i.total_payment
-      @payments_total_mbf = @payments_total_mbf + i.net_mbf
+      @payments_total_mbf = @payments_total_mbf + i.net_mbff
       @payments_total_tonnage = @payments_total_tonnage + i.tonnnage
     end
     
@@ -58,6 +58,12 @@ class EntryController < ApplicationController
       return
     end
     
+    @value = params[:value].to_s
+    3.times do
+      @value.sub!(",", "")
+    end
+    @value = @value.to_f
+    
     @day = params[:delivery_date][3..4]
     @month = params[:delivery_date][0..1]
     @year = params[:delivery_date][6..9]
@@ -67,7 +73,7 @@ class EntryController < ApplicationController
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
     
-    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => params[:value], :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
+    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
     unless params[:wood_type] == "3"
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
       @specie_codes.push(Specie.find(@species[0]).code)
@@ -93,19 +99,23 @@ class EntryController < ApplicationController
       end
     else
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => 0, :tonnage => params[:tonnage])
-    end 
+    end
   end
   
   def add_payment_entry_row
     @ac = ApplicationController.new
-    @destination = Destination.find_by_name(params[:destination_name])
-    @job = Job.find_by_name(params[:job_name])
     
     @day = params[:payment_date][3..4]
     @month = params[:payment_date][0..1]
     @year = params[:payment_date][6..9]
     
-    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => @destination.id, :job_id => @job.id, :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => params[:amount], :wood_type => params[:wood_type])
+    @total_payment = params[:amount].to_s
+    3.times do
+      @total_payment.sub!(",", "")
+    end
+    @total_payment = @total_payment.to_f
+    
+    @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => params[:destination_id], :job_id => params[:job_id], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => @total_payment, :wood_type => params[:wood_type])
   end
   
   def ticket_entry
@@ -135,7 +145,14 @@ class EntryController < ApplicationController
     @ticket.job_id = params[:job_id]
     @ticket.destination_id = params[:destination_id]
     @ticket.wood_type = params[:wood_type_id]
-    @ticket.value = params[:value]
+    
+    @value = params[:value].to_s
+    3.times do
+      @value.sub!(",", "")
+    end
+    @value = @value.to_f
+    
+    @ticket.value = @value
     
     @ticket.load_details.each_with_index do |i, x|
       i.species_id = params[:species][x]
@@ -168,9 +185,16 @@ class EntryController < ApplicationController
     @payment.payment_date = @payment_date
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
-    @payment.tonnage = params[:tonnage]
+    @payment.tonnage = params[:tons]
     @payment.net_mbf = params[:mbf]
-    @payment.total_payment = params[:total_payment]
+    
+    @total_payment = params[:total_payment].to_s
+    3.times do
+      @total_payment.sub!(",", "")
+    end
+    @total_payment = @total_payment.to_f
+    
+    @payment.total_payment = @total_payment
     
     unless @payment.save
       render :status => 306, :nothing => true
@@ -178,4 +202,19 @@ class EntryController < ApplicationController
       render :status => 200, :nothing => true
     end
   end
+
+  def delete_ticket
+    @ticket = Ticket.find(params[:id])
+    @ticket.delete
+    
+    render :nothing => true
+  end
+
+  def delete_payment
+    @payment = PaymentFromDestination.find(params[:id])
+    @payment.delete
+    
+    render :nothing => true
+  end
+
 end
