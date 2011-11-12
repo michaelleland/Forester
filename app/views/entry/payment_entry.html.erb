@@ -164,6 +164,11 @@
 			}
 		}
 		
+		if (!validate_date($('#payment_date').val())) {
+			$('#feedback').append('<div>Invalid date</div>');
+			everything_ok = false;
+		}
+		
 		setTimeout(function() {
 			$('#feedback').fadeOut();
 			setTimeout(function() {

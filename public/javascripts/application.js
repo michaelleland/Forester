@@ -232,3 +232,41 @@ var Base64 = {
 	}
  
 }
+
+function validate_date(date) {
+	var month = date.substr(0, 2);
+	var day = date.substr(3, 2);
+	var year = date.substr(6, 4);
+	
+	if (isNaN(parseInt(month))) {
+		return false;
+	} else {
+		month = parseInt(month);
+	}
+	
+	if (isNaN(parseInt(day))) {
+		return false;
+	} else {
+		day = parseInt(day);
+	}
+	
+	if (isNaN(parseInt(year))) {
+		return false;
+	} else {
+		year = parseInt(year);
+	}
+	
+	if (day < 0 || day > 31) {
+		return false;
+	}
+	
+	if (month < 0 || month > 12) {
+		return false;
+	}
+	
+	if (year < 1900 || year > 2100) {
+		return false;
+	}
+	
+	return true;
+}

@@ -6,8 +6,8 @@
 		<td id="wood_type" type_id="<%= i.wood_type %>"><%= WoodType.find(i.wood_type).name %></td>
 		<td id="payment_num"><%= i.payment_num %></td>
 		<td id="tickets"><%= i.tickets %></td>
-		<td id="tonnage"><%= i.tonnage %></td>
-		<td id="net_mbf"><%= i.net_mbf %></td>
+		<td id="tonnage"><%= @ac.give_pennies(i.tonnage) %></td>
+		<td id="net_mbf"><%= @ac.give_pennies(i.net_mbf) %></td>
 		<td class="currency" id="total_payment"><%= @ac.give_pennies(i.total_payment) %></td>
 		<td><input type="button" value="edit" onclick="show_payment_inputs(<%= i.id %>)"> 
 		<input type="button" value="del" onclick="delete_payment(<%= i.id %>)"></td>
