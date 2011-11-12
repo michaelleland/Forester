@@ -42,9 +42,9 @@ class PageControlsController < ApplicationController
       end
       
       if @tons == ""
-        @tons = "#{i.tonnage}"
+        @tons = "#{i.tonnnage}"
       else
-        @tons = "#{@tons},#{i.tonnage}"
+        @tons = "#{@tons},#{i.tonnnage}"
       end
     end
     

@@ -221,7 +221,7 @@
 		 */
 		function enable_load_fields() {
 			var job_name = $('#job_name').html();
-			var destination_name = $('#destination_name :selected').text();
+			var destination_name = $('#destination_name').val();
 			
 			$('#tonnage').attr('disabled', 'true');
 			$('#load_1_mbfs').attr('disabled', 'true');
@@ -287,8 +287,18 @@
 			$('#net_mbf').attr('value', total);
 		})
 		
-		function show_ticket_inputs(id) {
-			var where_from = $('#'+id+'entry');
+		function show_ticket_inputs(id, current) {
+			var where_from;
+			var boolean_as_string = "";
+			
+			if (current) {
+				where_from = $('#current_entries').find('#'+id+'entry');
+				boolean_as_string = "true";
+			} else {
+				where_from = $('#all_entries').find('#'+id+'entry');
+				boolean_as_string = "false";
+			}
+			
 			var ticket_number = where_from.find('#ticket_number');
 			var delivery_date = where_from.find('#delivery_date');
 			var job_name = where_from.find('#job_name').html();
@@ -316,7 +326,7 @@
 				// Following  blocks "overwrite" some of the fields of previous loop
 				
 				//The button for saving
-				where_from.find('td').last().html('<input type="button" value="save" style="width: 106px;" onclick="edit_ticket_entry('+id+')" />');
+				where_from.find('td').last().html('<input type="button" value="save" style="width: 106px;" onclick="edit_ticket_entry('+id+', '+boolean_as_string+')" />');
 				
 				//Select for job name
 				where_from.find('#job_name').html('\
@@ -450,8 +460,15 @@
 			
 		}
 		
-		function edit_ticket_entry(id) {
-			var where_from = $('#'+id+'entry')
+		function edit_ticket_entry(id, current) {
+			var where_from;
+			
+			if (current) {
+				var where_from = $('#current_entries').find('#'+id+'entry')
+			} else {
+				var where_from = $('#all_entries').find('#'+id+'entry')
+			}
+			
 			var serows = $('.'+id+'_species_edit_row');
 			
 			var ticket_num = where_from.find('#ticket_number').find('input').val();
@@ -487,36 +504,16 @@
 				url: url,
 				cache: false,
 				success: function() {
-					hide_inputs_from_current_entries(id);
+					fade_out_from_current_entries(id);
 					refresh_all_entries('ticket');
 				}
 			});	
 		}
-		
-		function hide_inputs_from_current_entries(id) {
-			var where_from = $('#current_entries #'+id+'entry');
-			
-			where_from.children().each(function() {
-				$(this).contents().fadeOut();
 				
-				var inputs_value = $(this).find('input').val(); 
-				var selects_value = $(this).find('select :selected').text();
-				
-				if (inputs_value == "" || inputs_value == undefined) {
-					$(this).html(selects_value);
-				}
-				if (selects_value == "" || selects_value == undefined) {
-					$(this).html(inputs_value);
-				}
-			});
+		function fade_out_from_current_entries(id) {
+			var where_from = $('#current_entries').find('#'+id+'entry');
 			
-			where_from.children().last().html('\
-			<input type="button" value="edit" onclick="show_ticket_inputs('+id+');">\
-			<input type="button" value="del" onclick="delete_ticket('+id+')">');
-			
-			setTimeout(function() {
-				where_from.children().fadeIn();
-			}, 620);
+			where_from.children().fadeOut();
 		}
 		
 		$(document).ready(function() {

@@ -270,3 +270,11 @@ function validate_date(date) {
 	
 	return true;
 }
+
+function shorten(str) {
+	if (str.length < 16) {
+		return str;
+	} else {
+		return str.substr(0, 16)+"..."
+	}
+}

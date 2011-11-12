@@ -185,7 +185,7 @@ class EntryController < ApplicationController
     @payment.payment_date = @payment_date
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
-    @payment.tonnage = params[:tonnage]
+    @payment.tonnage = params[:tons]
     @payment.net_mbf = params[:mbf]
     
     @total_payment = params[:total_payment].to_s

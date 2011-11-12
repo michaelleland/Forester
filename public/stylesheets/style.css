@@ -32,7 +32,7 @@ body {
 }
 
 .rates {
-	height: 210px;
+	height: 250px;
 }
 
 .rates .rate_type_select {
@@ -101,19 +101,19 @@ body {
 }
 
 .rates .accordion_left_column .row_headers {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_left_column .row_headers select {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_right_column .row_headers {
-	width: 180px;
+	width: 150px;
 }
 
 .rates .accordion_right_column .row_headers select {
-	width: 180px;
+	width: 150px;
 }
 
 .bottom_row {

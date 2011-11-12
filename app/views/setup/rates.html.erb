@@ -11,7 +11,7 @@
 					<div class="action_link" id="add_trucker_rate_row_<%= i.id %>" onclick="show_trucker_rate_inputs(<%= i.id %>)">Add a rate</div>					
 				<% else %>
 					<% @trds.each do |j| %>
-					   <div id="<%= j.id %>trucker_rate" class="data_rows"><div class="row_headers"><%= Destination.find(j.destination_id).name %>:</div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'trucker');">Del</div></div></div>
+					   <div id="<%= j.id %>trucker_rate" class="data_rows"><div class="row_headers"><%= shorten Destination.find(j.destination_id).name %>:</div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'trucker');">Del</div></div></div>
 					<% end %>
 					<div class="action_link" id="add_trucker_rate_row_<%= i.id %>" onclick="show_trucker_rate_inputs(<%= i.id %>)">Add a rate</div>
 				<% end %>
@@ -25,7 +25,7 @@
 						<div class="action_link" id="add_logger_rate_row_<%= i.id %>" onclick="show_logger_rate_inputs(<%= i.id %>)">Add a rate</div>					
 					<% else %>
 						<% @lrds.each do |j| %>
-							<div id="<%= j.id %>logger_rate" class="data_rows"><div class="row_headers"><%= Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'logger');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'logger');">Del</div></div></div>
+							<div id="<%= j.id %>logger_rate" class="data_rows"><div class="row_headers"><%= shorten Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'logger');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'logger');">Del</div></div></div>
 						<% end %>
 					<div class="action_link" id="add_logger_rate_row_<%= i.id %>" onclick="show_logger_rate_inputs(<%= i.id %>)">Add a rate</div>
 				<% end %>
@@ -58,7 +58,7 @@
 				<select id="destination">\
 					<option value="none"> </option>\
 					<% Destination.all.each do |i| %>\
-						<option value="<%= i.name %>"><%= i.name %></option>\
+						<option value="<%= i.name %>"><%= shorten i.name %></option>\
 					<% end %>\
 				</select>\
 				</div>\
@@ -83,7 +83,7 @@
 				<select id="destination">\
 					<option value="none"> </option>\
 					<% Destination.all.each do |i| %>\
-						<option value="<%= i.name %>"><%= i.name %></option>\
+						<option value="<%= i.name %>"><%= shorten i.name %></option>\
 					<% end %>\
 				</select>\
 				</div>\
@@ -113,7 +113,7 @@
 					
 					var html = '\
 					<div style="display: none;" id="'+response_text+type+'_rate" class="data_rows">\
-						<div class="row_headers">'+destination+':</div>\
+						<div class="row_headers">'+shorten(destination)+':</div>\
 						<div class="row_data"> $ <span class="rate" >'+rate+'</span> / <span class="rate_type">'+rate_type+'</span></div>\
 						<div class="rate_control_link_row">\
 							<div class="rate_control_link" onclick="show_edit_rate_inputs('+response_text+', \''+type+'\');" >Edit</div>\

@@ -8,10 +8,10 @@
 		<td id="destination_name"><%= shorten i.destination.name %></td>
 		<td id="wood_type" type_id="<%= i.wood_type %>"><%= @woodtypes[i.wood_type-1].name %></td>
 		<td id="species"><%= unless i.load_details.first.species_id == 0 then @species[@load_details.first.species_id-1].code else "PU" end %></td>
-		<td id="net_mbf"><%= @ac.give_pennies(i.net_mbf) %></td>
-		<td id="tonnage"><%= @ac.give_pennies(i.tonnage) %></td>
+		<td class="currency" id="net_mbf"><%= @ac.give_pennies(i.net_mbf) %></td>
+		<td class="currency" id="tonnage"><%= @ac.give_pennies(i.tonnage) %></td>
 		<td class="currency" id="load_pay"><%= @ac.give_pennies(i.value) %></td>
-		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= i.id %>);"> 
+		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= i.id %>, false);"> 
 		<input type="button" value="del" onclick="delete_ticket(<%= i.id %>)"></td>
 	</tr>
 <% end %>
