@@ -5,7 +5,7 @@
 default_run_options[:pty] = true
 
 #This is in another words, the url of the server and port number
-set :application, "forester.hficonsultants:3673"
+set :application, "forester.hficonsultants.com:3673"
 
 #This is the location of the repository which from we are deploying to server
 set :repository,  "git@github.com:michaelleland/Forester.git"
