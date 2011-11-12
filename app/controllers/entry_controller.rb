@@ -30,7 +30,7 @@ class EntryController < ApplicationController
     
     @payments.each do |i| 
       @payments_total = @payments_total + i.total_payment
-      @payments_total_mbf = @payments_total_mbf + i.net_mbf
+      @payments_total_mbf = @payments_total_mbf + i.net_mbff
       @payments_total_tonnage = @payments_total_tonnage + i.tonnnage
     end
     

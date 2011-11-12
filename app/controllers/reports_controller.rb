@@ -55,14 +55,12 @@ class ReportsController < ApplicationController
     
       @my_tickets.each do |i|
         i.load_details.each do |j|
-          unless j.mbfss == 0
-            @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss
-          else
-            @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnnage
-          end
-          if i.wood_type == 3 && j.species_id == 0 # WoodType with id = 3 is Pulp and it is always last in amounts the list
+          if i.wood_type == 3 || j.species_id == 0
             @total_pulp = @total_pulp + j.tonnage
+            next
           end
+          @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss
+          @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnnage
         end
       end
       
@@ -70,9 +68,9 @@ class ReportsController < ApplicationController
         writer.puts "Job, #{k.name}"
         writer.puts "Category, MBF, Tonnage"
         @species.each do |i|
-          writer.puts "#{i.code}, #{give_pennies(@amounts[i.id-1][0].to_f)}, #{give_pennies(@amounts[i.id-1][1].to_f)}"
+          writer.puts "#{i.code}, #{round_to(@amounts[i.id-1][0].to_f, 2)}, #{round_to(@amounts[i.id-1][1].to_f, 2)}"
         end
-        writer.puts "Pulp, ,#{@total_pulp}"
+        writer.puts "Pulp, ,#{round_to(@total_pulp.to_f, 2)}"
         writer.puts("\n")
       end
     end
@@ -126,7 +124,7 @@ class ReportsController < ApplicationController
       
       if params[:id] == "1"
         @jobs.each do |i|
-          @puts = "#{i.name}, #{i.owner.name}, #{i.logger.name}, #{i.trucker.name}, #{i.hfi_rate}, #{i.hfi_prime}"
+          @puts = "#{i.name}, #{i.owner.name.gsub(',', '')}, #{i.logger.name.gsub(',', '')}, #{i.trucker.name.gsub(',', '')}, #{i.hfi_rate}, #{i.hfi_prime}"
           writer.puts @puts
         end
       end
@@ -152,16 +150,16 @@ class ReportsController < ApplicationController
             @amounts_str = "#{@amounts_str}, #{j}"
           end
           
-          @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name}, #{i.job.name}, "
-          @puts << "#{WoodType.find(i.wood_type).name}#{@amounts_str}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value)}"
+          @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name.gsub(',', '')}, #{i.job.name.gsub(',', '')}, "
+          @puts << "#{WoodType.find(i.wood_type).name}#{@amounts_str}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value).gsub(',', '')}"
           writer.puts @puts
         end
       end
       if params[:id] == "3"
         @payments.each do |i|
-          @puts = "#{i.payment_date}, #{i.destination.name}, #{i.job.name}, #{i.payment_num}, "
+          @puts = "#{i.payment_date}, #{i.destination.name.gsub(',', '')}, #{i.job.name.gsub(',', '')}, #{i.payment_num}, "
           @puts << "#{WoodType.find(i.wood_type).name}, #{i.tonnage}, #{i.net_mbf}, "
-          @puts << "#{give_pennies(i.total_payment)}"
+          @puts << "#{give_pennies(i.total_payment).gsub(',', '')}"
           writer.puts @puts
         end
       end
