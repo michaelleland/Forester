@@ -388,7 +388,15 @@ class ReceiptsController < ApplicationController
   def save_owner_receipt    
     @tickets = Ticket.find(params[:tickets])
     
-    @payment_num = params[:payment_num]
+    @job = Job.find(@tickets.first.job_id)
+    @trucker = @job.trucker
+    
+    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
+    unless @receipts.first.nil?
+      @payment_num = @receipts.last.payment_num + 1
+    else
+      @payment_num = 1
+    end
     
     @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
     @tickets.each do |i|
@@ -404,7 +412,7 @@ class ReceiptsController < ApplicationController
     end
   end
   
-    def save_logger_receipt    
+  def save_logger_receipt    
     @tickets = Ticket.find(params[:tickets])
     
     @payment_num = params[:payment_num]
@@ -421,16 +429,22 @@ class ReceiptsController < ApplicationController
         @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
       end
     end
-    
   end
   
-  def save_trucker_receipt()    
+  def save_trucker_receipt
     @tickets = Ticket.find(params[:tickets])
     @notes = params[:notes]
-    @payment_num = params[:payment_num]
     @job = Job.find(@tickets.first.job_id)
+    @trucker = @job.trucker
     
-    @receipt = Receipt.create(:job_id => @job.id, :payment_num => @payment_num, :owner_id => @job.trucker_id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => @notes, :payment_total => @payment_total);
+    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
+    unless @receipts.first.nil?
+      @payment_num = @receipts.last.payment_num + 1
+    else
+      @payment_num = 1
+    end
+    
+    @receipt = Receipt.create(:job_id => @job.id, :payment_num => @payment_num, :owner_id => @trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => @notes, :payment_total => @payment_total);
     
     @tickets.each do |i|
       @receipt.tickets.push(i)

@@ -48,7 +48,7 @@
 		<textarea id="notes" name="notes" rows="5"></textarea>
 		
 		<input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
-		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" disabled="true" id="save_button" />
+		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="change_content('new_receipt', 2);" disabled="true" id="save_button" />
 	</form>	
 </div>
 
@@ -58,23 +58,33 @@ function set_form_action_to_save() {
 	var type = $('#owner_type_selector').val();
 	
 	$('#create_form').attr('action', '/save_'+type+'_receipt/');
+	$('#create_form').removeAttr('target');
 }
 
 function set_reviewed() {
-	$('body').find('input').each(function() {
-		if ($(this).attr('id') != "submit_button") {
-			$(this).attr('disabled', 'true');
-		}
-	});
-	$('#save_button').removeAttr('disabled');
-	
 	setTimeout(function() {
 		$('#submit_button').attr('disabled', 'true');
+		
 		$('body').find('select').each(function() {
-			$(this).attr('disabled', 'true');
+			$(this).fadeOut();
 		});
+		
+		$('body').find('input').each(function() {
+			if ($(this).attr('id') != 'save_button') {
+				$(this).fadeOut();
+			}
+		});
+		
+		$('body').find('h5').each(function() {
+			$(this).fadeOut();
+		});
+		
+		$('#input_row').fadeOut();
+		$('textarea').fadeOut();
+		
+		$('#save_button').removeAttr('disabled')
+		
 	}, 1000);
-	
 }
 
 //onclick="init_the_page();"
