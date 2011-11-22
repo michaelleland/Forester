@@ -68,25 +68,25 @@ function set_reviewed() {
 		$('#submit_button').attr('disabled', 'true');
 		
 		$('body').find('select').each(function() {
-			$(this).fadeOut();
+			$(this).fadeOut(10);
 		});
 		
 		$('body').find('input').each(function() {
 			if ($(this).attr('id') != 'save_button') {
-				$(this).fadeOut();
+				$(this).fadeOut(10);
 			}
 		});
 		
 		$('body').find('h5').each(function() {
-			$(this).fadeOut();
+			$(this).fadeOut(10);
 		});
 		
 		$('#input_row').fadeOut();
-		$('textarea').fadeOut();
+		$('textarea').fadeOut(10);
 		
 		$('#save_button').removeAttr('disabled')
 		
-	}, 1000);
+	}, 800);
 }
 
 //onclick="init_the_page();"

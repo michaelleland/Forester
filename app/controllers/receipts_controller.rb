@@ -257,80 +257,17 @@ class ReceiptsController < ApplicationController
   end
   
   def get_logger_receipt
-    #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
-    
-    #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    @notes = params[:notes]
-    
-    #Total vars declared and initialized
-    
-    @logger_total = 0 
-    @load_pay_total = 0
-    
-    @total = 0 #The final total after all those terrible calcs =)
-    @total_wo_deductions #Loggers total without deductions.
-    
     @tickets = Ticket.find(params[:tickets])
-    
+    @notes = params[:notes]
     @job = Job.find(@tickets.first.job_id)
     @logger = @job.logger
     
-    #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    @payment_num = params[:payment_num]
-    
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
+    unless @receipts.first.nil?
+      @payment_num = @receipts.last.payment_num + 1
+    else
+      @payment_num = 1
     end
-    
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-    
-    @destinations = Destination.find(@destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    @tickets.each do |j|      
-      @destinations.each do |i|
-        if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @logger.id)
-          if @rate.rate_type == "MBF"
-            j.logger_value = @rate.rate * j.net_mbf
-          else
-            if @rate.rate_type == "Tonnage"
-              j.logger_value = @rate.rate * j.tonnage
-            else @rate.rate_type == "percent"
-              if 
-                j.logger_value = (@rate / 100) *j.value
-              end
-            end
-          end
-        end
-      end
-      
-      @logger_total = @logger_total + j.logger_value
-      
-    end
-    
-    @total = @logger_total
-    
-    @total_wo_deductions = give_pennies(@total)
     
     @deduction_items = []
     
@@ -339,10 +276,16 @@ class ReceiptsController < ApplicationController
         @deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
-      
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@total)
+    respond_to do |format|
+      format.pdf do
+        #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
+        pdf = LoggerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
+        send_data pdf.render, filename: "#{@job.name}_trucker_receipt-#{Time.now.strftime("%Y%m%d-%H%M%S")}",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end
+    end
   end
   
   def trucker_receipt
@@ -353,7 +296,6 @@ class ReceiptsController < ApplicationController
     @tickets = Ticket.find(params[:tickets])
     @job = Job.find(@tickets.first.job_id)     
     @trucker = @job.trucker
-     
      
     if @payment_num.nil?
       @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
