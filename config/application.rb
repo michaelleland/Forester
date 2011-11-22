@@ -46,7 +46,7 @@ module Forester
       config.default_options = {
         :page_size => 'letter',
         :orientation => 'landscape'
-      }    
+      }
     end
     
   end

@@ -445,6 +445,10 @@ textarea {
 	clear: left;
 }
 
+#save_button {
+	float: left;
+}
+
 
 #job_selector {
 	width: 200px;
