@@ -58,7 +58,9 @@ function set_form_action_to_save() {
 	var type = $('#owner_type_selector').val();
 	
 	$('#create_form').attr('action', '/save_'+type+'_receipt/');
+	$('#create_form').attr('data-remote', 'true');
 	$('#create_form').removeAttr('target');
+	
 }
 
 function set_reviewed() {
