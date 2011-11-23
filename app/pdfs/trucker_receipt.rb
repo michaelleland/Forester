@@ -143,7 +143,7 @@ class TruckerReceipt < Prawn::Document
       
     tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Trucking rate", "Load Pay", "Trucker Pay"]]+
     @tickets.map do |i|
-      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{@rate.rate} / #{@rate.rate_type}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.trucker_value)}"]
+      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{i.trucker_rate.rate} / #{i.trucker_rate.rate_typee}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.trucker_value)}"]
     end +
     [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{@ac.give_pennies(@load_pay_total)}</b>", "<b>$ #{@total}</b>"]]
     

@@ -144,7 +144,7 @@ class LoggerReceipt < Prawn::Document
     
     tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Logging rate", "Load Pay", "Logger Pay"]]+
     @tickets.map do |i|
-      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{@rate.rate} / #{@rate.rate_type}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.logger_value)}"]
+      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{i.logger_rate.rate} / #{i.logger_rate.rate_typee}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.logger_value)}"]
     end +
     [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{@ac.give_pennies(@load_pay_total)}</b>", "<b>$ #{@total}</b>"]]
     

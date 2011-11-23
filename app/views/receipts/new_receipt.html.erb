@@ -48,19 +48,24 @@
 		<textarea id="notes" name="notes" rows="5"></textarea>
 		
 		<input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
-		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="change_content('new_receipt', 2);" disabled="true" id="save_button" />
+		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
 	</form>	
 </div>
 
 <script>
 
+function lets_get_outta_here() {
+	setTimeout(function() {
+		change_content('new_receipt', 2);
+	}, 2600)
+}
+
 function set_form_action_to_save() {
 	var type = $('#owner_type_selector').val();
 	
 	$('#create_form').attr('action', '/save_'+type+'_receipt/');
-	$('#create_form').attr('data-remote', 'true');
+	//$('#create_form').attr('data-remote', 'true');
 	$('#create_form').removeAttr('target');
-	
 }
 
 function set_reviewed() {

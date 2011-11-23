@@ -1,3 +1,9 @@
 class LoggerRate < ActiveRecord::Base
-  #Potentially mergeable with TruckerRate model, they are mostly identical
+  def rate_typee
+    if self.rate_type == "MBF"
+      "MBF"
+    else
+      "TON"
+    end
+  end
 end

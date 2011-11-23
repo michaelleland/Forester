@@ -143,101 +143,16 @@ class ReceiptsController < ApplicationController
   end
   
   def get_owner_receipt
-    #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
-    
-    #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    @notes = params[:notes]
-    
-    #Total vars declared and initialized
-    
-    @trucker_total = 0
-    @logger_total = 0 
-    @hfi_total = 0
-    @load_pay_total = 0
-    
-    @total = 0 #The final total after all those terrible calcs =)
-    @total_wo_deductions #Owners total without deductions.
-    
     @tickets = Ticket.find(params[:tickets])
-    
     @job = Job.find(@tickets.first.job_id)
     @owner = @job.owner
     
-    #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    @payment_num = params[:payment_num]
-    
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", @owner.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", @owner.id, @job.id, :order => "payment_num")
+    unless @receipts.first.nil?
+      @payment_num = @receipts.last.payment_num + 1
+    else
+      @payment_num = 1
     end
-    
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-    
-    @destinations = Destination.find(@destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-      if @rate.rate_type == "MBF"
-        j.trucker_value = @rate.rate * j.net_mbf
-      else
-        if @rate.rate_type == "Tonnage"
-          j.trucker_value = @rate.rate * j.tonnage
-        else 
-          if @rate.rate_type == "percent"
-            j.trucker_value = (@rate.rate / 100) * j.value
-          end
-        end
-      end
-      
-      @trucker_total = @trucker_total + j.trucker_value
-      
-      j.hfi_value = j.value * (@job.hfi_rate / 100)
-      @hfi_total = @hfi_total + j.hfi_value
-      
-      @destinations.each do |i|
-        if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
-          if @rate.rate_type == "MBF"
-            j.logger_value = @rate.rate * j.net_mbf
-          else
-            if @rate.rate_type == "Tonnage"
-              j.logger_value = @rate.rate * j.tonnage
-            else @rate.rate_type == "percent"
-              if 
-                j.logger_value = (@rate / 100) *j.value
-              end
-            end
-          end
-        end
-      end
-      
-      @logger_total = @logger_total + j.logger_value
-      
-      j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
-    end
-    
-    @tickets.each {|i| @total = @total + i.owner_value.to_f }
-    
-    @total_wo_deductions = give_pennies(@total)
     
     @deduction_items = []
     
@@ -246,10 +161,16 @@ class ReceiptsController < ApplicationController
         @deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
-      
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@total)
+    respond_to do |format|
+      format.pdf do
+        #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
+        pdf = LandownerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
+        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_landowner_receipt",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end 
+    end
   end
   
   def logger_receipt
@@ -279,9 +200,8 @@ class ReceiptsController < ApplicationController
     
     respond_to do |format|
       format.pdf do
-        #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
         pdf = LoggerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-        send_data pdf.render, filename: "#{@job.name}_trucker_receipt-#{Time.now.strftime("%Y%m%d-%H%M%S")}",
+        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_logger_receipt",
                               type: "application/pdf",
                               disposition: "inline"
       end
@@ -320,7 +240,7 @@ class ReceiptsController < ApplicationController
       format.pdf do
         #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
         pdf = TruckerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-        send_data pdf.render, filename: "#{@job.name}_trucker_receipt-#{Time.now.strftime("%Y%m%d-%H%M%S")}",
+        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt}",
                               type: "application/pdf",
                               disposition: "inline"
       end
@@ -329,6 +249,11 @@ class ReceiptsController < ApplicationController
   
   def save_owner_receipt    
     @tickets = Ticket.find(params[:tickets])
+    
+    if @tickets.first.paid_to_owner == true
+      render :nothing => true, :state => 500
+      return
+    end
     
     @job = Job.find(@tickets.first.job_id)
     @trucker = @job.trucker
@@ -357,6 +282,11 @@ class ReceiptsController < ApplicationController
   def save_logger_receipt    
     @tickets = Ticket.find(params[:tickets])
     
+    if @tickets.first.paid_to_logger == true
+      render :nothing => true, :state => 500
+      return
+    end
+    
     @payment_num = params[:payment_num]
     
     @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
@@ -366,15 +296,27 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
+    @deduction_items = []
+    @deduction_items.push([i, params[:deductions_values][x]])
+    
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
         @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
       end
     end
+    
+    pdf = LoggerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
+    send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt",
+                           type: "application/pdf"
   end
   
   def save_trucker_receipt
     @tickets = Ticket.find(params[:tickets])
+    if @tickets.first.paid_to_trucker == true
+      render :nothing => true, :state => 500
+      return
+    end
+    
     @notes = params[:notes]
     @job = Job.find(@tickets.first.job_id)
     @trucker = @job.trucker
@@ -394,11 +336,19 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
+    #Need by the pdf
+    @deduction_items = []
+    
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
         @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        @deduction_items.push([i, params[:deductions_values][x]])
       end
     end
+    
+    pdf = TruckerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
+    send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt",
+                           type: "application/pdf"
   end
   
   def delete_trucker_receipt
