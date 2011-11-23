@@ -49,10 +49,10 @@ class LandownerReceipt < Prawn::Document
         end
       end
       
-      trucker_total = trucker_total + j.trucker_value
+      trucker_total = trucker_total + give_pennies(j.trucker_value).to_f
       
       j.hfi_value = j.value * (job.hfi_rate / 100)
-      hfi_total = hfi_total + j.hfi_value
+      hfi_total = hfi_total + give_pennies(j.hfi_value).to_f
       
       rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(j.destination_id, j.job_id, job.logger.id)
       if rate.rate_type == "MBF"
@@ -67,16 +67,15 @@ class LandownerReceipt < Prawn::Document
         end
       end
       
-      logger_total = logger_total + j.logger_value
+      logger_total = logger_total + round_to(j.logger_value, 2).to_f
       
       j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
+      owner_total = owner_total + give_pennies(j.owner.value).to_f
     end
     
-    tickets.each {|i| total = total + i.owner_value.to_f }
+    owner_total = total
     
-    owner_total = total.to_f
-    
-    deduction_items.each {|i| total = total - i[1].to_f }
+    deduction_items.each {|i| total = total - give_pennies(i[1].to_f).to_f }
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -170,5 +169,9 @@ class LandownerReceipt < Prawn::Document
   
   def shorten(str)
     @view.shorten(str)
+  end
+  
+  def round_to(x, i)
+    @view.round_to(x, i)
   end
 end

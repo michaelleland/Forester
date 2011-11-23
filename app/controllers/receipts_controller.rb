@@ -249,7 +249,7 @@ class ReceiptsController < ApplicationController
       payment_num = 1
     end
     
-    payment_total = 0.0
+    payment_total = 0
     
     tickets.each do |i|    
       if i.logger_rate.rate_typee == "MBF"
@@ -271,22 +271,15 @@ class ReceiptsController < ApplicationController
           i.trucker_value = i.trucker_rate.rate/100*i.value
         end
       end
-    end
       
       i.hfi_value = job.hfi_rate*i.value
       
       i.owner_value = i.value - i.hfi_value - i.logger_value - i.trucker_value
       
-      payment_total = payment_total + i.owner_value
+      payment_total = payment_total + round_to(i.owner_value, 2)
     end
     
-    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    tickets.each do |i|
-      receipt.tickets.push(i)
-      i.paid_to_owner = true
-      i.save
-    end
-    
+    #Needed by the pdf
     deduction_items = []
     
     unless params[:deductions_list].nil?
@@ -295,6 +288,20 @@ class ReceiptsController < ApplicationController
         deduction_items.push([i, params[:deductions_values][x]])
       end
     end
+    
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
+    
+    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
+    tickets.each do |i|
+      receipt.tickets.push(i)
+      i.paid_to_owner = true
+      i.save
+    end
+    
     pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
     send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
                            type: "application/pdf"
@@ -327,19 +334,25 @@ class ReceiptsController < ApplicationController
       payment_num = 1
     end
     
-    payment_total = 0.0
+    payment_total = 0
     
     tickets.each do |i|
       if i.logger_rate.rate_type == "MBF"
-        payment_total = payment_total + (i.logger_rate.rate*i.net_mbf)
+        payment_total = payment_total + give_pennies(i.logger_rate.rate*i.net_mbf).to_f
       else
         if i.logger_rate.rate_type == "Tonnage"
-          payment_total = payment_total + (i.logger_rate.rate*i.tonnage)
+          payment_total = payment_total + give_pennies(i.logger_rate.rate*i.tonnage).to_f
         else
-          payment_total = payment_total + (i.logger_rate.rate/100*i.value)
+          payment_total = payment_total + give_pennies(i.logger_rate.rate/100*i.value).to_f
         end
       end
     end
+    
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
     
     receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
     tickets.each do |i|
@@ -355,6 +368,7 @@ class ReceiptsController < ApplicationController
   
   def save_trucker_receipt
     tickets = Ticket.find(params[:tickets])
+    
     if tickets.first.paid_to_trucker == true
       render :nothing => true, :state => 500
       return
@@ -371,26 +385,18 @@ class ReceiptsController < ApplicationController
       payment_num = 1
     end
     
-    payment_total = 0.0
+    payment_total = 0
     
     tickets.each do |i|
       if i.trucker_rate.rate_type == "MBF"
-        payment_total = payment_total + (i.trucker_rate.rate*i.net_mbf)
+        payment_total = payment_total + round_to(i.trucker_rate.rate*i.net_mbf, 2)
       else
         if i.trucker_rate.rate_type == "Tonnage"
-          payment_total = payment_total + (i.trucker_rate.rate*i.tonnage)
+          payment_total = payment_total + round_to(i.trucker_rate.rate*i.tonnage, 2)
         else
-          payment_total = payment_total + (i.trucker_rate.rate/100*i.value)
+          payment_total = payment_total + round_to(i.trucker_rate.rate/100*i.value, 2)
         end
       end
-    end
-    
-    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
-    
-    tickets.each do |i|
-      receipt.tickets.push(i)
-      i.paid_to_trucker = true
-      i.save
     end
     
     #Needed by the pdf
@@ -401,6 +407,20 @@ class ReceiptsController < ApplicationController
         receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
         deduction_items.push([i, params[:deductions_values][x]])
       end
+    end
+    
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
+    
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
+    
+    tickets.each do |i|
+      receipt.tickets.push(i)
+      i.paid_to_trucker = true
+      i.save
     end
     
     pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
@@ -606,5 +626,4 @@ class ReceiptsController < ApplicationController
       render "get_trucker_receipt.html.erb"
     end
   end
-  
 end

@@ -51,16 +51,16 @@ class TruckerReceipt < Prawn::Document
         end
       end
       
-      trucker_total = trucker_total + j.trucker_value
+      trucker_total = trucker_total + round_to(j.trucker_value, 2)
       
     end
     
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
+    tickets.each {|i| load_pay_total = load_pay_total + round_to(i.value, 2)}
     
     total = trucker_total
     total_wo_deductions = trucker_total
       
-    deduction_items.each {|i| total = total - i[1].to_f }
+    deduction_items.each {|i| total = total - round_to(i[1].to_f, 2) }
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -122,9 +122,9 @@ class TruckerReceipt < Prawn::Document
     
     start_new_page(:layout => :landscape, :left_margin => 124, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
       
-    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Trucking rate", "Load Pay", "Trucker Pay"]]+
+    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Trucking Rate", "Load Pay", "Trucker Pay"]]+
     tickets.map do |i|
-      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{i.trucker_rate.rate} #{i.trucker_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.trucker_value)}"]
+      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.trucker_rate.rate)} #{i.trucker_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.trucker_value)}"]
     end +
     [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
     
@@ -154,5 +154,9 @@ class TruckerReceipt < Prawn::Document
   
   def shorten(str)
     @view.shorten(str)
+  end
+  
+  def round_to(x, i)
+    @view.round_to(x, i)
   end
 end

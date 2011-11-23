@@ -56,14 +56,14 @@ class LoggerReceipt < Prawn::Document
               j.logger_value = rate.rate * j.tonnage
             else rate.rate_type == "percent"
               if
-                j.logger_value = (rate / 100) *j.value
+                j.logger_value = (rate.rate / 100) *j.value
               end
             end
           end
         end
       end
       
-      logger_total = logger_total + j.logger_value
+      logger_total = logger_total + round_to(j.logger_value, 2)
       
     end
     
@@ -74,14 +74,12 @@ class LoggerReceipt < Prawn::Document
     load_pay_total = 0
     
     tickets.each do |i| 
-      load_pay_total = load_pay_total + i.value
+      load_pay_total = load_pay_total + round_to(i.value, 2)
     end
     
     deduction_items.each do |i| 
-      total = total - i[1].to_f
+      total = total - round_to(i[1].to_f)
     end
-    
-    total = total
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -175,5 +173,9 @@ class LoggerReceipt < Prawn::Document
   
   def shorten(str)
     @view.shorten(str)
+  end
+  
+  def round_to(x, i)
+    @view.round_to(x, i)
   end
 end
