@@ -14,6 +14,7 @@
 				<th class="table_headers">Load pay</th>
 				<th class="table_headers">Action</th>
 			</tr>
+			
 			<tr>
 				<td>
 					<input id="ticket_num" type="text" name="ticket_num" size="5" class="fields"/>
@@ -65,7 +66,7 @@
 			</tr>
 			<tr id="filler_row">
 				<td colspan="3" >Job: <span id="job_name"></span></td>	
-				<td id="Incredible_invisible_text">been</td>
+				<td id="Incredible_invisible_text"> </td>
 				<td colspan="3"><%= link_to "Add another species", {:controller => "page_controls", :action => "add_specie"}, :remote => true, :id => "add_specie_button"%></td>			
 			</tr>
 		</table>
@@ -163,7 +164,7 @@
 					cache: false,
 					method: 'POST',
 					success: function() {
-	
+						
 					}
 				});
 			}

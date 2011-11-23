@@ -128,129 +128,35 @@ class ReceiptsController < ApplicationController
     attr_accessor :number, :value
   end
   
-  require 'base64'
-  
-  def get_pdf_receipt
-    @url = params[:url]
-    
-    @kit = PDFKit.new(Base64.decode64(@url))
-    
-    @filename = "#{Time.now.strftime("%Y%m%d-%H%M%S")}owner.pdf"
-    @filepath = "#{Rails.root}/public/pdfs/#{@filename}"
-    @file = File.open(@filepath, 'w')
-    @kit.to_file(@file.path)
-    @file = File.open(@filepath, 'r') 
-    send_data(@file.read, :type => "pdf", :filename => @filename)
-  end
-  
   def get_owner_receipt
-    #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
+    tickets = Ticket.find(params[:tickets])
+    job = Job.find(tickets.first.job_id)
+    owner = job.owner
+    notes = params[:notes]
     
-    #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    @notes = params[:notes]
-    
-    #Total vars declared and initialized
-    
-    @trucker_total = 0
-    @logger_total = 0 
-    @hfi_total = 0
-    @load_pay_total = 0
-    
-    @total = 0 #The final total after all those terrible calcs =)
-    @total_wo_deductions #Owners total without deductions.
-    
-    @tickets = Ticket.find(params[:tickets])
-    
-    @job = Job.find(@tickets.first.job_id)
-    @owner = @job.owner
-    
-    #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    @payment_num = params[:payment_num]
-    
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", @owner.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", owner.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
     end
     
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-    
-    @destinations = Destination.find(@destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-      if @rate.rate_type == "MBF"
-        j.trucker_value = @rate.rate * j.net_mbf
-      else
-        if @rate.rate_type == "Tonnage"
-          j.trucker_value = @rate.rate * j.tonnage
-        else 
-          if @rate.rate_type == "percent"
-            j.trucker_value = (@rate.rate / 100) * j.value
-          end
-        end
-      end
-      
-      @trucker_total = @trucker_total + j.trucker_value
-      
-      j.hfi_value = j.value * (@job.hfi_rate / 100)
-      @hfi_total = @hfi_total + j.hfi_value
-      
-      @destinations.each do |i|
-        if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
-          if @rate.rate_type == "MBF"
-            j.logger_value = @rate.rate * j.net_mbf
-          else
-            if @rate.rate_type == "Tonnage"
-              j.logger_value = @rate.rate * j.tonnage
-            else @rate.rate_type == "percent"
-              if 
-                j.logger_value = (@rate / 100) *j.value
-              end
-            end
-          end
-        end
-      end
-      
-      @logger_total = @logger_total + j.logger_value
-      
-      j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
-    end
-    
-    @tickets.each {|i| @total = @total + i.owner_value.to_f }
-    
-    @total_wo_deductions = give_pennies(@total)
-    
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
-      
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@total)
+    respond_to do |format|
+      format.pdf do
+        pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end 
+    end
   end
   
   def logger_receipt
@@ -258,92 +164,34 @@ class ReceiptsController < ApplicationController
   end
   
   def get_logger_receipt
-    #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
+    tickets = Ticket.find(params[:tickets])
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
     
-    #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    @notes = params[:notes]
-    
-    #Total vars declared and initialized
-    
-    @logger_total = 0 
-    @load_pay_total = 0
-    
-    @total = 0 #The final total after all those terrible calcs =)
-    @total_wo_deductions #Loggers total without deductions.
-    
-    @tickets = Ticket.find(params[:tickets])
-    
-    @job = Job.find(@tickets.first.job_id)
-    @logger = @job.logger
-    
-    #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    @payment_num = params[:payment_num]
-    
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", logger.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
     end
     
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-    
-    @destinations = Destination.find(@destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    @tickets.each do |j|      
-      @destinations.each do |i|
-        if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @logger.id)
-          if @rate.rate_type == "MBF"
-            j.logger_value = @rate.rate * j.net_mbf
-          else
-            if @rate.rate_type == "Tonnage"
-              j.logger_value = @rate.rate * j.tonnage
-            else @rate.rate_type == "percent"
-              if 
-                j.logger_value = (@rate / 100) *j.value
-              end
-            end
-          end
-        end
-      end
-      
-      @logger_total = @logger_total + j.logger_value
-      
-    end
-    
-    @total = @logger_total
-    
-    @total_wo_deductions = give_pennies(@total)
-    
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
-      
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@total)
+    respond_to do |format|
+      format.pdf do
+        pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end
+    end
   end
   
   def trucker_receipt
@@ -351,162 +199,250 @@ class ReceiptsController < ApplicationController
   end
   
   def get_trucker_receipt
-    #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
+    tickets = Ticket.find(params[:tickets])
+    job = Job.find(tickets.first.job_id)     
+    trucker = job.trucker
     
-    #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    @notes = params[:notes]
-    
-    #Total vars declared and initialized
-    
-    @trucker_total = 0     
-    @load_pay_total = 0
-    
-    @total = 0 #The final total after all those terrible calcs =)   
-    
-    @tickets = Ticket.find(params[:tickets])
-    
-    @job = Job.find(@tickets.first.job_id)
-    @trucker = @job.trucker
-    
-    #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    @payment_num = params[:payment_num]
-    
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", trucker.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
     end
     
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-    
-    @destinations = Destination.find(@destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-      if @rate.rate_type == "MBF"
-        j.trucker_value = @rate.rate * j.net_mbf
-      else
-        if @rate.rate_type == "Tonnage"
-          j.trucker_value = @rate.rate * j.tonnage
-        else 
-          if @rate.rate_type == "percent"
-            j.trucker_value = (@rate.rate / 100) * j.value
-          end
-        end
-      end
-      
-      @trucker_total = @trucker_total + j.trucker_value
-      
-    end
-    
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.owner_value.to_f }
-    
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
-    @total = @trucker_total
-    @total_wo_deductions = @trucker_total
-      
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
     
-    @total = give_pennies(@total)
+    notes = params[:notes]
     
-    @pages = []
-    
-    @tickets_count = @tickets.length
-    @pages_count = @tickets_count/44
-    if @tickets_count%44 != 0
-      @pages_count = @pages_count+1
+    respond_to do |format|
+      format.pdf do
+        pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt}",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end
     end
-    
-    @counter = 0
-    @pages_count.times do
-      @pages.push(@counter)
-      @counter = @counter+44
-    end
-    
-    
-    
   end
   
   def save_owner_receipt    
-    @tickets = Ticket.find(params[:tickets])
+    tickets = Ticket.find(params[:tickets])
     
-    @payment_num = params[:payment_num]
+    if tickets.first.paid_to_owner == true
+      render :nothing => true, :state => 500
+      return
+    end
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    job = Job.find(tickets.first.job_id)
+    owner = job.owner
+    notes = params[:notes]
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", owner.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
+    
+    payment_total = 0
+    
+    tickets.each do |i|    
+      if i.logger_rate.rate_typee == "MBF"
+        i.logger_value = i.logger_rate.rate*i.net_mbf
+      else
+        if i.logger_rate.rate_type == "Tonnage"
+          i.logger_value = i.logger_rate.rate*i.tonnage
+        else
+          i.logger_value = i.logger_rate.rate/100*i.value
+        end
+      end
+      
+      if i.trucker_rate.rate_type == "MBF"
+        i.trucker_value = i.trucker_rate.rate*i.net_mbf
+      else
+        if i.trucker_rate.rate_type == "Tonnage"
+          i.trucker_value = i.trucker_rate.rate*i.net_mbf
+        else
+          i.trucker_value = i.trucker_rate.rate/100*i.value
+        end
+      end
+      
+      i.hfi_value = job.hfi_rate*i.value
+      
+      i.owner_value = i.value - i.hfi_value - i.logger_value - i.trucker_value
+      
+      payment_total = payment_total + round_to(i.owner_value, 2)
+    end
+    
+    #Needed by the pdf
+    deduction_items = []
+    
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
+      end
+    end
+    
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
+    
+    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_owner = true
       i.save
     end
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
-      end
-    end
+    pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
+                           type: "application/pdf"
   end
   
-    def save_logger_receipt    
-    @tickets = Ticket.find(params[:tickets])
+  def save_logger_receipt    
+    tickets = Ticket.find(params[:tickets])
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
     
-    @payment_num = params[:payment_num]
+    if tickets.first.paid_to_logger == true
+      render :nothing => true, :state => 500
+      return
+    end
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    deduction_items = []
+    
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
+      end
+    end
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", logger.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
+    
+    payment_total = 0
+    
+    tickets.each do |i|
+      if i.logger_rate.rate_type == "MBF"
+        payment_total = payment_total + give_pennies(i.logger_rate.rate*i.net_mbf).to_f
+      else
+        if i.logger_rate.rate_type == "Tonnage"
+          payment_total = payment_total + give_pennies(i.logger_rate.rate*i.tonnage).to_f
+        else
+          payment_total = payment_total + give_pennies(i.logger_rate.rate/100*i.value).to_f
+        end
+      end
+    end
+    
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
+    
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_logger = true
       i.save
     end
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+    pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
+                           type: "application/pdf"
+  end
+  
+  def save_trucker_receipt
+    tickets = Ticket.find(params[:tickets])
+    
+    if tickets.first.paid_to_trucker == true
+      render :nothing => true, :state => 500
+      return
+    end
+    
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    trucker = job.trucker
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", trucker.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
+    
+    payment_total = 0
+    
+    tickets.each do |i|
+      if i.trucker_rate.rate_type == "MBF"
+        payment_total = payment_total + round_to(i.trucker_rate.rate*i.net_mbf, 2)
+      else
+        if i.trucker_rate.rate_type == "Tonnage"
+          payment_total = payment_total + round_to(i.trucker_rate.rate*i.tonnage, 2)
+        else
+          payment_total = payment_total + round_to(i.trucker_rate.rate/100*i.value, 2)
+        end
       end
     end
     
-  end
-  
-    def save_trucker_receipt    
-    @tickets = Ticket.find(params[:tickets])
+    #Needed by the pdf
+    deduction_items = []
     
-    @payment_num = params[:payment_num]
+    unless params[:deductions_list].nil?
+      params[:deductions_list].each_with_index do |i, x|
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
+      end
+    end
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:trucker_id], :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    deduction_items.each do |i| 
+      payment_total - round_to(i.to_f, 2)
+    end
+    
+    payment_total = round_to(payment_total, 2)
+    
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
+    
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_trucker = true
       i.save
     end
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
-      end
+    pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
+                           type: "application/pdf"
+  end
+  
+  def delete_trucker_receipt
+    @receipt = Receipt.find(params[:receipt_id])
+    
+    @receipt.tickets.each do |i|
+      i.paid_to_trucker = false
+      i.save
     end
+    
+    @receipt.receipt_items.each do |i|
+      i.delete
+    end
+    
+    @receipt.delete
+    
+    render :nothing => true
   end
   
   def get_old_receipt
@@ -690,5 +626,4 @@ class ReceiptsController < ApplicationController
       render "get_trucker_receipt.html.erb"
     end
   end
-  
 end

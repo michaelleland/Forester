@@ -47,13 +47,57 @@
 		
 		<textarea id="notes" name="notes" rows="5"></textarea>
 		
-		<input id="submit_button" disabled="true" onclick="get_pdf_receipt();init_the_page();" onmouseover="select_all_deductions();" type="button" value="No tickets selected" />		
+		<input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
+		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
 	</form>	
 </div>
 
 <script>
 
-function get_pdf_receipt() {
+function lets_get_outta_here() {
+	time = ($("#tickets_select").val().length/10)*1400
+	
+	setTimeout(function() {
+		change_content('new_receipt', 2);
+	}, time)
+}
+
+function set_form_action_to_save() {
+	var type = $('#owner_type_selector').val();
+	
+	$('#create_form').attr('action', '/save_'+type+'_receipt/');
+	//$('#create_form').attr('data-remote', 'true');
+	$('#create_form').removeAttr('target');
+}
+
+function set_reviewed() {
+	setTimeout(function() {
+		$('#submit_button').attr('disabled', 'true');
+		
+		$('body').find('select').each(function() {
+			$(this).fadeOut(10);
+		});
+		
+		$('body').find('input').each(function() {
+			if ($(this).attr('id') != 'save_button') {
+				$(this).fadeOut(10);
+			}
+		});
+		
+		$('body').find('h5').each(function() {
+			$(this).fadeOut(10);
+		});
+		
+		$('#input_row').fadeOut();
+		$('textarea').fadeOut(10);
+		
+		$('#save_button').removeAttr('disabled')
+		
+	}, 800);
+}
+
+//onclick="init_the_page();"
+function save_the_receipt() {
 	var tickets = $('#tickets_select').val();
 	var owner = $('#owner_type_selector').val();
 	var url = 'http://localhost/get_'+owner+'_receipt/?';
@@ -82,7 +126,13 @@ function get_pdf_receipt() {
 	
 	url = url + "&notes="+notes;
 	
-	window.location = '/get_pdf_receipt/?url='+Base64.encode(url);
+	$.ajax({
+		url: '/get_pdf_receipt/?url='+url,
+		cache: false,
+		success: function() {
+			
+		}
+	});
 }
 
 $('#job_selector').change(function() {
@@ -129,7 +179,7 @@ function refresh_form_action () {
 	var type = $('#owner_type_selector').val();
 	var receipt_id = $('#receipt_select').val();
 	
-	$('#create_form').attr('action', '/get_'+type+'_receipt/')
+	$('#create_form').attr('action', '/get_'+type+'_receipt.pdf/');
 }
 
 function refresh_receipts (type) {
