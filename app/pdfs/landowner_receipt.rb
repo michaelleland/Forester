@@ -19,6 +19,7 @@ class LandownerReceipt < Prawn::Document
     trucker_total = 0
     logger_total = 0 
     hfi_total = 0
+    owner_total = 0
     load_pay_total = 0
     
     total = 0 #The final total after all those terrible calcs =)
@@ -62,7 +63,7 @@ class LandownerReceipt < Prawn::Document
           j.logger_value = rate.rate * j.tonnage
         else rate.rate_type == "percent"
           if 
-            j.logger_value = (rate / 100) *j.value
+            j.logger_value = (rate.rate / 100) *j.value
           end
         end
       end
@@ -70,10 +71,10 @@ class LandownerReceipt < Prawn::Document
       logger_total = logger_total + round_to(j.logger_value, 2).to_f
       
       j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
-      owner_total = owner_total + give_pennies(j.owner.value).to_f
+      owner_total = owner_total + give_pennies(j.owner_value).to_f
     end
     
-    owner_total = total
+    total = owner_total
     
     deduction_items.each {|i| total = total - give_pennies(i[1].to_f).to_f }
     

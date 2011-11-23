@@ -24,9 +24,6 @@ class TruckerReceipt < Prawn::Document
     trucker = job.trucker
     logger = job.logger
     
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
-    
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
     # put into @destinations var
     destination_ids = tickets.collect {|i| i.destination_id }
@@ -52,10 +49,8 @@ class TruckerReceipt < Prawn::Document
       end
       
       trucker_total = trucker_total + round_to(j.trucker_value, 2)
-      
+      load_pay_total = load_pay_total+round_to(j.value, 2)
     end
-    
-    tickets.each {|i| load_pay_total = load_pay_total + round_to(i.value, 2)}
     
     total = trucker_total
     total_wo_deductions = trucker_total
