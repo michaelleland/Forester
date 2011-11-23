@@ -50,7 +50,7 @@ class LandownerReceipt < Prawn::Document
         end
       end
       
-      trucker_total = trucker_total + give_pennies(j.trucker_value).to_f
+      trucker_total = trucker_total + round_to(j.trucker_value, 2)
       
       j.hfi_value = j.value * (job.hfi_rate / 100)
       hfi_total = hfi_total + give_pennies(j.hfi_value).to_f
@@ -68,15 +68,15 @@ class LandownerReceipt < Prawn::Document
         end
       end
       
-      logger_total = logger_total + round_to(j.logger_value, 2).to_f
+      logger_total = logger_total + round_to(j.logger_value, 2)
       
       j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
-      owner_total = owner_total + give_pennies(j.owner_value).to_f
+      owner_total = owner_total + round_to(j.owner_value, 2)
     end
     
     total = owner_total
     
-    deduction_items.each {|i| total = total - give_pennies(i[1].to_f).to_f }
+    deduction_items.each {|i| total = total - round_to(i[1].to_f, 2) }
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
