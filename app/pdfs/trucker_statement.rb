@@ -1,4 +1,4 @@
-class LandownerReceipt < Prawn::Document
+class TruckerStatement < Prawn::Document
   def initialize(tickets, payment_num, deduction_items, notes, view)
     super()
     
@@ -8,11 +8,6 @@ class LandownerReceipt < Prawn::Document
     date_string = Time.now.strftime('%m/%d/%Y')
     
     #end utils
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    notes
     
     #Total vars declared and initialized
     
