@@ -14,54 +14,63 @@ module ApplicationHelper
   end
   
   def round_to(x, d)
-    @rounded = (x * 10**d).round.to_f / 10**d
+    rounded = (x * 10**d).round.to_f / 10**d
   end
   
   def give_pennies(x)
-    x = round_to(x, 2)
-    @as_string = x.to_s
+    negative = false
+    if x<0
+      negative = true
+      x = x.abs
+    end
     
-    if (@as_string.length - @as_string.index('.')) < 3
-      @as_string = "#{@as_string}0"
+    x = round_to(x, 2)
+    as_string = x.to_s
+    
+    if (as_string.length - as_string.index('.')) < 3
+      as_string = "#{as_string}0"
     else
-      if (@as_string.length - @as_string.index('.')) > 3
-        @as_string = @as_string[0, @as_string.index('.')+2]
+      if (as_string.length - as_string.index('.')) > 3
+        as_string = as_string[0, as_string.index('.')+2]
       end
     end
-    @split_arr = @as_string.split('.')
+    split_arr = as_string.split('.')
     
-    @integers = @split_arr[0]
-    @length = @integers.length
-    if @length > 3 && @length < 7
-      @integers.reverse!
-      @integers.insert(3, ',')
-      @integers.reverse!
+    integers = split_arr[0]
+    length = integers.length
+    if length > 3 && length < 7
+      integers.reverse!
+      integers.insert(3, ',')
+      integers.reverse!
     end
-    if @length > 6
-      @integers.reverse!
-      @integers.insert(3, ',')
-      @integers.insert(7, ',')
-      @integers.reverse!
+    if length > 6
+      integers.reverse!
+      integers.insert(3, ',')
+      integers.insert(7, ',')
+      integers.reverse!
     end
     
-    @as_string = "#{@integers}.#{@split_arr[1]}"
+    as_string = "#{integers}.#{split_arr[1]}"
     
-    @as_string
+    if negative
+      as_string = "-#{as_string}"
+    end
     
+    as_string  
   end
   
-    def give_decimals(x)
+  def give_decimals(x)
     x = round_to(x, 2)
-    @as_string = x.to_s
+    as_string = x.to_s
     
-    if (@as_string.length - @as_string.index('.')) < 3
-      @as_string = "#{@as_string}0"
+    if (as_string.length - as_string.index('.')) < 3
+      as_string = "#{as_string}0"
     else
-      if (@as_string.length - @as_string.index('.')) > 3
-        @as_string = @as_string[0, @as_string.index('.')+2]
+      if (as_string.length - as_string.index('.')) > 3
+        as_string = as_string[0, as_string.index('.')+2]
       end
     end
     
-    @as_string
+    as_string
   end
 end

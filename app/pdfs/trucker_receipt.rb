@@ -1,85 +1,66 @@
 class TruckerReceipt < Prawn::Document
-  def initialize(tickets, payment_num, deduction_items, notes)
+  def initialize(tickets, payment_num, deduction_items, notes, view)
     super()
     
-    @tickets = tickets
-    @payment_num = payment_num
-    @deduction_items = deduction_items
-    @notes = notes
+    @view = view
     
-    @ac = ApplicationController.new
+    tickets = tickets
+    payment_num = payment_num
+    deduction_items = deduction_items
+    notes = notes
     
     #Some utility stoof
-    @date_string = Time.now.strftime('%m/%d/%Y')
+    date_string = Time.now.strftime('%m/%d/%Y')
     #end utils
     
     #Total vars declared and initialized
     
-    @trucker_total = 0     
-    @load_pay_total = 0
+    trucker_total = 0     
+    load_pay_total = 0
     
-    @total = 0 #The final total after all those terrible calcs =)   
+    total = 0 #The final total after all those terrible calcs =)   
     
-    @job = Job.find(@tickets.first.job_id)
-    @trucker = @job.trucker
-    @logger = @job.logger
+    job = Job.find(tickets.first.job_id)
+    trucker = job.trucker
+    logger = job.logger
     
     #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
+    tickets.each {|i| load_pay_total = load_pay_total + i.value }
     
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
     # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
+    destination_ids = tickets.collect {|i| i.destination_id }
+    destination_ids = destination_ids.uniq
     
-    @destinations = Destination.find(@destination_ids)
-    
-    #Truckers rate, needs to be shown in tickets list
-    @rate
+    destinations = Destination.find(destination_ids)
     
     #All tickets are given values for trucker_value, hfi_value and logger_value, with which
     # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
     # totals are also added up in the midst of all this. 
-    @tickets.each do |j|
-      @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-      if @rate.rate_type == "MBF"
-        j.trucker_value = @rate.rate * j.net_mbf
+    tickets.each do |j|
+      rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(job.id, job.trucker.id, j.destination_id)
+      if rate.rate_type == "MBF"
+        j.trucker_value = rate.rate * j.net_mbf
       else
-        if @rate.rate_type == "Tonnage"
-          j.trucker_value = @rate.rate * j.tonnage
+        if rate.rate_type == "Tonnage"
+          j.trucker_value = rate.rate * j.tonnage
         else 
-          if @rate.rate_type == "percent"
-            j.trucker_value = (@rate.rate / 100) * j.value
+          if rate.rate_type == "percent"
+            j.trucker_value = (rate.rate / 100) * j.value
           end
         end
       end
       
-      @trucker_total = @trucker_total + j.trucker_value
+      trucker_total = trucker_total + j.trucker_value
       
     end
     
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
+    tickets.each {|i| load_pay_total = load_pay_total + i.value }
     
-    @total = @trucker_total
-    @total_wo_deductions = @trucker_total
+    total = trucker_total
+    total_wo_deductions = trucker_total
       
-    @deduction_items.each {|i| @total = @total - i[1].to_f }
-    
-    @total = @ac.give_pennies(@total)
-    
-    @pages = []
-    
-    @tickets_count = @tickets.length
-    @pages_count = @tickets_count/44
-    if @tickets_count%44 != 0
-      @pages_count = @pages_count+1
-    end
-    
-    @counter = 0
-    @pages_count.times do
-      @pages.push(@counter)
-      @counter = @counter+44
-    end
+    deduction_items.each {|i| total = total - i[1].to_f }
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -107,19 +88,19 @@ class TruckerReceipt < Prawn::Document
     end
     
     grid([1, 7], [2, 9]).bounding_box do
-      text "#{@job.name}", :indent_paragraphs => 5
-      text "#{@job.owner.name}", :indent_paragraphs => 5
-      text "#{@logger.name}", :indent_paragraphs => 5
-      text "#{@trucker.name}", :indent_paragraphs => 5
+      text "#{job.name}", :indent_paragraphs => 5
+      text "#{job.owner.name}", :indent_paragraphs => 5
+      text "#{logger.name}", :indent_paragraphs => 5
+      text "#{trucker.name}", :indent_paragraphs => 5
     end
     
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
-      [[@payment_num, @date_string, "Trucking pay", "", "$ #{@ac.give_pennies(@trucker_total)}"]] +
-      @deduction_items.map do |i|
-        ["", "", i[0], "", "$ #{@ac.give_pennies(i[1].to_f)}"]
+      [[payment_num, date_string, "Trucking pay", "", "$ #{give_pennies(trucker_total)}"]] +
+      deduction_items.map do |i|
+        ["", "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
       end +
-      [["", "", "", "<b>Total:</b>", "<u>$ #{@total}</u>"]]
+      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
       
       table table_data do
         row(0).font_style = :bold
@@ -134,30 +115,44 @@ class TruckerReceipt < Prawn::Document
       
       move_down 15
       
-      unless @notes == "" 
-        text "Notes: #{@notes}"
+      unless notes == "" 
+        text "Notes: #{notes}"
       end
     end
     
-    start_new_page(:layout => :landscape)
+    start_new_page(:layout => :landscape, :left_margin => 124, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
       
     tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Trucking rate", "Load Pay", "Trucker Pay"]]+
-    @tickets.map do |i|
-      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{i.trucker_rate.rate} / #{i.trucker_rate.rate_typee}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.trucker_value)}"]
+    tickets.map do |i|
+      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(Destination.find(i.destination_id).name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{i.trucker_rate.rate} / #{i.trucker_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.trucker_value)}"]
     end +
-    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{@ac.give_pennies(@load_pay_total)}</b>", "<b>$ #{@total}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold
-      columns(7..8).align = :right
+      columns(1..3).align = :center
+      columns(4..8).align = :right
+      column(0).align = :right
+      column(6).align = :center
+      rows(0).align = :left
+      rows(0).background_color = "33EE44"
       self.header = true
-      self.row_colors = ["BABABA", "D2D2D2"]
-      self.column_widths = [80, 75, 140, 70, 50, 50, 75, 90, 90]
+      self.row_colors = ["BABABA", "FFFFFF"]
+      self.column_widths = [41, 46, 84, 48, 35, 35, 72, 90, 90]
       self.cell_style = {
         :size => 10,
         :padding => [2, 2, 2, 2],
-        :inline_format => true
+        :inline_format => true,
+        :border_colors => ["D1D1D1", "D1D1D1", "D1D1D1", "D1D1D1"]
       }
     end
+  end
+  
+  def give_pennies(x)
+    @view.give_pennies(x)
+  end
+  
+  def shorten(str)
+    @view.shorten(str)
   end
 end

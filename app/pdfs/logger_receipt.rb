@@ -1,86 +1,87 @@
 class LoggerReceipt < Prawn::Document
-  def initialize(tickets, payment_num, deduction_items, notes)
+  def initialize(tickets, payment_num, deduction_items, notes, view)
     super()
     
+    @view = view
+    
     #Some utility vars
-    @date_string = Time.now.strftime('%m/%d/%Y')
-    @ac = ApplicationController.new
+    date_string = Time.now.strftime('%m/%d/%Y')
     
     #end utils
     
-    @deduction_items = deduction_items
+    deduction_items = deduction_items
     
     #stored into this var so when page is called as old receipt
     # we can fetch db notes and put them into same name bearing var
     # and happily render the page :)
-    @notes = notes
+    notes = notes
     
     #Total vars declared and initialized
-    @logger_total = 0 
-    @load_pay_total = 0
+    logger_total = 0 
+    load_pay_total = 0
     
-    @total = 0 #The final total after all those terrible calcs =)
-    @total_wo_deductions #Loggers total without deductions.
+    total = 0 #The final total after all those terrible calcs =)
+    total_wo_deductions = 0 #Loggers total without deductions.
     
-    @tickets = tickets
+    tickets = tickets
     
-    @job = Job.find(@tickets.first.job_id)
-    @logger = @job.logger
-    @trucker = @job.trucker
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
+    trucker = job.trucker
     
     #Load pay total calculation
-    @tickets.each {|i| @load_pay_total = @load_pay_total + i.value }
+    tickets.each {|i| load_pay_total = load_pay_total + i.value }
     
     #This is "inherited" if we are pulling out an old receipt
-    @payment_num = payment_num
+    payment_num = payment_num
     
     #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
     # put into @destinations var
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
+    destination_ids = tickets.collect {|i| i.destination_id }
+    destination_ids = destination_ids.uniq
     
-    @destinations = Destination.find(@destination_ids)
+    destinations = Destination.find(destination_ids)
     
     #All tickets are given values for trucker_value, hfi_value and logger_value, with which
     # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
     # totals are also added up in the midst of all this. 
-    @tickets.each do |j|      
-      @destinations.each do |i|
+    tickets.each do |j|      
+      destinations.each do |i|
         if j.destination_id == i.id
-          @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @logger.id)
-          if @rate.rate_type == "MBF"
-            j.logger_value = @rate.rate * j.net_mbf
+          rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, logger.id)
+          if rate.rate_type == "MBF"
+            j.logger_value = rate.rate * j.net_mbf
           else
-            if @rate.rate_type == "Tonnage"
-              j.logger_value = @rate.rate * j.tonnage
-            else @rate.rate_type == "percent"
+            if rate.rate_type == "Tonnage"
+              j.logger_value = rate.rate * j.tonnage
+            else rate.rate_type == "percent"
               if
-                j.logger_value = (@rate / 100) *j.value
+                j.logger_value = (rate / 100) *j.value
               end
             end
           end
         end
       end
       
-      @logger_total = @logger_total + j.logger_value
+      logger_total = logger_total + j.logger_value
       
     end
     
-    @total = @logger_total
+    total = logger_total
     
-    @total_wo_deductions = @total
+    total_wo_deductions = total
     
-    @load_pay_total = 0
+    load_pay_total = 0
     
-    @tickets.each do |i| 
-      @load_pay_total = @load_pay_total + i.value
+    tickets.each do |i| 
+      load_pay_total = load_pay_total + i.value
     end
     
-    @deduction_items.each do |i| 
-      @total = @total - i[1].to_f
+    deduction_items.each do |i| 
+      total = total - i[1].to_f
     end
     
-    @total = @ac.give_pennies(@total)
+    total = total
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -90,7 +91,7 @@ class LoggerReceipt < Prawn::Document
     end
     
     grid([0, 2], [0, 9]).bounding_box do
-      text "Trucker Receipt", size: 25, style: :bold, :align => :center
+      text "Logger Receipt", size: 25, style: :bold, :align => :center
     end
     
     grid([1, 2], [2, 6]).bounding_box do
@@ -108,19 +109,19 @@ class LoggerReceipt < Prawn::Document
     end
     
     grid([1, 7], [2, 9]).bounding_box do
-      text "#{@job.name}", :indent_paragraphs => 5
-      text "#{@job.owner.name}", :indent_paragraphs => 5
-      text "#{@logger.name}", :indent_paragraphs => 5
-      text "#{@trucker.name}", :indent_paragraphs => 5
+      text "#{job.name}", :indent_paragraphs => 5
+      text "#{job.owner.name}", :indent_paragraphs => 5
+      text "#{logger.name}", :indent_paragraphs => 5
+      text "#{trucker.name}", :indent_paragraphs => 5
     end
     
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
-      [[@payment_num, @date_string, "Logging pay", "", "$ #{@ac.give_pennies(@logger_total)}"]] +
-      @deduction_items.map do |i|
-        ["", "", i[0], "", "$ #{@ac.give_pennies(i[1].to_f)}"]
+      [[payment_num, date_string, "Logging pay", "", "$ #{give_pennies(logger_total)}"]] +
+      deduction_items.map do |i|
+        ["", "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
       end +
-      [["", "", "", "<b>Total:</b>", "<u>$ #{@total}</u>"]]
+      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
       
       table table_data do
         row(0).font_style = :bold
@@ -135,25 +136,30 @@ class LoggerReceipt < Prawn::Document
       
       move_down 15
       
-      unless @notes == "" 
-        text "Notes: #{@notes}"
+      unless notes == "" 
+        text "Notes: #{notes}"
       end
     end
     
-    start_new_page(:layout => :landscape)
+    start_new_page(:layout => :landscape, :left_margin => 124, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
     
-    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Logging rate", "Load Pay", "Logger Pay"]]+
-    @tickets.map do |i|
-      [i.number, i.delivery_date, Destination.find(i.destination_id).name, WoodType.find(i.wood_type).name, @ac.give_pennies(i.net_mbf), @ac.give_pennies(i.tonnage), "$ #{i.logger_rate.rate} / #{i.logger_rate.rate_typee}", "$ #{@ac.give_pennies(i.value)}", "$ #{@ac.give_pennies(i.logger_value)}"]
+    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Logging Rate", "Load Pay", "Logger Pay"]]+
+    tickets.map do |i|
+      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(Destination.find(i.destination_id).name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.logger_rate.rate)} / #{i.logger_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.logger_value)}"]
     end +
-    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{@ac.give_pennies(@load_pay_total)}</b>", "<b>$ #{@total}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold
-      columns(7..8).align = :right
+      column(0).align = :right
+      columns(4..8).align = :right
+      columns(1..3).align = :center
+      rows(0).background_color = "33EE44"
+      rows(0).align = :left
+      column(6).align = :center
       self.header = true
       self.row_colors = ["BABABA", "FFFFFF"]
-      self.column_widths = [80, 75, 140, 70, 50, 50, 75, 90, 90]
+      self.column_widths = [41, 46, 84, 48, 35, 35, 72, 90, 90]
       self.cell_style = {
         :size => 10,
         :padding => [2, 2, 2, 2],
@@ -161,5 +167,13 @@ class LoggerReceipt < Prawn::Document
         :border_colors => ["D1D1D1", "D1D1D1", "D1D1D1", "D1D1D1"]
       }
     end
+  end
+  
+  def give_pennies(x)
+    @view.give_pennies(x)
+  end
+  
+  def shorten(str)
+    @view.shorten(str)
   end
 end

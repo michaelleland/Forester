@@ -55,9 +55,11 @@
 <script>
 
 function lets_get_outta_here() {
+	time = ($("#tickets_select").val().length/10)*1000
+	
 	setTimeout(function() {
 		change_content('new_receipt', 2);
-	}, 2600)
+	}, time)
 }
 
 function set_form_action_to_save() {

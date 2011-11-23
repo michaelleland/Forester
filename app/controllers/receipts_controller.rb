@@ -128,45 +128,31 @@ class ReceiptsController < ApplicationController
     attr_accessor :number, :value
   end
   
-  require 'base64'
-  
-  def get_pdf_receipt
-    @url = params[:url]
-    
-    @kit = PDFKit.new(Base64.decode64(@url))
-    
-    @filename = "#{Time.now.strftime("%Y%m%d-%H%M%S")}trucker.pdf"
-    @filepath = "#{Rails.root}/public/pdfs/#{@filename}"
-    @kit.to_pdf
-    @file = @kit.to_file(@filepath)
-    send_data(@file.read, :type => "pdf", :filename => @filename)
-  end
-  
   def get_owner_receipt
-    @tickets = Ticket.find(params[:tickets])
-    @job = Job.find(@tickets.first.job_id)
-    @owner = @job.owner
+    tickets = Ticket.find(params[:tickets])
+    job = Job.find(tickets.first.job_id)
+    owner = job.owner
+    notes = params[:notes]
     
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", @owner.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @payment_num = @receipts.last.payment_num + 1
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", owner.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
     else
-      @payment_num = 1
+      payment_num = 1
     end
     
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
     
     respond_to do |format|
       format.pdf do
-        #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
-        pdf = LandownerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_landowner_receipt",
+        pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
                               type: "application/pdf",
                               disposition: "inline"
       end 
@@ -178,30 +164,30 @@ class ReceiptsController < ApplicationController
   end
   
   def get_logger_receipt
-    @tickets = Ticket.find(params[:tickets])
-    @notes = params[:notes]
-    @job = Job.find(@tickets.first.job_id)
-    @logger = @job.logger
+    tickets = Ticket.find(params[:tickets])
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
     
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", @logger.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @payment_num = @receipts.last.payment_num + 1
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", logger.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
     else
-      @payment_num = 1
+      payment_num = 1
     end
     
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
     
     respond_to do |format|
       format.pdf do
-        pdf = LoggerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_logger_receipt",
+        pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
                               type: "application/pdf",
                               disposition: "inline"
       end
@@ -213,34 +199,31 @@ class ReceiptsController < ApplicationController
   end
   
   def get_trucker_receipt
-    @tickets = Ticket.find(params[:tickets])
-    @job = Job.find(@tickets.first.job_id)     
-    @trucker = @job.trucker
-     
-    if @payment_num.nil?
-      @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
-      unless @receipts.first.nil?
-        @payment_num = @receipts.last.payment_num + 1
-      else
-        @payment_num = 1
-      end
+    tickets = Ticket.find(params[:tickets])
+    job = Job.find(tickets.first.job_id)     
+    trucker = job.trucker
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", trucker.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
     end
     
-    @deduction_items = []
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @deduction_items.push([i, params[:deductions_values][x]])
+        deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
     
-    @notes = params[:notes]
+    notes = params[:notes]
     
     respond_to do |format|
       format.pdf do
-        #save_trucker_receipt(@tickets, @payment_num, @deduction_items, @notes)
-        pdf = TruckerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-        send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt}",
+        pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt}",
                               type: "application/pdf",
                               disposition: "inline"
       end
@@ -248,106 +231,121 @@ class ReceiptsController < ApplicationController
   end
   
   def save_owner_receipt    
-    @tickets = Ticket.find(params[:tickets])
+    tickets = Ticket.find(params[:tickets])
     
-    if @tickets.first.paid_to_owner == true
+    if tickets.first.paid_to_owner == true
       render :nothing => true, :state => 500
       return
     end
     
-    @job = Job.find(@tickets.first.job_id)
-    @trucker = @job.trucker
+    job = Job.find(tickets.first.job_id)
+    owner = job.owner
+    notes = params[:notes]
     
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @payment_num = @receipts.last.payment_num + 1
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", owner.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
     else
-      @payment_num = 1
+      payment_num = 1
     end
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:owner_id], :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_owner = true
       i.save
     end
     
+    deduction_items = []
+    
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
       end
     end
+    pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
+                           type: "application/pdf"
   end
   
   def save_logger_receipt    
-    @tickets = Ticket.find(params[:tickets])
+    tickets = Ticket.find(params[:tickets])
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
     
-    if @tickets.first.paid_to_logger == true
+    if tickets.first.paid_to_logger == true
       render :nothing => true, :state => 500
       return
     end
     
-    @payment_num = params[:payment_num]
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("logger", logger.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
     
-    @receipt = Receipt.create(:job_id => @tickets.first.job_id, :payment_num => @payment_num, :owner_id => params[:logger_id], :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => params[:payment_total]);
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_logger = true
       i.save
     end
     
-    @deduction_items = []
-    @deduction_items.push([i, params[:deductions_values][x]])
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
       end
     end
     
-    pdf = LoggerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-    send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt",
+    pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
                            type: "application/pdf"
   end
   
   def save_trucker_receipt
-    @tickets = Ticket.find(params[:tickets])
-    if @tickets.first.paid_to_trucker == true
+    tickets = Ticket.find(params[:tickets])
+    if tickets.first.paid_to_trucker == true
       render :nothing => true, :state => 500
       return
     end
     
-    @notes = params[:notes]
-    @job = Job.find(@tickets.first.job_id)
-    @trucker = @job.trucker
+    notes = params[:notes]
+    job = Job.find(tickets.first.job_id)
+    trucker = job.trucker
     
-    @receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", @trucker.id, @job.id, :order => "payment_num")
-    unless @receipts.first.nil?
-      @payment_num = @receipts.last.payment_num + 1
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("trucker", trucker.id, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
     else
-      @payment_num = 1
+      payment_num = 1
     end
     
-    @receipt = Receipt.create(:job_id => @job.id, :payment_num => @payment_num, :owner_id => @trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => @notes, :payment_total => @payment_total);
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => @notes, :payment_total => @payment_total);
     
-    @tickets.each do |i|
-      @receipt.tickets.push(i)
+    tickets.each do |i|
+      receipt.tickets.push(i)
       i.paid_to_trucker = true
       i.save
     end
     
-    #Need by the pdf
-    @deduction_items = []
+    #Needed by the pdf
+    deduction_items = []
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        @receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
-        @deduction_items.push([i, params[:deductions_values][x]])
+        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
+        deduction_items.push([i, params[:deductions_values][x]])
       end
     end
     
-    pdf = TruckerReceipt.new(@tickets, @payment_num, @deduction_items, @notes)
-    send_data pdf.render, filename: "#{@job.name}_#{@payment_num}_trucker_receipt",
+    pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+    send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
                            type: "application/pdf"
   end
   
