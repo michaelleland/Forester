@@ -1,6 +1,6 @@
 <div class="grid_10" id="new_statement_box">
 	<h4>Create a new job statement: </h4>
-	<form id="create_form" action="" method="get" target="_blank">
+	<form id="create_form" action="" method="get">
 		<h5>Select job:</h5>
 		<select id="job_selector">
 			<option value="0">Select a job</option>
@@ -37,7 +37,7 @@ function refresh_form_action () {
 	var type = $('#owner_type_selector').val();
 	var job_id = $('#job_selector').val();
 	
-	$('#create_form').attr('action', '/get_statement/'+job_id+'?type='+type);
+	$('#create_form').attr('action', '/get_statement/'+job_id+'.pdf?type='+type);
 }
 
 $('#owner_type_selector').change(function() {

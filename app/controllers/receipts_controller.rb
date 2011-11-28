@@ -14,13 +14,13 @@ class ReceiptsController < ApplicationController
     
     receipts = []
     if params[:type] == "owner"
-      receipts = @job.receipts.collect {|i| if i.owner_type == "owner" then i else 0 end }
+      receipts = job.receipts.collect {|i| if i.owner_type == "owner" then i else 0 end }
     end
     if params[:type] == "logger"
-      receipts = @job.receipts.collect {|i| if i.owner_type == "logger" then i else 0 end }
+      receipts = job.receipts.collect {|i| if i.owner_type == "logger" then i else 0 end }
     end
     if params[:type] == "trucker"
-      receipts = @job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
+      receipts = job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
     end
     
     receipts.delete_if {|i| i == 0 }
@@ -32,13 +32,32 @@ class ReceiptsController < ApplicationController
       end
     end
     
-    respond_to do |format|
+    if params[:type] == "owner"
+      respond_to do |format|
+        format.pdf do
+        pdf = LandownerStatement.new(receipts, deduction_items, view_context)
+        send_data pdf.render, filename: "#{job.name}_landowner_statement",
+                              type: "application/pdf"
+        end 
+      end
+    end
+    if params[:type] == "logger"
+      respond_to do |format|
+        format.pdf do
+          pdf = LoggerStatement.new(receipts, deduction_items, view_context)
+          send_data pdf.render, filename: "#{job.name}_logger_statement",
+                              type: "application/pdf"
+        end 
+      end
+    end
+    if params[:type] == "trucker"
+      respond_to do |format|
       format.pdf do
-        pdf = LandownerStatement.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
-                              type: "application/pdf",
-                              disposition: "inline"
-      end 
+        pdf = TruckerStatement.new(receipts, deduction_items, view_context)
+        send_data pdf.render, filename: "#{job.name}_trucker_statement",
+                              type: "application/pdf"
+        end 
+      end
     end
   end
   
@@ -186,13 +205,13 @@ class ReceiptsController < ApplicationController
     payment_total = 0
     
     tickets.each do |i|    
-      if i.logger_rate.rate_typee == "MBF"
+      if i.logger_rate.rate_type == "MBF"
         i.logger_value = i.logger_rate.rate*i.net_mbf
       else
         if i.logger_rate.rate_type == "Tonnage"
           i.logger_value = i.logger_rate.rate*i.tonnage
         else
-          i.logger_value = i.logger_rate.rate/100*i.value
+          i.logger_value = (i.logger_rate.rate/100)*i.value
         end
       end
       
@@ -202,11 +221,11 @@ class ReceiptsController < ApplicationController
         if i.trucker_rate.rate_type == "Tonnage"
           i.trucker_value = i.trucker_rate.rate*i.net_mbf
         else
-          i.trucker_value = i.trucker_rate.rate/100*i.value
+          i.trucker_value = (i.trucker_rate.rate/100)*i.value
         end
       end
       
-      i.hfi_value = job.hfi_rate*i.value
+      i.hfi_value = (job.hfi_rate/100)*i.value
       
       i.owner_value = i.value - i.hfi_value - i.logger_value - i.trucker_value
       
@@ -224,12 +243,12 @@ class ReceiptsController < ApplicationController
     end
     
     deduction_items.each do |i| 
-      payment_total - round_to(i.to_f, 2)
+      payment_total = payment_total - round_to(i.to_f, 2)
     end
     
     payment_total = round_to(payment_total, 2)
     
-    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => params[:payment_total]);
+    receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :payment_total => payment_total);
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_owner = true
@@ -272,23 +291,21 @@ class ReceiptsController < ApplicationController
     
     tickets.each do |i|
       if i.logger_rate.rate_type == "MBF"
-        payment_total = payment_total + give_pennies(i.logger_rate.rate*i.net_mbf).to_f
+        payment_total = payment_total + round_to(i.logger_rate.rate*i.net_mbf, 2)
       else
         if i.logger_rate.rate_type == "Tonnage"
-          payment_total = payment_total + give_pennies(i.logger_rate.rate*i.tonnage).to_f
+          payment_total = payment_total + round_to(i.logger_rate.rate*i.tonnage, 2)
         else
-          payment_total = payment_total + give_pennies(i.logger_rate.rate/100*i.value).to_f
+          payment_total = payment_total + round_to(i.logger_rate.rate/100*i.value, 2)
         end
       end
     end
     
     deduction_items.each do |i| 
-      payment_total - round_to(i.to_f, 2)
+      payment_total = payment_total - round_to(i.to_f, 2)
     end
     
-    payment_total = round_to(payment_total, 2)
-    
-    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total);
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total)
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_logger = true

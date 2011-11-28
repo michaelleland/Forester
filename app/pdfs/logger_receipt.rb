@@ -29,8 +29,7 @@ class LoggerReceipt < Prawn::Document
     logger = job.logger
     trucker = job.trucker
     
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
+    logger_total = 0
     
     #This is "inherited" if we are pulling out an old receipt
     payment_num = payment_num
@@ -42,9 +41,6 @@ class LoggerReceipt < Prawn::Document
     
     destinations = Destination.find(destination_ids)
     
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
     tickets.each do |j|      
       destinations.each do |i|
         if j.destination_id == i.id
@@ -56,7 +52,7 @@ class LoggerReceipt < Prawn::Document
               j.logger_value = rate.rate * j.tonnage
             else rate.rate_type == "percent"
               if
-                j.logger_value = (rate.rate / 100) *j.value
+                j.logger_value = (rate.rate / 100)*j.value
               end
             end
           end

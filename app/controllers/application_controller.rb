@@ -51,4 +51,22 @@ class ApplicationController < ActionController::Base
     
   end
   
+  def clr
+    Ticket.all.each do |i|
+      i.paid_to_logger = false
+      i.paid_to_trucker = false
+      i.paid_to_owner = false
+      i.save
+    end
+    
+    Receipt.all.each do |i|
+      i.delete
+    end
+    
+    ReceiptItem.all.each do |i|
+      i.delete
+    end
+  end
+  
+  
 end
