@@ -10,102 +10,36 @@ class ReceiptsController < ApplicationController
   end
   
   def get_statement
-    @job = Job.find(params[:id])
-    @ac = ApplicationController.new
-    @receipts
-    @owner_type = params[:type]
-    @owner
+    job = Job.find(params[:id])
     
+    receipts = []
     if params[:type] == "owner"
-      @owner = @job.owner
-      @receipts = @job.receipts.collect {|i| if i.owner_type == "owner" then i else 0 end }
+      receipts = @job.receipts.collect {|i| if i.owner_type == "owner" then i else 0 end }
     end
     if params[:type] == "logger"
-      @owner = @job.logger
-      @logger = @owner
-      @receipts = @job.receipts.collect {|i| if i.owner_type == "logger" then i else 0 end }
+      receipts = @job.receipts.collect {|i| if i.owner_type == "logger" then i else 0 end }
     end
     if params[:type] == "trucker"
-      @owner = @job.trucker
-      @trucker = @owner
-      @receipts = @job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
+      receipts = @job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
     end
     
-    @receipts.delete_if {|i| i == 0 }
+    receipts.delete_if {|i| i == 0 }
     
-    @tickets = @receipts.collect {|i| i.tickets }
-    @tickets.flatten!
-    
-    @total = 0
-    @receipts.each {|i| @total = @total + i.payment_total}
-    @total = @ac.give_pennies(@total)
-    
-    @deductions = []
-    @receipts.each do |i|
+    deduction_items = []
+    receipts.each do |i|
       i.receipt_items.each do |j|
-        @deductions.push(j)
+        deduction_items.push([j.item_data, j.value, i.payment_num])
       end
     end
     
-    @ded_total = 0
-    @deductions.each do |i|
-      @ded_total = @ded_total + i.value
+    respond_to do |format|
+      format.pdf do
+        pdf = LandownerStatement.new(tickets, payment_num, deduction_items, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end 
     end
-    
-    @destination_ids = @tickets.collect {|i| i.destination_id }
-    @destination_ids = @destination_ids.uniq
-  
-    @destinations = Destination.find(@destination_ids)
-    
-    @trucker_total = 0
-    @logger_total = 0
-    @owner_total = 0
-    @hfi_total = 0
-    @load_pay_total = 0
-    
-    @tickets.each do |j|
-        @load_pay_total = @load_pay_total + j.value
-        
-        @rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(@job.id, @job.trucker.id, j.destination_id)
-        if @rate.rate_type == "MBF"
-          j.trucker_value = @rate.rate * j.net_mbf
-        else
-          if @rate.rate_type == "Tonnage"
-            j.trucker_value = @rate.rate * j.tonnage
-          else 
-            if @rate.rate_type == "percent"
-              j.trucker_value = (@rate.rate / 100) * j.value
-            end
-          end
-        end
-          
-        @trucker_total = @trucker_total + j.trucker_value
-        
-        j.hfi_value = j.value * (@job.hfi_rate / 100)
-        @hfi_total = @hfi_total + j.hfi_value 
-        
-        @destinations.each do |i|
-          if j.destination_id == i.id
-            @rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, @job.logger.id)
-            if @rate.rate_type == "MBF"
-              j.logger_value = @rate.rate * j.net_mbf
-            else
-              if @rate.rate_type == "Tonnage"
-                j.logger_value = @rate.rate * j.tonnage
-              else @rate.rate_type == "percent"
-                if 
-                  j.logger_value = (@rate / 100) *j.value
-                end
-              end
-            end
-          end
-        end
-        
-        @logger_total = @logger_total + j.logger_value
-        
-        j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
-        @owner_total = @owner_total + j.owner_value
-      end
   end
   
   

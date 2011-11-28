@@ -1,15 +1,12 @@
 class LandownerStatement < Prawn::Document
-  def initialize(receipts, deduction_items, notes, view)
+  def initialize(receipts, deduction_items, view)
     super()
     
     @view = view
     
     tickets = []
     
-    receipts.each do |i|
-      tickets.push(i.tickets)
-    end
-    
+    tickets = receipts.collect {|i| i.tickets }
     tickets.flatten!
     
     #Some utility vars
@@ -18,6 +15,16 @@ class LandownerStatement < Prawn::Document
     #end utils
     
     #Total vars declared and initialized
+    
+    payment_total = 0
+    receipts.each do |i|
+      payment_total = payment_total  + i.payment_total
+    end
+    
+    deductions_total = 0
+    deduction_items each do |i|
+      deductions_total = deductions_total + i[1].to_f
+    end
     
     trucker_total = 0
     logger_total = 0 
@@ -114,11 +121,9 @@ class LandownerStatement < Prawn::Document
     
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
-      [[payment_num, date_string, "Landowner pay", "", "$ #{give_pennies(owner_total)}"]] +
-      deduction_items.map do |i|
-        ["", "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
-      end +
-      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
+      receipts.map do |i|
+        [i.payment_num, i.payment_date, "Landowner pay", "", "$ #{give_pennies(i.payment_total)}"]
+      end
       
       table table_data do
         row(0).font_style = :bold
@@ -130,12 +135,29 @@ class LandownerStatement < Prawn::Document
           :inline_format => true
         }
       end
-      
-      move_down 15
-      
-      unless notes == "" 
-        text "Notes: #{notes}"
-      end
+    end
+    
+    move_down 15
+    
+    pdf.text "Deductions"
+    
+    move_down 15
+    
+    table_data = [["Payment Number", "", "Desription", "", "Amount"]] +
+    deduction_items.map do |i|
+      [i[2], "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
+    end +
+    [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(deductions_total)}</u>"]]
+    
+    table table_data do
+      row(0).font_style = :bold
+      columns(3..4).align = :right
+      self.column_widths = [110, 75, 155, 70, 130]
+      self.cell_style = {
+        :borders => [],
+        :padding => [1, 0, 1, 0],
+        :inline_format => true
+      }
     end
     
     start_new_page(:layout => :landscape, :left_margin => 5, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
