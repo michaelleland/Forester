@@ -209,7 +209,7 @@
 			where_from.find('td').each(function() {
 				var value = $(this).html();
 				var width = $('#all_entries th:nth-child('+counter+')').width();
-				$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
+				$(this).html('<input type="text" value="'+value+'" style="width: 110%;" />');
 				where_from.find('td').fadeIn();
 				counter++;
 			});
@@ -217,7 +217,7 @@
 			// Following  blocks "overwrite" some of the fields of previous loop
 			
 			//The button for saving
-			where_from.find('td').last().html('<input type="button" value="save" style="width:106px;" onclick="edit_payment_entry('+id+', '+boolean_as_string+')" />');
+			where_from.find('td').last().html('<input type="button" value="save" onclick="edit_payment_entry('+id+', '+boolean_as_string+')" />');
 			
 			//Select for job name
 			where_from.find('#job_name').html('\
@@ -293,8 +293,8 @@
 			url: url,
 			cache: false,
 			success: function() {
-				fade_out_from_current_entries(id, current);
 				refresh_all_entries('payment');
+				fade_out_from_current_entries(id, current);
 			}
 		});
 	}
@@ -318,7 +318,7 @@
 			});
 			
 			where_from.children().last().html('\
-			<input type="button" value="edit" onclick="show_ticket_inputs('+id+');">\
+			<input type="button" value="edit" onclick="show_payment_inputs('+id+', true);">\
 			<input type="button" value="del" onclick="delete_ticket('+id+')">');
 			
 			setTimeout(function() {
