@@ -8,16 +8,11 @@ class LandownerStatement < Prawn::Document
     tickets = receipts.collect {|i| i.tickets }
     tickets.flatten!
     
-    #Some utility vars
     date_string = Time.now.strftime('%m/%d/%Y')
-    
-    #end utils
-    
-    #Total vars declared and initialized
     
     payment_total = 0
     receipts.each do |i|
-      payment_total = payment_total + i.payment_total
+      payment_total = payment_total + i.total_payment
     end
     
     deductions_total = 0
@@ -30,9 +25,6 @@ class LandownerStatement < Prawn::Document
     hfi_total = 0
     owner_total = 0
     load_pay_total = 0
-    
-    total = 0 #The final total after all those terrible calcs =)
-    total_wo_deductions = 0 #Owners total without deductions.
     
     job = Job.find(tickets.first.job_id)
     owner = job.owner
@@ -83,10 +75,6 @@ class LandownerStatement < Prawn::Document
       owner_total = owner_total + j.owner_value
     end
     
-    receipts.each do |i|
-      total = total + i.payment_total
-    end
-    
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
     define_grid(:columns => 10, :rows => 14, :gutter => 10)
@@ -122,7 +110,7 @@ class LandownerStatement < Prawn::Document
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       receipts.map do |i|
-        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Landowner pay", "", "$ #{give_pennies(i.payment_total)}"]
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Landowner pay", "", "$ #{give_pennies(i.total_payment)}"]
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payment_total)}</u>"]]
       

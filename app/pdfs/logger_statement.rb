@@ -5,7 +5,9 @@ class LoggerStatement < Prawn::Document
     @view = view
     
     tickets = []
-    tickets = receipts.collect {|i| i.tickets }
+    receipts.each do |i|
+      tickets.push(i.tickets)
+    end
     tickets.flatten!
     
     load_pay_total = 0
@@ -19,30 +21,33 @@ class LoggerStatement < Prawn::Document
     
     tickets.each do |i|
       if i.logger_rate.rate_type == "MBF"
-        i.logger_value = round_to(round_to(i.net_mbf, 2) * round_to(i.logger_rate.rate, 2), 2)
+        i.logger_value = i.net_mbf.round(2) * i.logger_rate.rate.round(2)
+        i.logger_value = i.logger_value.round(2)
       end
       if i.logger_rate.rate_type == "Tonnage"
-        i.logger_value = round_to(round_to(i.tonnage, 2) * round_to(i.logger_rate.rate, 2), 2)
+        i.logger_value = i.tonnage.round(2) * i.logger_rate.rate.round(2)
+        i.logger_value = i.logger_value.round(2)
       end
       if i.logger_rate.rate_type == "percent"
-        i.logger_value = round_to((i.logger_rate.rate/100) * round_to(i.value, 2), 2)
+        i.logger_value = i.value.round(2) * (i.logger_rate.rate.round(2)/100)
+        i.logger_value = i.logger_value.round(2)
       end
       
       logger_total = logger_total + i.logger_value
-      logger_total = round_to(logger_total, 2)
+      logger_total = logger_total.round(2)
     end
     
     total = logger_total
         
     deduction_items.each do |i| 
-      total = total - round_to(i[1].to_f)
-      total = round_to(total, 2)
+      total = total - i[1].to_f.round(2)
+      total = total.round(2)
     end
     
     payments_total = 0
     
     receipts.each do |i|
-      payments_total = payments_total + i.payment_total
+      payments_total = payments_total + i.total_payment
     end
     
     job = Job.find(tickets.first.job_id)
@@ -84,7 +89,7 @@ class LoggerStatement < Prawn::Document
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       receipts.map do |i|
-        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Logging pay", "", "$ #{give_pennies(i.payment_total)}"]
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Logging pay", "", "$ #{give_pennies(i.total_payment)}"]
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payments_total)}</u>"]]
       
@@ -131,7 +136,7 @@ class LoggerStatement < Prawn::Document
     tickets.map do |i|
       [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.logger_rate.rate)} #{i.logger_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.logger_value)}"]
     end +
-    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(logger_total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold
