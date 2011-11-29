@@ -45,6 +45,7 @@ Forester::Application.routes.draw do
   match "/sawmills" => "setup#sawmills"
   match "/rates" => "setup#rates"
   match "/ticket_ranges" => "setup#ticket_ranges"
+  match "/get_existing/:id" => "setup#get_existing"
   
   #Receipt page's basic page calls
   match "/new_receipt" => "receipts#new_receipt"
