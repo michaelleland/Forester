@@ -160,15 +160,18 @@
 			
 			var tonnage_selected = ''
 			var mbf_selected = ''
+			var percent_selected = ''
 			
 			if (old_type == "Tonnage") {
 				var tonnage_selected = 'selected="true"'
 			} else if (old_type == "MBF") {
 				var mbf_selected = 'selected="true"'
+			} else if (old_type == "percent") {
+				var percent_selected = 'selected="true"'
 			}
 			
 			var html = '\
-				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select class="rate_type_select" id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option></select></div>\
+				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select class="rate_type_select" id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option><option '+percent_selected+' value="percent">%</option></select></div>\
 				<div class="rate_control_link_row" style="display: none;">\
 					<div class="rate_control_link" onclick="edit_the_rate('+id+', \''+type+'\');">Save</div>\
 				</div>\

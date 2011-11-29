@@ -49,10 +49,10 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" value="0" id="tonnage" size="4" name="tonnage" disabled="true" class="fields"/>
+					<input type="text" value="0" id="tonnage" size="4" name="tonnage" class="fields"/>
 				</td>
 				<td>
-					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" disabled="true" name="load_1_mbfs"/>
+					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" name="load_1_mbfs"/>
 				</td>
 				<td>
 					<input id="net_mbf" type="text" size="4" value="0" name="net_mbf" disabled="true" class="fields"/>
@@ -181,12 +181,9 @@
 			values.push([$('#destination_name :selected').text(), 'Destination']);
 			values.push([$('#wood_type :selected').text(), 'Wood Type']);
 			values.push([$('#species_1 :selected').text(), 'Specie']);
-			if ($('#tonnage').attr('disabled') == undefined) {
-				values.push([$('#tonnage').attr('value'), 'Tonnage']);
-			} else {
-				if ($('#net_mbf').attr('disabled') == undefined) {
-					values.push([$('#net_mbf').attr('value'), 'Net MBF']);
-				}
+			
+			if (($('#tonnage').val() == "" || $('#tonnage').val() == "0") && ($('#net_mbf').val() == "" || $('#net_mbf').val() == "0")) {
+				values.push(["", 'MBF or Tonnage']);
 			}
 			
 			values.push([$('#value').attr('value'), 'Ticket value']);
@@ -220,6 +217,8 @@
 		/* When destination fields value changes, this function enables Tonnage/MBf fields according to the  
 		 * trucker/logger rates in this job / destination combination. 
 		 */
+		
+		/*
 		function enable_load_fields() {
 			var job_name = $('#job_name').html();
 			var destination_name = $('#destination_name').val();
@@ -242,47 +241,12 @@
 			 	}
 			 });
 		}
+		*/
 		
 		$('#load_1_mbfs').change(function() {
-			var total = 0
+			var total = 0;
 			$('.specie_mbfs').each(function() {
-				total = total + parseFloat($(this).attr('value'));
-			});
-			
-			$('#net_mbf').attr('value', total);
-		})
-		
-		$('#load_2_mbfs').change(function() {
-			var total = 0
-			$('.specie_mbfs').each(function() {
-				total = total + parseFloat($(this).attr('value'));
-			});
-			
-			$('#net_mbf').attr('value', total);
-		})
-		
-		$('#load_3_mbfs').change(function() {
-			var total = 0
-			$('.specie_mbfs').each(function() {
-				total = total + parseFloat($(this).attr('value'));
-			});
-			
-			$('#net_mbf').attr('value', total);
-		})
-		
-		$('#load_4_mbfs').change(function() {
-			var total = 0
-			$('.specie_mbfs').each(function() {
-				total = total + parseFloat($(this).attr('value'));
-			});
-			
-			$('#net_mbf').attr('value', total);
-		})
-		
-		$('#load_5_mbfs').change(function() {
-			var total = 0
-			$('.specie_mbfs').each(function() {
-				total = total + parseFloat($(this).attr('value'));
+				total = total + parseFloat($(this).val());
 			});
 			
 			$('#net_mbf').attr('value', total);
@@ -315,11 +279,10 @@
 			var counter = 1;
 			
 			setTimeout(function() {
-				
 				where_from.find('td').each(function() {
 					var value = $(this).html();
 					var width = $('#all_entries th:nth-child('+counter+')').width();
-					$(this).html('<input type="text" value="'+value+'" style="width: '+(width-18)+'px;" />');
+					$(this).html('<input type="text" value="'+value+'" style="width: 90%;" />');
 					where_from.find('td').fadeIn();
 					counter++;
 				});
@@ -327,7 +290,7 @@
 				// Following  blocks "overwrite" some of the fields of previous loop
 				
 				//The button for saving
-				where_from.find('td').last().html('<input type="button" value="save" style="width: 106px;" onclick="edit_ticket_entry('+id+', '+boolean_as_string+')" />');
+				where_from.find('td').last().html('<input type="button" value="save" style="width: 105px;" onclick="edit_ticket_entry('+id+', '+boolean_as_string+')" />');
 				
 				//Select for job name
 				where_from.find('#job_name').html('\
@@ -375,6 +338,12 @@
 					}
 				});
 				
+				where_from.find('#delivery_date input').css('width', '83px');
+				
+				where_from.find('#load_pay input').css('width', '65px');
+				where_from.find('#load_pay input').css('float', 'right');
+				where_from.find('#load_pay input').css('text-align', 'right');
+				
 				var species;
 				var mbfs;
 				var tons;
@@ -395,11 +364,11 @@
 						var bg_color = where_from.css('background-color');
 						
 						net_mbf.html('\
-							<input type="text" id="load_1_mbf" value="'+mbfs[0]+'" style="width: '+mbf_width+'px;" />\
+							<input type="text" id="load_1_mbf" value="'+mbfs[0]+'" style="width: '+mbf_width+'px; float: right; text-align: right;" />\
 						');
 						
 						tonnage.html('\
-							<input type="text" id="load_1_tons" value="'+tons[0]+'" style="width: '+tonnage_width+'px;" />\
+							<input type="text" id="load_1_tons" value="'+tons[0]+'" style="width: '+tonnage_width+'px; float: right; text-align: right;" />\
 						');
 						
 						where_from.find('#species').html('\
@@ -435,10 +404,10 @@
 										</select>\
 									</td>\
 									<td>\
-										<input type="text" id="load_'+counterr+'_mbf" value="'+mbfs[(counterr-1)]+'" style="width: '+mbf_width+'px;" />\
+										<input type="text" id="load_'+counterr+'_mbf" value="'+mbfs[(counterr-1)]+'" style="width: '+mbf_width+'px; float: right; text-align: right;" />\
 									</td>\
 									<td>\
-										<input type="text" id="load_'+counterr+'_tons" value="'+tons[(counterr-1)]+'" style="width: '+tonnage_width+'px;" />\
+										<input type="text" id="load_'+counterr+'_tons" value="'+tons[(counterr-1)]+'" style="width: '+tonnage_width+'px; float: right; text-align: right;" />\
 									</td>\
 									<td></td>\
 									<td></td>\
@@ -458,7 +427,6 @@
 					}
 				});
 			}, 620);
-			
 		}
 		
 		function edit_ticket_entry(id, current) {

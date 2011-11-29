@@ -8,16 +8,12 @@ class TruckerStatement < Prawn::Document
     tickets = receipts.collect {|i| i.tickets }
     tickets.flatten!
     
-    #Some utility vars
     date_string = Time.now.strftime('%m/%d/%Y')
     
-    #end utils
-    
-    #Total vars declared and initialized
     
     payment_total = 0
     receipts.each do |i|
-      payment_total = payment_total + i.payment_total
+      payment_total = payment_total + i.total_payment
     end
     
     deductions_total = 0
@@ -31,20 +27,11 @@ class TruckerStatement < Prawn::Document
     owner_total = 0
     load_pay_total = 0
     
-    total = 0 #The final total after all those terrible calcs =)
-    total_wo_deductions = 0 #Owners total without deductions.
-    
     job = Job.find(tickets.first.job_id)
     owner = job.owner
     logger = job.logger
     trucker = job.trucker
     
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
     tickets.each do |j|
       rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(job.id, job.trucker.id, j.destination_id)
       if rate.rate_type == "MBF"
@@ -59,12 +46,8 @@ class TruckerStatement < Prawn::Document
         end
       end
       
-      trucker_total = trucker_total + round_to(j.trucker_value, 2)
-      load_pay_total = load_pay_total+round_to(j.value, 2)
-    end
-    
-    receipts.each do |i|
-      total = total + i.payment_total
+      trucker_total = trucker_total + j.trucker_value.round(2)
+      load_pay_total = load_pay_total + j.value.round(2)
     end
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
@@ -102,7 +85,7 @@ class TruckerStatement < Prawn::Document
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       receipts.map do |i|
-        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Trucking pay", "", "$ #{give_pennies(i.payment_total)}"]
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Trucking pay", "", "$ #{give_pennies(i.total_payment)}"]
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payment_total)}</u>"]]
       
@@ -149,7 +132,7 @@ class TruckerStatement < Prawn::Document
     tickets.map do |i|
       [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.trucker_rate.rate)} #{i.trucker_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.trucker_value)}"]
     end +
-    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(trucker_total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold

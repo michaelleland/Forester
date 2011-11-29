@@ -314,7 +314,7 @@ class SetupController < ApplicationController
       logger_rates.delete(logger_rates.first)
       
       logger_rates.each do |i|
-        rates_string << ", #{i.destination_id}"
+        rates_string << ",#{i.destination_id}"
       end
     end
     
@@ -325,7 +325,7 @@ class SetupController < ApplicationController
       trucker_rates.delete(trucker_rates.first)
       
       trucker_rates.each do |i|
-        rates_string << ", #{i.destination_id}"
+        rates_string << ",#{i.destination_id}"
       end
     end
     render :text => rates_string

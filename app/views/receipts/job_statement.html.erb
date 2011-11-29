@@ -41,10 +41,21 @@ function refresh_form_action () {
 }
 
 $('#owner_type_selector').change(function() {
+	var job_id = $('#job_selector').val();
+	var type = $('#owner_type_selector').val();
 	if ($('#owner_type_selector') != "none" && $('#owner_type_selector :selected').val() != "0") {
 		if ($('#job_selector :selected').val() != "0") {
-			enable_button();
-			refresh_form_action();
+			$.ajax({
+				url: '/check_for_receipts/'+job_id+'?type='+type,
+				cache: false,
+				success: function() {
+					enable_button();
+					refresh_form_action();
+				},
+				error: function() {
+					button_show_no_receipts(type);
+				}
+			})
 		}
 	}
 });
@@ -59,4 +70,8 @@ function disable_button() {
 	$('#submit_button').attr('value', 'No owner type selected');
 }
 
+function button_show_no_receipts(type) {
+	$('#submit_button').attr('disabled', 'true');
+	$('#submit_button').attr('value', 'No '+type+' receipts in DB');
+}
 </script>

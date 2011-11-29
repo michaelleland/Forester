@@ -54,6 +54,7 @@ Forester::Application.routes.draw do
   match "/trucker_receipt" => "receipts#trucker_receipt"  
   match "/search_receipt" => "receipts#search_receipt"
   match "/job_statement" => "receipts#job_statement"
+  match "/check_for_receipts/:id" => "receipts#check_for_receipts"
   
   #Receipt page's "pull receipt" calls
   match "/get_owner_receipt" => "receipts#get_owner_receipt"

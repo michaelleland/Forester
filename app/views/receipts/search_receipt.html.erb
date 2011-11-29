@@ -1,6 +1,6 @@
 <div class="grid_10" id="logger_receipt_selector">
 	<h4>Search for an old receipt </h4>
-	<form id="search_form" action="/get_logger_receipt" method="get" target="_blank">
+	<form id="search_form" action="/get_logger_receipt" method="get">
 		<h5>Select job:</h5>
 		<select id="job_selector">
 			<option value="0">Select a job</option>
@@ -9,7 +9,7 @@
 			<% end %>
 		</select>
 		
-		<h5>Get tickets of:</h5>
+		<h5>Select owner type:</h5>
 		<select id="owner_type_selector">
 			<option value="none"></option>
 			<option value="owner">Landowner</option>
@@ -28,7 +28,7 @@
 		<input id="owner_type_hinput" type="hidden" name="owner_type" value="" />
 		<input id="receipt_id_hinput" type="hidden" name="receipt_id" value="" />
 		
-		<input id="submit_btn" type="submit" disabled="true" value="No payments selected" />		
+		<input id="submit_btn" type="submit" disabled="true" value="No payment selected" />		
 	</form>	
 </div>
 
