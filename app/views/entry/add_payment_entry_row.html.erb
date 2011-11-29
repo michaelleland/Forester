@@ -5,8 +5,8 @@
 	<td id="wood_type" type_id="<%= @pfd.wood_type %>"><%= WoodType.find(params[:wood_type]).name %></td>
 	<td id="payment_num"><%= @pfd.payment_num %></td>
 	<td id="tickets"><%= @pfd.tickets %></td>
-	<td class="currency" id="tonnage"><%= @ac.give_pennies(@pfd.tonnage) %></td>
-	<td class="currency" id="net_mbf"><%= @ac.give_pennies(@pfd.net_mbff) %></td>
+	<td class="currency" id="tonnage"><%= give_pennies(@pfd.tonnnage) %></td>
+	<td class="currency" id="net_mbf"><%= give_pennies(@pfd.net_mbff) %></td>
 	<td class="currency" id="total_payment"><%= @ac.give_pennies(@pfd.total_payment) %></td>
 	<td><input type="button" value="edit" onclick="show_payment_inputs(<%= @pfd.id %>, true)"/> 
 	<input type="button" value="del" onclick="delete_payment(<%= @pfd.id %>)"></td>

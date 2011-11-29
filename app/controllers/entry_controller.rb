@@ -183,6 +183,7 @@ class EntryController < ApplicationController
     @payment.job_id = params[:job_id]
     @payment.destination_id = params[:destination_id]
     @payment.payment_date = @payment_date
+    @payment.payment_num = params[:payment_num]
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
     @payment.tonnage = params[:tons]

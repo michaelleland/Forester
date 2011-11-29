@@ -24,16 +24,13 @@ gem 'backup'
 #Packaging DB export files
 gem 'zipruby'
 
-gem 'rake', '=0.9.2'
+gem 'rake', '=0.9.2.2'
 
 #Creating PDFs
 gem 'pdfkit'
 gem 'prawn'
 
-
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'ruby-debug19', :require => 'ruby-debug'
 
 # Bundle the extra gems:
 # gem 'bj'

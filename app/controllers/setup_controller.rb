@@ -105,40 +105,40 @@ class SetupController < ApplicationController
   end
   
   def edit_job
-    @job = Job.find(params[:job_id])
+    job = Job.find(params[:job_id])
     
-    @old_owner = @job.owner
-    @old_logger = @job.logger
-    @old_trucker = @job.trucker
+    old_owner = job.owner
+    old_logger = job.logger
+    old_trucker = job.trucker
     
-    @owner = Owner.find_by_name(params[:owner_name])
-    @logger = Partner.find_by_name(params[:logger_name])
-    @trucker = Partner.find_by_name(params[:trucker_name])
+    owner = Owner.find_by_name(params[:owner_name])
+    logger = Partner.find_by_name(params[:logger_name])
+    trucker = Partner.find_by_name(params[:trucker_name])
     
-    @job.name = params[:job_name]
-    @job.owner_id = @owner.id
-    @job.hfi_rate = params[:hfi_rate]
-    @job.hfi_prime = params[:hfi_prime]
-    @job.save
+    job.name = params[:job_name]
+    job.owner_id = owner.id
+    job.hfi_rate = params[:hfi_rate]
+    job.hfi_prime = params[:hfi_prime]
+    job.save
     
-    @la = LoggerAssignment.find_by_job_id_and_partner_id(@job.id, @old_logger.id)
-    @la.partner_id = @logger.id
-    @la.save
+    la = LoggerAssignment.find_by_job_id_and_partner_id(job.id, old_logger.id)
+    la.partner_id = logger.id
+    la.save
     
-    @ta = TruckerAssignment.find_by_job_id_and_partner_id(@job.id, @old_trucker.id)
-    @ta.partner_id = @trucker.id
-    @ta.save
+    ta = TruckerAssignment.find_by_job_id_and_partner_id(job.id, old_trucker.id)
+    ta.partner_id = trucker.id
+    ta.save
     
     @content_type = 1
     render "edit_whatever.js.erb"
   end
   
   def new_owner
-    @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
-    @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
-    @owner = Owner.create(:name => params[:owner_name], :address_id => @address.id, :contact_person_id => @contact_person.id)
-  
-    @content_type = 3
+    contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
+    address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
+    owner = Owner.create(:name => params[:owner_name], :address_id => address.id, :contact_person_id => contact_person.id)
+    
+    content_type = 3
     render "new_whatever.js.erb"
   end
   
@@ -238,7 +238,7 @@ class SetupController < ApplicationController
   end
 
   def new_rate
-    @destination = Destination.find_by_name(params[:destination_name])
+    @destination = Destination.find(params[:destination_id])
     @job = Job.find(params[:id])
     
     if params[:type] == "logger"
@@ -252,7 +252,7 @@ class SetupController < ApplicationController
     if params[:type] == "trucker"
       @trucker_rate = TruckerRate.new(:destination_id => @destination.id, :partner_id => @job.trucker.id, :job_id => @job.id, :rate_type => params[:rate_type], :rate => params[:rate])
       if @trucker_rate.save
-        render :text => "#{@trucker_rate.id}"
+        render :text => "#{@trucker_rate.id},#{@destination.id}"
       else
         render :status => 500
       end
@@ -301,6 +301,34 @@ class SetupController < ApplicationController
       end
       
     end
+  end
+  
+  def get_existing
+    
+    rates_string = ""
+    
+    if params[:type] == "logger"
+      logger_rates = LoggerRate.find_all_by_job_id(params[:id])
+      
+      rates_string << "#{logger_rates.first.destination_id}"
+      logger_rates.delete(logger_rates.first)
+      
+      logger_rates.each do |i|
+        rates_string << ",#{i.destination_id}"
+      end
+    end
+    
+    if params[:type] == "trucker"
+      trucker_rates = TruckerRate.find_all_by_job_id(params[:id])
+      
+      rates_string << "#{trucker_rates.first.destination_id}"
+      trucker_rates.delete(trucker_rates.first)
+      
+      trucker_rates.each do |i|
+        rates_string << ",#{i.destination_id}"
+      end
+    end
+    render :text => rates_string
   end
   
 end

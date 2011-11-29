@@ -4,81 +4,43 @@ class LoggerReceipt < Prawn::Document
     
     @view = view
     
-    #Some utility vars
     date_string = Time.now.strftime('%m/%d/%Y')
     
-    #end utils
-    
-    deduction_items = deduction_items
-    
-    #stored into this var so when page is called as old receipt
-    # we can fetch db notes and put them into same name bearing var
-    # and happily render the page :)
-    notes = notes
-    
-    #Total vars declared and initialized
-    logger_total = 0 
     load_pay_total = 0
     
-    total = 0 #The final total after all those terrible calcs =)
-    total_wo_deductions = 0 #Loggers total without deductions.
+    tickets.each do |i|
+      load_pay_total = load_pay_total + round_to(i.value, 2)
+      load_pay_total = round_to(load_pay_total, 2)
+    end
     
-    tickets = tickets
+    logger_total = 0
+    
+    tickets.each do |i|
+      if i.logger_rate.rate_type == "MBF"
+        i.logger_value = round_to(round_to(i.net_mbf, 2) * round_to(i.logger_rate.rate, 2), 2)
+      end
+      if i.logger_rate.rate_type == "Tonnage"
+        i.logger_value = round_to(round_to(i.tonnage, 2) * round_to(i.logger_rate.rate, 2), 2)
+      end
+      if i.logger_rate.rate_type == "percent"
+        i.logger_value = round_to((i.logger_rate.rate/100) * round_to(i.value, 2), 2)
+      end
+      
+      logger_total = logger_total + i.logger_value
+      logger_total = round_to(logger_total, 2)
+    end
+    
+    total = 0
     
     job = Job.find(tickets.first.job_id)
     logger = job.logger
     trucker = job.trucker
     
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
-    
-    #This is "inherited" if we are pulling out an old receipt
-    payment_num = payment_num
-    
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    destination_ids = tickets.collect {|i| i.destination_id }
-    destination_ids = destination_ids.uniq
-    
-    destinations = Destination.find(destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    tickets.each do |j|      
-      destinations.each do |i|
-        if j.destination_id == i.id
-          rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, logger.id)
-          if rate.rate_type == "MBF"
-            j.logger_value = rate.rate * j.net_mbf
-          else
-            if rate.rate_type == "Tonnage"
-              j.logger_value = rate.rate * j.tonnage
-            else rate.rate_type == "percent"
-              if
-                j.logger_value = (rate.rate / 100) *j.value
-              end
-            end
-          end
-        end
-      end
-      
-      logger_total = logger_total + round_to(j.logger_value, 2)
-      
-    end
-    
     total = logger_total
-    
-    total_wo_deductions = total
-    
-    load_pay_total = 0
-    
-    tickets.each do |i| 
-      load_pay_total = load_pay_total + round_to(i.value, 2)
-    end
-    
+        
     deduction_items.each do |i| 
       total = total - round_to(i[1].to_f)
+      total = round_to(total, 2)
     end
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
@@ -145,7 +107,7 @@ class LoggerReceipt < Prawn::Document
     tickets.map do |i|
       [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.logger_rate.rate)} #{i.logger_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.logger_value)}"]
     end +
-    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(total)}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(logger_total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold

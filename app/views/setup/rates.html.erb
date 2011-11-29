@@ -11,7 +11,7 @@
 					<div class="action_link" id="add_trucker_rate_row_<%= i.id %>" onclick="show_trucker_rate_inputs(<%= i.id %>)">Add a rate</div>					
 				<% else %>
 					<% @trds.each do |j| %>
-					   <div id="<%= j.id %>trucker_rate" class="data_rows"><div class="row_headers"><%= shorten Destination.find(j.destination_id).name %>:</div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'trucker');">Del</div></div></div>
+					   <div id="<%= j.id %>trucker_rate" class="data_rows"><div class="row_headers trucker_rates" id="j.destination_id"><%= shorten Destination.find(j.destination_id).name %>:</div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'trucker');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'trucker');">Del</div></div></div>
 					<% end %>
 					<div class="action_link" id="add_trucker_rate_row_<%= i.id %>" onclick="show_trucker_rate_inputs(<%= i.id %>)">Add a rate</div>
 				<% end %>
@@ -25,7 +25,7 @@
 						<div class="action_link" id="add_logger_rate_row_<%= i.id %>" onclick="show_logger_rate_inputs(<%= i.id %>)">Add a rate</div>					
 					<% else %>
 						<% @lrds.each do |j| %>
-							<div id="<%= j.id %>logger_rate" class="data_rows"><div class="row_headers"><%= shorten Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'logger');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'logger');">Del</div></div></div>
+							<div id="<%= j.id %>logger_rate" class="data_rows"><div class="row_headers logger_rates" id="j.destination_id"><%= shorten Destination.find(j.destination_id).name %>: </div><div class="row_data"> $ <span class="rate" ><%= j.rate %></span> / <span class="rate_type"><%= j.rate_type %></span></div><div class="rate_control_link_row"><div class="rate_control_link" onclick="show_edit_rate_inputs(<%= j.id %>, 'logger');" >Edit</div><div class="rate_control_link" onclick="delete_rate(<%= j.id %>, 'logger');">Del</div></div></div>
 						<% end %>
 					<div class="action_link" id="add_logger_rate_row_<%= i.id %>" onclick="show_logger_rate_inputs(<%= i.id %>)">Add a rate</div>
 				<% end %>
@@ -36,20 +36,6 @@
 	<script>
 		$('#jobs').accordion();
 		$('#jobs_nav').attr('class', 'selected');
-		
-		function attach_autocomplete_to_input (id, type) {
-			var destinations = [
-				<% Destination.all.each do |i| %>
-					<%= "'#{i.name}'," %>
-				<% end %>
-			];
-									
-			$('#input_'+type+'_data_row_'+id+' #destination').autocomplete({ 
-				source: destinations,
-				delay: 50,
-				autoFocus: true
-			});			
-		}
 				
 		function show_trucker_rate_inputs (id) {
 			$('#add_trucker_rate_row_'+id).before('\
@@ -58,7 +44,7 @@
 				<select id="destination">\
 					<option value="none"> </option>\
 					<% Destination.all.each do |i| %>\
-						<option value="<%= i.name %>"><%= shorten i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>\
 				</select>\
 				</div>\
@@ -74,6 +60,7 @@
 			<div class="action_link rate_link" id="add_the_trucker_rate_'+id+'" onclick="add_the_rate('+id+', \'trucker\')">Add</div>');
 			
 			$('#add_trucker_rate_row_'+id).fadeOut();
+			remove_existing_destinations(id, 'trucker')
 		}
 		
 		function show_logger_rate_inputs (id) {
@@ -83,7 +70,7 @@
 				<select id="destination">\
 					<option value="none"> </option>\
 					<% Destination.all.each do |i| %>\
-						<option value="<%= i.name %>"><%= shorten i.name %></option>\
+						<option value="<%= i.id %>"><%= shorten i.name %></option>\
 					<% end %>\
 				</select>\
 				</div>\
@@ -99,25 +86,50 @@
 			<div class="action_link rate_link" id="add_the_logger_rate_'+id+'" onclick="add_the_rate('+id+', \'logger\')">Add</div>');
 			
 			$('#add_logger_rate_row_'+id).fadeOut();
+			remove_existing_destinations(id, 'logger');
+		}
+		
+		function remove_existing_destinations(id, type) {
+			
+			var options = $('#input_'+type+'_data_row_'+id+' select:first option')
+			var existing = []
+			
+			$.ajax({
+				url: '/get_existing/'+id+'?type='+type,
+				cache: false,
+				success: function(ids) {
+					existing = ids.split(',');
+					options.each(function() {
+						for (i=0;i<existing.length;i++) {
+							if ($(this).val() == existing[i]) {
+								$(this).remove();
+							}
+						}
+					});
+				}
+			});
 		}
 
 		function add_the_rate(id, type) {
-			var destination = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #destination').val();
+			var destination_id = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #destination').val();
+			var destination_name = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #destination :selected').text();
 			var rate_type = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate_type').attr('value');
 			var rate = $('#'+id+'_accordion #input_'+type+'_data_row_'+id+' #rate').attr('value');
 			
 			$.ajax ({
-				url: '/new_rate/'+id+'?destination_name='+destination+'&rate_type='+rate_type+'&rate='+rate+'&type='+type,
+				url: '/new_rate/'+id+'?destination_id='+destination_id+'&rate_type='+rate_type+'&rate='+rate+'&type='+type,
 				cache: false,
 				success: function(response_text) {
 					
+					var ids = response_text.split(',');
+					
 					var html = '\
-					<div style="display: none;" id="'+response_text+type+'_rate" class="data_rows">\
-						<div class="row_headers">'+shorten(destination)+':</div>\
+					<div style="display: none;" id="'+ids[0]+type+'_rate" class="data_rows">\
+						<div class="row_headers '+type+'_rates" id="'+ids[1]+'">'+destination_name+':</div>\
 						<div class="row_data"> $ <span class="rate" >'+rate+'</span> / <span class="rate_type">'+rate_type+'</span></div>\
 						<div class="rate_control_link_row">\
-							<div class="rate_control_link" onclick="show_edit_rate_inputs('+response_text+', \''+type+'\');" >Edit</div>\
-							<div class="rate_control_link" onclick="delete_rate('+response_text+', \''+type+'\');">Del</div>\
+							<div class="rate_control_link" onclick="show_edit_rate_inputs('+ids[0]+', \''+type+'\');" >Edit</div>\
+							<div class="rate_control_link" onclick="delete_rate('+ids[0]+', \''+type+'\');">Del</div>\
 						</div>\
 					</div>'
 					
@@ -127,13 +139,11 @@
 						$('#no_trucker_rate_data_for_'+id).fadeOut();
 					}
 					
-					
 					$('#input_'+type+'_data_row_'+id).fadeOut();
 					$('#add_the_'+type+'_rate_'+id).fadeOut();
 					$('#add_'+type+'_rate_row_'+id).fadeIn();
 					$('#add_'+type+'_rate_row_'+id).before(html);
-					$('#'+response_text+type+'_rate').fadeIn();
-					
+					$('#'+ids[0]+type+'_rate').fadeIn();
 					
 					setTimeout(function() {
 						$('#input_'+type+'_data_row_'+id).remove();
@@ -150,15 +160,18 @@
 			
 			var tonnage_selected = ''
 			var mbf_selected = ''
+			var percent_selected = ''
 			
 			if (old_type == "Tonnage") {
 				var tonnage_selected = 'selected="true"'
 			} else if (old_type == "MBF") {
 				var mbf_selected = 'selected="true"'
+			} else if (old_type == "percent") {
+				var percent_selected = 'selected="true"'
 			}
 			
 			var html = '\
-				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select class="rate_type_select" id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option></select></div>\
+				<div class="row_data" style="display: none;"> $ <input id="new_rate" type="text" value="'+old_rate+'" size="3" /> / <select class="rate_type_select" id="new_type"><option '+mbf_selected+' value="MBF">MBF</option><option '+tonnage_selected+' value="Tonnage">Ton</option><option '+percent_selected+' value="percent">%</option></select></div>\
 				<div class="rate_control_link_row" style="display: none;">\
 					<div class="rate_control_link" onclick="edit_the_rate('+id+', \''+type+'\');">Save</div>\
 				</div>\

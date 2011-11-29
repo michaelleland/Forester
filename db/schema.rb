@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111012172028) do
+ActiveRecord::Schema.define(:version => 20111129012620) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -71,10 +71,10 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.integer  "job_id"
     t.integer  "partner_id"
     t.integer  "receipt_id"
-    t.float    "rate"
     t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "rate",           :precision => 8, :scale => 2
   end
 
   create_table "owners", :force => true do |t|
@@ -100,19 +100,19 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.string   "payment_num"
     t.float    "tonnage"
     t.integer  "tickets"
-    t.float    "total_payment"
     t.float    "net_mbf"
     t.integer  "wood_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "total_payment",  :precision => 8, :scale => 2
   end
 
   create_table "receipt_items", :force => true do |t|
     t.string   "item_data"
     t.integer  "receipt_id"
-    t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "value",      :precision => 8, :scale => 2
   end
 
   create_table "receipt_logger_rates", :force => true do |t|
@@ -125,11 +125,11 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "payment_num"
-    t.float    "payment_total"
     t.string   "notes"
     t.date     "receipt_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "total_payment", :precision => 8, :scale => 2
   end
 
   create_table "receipts_tickets", :id => false, :force => true do |t|
@@ -161,9 +161,9 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.boolean  "paid_to_owner"
     t.boolean  "paid_to_logger"
     t.boolean  "paid_to_trucker"
-    t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "value",           :precision => 8, :scale => 2
   end
 
   create_table "trucker_assignments", :force => true do |t|
@@ -178,10 +178,10 @@ ActiveRecord::Schema.define(:version => 20111012172028) do
     t.integer  "job_id"
     t.integer  "partner_id"
     t.integer  "receipt_id"
-    t.float    "rate"
     t.string   "rate_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "rate",           :precision => 8, :scale => 2
   end
 
   create_table "wood_types", :force => true do |t|

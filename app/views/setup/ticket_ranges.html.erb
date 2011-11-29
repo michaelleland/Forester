@@ -48,6 +48,9 @@
 		function show_add_inputs(job_id) {
 			var where_to = $('#'+job_id+'job').find('.data_rows').last();
 			var n = parseInt($('#'+job_id+'job').find('.book_nums').last().html());
+			if (n == 0) {
+				$('#'+job_id+'job').find('.book_nums').last().remove();
+			}
 			var html = '<div class="data_rows">\
 							<div class="row_headers">Book #<span class="book_nums">'+(n+1)+'</span></div>\
 							<span id="range_from"><input size="3" type="text" id="range_from_input" /></span> - \

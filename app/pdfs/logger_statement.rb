@@ -1,77 +1,58 @@
 class LoggerStatement < Prawn::Document
-  def initialize(tickets, payment_num, deduction_items, notes, view)
+  def initialize(receipts, deduction_items, view)
     super()
     
     @view = view
     
-    #Some utility vars
-    date_string = Time.now.strftime('%m/%d/%Y')
+    tickets = []
+    receipts.each do |i|
+      tickets.push(i.tickets)
+    end
+    tickets.flatten!
     
-    #end utils
-    
-    #Total vars declared and initialized
-    
-    trucker_total = 0
-    logger_total = 0 
-    hfi_total = 0
     load_pay_total = 0
     
-    total = 0 #The final total after all those terrible calcs =)
-    total_wo_deductions = 0 #Owners total without deductions.
-    
-    job = Job.find(tickets.first.job_id)
-    owner = job.owner
-    logger = job.logger
-    trucker = job.trucker
-    
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    tickets.each do |j|
-      rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(job.id, job.trucker.id, j.destination_id)
-      if rate.rate_type == "MBF"
-        j.trucker_value = rate.rate * j.net_mbf
-      else
-        if rate.rate_type == "Tonnage"
-          j.trucker_value = rate.rate * j.tonnage
-        else 
-          if rate.rate_type == "percent"
-            j.trucker_value = (rate.rate / 100) * j.value
-          end
-        end
-      end
-      
-      trucker_total = trucker_total + j.trucker_value
-      
-      j.hfi_value = j.value * (job.hfi_rate / 100)
-      hfi_total = hfi_total + j.hfi_value
-      
-      rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(j.destination_id, j.job_id, job.logger.id)
-      if rate.rate_type == "MBF"
-        j.logger_value = rate.rate * j.net_mbf
-      else
-        if rate.rate_type == "Tonnage"
-          j.logger_value = rate.rate * j.tonnage
-        else rate.rate_type == "percent"
-          if 
-            j.logger_value = (rate / 100) *j.value
-          end
-        end
-      end
-      
-      logger_total = logger_total + j.logger_value
-      
-      j.owner_value = j.value - j.logger_value - j.trucker_value - j.hfi_value
+    tickets.each do |i|
+      load_pay_total = load_pay_total + round_to(i.value, 2)
+      load_pay_total = round_to(load_pay_total, 2)
     end
     
-    tickets.each {|i| total = total + i.owner_value.to_f }
+    logger_total = 0
     
-    owner_total = total.to_f
+    tickets.each do |i|
+      if i.logger_rate.rate_type == "MBF"
+        i.logger_value = i.net_mbf.round(2) * i.logger_rate.rate.round(2)
+        i.logger_value = i.logger_value.round(2)
+      end
+      if i.logger_rate.rate_type == "Tonnage"
+        i.logger_value = i.tonnage.round(2) * i.logger_rate.rate.round(2)
+        i.logger_value = i.logger_value.round(2)
+      end
+      if i.logger_rate.rate_type == "percent"
+        i.logger_value = i.value.round(2) * (i.logger_rate.rate.round(2)/100)
+        i.logger_value = i.logger_value.round(2)
+      end
+      
+      logger_total = logger_total + i.logger_value
+      logger_total = logger_total.round(2)
+    end
     
-    deduction_items.each {|i| total = total - i[1].to_f }
+    total = logger_total
+        
+    deduction_items.each do |i| 
+      total = total - i[1].to_f.round(2)
+      total = total.round(2)
+    end
+    
+    payments_total = 0
+    
+    receipts.each do |i|
+      payments_total = payments_total + i.total_payment
+    end
+    
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
+    trucker = job.trucker
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -81,7 +62,7 @@ class LoggerStatement < Prawn::Document
     end
     
     grid([0, 2], [0, 9]).bounding_box do
-      text "Landowner Receipt", size: 25, style: :bold, :align => :center
+      text "Logger Statement", size: 25, style: :bold, :align => :center
     end
     
     grid([1, 2], [2, 6]).bounding_box do
@@ -107,11 +88,10 @@ class LoggerStatement < Prawn::Document
     
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
-      [[payment_num, date_string, "Landowner pay", "", "$ #{give_pennies(owner_total)}"]] +
-      deduction_items.map do |i|
-        ["", "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
+      receipts.map do |i|
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Logging pay", "", "$ #{give_pennies(i.total_payment)}"]
       end +
-      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
+      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payments_total)}</u>"]]
       
       table table_data do
         row(0).font_style = :bold
@@ -123,33 +103,52 @@ class LoggerStatement < Prawn::Document
           :inline_format => true
         }
       end
+    end
+    
+    move_down 15
+    
+    unless deduction_items.length == 0
+      text "Deductions", :style => :bold, :size => 15
+    
+      move_down 5
       
-      move_down 15
+      table_data = [["Payment Number", "", "Desription", "", "Amount"]] +
+      deduction_items.map do |i|
+      [i[2], "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
+      end +
+      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(deductions_total)}</u>"]]
       
-      unless notes == "" 
-        text "Notes: #{notes}"
+      table table_data do
+        row(0).font_style = :bold
+        columns(3..4).align = :right
+        self.column_widths = [110, 75, 155, 70, 130]
+        self.cell_style = {
+          :borders => [],
+          :padding => [1, 0, 1, 0],
+          :inline_format => true
+        }
       end
     end
     
-    start_new_page(:layout => :landscape, :left_margin => 5, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
+    start_new_page(:layout => :landscape, :left_margin => 124, :right_margin => 5, :top_margin => 10, :bottom_margin => 10)
     
-    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Logging Rate", "Trucking Rate", "HFI Rate", "Load Pay", "Logger Pay", "Trucker Pay", "HFI Pay", "Owner Pay"]]+
+    tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "Logging Rate", "Load Pay", "Logger Pay"]]+
     tickets.map do |i|
-      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(Destination.find(i.destination_id).name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.logger_rate.rate)} / #{i.logger_rate.rate_typee}", "#{give_pennies(i.trucker_rate.rate)} / #{i.trucker_rate.rate_typee}", "#{job.hfi_rate} %", "#{give_pennies(i.value)}", "#{give_pennies(i.logger_value)}", "#{give_pennies(i.trucker_value)}", "#{give_pennies(i.hfi_value)}", "#{give_pennies(i.owner_value)}"]
+      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{give_pennies(i.logger_rate.rate)} #{i.logger_rate.rate_typee}", "#{give_pennies(i.value)}", "#{give_pennies(i.logger_value)}"]
     end +
-    [["", "", "", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(logger_total)}</b>", "<b>$ #{give_pennies(trucker_total)}</b>", "<b>$ #{give_pennies(hfi_total)}</b>", "<b>$ #{give_pennies(owner_total)}</b>"]]
+    [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(logger_total)}</b>"]]
     
     table tickets_data do
       row(0).font_style = :bold
-      rows(0).background_color = "33EE44"
-      columns(4..13).align = :right
-      column(8).align = :center
       column(0).align = :right
+      columns(4..8).align = :right
       columns(1..3).align = :center
+      rows(0).background_color = "33EE44"
       rows(0).align = :left
+      column(6).align = :center
       self.header = true
       self.row_colors = ["BABABA", "FFFFFF"]
-      self.column_widths = [41, 46, 84, 48, 35, 35, 67, 67, 38, 64, 64, 64, 64, 65]
+      self.column_widths = [41, 46, 84, 48, 35, 35, 72, 90, 90]
       self.cell_style = {
         :size => 10,
         :padding => [2, 2, 2, 2],
@@ -165,5 +164,9 @@ class LoggerStatement < Prawn::Document
   
   def shorten(str)
     @view.shorten(str)
+  end
+  
+  def round_to(x, i)
+    @view.round_to(x, i)
   end
 end
