@@ -102,7 +102,7 @@ class TruckerStatement < Prawn::Document
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       receipts.map do |i|
-        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Landowner pay", "", "$ #{give_pennies(i.payment_total)}"]
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Trucking pay", "", "$ #{give_pennies(i.payment_total)}"]
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payment_total)}</u>"]]
       

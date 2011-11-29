@@ -287,25 +287,38 @@ class ReceiptsController < ApplicationController
       payment_num = 1
     end
     
-    payment_total = 0
+    load_pay_total = 0
+    
+    tickets.each do |i|
+      load_pay_total = load_pay_total + round_to(i.value, 2)
+      load_pay_total = round_to(load_pay_total, 2)
+    end
+    
+    logger_total = 0
     
     tickets.each do |i|
       if i.logger_rate.rate_type == "MBF"
-        payment_total = payment_total + round_to(i.logger_rate.rate*i.net_mbf, 2)
-      else
-        if i.logger_rate.rate_type == "Tonnage"
-          payment_total = payment_total + round_to(i.logger_rate.rate*i.tonnage, 2)
-        else
-          payment_total = payment_total + round_to(i.logger_rate.rate/100*i.value, 2)
-        end
+        i.logger_value = round_to(round_to(i.net_mbf, 2) * round_to(i.logger_rate.rate, 2), 2)
       end
+      if i.logger_rate.rate_type == "Tonnage"
+        i.logger_value = round_to(round_to(i.tonnage, 2) * round_to(i.logger_rate.rate, 2), 2)
+      end
+      if i.logger_rate.rate_type == "percent"
+        i.logger_value = round_to((i.logger_rate.rate/100) * round_to(i.value, 2), 2)
+      end
+      
+      logger_total = logger_total + i.logger_value
+      logger_total = round_to(logger_total, 2)
     end
     
+    total = logger_total
+        
     deduction_items.each do |i| 
-      payment_total = payment_total - round_to(i.to_f, 2)
+      total = total - round_to(i[1].to_f)
+      total = round_to(total, 2)
     end
     
-    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => payment_total)
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :payment_total => total)
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_logger = true

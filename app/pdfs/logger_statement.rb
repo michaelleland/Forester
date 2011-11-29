@@ -8,74 +8,46 @@ class LoggerStatement < Prawn::Document
     tickets = receipts.collect {|i| i.tickets }
     tickets.flatten!
     
-    #Some utility vars
-    date_string = Time.now.strftime('%m/%d/%Y')
-    
-    #end utils
-    
-    #Total vars declared and initialized
-    
-    payment_total = 0
-    receipts.each do |i|
-      payment_total = payment_total + i.payment_total
-    end
-    
-    deductions_total = 0
-    deduction_items.each do |i|
-      deductions_total = deductions_total + i[1].to_f
-    end
-    
-    trucker_total = 0
-    logger_total = 0 
-    hfi_total = 0
-    owner_total = 0
     load_pay_total = 0
     
-    total = 0 #The final total after all those terrible calcs =)
-    total_wo_deductions = 0 #Owners total without deductions.
+    tickets.each do |i|
+      load_pay_total = load_pay_total + round_to(i.value, 2)
+      load_pay_total = round_to(load_pay_total, 2)
+    end
     
-    job = Job.find(tickets.first.job_id)
-    owner = job.owner
-    logger = job.logger
-    trucker = job.trucker
+    logger_total = 0
     
-    #Load pay total calculation
-    tickets.each {|i| load_pay_total = load_pay_total + i.value }
-    
-    #Destination ids in tickets are gathered, duplicates removed and correspoding destinations
-    # put into @destinations var
-    destination_ids = tickets.collect {|i| i.destination_id }
-    destination_ids = destination_ids.uniq
-    
-    destinations = Destination.find(destination_ids)
-    
-    #All tickets are given values for trucker_value, hfi_value and logger_value, with which
-    # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
-    tickets.each do |j|      
-      destinations.each do |i|
-        if j.destination_id == i.id
-          rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(i.id, j.job_id, logger.id)
-          if rate.rate_type == "MBF"
-            j.logger_value = rate.rate * j.net_mbf
-          else
-            if rate.rate_type == "Tonnage"
-              j.logger_value = rate.rate * j.tonnage
-            else rate.rate_type == "percent"
-              if
-                j.logger_value = (rate.rate / 100) *j.value
-              end
-            end
-          end
-        end
+    tickets.each do |i|
+      if i.logger_rate.rate_type == "MBF"
+        i.logger_value = round_to(round_to(i.net_mbf, 2) * round_to(i.logger_rate.rate, 2), 2)
+      end
+      if i.logger_rate.rate_type == "Tonnage"
+        i.logger_value = round_to(round_to(i.tonnage, 2) * round_to(i.logger_rate.rate, 2), 2)
+      end
+      if i.logger_rate.rate_type == "percent"
+        i.logger_value = round_to((i.logger_rate.rate/100) * round_to(i.value, 2), 2)
       end
       
-      logger_total = logger_total + round_to(j.logger_value, 2)
+      logger_total = logger_total + i.logger_value
+      logger_total = round_to(logger_total, 2)
     end
     
-    receipts.each do |i|
-      total = total + i.payment_total
+    total = logger_total
+        
+    deduction_items.each do |i| 
+      total = total - round_to(i[1].to_f)
+      total = round_to(total, 2)
     end
+    
+    payments_total = 0
+    
+    receipts.each do |i|
+      payments_total = payments_total + i.payment_total
+    end
+    
+    job = Job.find(tickets.first.job_id)
+    logger = job.logger
+    trucker = job.trucker
     
     hfi_logo = "#{Rails.root}/public/images/HFI_logo.png"
     
@@ -112,9 +84,9 @@ class LoggerStatement < Prawn::Document
     grid([3, 0], [9, 9]).bounding_box do
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       receipts.map do |i|
-        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Landowner pay", "", "$ #{give_pennies(i.payment_total)}"]
+        [i.payment_num, i.receipt_date.strftime("%m/%d/%Y"), "Logging pay", "", "$ #{give_pennies(i.payment_total)}"]
       end +
-      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payment_total)}</u>"]]
+      [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(payments_total)}</u>"]]
       
       table table_data do
         row(0).font_style = :bold
