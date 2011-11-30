@@ -24,7 +24,7 @@
 					<script> $('#delivery_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#delivery_date').mask("99-99-9999", {placeholder: " "}); </script>
 				</td>
 				<td>
-					<select name="destination_name" id="destination_name" onfocusout="enable_load_fields()">
+					<select name="destination_name" id="destination_name" >
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.name %>"><%= shorten(i.name) %></option>
@@ -32,7 +32,7 @@
 					</select>
 				</td>
 				<td>
-					<select id="wood_type" name="wood_type" onfocus="enable_load_fields();">
+					<select id="wood_type" name="wood_type" >
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -40,7 +40,7 @@
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species_1" id="species_1" onfocus="enable_load_fields();">
+					<select class="specie_selector" name="species_1" id="species_1">
 						<option value="-1"></option>
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
@@ -64,6 +64,7 @@
 					<input id="check_button" type="button" value="Submit" onclick="validated_submit()" />
 				</td>
 			</tr>
+			<input type="hidden" id="converted" name="converted" value="0" />
 			<tr id="filler_row">
 				<td colspan="3" >Job: <span id="job_name"></span></td>	
 				<td id="Incredible_invisible_text"> </td>
@@ -249,7 +250,42 @@
 				total = total + parseFloat($(this).val());
 			});
 			
+			$('#conversion_marker').remove();
+			$('#converted').val('0');
+			
 			$('#net_mbf').attr('value', total);
+		})
+		
+		$('#tonnage').change(function() {
+			var mbfs = $('#load_1_mbfs').val();
+			var specie = parseInt($('#species_1').val());
+			var tonnage = parseFloat($('#tonnage').val());
+			
+			var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
+			
+			if ((mbfs == "0" || mbfs == "") && (specie != -1 || specie != 0)) {
+				var division = tonnage/c_rates[specie-1]
+				var converted_mbf = Math.round(division*100)/100
+				$('#load_1_mbfs').attr('value', converted_mbf);
+				$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>");
+				$('#converted').val('1');
+			}
+		})
+		
+		$('#value').focus(function() {
+			var mbfs = $('#load_1_mbfs').val();
+			var specie = parseInt($('#species_1').val());
+			var tonnage = parseFloat($('#tonnage').val());
+			
+			var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
+			
+			if ((mbfs == "0" || mbfs == "") && (specie != -1 || specie != 0)) {
+				var division = tonnage/c_rates[specie-1]
+				var converted_mbf = Math.round(division*100)/100
+				$('#load_1_mbfs').attr('value', converted_mbf);
+				$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>")
+				$('#converted').val('1');
+			}
 		})
 		
 		function show_ticket_inputs(id, current) {
@@ -508,9 +544,6 @@
 				where_from.children().fadeOut();
 			}
 		}
-		
-		
-		
 		
 		$(document).ready(function() {
 			setTimeout(function () {
