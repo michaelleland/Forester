@@ -63,8 +63,8 @@
 				<td>
 					<input id="check_button" type="button" value="Submit" onclick="validated_submit()" />
 				</td>
+				<input type="hidden" id="converted" name="converted" value="0" />
 			</tr>
-			<input type="hidden" id="converted" name="converted" value="0" />
 			<tr id="filler_row">
 				<td colspan="3" >Job: <span id="job_name"></span></td>	
 				<td id="Incredible_invisible_text"> </td>
@@ -118,15 +118,13 @@
 		
 		function validated_submit() {
 			if (check_field_data()) {
-				remove_conversion_mark();
-				set_mbf_as_not_converted();
-				
 				var ticket_num = $('#ticket_num').attr('value');
 				var destination_name = $('#destination_name').val();
 				var job_name = $('#job_name').html();
 				var species = [$('#species_1').val()];
 				var loads = [$('#load_1_mbfs').attr('value')];
-				var delivery_date = $('#delivery_date').attr('value')
+				var delivery_date = $('#delivery_date').attr('value');
+				var converted = $('#converted').val();
 				
 				if ($('#load_2_mbfs').attr('value') != undefined) {
 					loads.push($('#load_2_mbfs').attr('value'));
@@ -161,7 +159,7 @@
 				
 				var url = "";
 				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
-				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date;
+				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date+'&converted='+converted;
 				
 				$.ajax ({
 					url: url,
@@ -172,6 +170,8 @@
 					}
 				});
 			}
+			remove_conversion_mark();
+			set_mbf_as_not_converted();
 		}
 		
 		/* At this point, this function makes sure that all fields have a value. Disabled fields are not included.
@@ -302,7 +302,7 @@
 		}
 		
 		function set_mbf_as_not_converted() {
-			$('#converted').val('1');
+			$('#converted').val('0');
 		}
 		
 		function converted () {
