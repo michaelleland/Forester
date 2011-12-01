@@ -244,48 +244,86 @@
 		}
 		*/
 		
+		var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
+		
 		$('#load_1_mbfs').change(function() {
 			var total = 0;
 			$('.specie_mbfs').each(function() {
 				total = total + parseFloat($(this).val());
 			});
 			
-			$('#conversion_marker').remove();
-			$('#converted').val('0');
+			remove_conversion_mark();
+			mark_mbf_as_not_converted();
 			
 			$('#net_mbf').attr('value', total);
 		})
 		
-		$('#tonnage').change(function() {
-			var mbfs = $('#load_1_mbfs').val();
-			var specie = parseInt($('#species_1').val());
-			var tonnage = parseFloat($('#tonnage').val());
-			
-			var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
-			
-			if ((mbfs == "0" || mbfs == "") && (specie != -1 || specie != 0)) {
-				var division = tonnage/c_rates[specie-1]
-				var converted_mbf = Math.round(division*100)/100
-				$('#load_1_mbfs').attr('value', converted_mbf);
-				$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>");
-				$('#converted').val('1');
+		$('#species_1').change(function() {
+			if (($(this).val() != "0" && $(this).val() != "-1") && $('#tonnage').val() != "" && $('#tonnage').val() != "0") {
+				convert_tonnage_to_mbf();
+				if (!converted()) {
+					show_conversion_mark();
+					mark_mbf_as_converted();
+				}
+			} else if (converted()) {
+				remove_conversion_mark();
+				mark_mbf_as_not_converted();
+			}
+			if ($(this).val() == "0") {
+				$('#load_1_mbfs').val('');
 			}
 		})
 		
-		$('#value').focus(function() {
+		function convert_tonnage_to_mbf() {
 			var mbfs = $('#load_1_mbfs').val();
 			var specie = parseInt($('#species_1').val());
 			var tonnage = parseFloat($('#tonnage').val());
 			
-			var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
-			
-			if ((mbfs == "0" || mbfs == "") && (specie != -1 || specie != 0)) {
-				var division = tonnage/c_rates[specie-1]
-				var converted_mbf = Math.round(division*100)/100
-				$('#load_1_mbfs').attr('value', converted_mbf);
-				$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>")
-				$('#converted').val('1');
+			var division = tonnage/c_rates[specie-1]
+			var converted_mbf = Math.round(division*100)/100
+			$('#load_1_mbfs').attr('value', converted_mbf);
+		}
+		
+		function show_conversion_mark () {
+			$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>")
+		}
+		
+		function remove_conversion_mark () {
+			$('#conversion_marker').remove();
+		}
+		
+		function mark_mbf_as_converted() {
+			$('#converted').val('1');
+		}
+		
+		function mark_mbf_as_not_converted() {
+			$('#converted').val('1');
+		}
+		
+		function converted () {
+			if ($('#converted').val() == "1") {
+				return true;
+			} else {
+				return false;
 			}
+		}
+		
+		$('#tonnage').focusout(function() {
+			if (($(this).val() != "0" && $(this).val() != "") && $('#species_1').val() != "-1" && $('#species_1').val() != "0") {
+				convert_tonnage_to_mbf();
+				if (!converted()) {
+					show_conversion_mark();
+					mark_mbf_as_converted();
+				}
+			} else if (converted()) {
+				remove_conversion_mark();
+				mark_mbf_as_not_converted();
+			}
+		})
+		
+		
+		$('#e').change(function() {
+			
 		})
 		
 		function show_ticket_inputs(id, current) {
