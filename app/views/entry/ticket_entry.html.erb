@@ -24,7 +24,7 @@
 					<script> $('#delivery_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#delivery_date').mask("99-99-9999", {placeholder: " "}); </script>
 				</td>
 				<td>
-					<select name="destination_name" id="destination_name" onfocusout="enable_load_fields()">
+					<select name="destination_name" id="destination_name" >
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.name %>"><%= shorten(i.name) %></option>
@@ -32,7 +32,7 @@
 					</select>
 				</td>
 				<td>
-					<select id="wood_type" name="wood_type" onfocus="enable_load_fields();">
+					<select id="wood_type" name="wood_type" >
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -40,7 +40,7 @@
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species_1" id="species_1" onfocus="enable_load_fields();">
+					<select class="specie_selector" name="species_1" id="species_1">
 						<option value="-1"></option>
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
@@ -63,6 +63,7 @@
 				<td>
 					<input id="check_button" type="button" value="Submit" onclick="validated_submit()" />
 				</td>
+				<input type="hidden" id="converted" name="converted" value="0" />
 			</tr>
 			<tr id="filler_row">
 				<td colspan="3" >Job: <span id="job_name"></span></td>	
@@ -122,7 +123,8 @@
 				var job_name = $('#job_name').html();
 				var species = [$('#species_1').val()];
 				var loads = [$('#load_1_mbfs').attr('value')];
-				var delivery_date = $('#delivery_date').attr('value')
+				var delivery_date = $('#delivery_date').attr('value');
+				var converted = $('#converted').val();
 				
 				if ($('#load_2_mbfs').attr('value') != undefined) {
 					loads.push($('#load_2_mbfs').attr('value'));
@@ -157,7 +159,7 @@
 				
 				var url = "";
 				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
-				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date;
+				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date+'&converted='+converted;
 				
 				$.ajax ({
 					url: url,
@@ -168,6 +170,8 @@
 					}
 				});
 			}
+			remove_conversion_mark();
+			set_mbf_as_not_converted();
 		}
 		
 		/* At this point, this function makes sure that all fields have a value. Disabled fields are not included.
@@ -243,13 +247,101 @@
 		}
 		*/
 		
+		var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
+		
 		$('#load_1_mbfs').change(function() {
 			var total = 0;
 			$('.specie_mbfs').each(function() {
 				total = total + parseFloat($(this).val());
 			});
 			
+			remove_conversion_mark();
+			set_mbf_as_not_converted();
+			
 			$('#net_mbf').attr('value', total);
+		})
+		
+		$('#species_1').change(function() {
+			if (($(this).val() != "0" && $(this).val() != "-1") && $('#tonnage').val() != "" && $('#tonnage').val() != "0") {
+				convert_tonnage_to_mbf();
+				if ($('#conversion_marker').length == 0) {
+					show_conversion_mark();
+				}
+				if (!converted()) {
+					set_mbf_as_converted();
+				}
+			} else if (converted()) {
+				remove_conversion_mark();
+				set_mbf_as_not_converted();
+			}
+			if ($(this).val() == "0") {
+				$('#load_1_mbfs').val('');
+			}
+		})
+		
+		function convert_tonnage_to_mbf() {
+			var mbfs = $('#load_1_mbfs').val();
+			var specie = parseInt($('#species_1').val());
+			var tonnage = parseFloat($('#tonnage').val());
+			
+			var division = tonnage/c_rates[specie-1]
+			var converted_mbf = Math.round(division*100)/100
+			$('#load_1_mbfs').attr('value', converted_mbf);
+		}
+		
+		function show_conversion_mark () {
+			$('tr :first:nth-child(7)').append("<span id='conversion_marker' style='color: green;'> (C) </span>")
+		}
+		
+		function remove_conversion_mark () {
+			$('#conversion_marker').remove();
+		}
+		
+		function set_mbf_as_converted() {
+			$('#converted').val('1');
+		}
+		
+		function set_mbf_as_not_converted() {
+			$('#converted').val('0');
+		}
+		
+		function converted () {
+			if ($('#converted').val() == "1") {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		$('#tonnage').focusout(function() {
+			if (($(this).val() != "0" && $(this).val() != "") && $('#species_1').val() != "-1" && $('#species_1').val() != "0") {
+				convert_tonnage_to_mbf();
+				if ($('#conversion_marker').length == 0) {
+					show_conversion_mark();
+				}
+				if (!converted()) {
+					set_mbf_as_converted();
+				}
+			} else if (converted()) {
+				remove_conversion_mark();
+				set_mbf_as_not_converted();
+			}
+			if ($(this).val() == "0" || $(this).val() == "") {
+				$('#load_1_mbfs').val('');
+				set_mbf_as_not_converted();
+				remove_conversion_mark();
+			}
+		})
+		
+		
+		$('#value').focusin(function() {
+			if (($('#load_1_mbfs').val() == "0" || $('#load_1_mbfs').val() == "")) {
+				if (($('#tonnage').val() != "0" && $('#tonnage').val() != "") && $('#species_1').val() != "-1" && $('#species_1').val() != "0") {
+					convert_tonnage_to_mbf();
+					show_conversion_mark();
+					set_mbf_as_converted();
+				}
+			}
 		})
 		
 		function show_ticket_inputs(id, current) {
@@ -508,9 +600,6 @@
 				where_from.children().fadeOut();
 			}
 		}
-		
-		
-		
 		
 		$(document).ready(function() {
 			setTimeout(function () {

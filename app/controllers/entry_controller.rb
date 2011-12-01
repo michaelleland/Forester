@@ -20,7 +20,9 @@ class EntryController < ApplicationController
     
     @tickets.each do |i| 
       @tickets_total = @tickets_total + i.value
-      @tickets_total_mbf = @tickets_total_mbf + i.net_mbf
+      unless i.mbf_converted
+        @tickets_total_mbf = @tickets_total_mbf + i.net_mbf
+      end
       @tickets_total_tonnage = @tickets_total_tonnage + i.tonnage
     end
     
@@ -70,10 +72,15 @@ class EntryController < ApplicationController
     
     @specie_codes = []
     
+    converted = false
+    if params[:converted] == "1"
+      converted = true
+    end
+    
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find_by_name(params[:destination_name])
     
-    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false)
+    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false, :mbf_converted => converted)
     unless params[:wood_type] == "3"
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
       @specie_codes.push(Specie.find(@species[0]).code)
