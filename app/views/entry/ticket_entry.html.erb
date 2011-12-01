@@ -118,6 +118,9 @@
 		
 		function validated_submit() {
 			if (check_field_data()) {
+				remove_conversion_mark();
+				set_mbf_as_not_converted();
+				
 				var ticket_num = $('#ticket_num').attr('value');
 				var destination_name = $('#destination_name').val();
 				var job_name = $('#job_name').html();
@@ -253,7 +256,7 @@
 			});
 			
 			remove_conversion_mark();
-			mark_mbf_as_not_converted();
+			set_mbf_as_not_converted();
 			
 			$('#net_mbf').attr('value', total);
 		})
@@ -261,13 +264,15 @@
 		$('#species_1').change(function() {
 			if (($(this).val() != "0" && $(this).val() != "-1") && $('#tonnage').val() != "" && $('#tonnage').val() != "0") {
 				convert_tonnage_to_mbf();
-				if (!converted()) {
+				if ($('#conversion_marker').length == 0) {
 					show_conversion_mark();
-					mark_mbf_as_converted();
+				}
+				if (!converted()) {
+					set_mbf_as_converted();
 				}
 			} else if (converted()) {
 				remove_conversion_mark();
-				mark_mbf_as_not_converted();
+				set_mbf_as_not_converted();
 			}
 			if ($(this).val() == "0") {
 				$('#load_1_mbfs').val('');
@@ -292,11 +297,11 @@
 			$('#conversion_marker').remove();
 		}
 		
-		function mark_mbf_as_converted() {
+		function set_mbf_as_converted() {
 			$('#converted').val('1');
 		}
 		
-		function mark_mbf_as_not_converted() {
+		function set_mbf_as_not_converted() {
 			$('#converted').val('1');
 		}
 		
@@ -311,19 +316,32 @@
 		$('#tonnage').focusout(function() {
 			if (($(this).val() != "0" && $(this).val() != "") && $('#species_1').val() != "-1" && $('#species_1').val() != "0") {
 				convert_tonnage_to_mbf();
-				if (!converted()) {
+				if ($('#conversion_marker').length == 0) {
 					show_conversion_mark();
-					mark_mbf_as_converted();
+				}
+				if (!converted()) {
+					set_mbf_as_converted();
 				}
 			} else if (converted()) {
 				remove_conversion_mark();
-				mark_mbf_as_not_converted();
+				set_mbf_as_not_converted();
+			}
+			if ($(this).val() == "0" || $(this).val() == "") {
+				$('#load_1_mbfs').val('');
+				set_mbf_as_not_converted();
+				remove_conversion_mark();
 			}
 		})
 		
 		
-		$('#e').change(function() {
-			
+		$('#value').focusin(function() {
+			if (($('#load_1_mbfs').val() == "0" || $('#load_1_mbfs').val() == "")) {
+				if (($('#tonnage').val() != "0" && $('#tonnage').val() != "") && $('#species_1').val() != "-1" && $('#species_1').val() != "0") {
+					convert_tonnage_to_mbf();
+					show_conversion_mark();
+					set_mbf_as_converted();
+				}
+			}
 		})
 		
 		function show_ticket_inputs(id, current) {
