@@ -191,8 +191,7 @@ class ReceiptsController < ApplicationController
     end
   end
   
-  def save_owner_receipt    
-    debugger
+  def save_owner_receipt
     tickets = Ticket.find(params[:tickets])
     
     if tickets.first.paid_to_owner == true
