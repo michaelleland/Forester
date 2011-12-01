@@ -611,7 +611,7 @@
 		
 		$('#ticket_num').change(function() {
 			$.ajax({
-				url: '/get_job/'+$(this).attr('value'),
+				url: '/get_job_name/'+$(this).attr('value'),
 				cache: false,
 				success: function (answer) {
 					$('#job_name').html(answer)

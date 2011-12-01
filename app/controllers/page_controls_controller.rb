@@ -1,7 +1,10 @@
 class PageControlsController < ApplicationController
   layout nil
   
-  def get_job
+  #Ajax action
+  #Renders the name of the job whiches ticket range includes the ticket number
+  #If the given number is not in any of the ranges, error message is rendered.
+  def get_job_name
     @ticket_num = params[:id].to_i
     Job.all.each do |i|
       i.ticket_ranges.each do |j|
@@ -14,6 +17,9 @@ class PageControlsController < ApplicationController
     render :text => "Invalid Ticket #"
   end
   
+  #Ajax action
+  #Renders a string formatted in the way of csv. It renders species codes, amounts in mbf and tonnage.
+  #The format is: "CODE, CODE; MBF, MBF; TONS, TONS"
   def get_load_details
     @ticket = Ticket.find(params[:id])
     @species = ""
@@ -51,6 +57,8 @@ class PageControlsController < ApplicationController
     render :text => "#{@species};#{@mbfs};#{@tons}"
   end
   
+  #Ajax action
+  #Renders a html which contains 200 first ticket entries as table rows filled with ticket data
   def all_ticket_entries
    @ac = ApplicationController.new
    @tickets = Ticket.all[0..200] 
@@ -58,6 +66,7 @@ class PageControlsController < ApplicationController
    @woodtypes = WoodType.all
   end
   
+  #Same as above but for payment
   def all_payment_entries
     @ac = ApplicationController.new
     @payments = PaymentFromDestination.all

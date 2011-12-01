@@ -2,9 +2,12 @@ class EntryController < ApplicationController
   layout false
   
   def entry
-
+    
   end
   
+  #View action
+  #Pulls all tickets and payments from DB, collects data from the records
+  # and makes calculations
   def comparison
     @tickets = Ticket.all
     @payments = PaymentFromDestination.all
@@ -41,9 +44,13 @@ class EntryController < ApplicationController
     @tonnage_diff = @tickets_total_tonnage - @payments_total_tonnage
   end
   
+  #Ajax action
+  #Creates a ticket and returns a html ul list row with the data of the new ticket
   def add_ticket_entry_row
     @ac = ApplicationController.new
     
+    #Checks if there already is a ticket with the given number
+    #If there is, a js is rendered which lets user know of it.
     @t_nums = Ticket.all.collect {|i| i.number}
     @t_nums.each do |i|
       if params[:ticket_num] == i.to_s
@@ -55,6 +62,8 @@ class EntryController < ApplicationController
     @species = params[:species]
     @mbfs = params[:mbfs]
     
+    #If there are multiple species in a load and the data contains two species - mbf pairs
+    # where species is the same, a js is rendered which lets user to know of it.
     if @species.length != @species.uniq.length
       render "duplicates.js.erb"
       return
@@ -81,10 +90,13 @@ class EntryController < ApplicationController
     @destination = Destination.find_by_name(params[:destination_name])
     
     @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false, :mbf_converted => converted)
-    unless params[:wood_type] == "3"
+    
+    unless params[:wood_type] == "3" #wood type 3 means pulp
+      #One load detail for one ticket is created in any case
       LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
       @specie_codes.push(Specie.find(@species[0]).code)
       
+      #But if there is more, so many load details will be created
       unless @species[1].nil?
         LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[1], :mbfs => @mbfs[1])
         @specie_codes.push(Specie.find(@species[1]).code)
@@ -109,6 +121,8 @@ class EntryController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Creates a payment and returns a html ul list row with the data of the new ticket
   def add_payment_entry_row
     @ac = ApplicationController.new
     
@@ -125,18 +139,26 @@ class EntryController < ApplicationController
     @pfd = PaymentFromDestination.create(:payment_date => "#{@year}-#{@month}-#{@day}", :payment_num => params[:payment_num], :destination_id => params[:destination_id], :job_id => params[:job_id], :tickets => params[:tickets], :net_mbf => params[:net_mbf], :tonnage =>  params[:tonnage], :total_payment => @total_payment, :wood_type => params[:wood_type])
   end
   
+  #Show action
+  #The rendered html of this file contains the ticket entry inputs and the all tickets section
+  # and the latter is initially empty
   def ticket_entry
     @jobs = Job.all
     @loggers = Job.all.collect {|i| i.logger }.flatten.uniq
     @destinations = Destination.all
   end
   
+  #Show action
+  #Same as above, but for payments
   def payment_entry
     @jobs = Job.all
     @loggers = Job.all.collect {|i| i.logger }.flatten.uniq
     @destinations = Destination.all
   end 
   
+  #Ajax action
+  #Searches for a ticket with given id and saves the given values to it
+  # despite the fact that they might be the same as the old ones
   def save_edited_ticket_entry
     @raw_date = params[:delivery_date]
     
@@ -153,6 +175,8 @@ class EntryController < ApplicationController
     @ticket.destination_id = params[:destination_id]
     @ticket.wood_type = params[:wood_type_id]
     
+    #Because the tickets value (load pay) comes in as string in currency format
+    # some parts have to be stripped off to be able to turn it into float correctly 
     @value = params[:value].to_s
     3.times do
       @value.sub!(",", "")
@@ -165,8 +189,10 @@ class EntryController < ApplicationController
       i.species_id = params[:species][x]
       i.tonnage = params[:tons][x]
       i.mbfs = params[:mbfs][x]
+      
       unless i.save
         render :status => 306, :nothing => true
+        return
       end
     end
     
@@ -177,6 +203,8 @@ class EntryController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Same as above, but for payment
   def save_edited_payment_entry
     @raw_date = params[:payment_date]
     
@@ -196,6 +224,8 @@ class EntryController < ApplicationController
     @payment.tonnage = params[:tons]
     @payment.net_mbf = params[:mbf]
     
+    #Because the total payment comes in as string in currency format
+    # some parts have to be stripped off to be able to turn it into float correctly
     @total_payment = params[:total_payment].to_s
     3.times do
       @total_payment.sub!(",", "")
@@ -206,23 +236,28 @@ class EntryController < ApplicationController
     
     unless @payment.save
       render :status => 306, :nothing => true
+      return
     else
       render :status => 200, :nothing => true
+      return
     end
   end
 
+  #Ajax action
+  #Deletes a ticket with given id
   def delete_ticket
     @ticket = Ticket.find(params[:id])
     @ticket.delete
     
     render :nothing => true
   end
-
+  
+  #Ajax action
+  #Deletes a payment with given id
   def delete_payment
     @payment = PaymentFromDestination.find(params[:id])
     @payment.delete
     
     render :nothing => true
   end
-
 end
