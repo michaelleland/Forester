@@ -161,7 +161,7 @@ class LandownerStatement < Prawn::Document
     
     table tickets_data do
       row(0).font_style = :bold
-      rows(0).background_color = "33EE44"
+      rows(0).background_color = "11AA22"
       columns(4..13).align = :right
       column(8).align = :center
       column(0).align = :right

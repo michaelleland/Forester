@@ -13,15 +13,7 @@ class ReceiptsController < ApplicationController
     job = Job.find(params[:id])
     
     receipts = []
-    if params[:type] == "owner"
-      receipts = job.receipts.collect {|i| if i.owner_type == "owner" then i else 0 end }
-    end
-    if params[:type] == "logger"
-      receipts = job.receipts.collect {|i| if i.owner_type == "logger" then i else 0 end }
-    end
-    if params[:type] == "trucker"
-      receipts = job.receipts.collect {|i| if i.owner_type == "trucker" then i else 0 end }
-    end
+    receipts = job.receipts.collect {|i| if i.owner_type == params[:type] then i else 0 end }
     
     receipts.delete_if {|i| i == 0 }
     
@@ -55,6 +47,15 @@ class ReceiptsController < ApplicationController
       format.pdf do
         pdf = TruckerStatement.new(receipts, deduction_items, view_context)
         send_data pdf.render, filename: "#{job.name}_trucker_statement",
+                              type: "application/pdf"
+        end 
+      end
+    end
+    if params[:type] == "hfi"
+      respond_to do |format|
+        format.pdf do
+        pdf = HFIStatement.new(receipts, view_context)
+        send_data pdf.render, filename: "#{job.name}_hfi_statement",
                               type: "application/pdf"
         end 
       end
@@ -120,10 +121,6 @@ class ReceiptsController < ApplicationController
     end
   end
   
-  def logger_receipt
-  
-  end
-  
   def get_logger_receipt
     tickets = Ticket.find(params[:tickets])
     notes = params[:notes]
@@ -155,10 +152,6 @@ class ReceiptsController < ApplicationController
     end
   end
   
-  def trucker_receipt
-    
-  end
-  
   def get_trucker_receipt
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)     
@@ -188,6 +181,28 @@ class ReceiptsController < ApplicationController
                               type: "application/pdf",
                               disposition: "inline"
       end
+    end
+  end
+  
+  def get_hfi_receipt
+    tickets = Ticket.find(params[:tickets])
+    job = Job.find(tickets.first.job_id)
+    notes = params[:notes]
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("hfi", 0, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
+    
+    respond_to do |format|
+      format.pdf do
+        pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
+                              type: "application/pdf",
+                              disposition: "inline"
+      end 
     end
   end
   
@@ -411,10 +426,61 @@ class ReceiptsController < ApplicationController
       i.save
     end
     
+    unless deduction_items.first.nil?
+      deduction_items.each do |i| 
+        receipt.receipt_items.create(:item_data => i[0], :value => i[1])
+      end
+    end
+    
     pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
     send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
                            type: "application/pdf"
   end
+  
+  def save_hfi_receipt
+    tickets = Ticket.find(params[:tickets])
+    
+    if tickets.first.paid_to_hfi == true
+      render :nothing => true, :state => 500
+      return
+    end
+    
+    hfi_total = 0
+    load_pay_total = 0
+    
+    job = Job.find(tickets.first.job_id)
+    owner = job.owner
+    logger = job.logger
+    trucker = job.trucker
+    
+    receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("hfi", 0, job.id, :order => "payment_num")
+    unless receipts.first.nil?
+      payment_num = receipts.last.payment_num + 1
+    else
+      payment_num = 1
+    end
+    
+    notes = params[:notes]
+    
+    tickets.each do |j|
+      j.hfi_value = j.value * (job.hfi_rate / 100)
+      hfi_total = hfi_total + j.hfi_value.round(2)
+      load_pay_total = load_pay_total + j.value
+    end
+    
+    receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => 0, :owner_type => "hfi", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :total_payment => hfi_total);
+    
+    tickets.each do |i|
+      receipt.tickets.push(i)
+      i.paid_to_hfi = true
+      i.save
+    end
+    
+    pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
+        send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
+                              type: "application/pdf"
+  end
+  
   
   def delete_trucker_receipt
     @receipt = Receipt.find(params[:receipt_id])

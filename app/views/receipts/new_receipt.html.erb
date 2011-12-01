@@ -15,6 +15,7 @@
 			<option value="owner">Landowner</option>
 			<option value="logger">Logger</option>
 			<option value="trucker">Trucker</option>
+			<option value="hfi">HFI</option>
 		</select>
 		
 		<h5>Select tickets:</h5>
@@ -177,21 +178,8 @@ function init_type_select () {
 
 function refresh_form_action () {
 	var type = $('#owner_type_selector').val();
-	var receipt_id = $('#receipt_select').val();
 	
 	$('#create_form').attr('action', '/get_'+type+'_receipt.pdf/');
-}
-
-function refresh_receipts (type) {
-	var job_id = $('#job_selector').val();
-	
-	$.ajax ({
-		url: '/get_receipts/'+job_id+'?owner_type='+type,
-		cache: false,
-		success: function (html) {
-			$('#receipt_select').html(html);
-		}		
-	});
 }
 
 $('#owner_type_selector').change(function() {
