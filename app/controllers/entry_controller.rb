@@ -78,7 +78,7 @@ class EntryController < ApplicationController
     end
     
     @job = Job.find_by_name(params[:job_name])
-    @destination = Destination.find_by_name(params[:destination_name])
+    @destination = Destination.find(params[:destination_id])
     
     @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false, :mbf_converted => converted)
     unless params[:wood_type] == "3"

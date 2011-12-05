@@ -27,7 +27,7 @@
 					<select name="destination_name" id="destination_name" >
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten(i.name) %></option>
+							<option value="<%= i.id %>"><%= shorten(i.name) %></option>
 						<% end %>
 					</select>
 				</td>
@@ -119,7 +119,7 @@
 		function validated_submit() {
 			if (check_field_data()) {
 				var ticket_num = $('#ticket_num').attr('value');
-				var destination_name = $('#destination_name').val();
+				var destination_id = $('#destination_name').val();
 				var job_name = $('#job_name').html();
 				var species = [$('#species_1').val()];
 				var loads = [$('#load_1_mbfs').attr('value')];
@@ -158,7 +158,7 @@
 				}
 				
 				var url = "";
-				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_name='+destination_name+'&job_name='+job_name+'&wood_type='+wood_type
+				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_id='+destination_id+'&job_name='+job_name+'&wood_type='+wood_type
 				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date+'&converted='+converted;
 				
 				$.ajax ({
