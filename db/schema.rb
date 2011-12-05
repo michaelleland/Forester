@@ -10,7 +10,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< .merge_file_JXNWh4
 ActiveRecord::Schema.define(:version => 20111130234354) do
+=======
+ActiveRecord::Schema.define(:version => 20111130222336) do
+>>>>>>> .merge_file_b9U2T5
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -164,7 +168,11 @@ ActiveRecord::Schema.define(:version => 20111130234354) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "value",           :precision => 8, :scale => 2
+<<<<<<< .merge_file_JXNWh4
     t.boolean  "paid_to_hfi"
+=======
+    t.boolean  "mbf_converted"
+>>>>>>> .merge_file_b9U2T5
   end
 
   create_table "trucker_assignments", :force => true do |t|

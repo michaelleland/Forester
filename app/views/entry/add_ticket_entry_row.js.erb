@@ -11,7 +11,7 @@ $('#current_entries tbody').append('\
 		<td id="ticket_number">'+ticket_no+'</td>\
 		<td id="delivery_date">'+date+'</td>\
 		<td id="job_name"><%= shorten params[:job_name] %></td>\
-		<td id="destination_name"><%= shorten params[:destination_name] %></td>\
+		<td id="destination_name"><%= shorten @destination.name %></td>\
 		<td id="wood_type" type_id="<%= @ticket.wood_type %>"><%= WoodType.find(params[:wood_type]).name %></td>\
 		<td id="species"><%= @sp_str %></td>\
 		<td id="net_mbf"><%= @ticket.net_mbf %></td>\
