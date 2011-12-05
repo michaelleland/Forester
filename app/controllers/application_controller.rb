@@ -3,11 +3,17 @@ class ApplicationController < ActionController::Base
   
   $states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
   
-  
+  #Rounds a float to certain number of decimals
+  #Actually Float class itself has method .round(int) which
+  # would do the trick but since it's been used in so many places and it would
+  # take a lot of time to fix the code, I'll let it be...
   def round_to(x, d)
     rounded = (x * 10**d).round.to_f / 10**d
   end
   
+  #This method should probably be called currency()
+  #It rounds the given float into two decimal and adds commas and returns the result as a string
+  #It does not add dollar sign.
   def give_pennies(x)
     negative = false
     if x<0
@@ -67,6 +73,4 @@ class ApplicationController < ActionController::Base
       i.delete
     end
   end
-  
-  
 end
