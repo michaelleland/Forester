@@ -52,8 +52,8 @@ class LandownerReceipt < Prawn::Document
       
       trucker_total = trucker_total + round_to(j.trucker_value, 2)
       
-      j.hfi_value = j.value * (job.hfi_rate / 100)
-      hfi_total = hfi_total + give_pennies(j.hfi_value).to_f
+      j.hfi_value = (j.value * (job.hfi_rate / 100)).round(2)
+      hfi_total = hfi_total + j.hfi_value.round(2)
       
       rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(j.destination_id, j.job_id, job.logger.id)
       if rate.rate_type == "MBF"
@@ -146,7 +146,7 @@ class LandownerReceipt < Prawn::Document
     
     table tickets_data do
       row(0).font_style = :bold
-      rows(0).background_color = "33EE44"
+      rows(0).background_color = "11AA22"
       columns(4..13).align = :right
       column(8).align = :center
       column(0).align = :right

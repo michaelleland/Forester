@@ -130,7 +130,7 @@ class TruckerReceipt < Prawn::Document
       column(0).align = :right
       column(6).align = :center
       rows(0).align = :left
-      rows(0).background_color = "33EE44"
+      rows(0).background_color = "11AA22"
       self.header = true
       self.row_colors = ["BABABA", "FFFFFF"]
       self.column_widths = [41, 46, 84, 48, 35, 35, 72, 90, 90]

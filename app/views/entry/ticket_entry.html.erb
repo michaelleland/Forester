@@ -388,7 +388,7 @@
 				where_from.find('#job_name').html('\
 				<select id="job_name_select">\
 					<% Job.all.each do |i| %>
-						<option value="<%= i.id %>"><%= shorten i.name %></option>\
+						<option value="<%= i.id %>"><%= j(shorten(i.name)) %></option>\
 					<% end %>
 				</select>\
 				');
