@@ -1,24 +1,30 @@
 class SetupController < ApplicationController
   layout nil
   
+  #Show action
   def index
     
   end
   
+  #Show action
   def jobs
+  
   end
   
+  #Show action
   def show_jobs
     
   end
   
+  #Show action
   def ticket_ranges
-    
-    
-    
     
   end
   
+  #Ajax action
+  #Sets the boundaries of a given range into given values, if they are not overlapping with some other job's
+  # ticket range. In that case, "error" status 306 is rendered with the name of the job which has
+  # overlapping range.
   def edit_range
     @range = TicketRange.find(params[:id])
     @range.from = params[:from]
@@ -51,6 +57,9 @@ class SetupController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Creates a new range with given boundaries if it does not overlap with any existing range's boundaries.
+  #In the latter case, the name of the job with overlapping range is rendered
   def new_range
     @job = Job.find(params[:id])
     @range = TicketRange.new(:from => params[:from], :to => params[:to])
