@@ -105,9 +105,11 @@ class ReportsController < ApplicationController
   # 2. All of the tickets
   # 3. All of the payments
   def export_the_thing
+    #First, the file name, path and table headers will be set according to given id 
     if params[:id] == "1"
       @jobs = Job.all
       
+      #Same filepath thingy here as above
       @filename = "Jobs_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
       @file_path = "#{Rails.root}/../shared/system/exports/"
       @table_name = "Jobs"
@@ -137,6 +139,8 @@ class ReportsController < ApplicationController
       @table_headers = "Date, Destination Name, Job Name, Payment #, Wood Type, Net MBF, Tonnage, Total Payment"      
     end
     
+    #Then, file is created with name and path set above and the headers are written to the file
+    #After writing the headers, the data according to given id is written.
     File.open("#{@file_path}#{@filename}", "w") do |writer|
       writer.puts @table_name
       writer.puts @table_headers
@@ -185,6 +189,7 @@ class ReportsController < ApplicationController
       end
     end
     
+    #Written file is opened for sending and sent
     @file = File.open("#{@file_path}#{@filename}", "r")
     
     send_data(@file.read, :type => "csv", :filename => @filename)
