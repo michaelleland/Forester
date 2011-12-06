@@ -1,11 +1,9 @@
 class Destination < ActiveRecord::Base
+  belongs_to :address
+  belongs_to :contact_person
   
-  def address
-    @address = Address.find(self.address_id)
-  end
-  
-  def contact_person
-    @contact_person = ContactPerson.find(self.contact_person_id)
-  end
+  #def contact_person
+  #  @contact_person = ContactPerson.find(self.contact_person_id)
+  #end
   
 end

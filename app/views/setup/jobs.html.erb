@@ -33,7 +33,7 @@
 						<select id="owner_name_select" name="owner_name">
 							<option value="-1"></option>
 							<% Owner.all.each do |i| %>
-								<option value="<%= i.name %>"><%= i.name %></option>
+								<option value="<%= i.name %>"><%= shorten i.name %></option>
 							<% end %>
 						</select>
 					</div>
@@ -44,7 +44,7 @@
 						<select name="logger_name" id="logger_name_select">
 							<option value="-1"></option>
 							<% Partner.all.each do |i| %>
-								<option value="<%= i.name %>"><%= i.name %></option>
+								<option value="<%= i.name %>"><%= shorten i.name %></option>
 							<% end %>
 						</select>
 					</div>
@@ -55,7 +55,7 @@
 						<select name="trucker_name" id="trucker_name_select">
 							<option value="-1"></option>
 							<% Partner.all.each do |i| %>
-								<option value="<%= i.name %>"><%= i.name %></option>
+								<option value="<%= i.name %>"><%= shorten i.name %></option>
 							<% end %>
 						</select>
 					</div>
@@ -184,43 +184,43 @@
 				var where_from = $(place);
 				
 				where_from.find('#owner_input').html('\
-					<select id="owner_name_select" name="owner_name">\
+					<select id="owner_name_select" name="owner_name">'+
 						<% Owner.all.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+							'<option value="<%= i.name %>"><%= escape_javascript(shorten(i.name)) %></option>'+
 						<% end %>
-					</select>\
+					'</select>\
 				');
 				
 				where_from.find('#owner_name_select option').each(function() {
-					if ($(this).html() == owner_name) {
+					if ($(this).html() == shorten(owner_name)) {
 						$(this).attr('selected', 'true');
 					}
 				});
 				
 				where_from.find('#logger_input').html('\
-					<select id="logger_name_select" name="logger_name">\
+					<select id="logger_name_select" name="logger_name">'+
 						<% Partner.all.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+							'<option value="<%= i.name %>"><%= escape_javascript(shorten(i.name)) %></option>'+
 						<% end %>
-					</select>\
+					'</select>\
 				');
 				
 				where_from.find('#logger_name_select option').each(function() {
-					if ($(this).html() == logger_name) {
+					if ($(this).html() == shorten(logger_name)) {
 						$(this).attr('selected', 'true');
 					}
 				});
 				
 				where_from.find('#trucker_input').html('\
-					<select id="trucker_name_select" name="trucker_name">\
+					<select id="trucker_name_select" name="trucker_name">'+
 						<% Partner.all.each do |i| %>
-							<option value="<%= i.name %>"><%= shorten i.name %></option>\
+							'<option value="<%= i.name %>"><%= escape_javascript(shorten(i.name)) %></option>'+
 						<% end %>
-					</select>\
+					'</select>\
 				');
 				
 				where_from.find('#trucker_name_select option').each(function() {
-					if ($(this).html() == trucker_name) {
+					if ($(this).html() == shorten(trucker_name)) {
 						$(this).attr('selected', 'true');
 					}
 				});

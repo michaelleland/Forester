@@ -3,10 +3,6 @@ class Job < ActiveRecord::Base
   has_many :tickets
   has_many :ticket_ranges
   
-  attr_accessor :logger
-  attr_accessor :trucker
-  attr_accessor :owner
-  
   def logger
     @asg = LoggerAssignment.find_by_job_id(self.id)
     @logger = Partner.find(@asg.partner_id)

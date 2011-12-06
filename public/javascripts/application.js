@@ -278,9 +278,9 @@ function validate_date(date) {
 }
 
 function shorten(str) {
-	if (str.length < 16) {
+	if (str.length <= 14) {
 		return str;
 	} else {
-		return str.substr(0, 16)+"..."
+		return str.substr(0, 14)+"..."
 	}
 }
