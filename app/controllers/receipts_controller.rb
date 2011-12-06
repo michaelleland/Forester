@@ -9,6 +9,8 @@ class ReceiptsController < ApplicationController
     
   end
   
+  #Ajax action
+  #Renders a PDF statement of given user and given owner type (landowner, logger, trucker, hfi) 
   def get_statement
     job = Job.find(params[:id])
     
@@ -62,6 +64,9 @@ class ReceiptsController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Return statuscode 200 if there are receipts for given job and given owner type(same as above)
+  #If not, returns error. Js in browser knows how to handle them.
   def check_for_receipts
     receipts = Receipt.find_all_by_job_id_and_owner_type(params[:id], params[:type])
     if receipts.length == 0
@@ -80,22 +85,25 @@ class ReceiptsController < ApplicationController
   end
  
   def owner_receipt
+  
   end
   
-  def add_deduction
-    @receipt_item = ReceiptItem.create(:item_data => params[:data], :receipt_id => 0, :value => params[:deduction_amount])
-  end
-  
+  #Utility class
   class Payment
     attr_accessor :number, :value
   end
   
+  #Ajax action
+  #Gathers up the tickets for the receipt and resolves payment number for the payment/receipt
+  #Passes the data to a new instance of corresponding PDF class. That is rendered to user.
   def get_owner_receipt
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)
     owner = job.owner
     notes = params[:notes]
     
+    #Payment number is one greater than the payment number in the latest receipt
+    #If it does not exits, this is the first receipt if this type and so payment number is 1.
     receipts = Receipt.find_all_by_owner_type_and_owner_id_and_job_id("owner", owner.id, job.id, :order => "payment_num")
     unless receipts.first.nil?
       payment_num = receipts.last.payment_num + 1
@@ -103,24 +111,30 @@ class ReceiptsController < ApplicationController
       payment_num = 1
     end
     
+    #Deduction items, when it's populated, is a two dimensional array. The acutal deductions
+    # consist of [Name, value] "pairs". 
     deduction_items = []
     
+    #Deduction items is populated here, using data from params arrays.
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
         deduction_items.push([i, params[:deductions_values][x]])
       end     
     end
     
+    #The ajax call from browser uses pdf format so we respond to that.
     respond_to do |format|
       format.pdf do
         pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
         send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
                               type: "application/pdf",
-                              disposition: "inline"
+                              disposition: "inline" #PDF will be shown in the browser
       end 
     end
   end
   
+  #Ajax action
+  #Same as above
   def get_logger_receipt
     tickets = Ticket.find(params[:tickets])
     notes = params[:notes]
@@ -152,6 +166,9 @@ class ReceiptsController < ApplicationController
     end
   end
   
+  
+  #Ajax action
+  #Same as above
   def get_trucker_receipt
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)     
@@ -184,6 +201,8 @@ class ReceiptsController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Same as above with exception that hfi receipts don't contain deduction items  
   def get_hfi_receipt
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)
@@ -205,14 +224,14 @@ class ReceiptsController < ApplicationController
       end 
     end
   end
-
+  
+  #Ajax action
+  #Does the same calculations which are done in the receipt PDF classes, but now for saving the same data
+  # into database so it can be later on pulled out and used to recreate the old receipts.
+  #Some of the things happening here are already described in the previous actions. See also the documentation
+  # in the PDF receipt classes.
   def save_owner_receipt
     tickets = Ticket.find(params[:tickets])
-    
-    if tickets.first.paid_to_owner == true
-      render :nothing => true, :state => 500
-      return
-    end
     
     job = Job.find(tickets.first.job_id)
     owner = job.owner
@@ -291,6 +310,8 @@ class ReceiptsController < ApplicationController
                            type: "application/pdf"
   end
   
+  #Ajax action
+  #Same as above
   def save_logger_receipt    
     tickets = Ticket.find(params[:tickets])
     notes = params[:notes]
@@ -368,6 +389,8 @@ class ReceiptsController < ApplicationController
                            type: "application/pdf"
   end
   
+  #Ajax action
+  #Same as above
   def save_trucker_receipt
     tickets = Ticket.find(params[:tickets])
     
@@ -436,6 +459,8 @@ class ReceiptsController < ApplicationController
                            type: "application/pdf"
   end
   
+  #Ajax action
+  #Same as above
   def save_hfi_receipt
     tickets = Ticket.find(params[:tickets])
     
@@ -480,7 +505,9 @@ class ReceiptsController < ApplicationController
                               type: "application/pdf"
   end
   
-  
+  #Ajax action
+  #This method was written in case user would be let to delete receipts
+  #Not in use at the moment.
   def delete_trucker_receipt
     @receipt = Receipt.find(params[:receipt_id])
     
@@ -498,6 +525,9 @@ class ReceiptsController < ApplicationController
     render :nothing => true
   end
   
+  #Ajax actionm
+  #Pulls out from DB the receipt with given id. Rest of the data is associated with that receipt.
+  #Sends the corresponding PDF file to user.
   def get_old_receipt
     receipt = Receipt.find(params[:receipt_id])
     job = Job.find(receipt.job_id)
