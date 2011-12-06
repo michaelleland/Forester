@@ -98,8 +98,8 @@ class LandownerReceipt < Prawn::Document
       text "Fax. 360-723-5522", :indent_paragraphs => 15
     end
     
-    #Following blocks are really not any lists, rather just placed to look like that
-    #Basic job info list headers
+    #The basic job data "table". In practice it is just two lists.
+    #Basic job info list headers.
     grid([1, 6], [2, 7]).bounding_box do
       text "Job:", style: :bold, :indent_paragraphs => 5
       text "Owner:", style: :bold, :indent_paragraphs => 5
@@ -107,7 +107,7 @@ class LandownerReceipt < Prawn::Document
       text "Trucker:", style: :bold, :indent_paragraphs => 5
     end
     
-    #Basic job info list values
+    #Basic job info list values.
     grid([1, 7], [2, 9]).bounding_box do
       text "#{job.name}", :indent_paragraphs => 5
       text "#{job.owner.name}", :indent_paragraphs => 5
@@ -124,6 +124,7 @@ class LandownerReceipt < Prawn::Document
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
       
+      #Drawing table and styling it.
       table table_data do
         row(0).font_style = :bold
         columns(3..4).align = :right
@@ -153,6 +154,7 @@ class LandownerReceipt < Prawn::Document
     end +
     [["", "", "", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(logger_total)}</b>", "<b>$ #{give_pennies(trucker_total)}</b>", "<b>$ #{give_pennies(hfi_total)}</b>", "<b>$ #{give_pennies(owner_total)}</b>"]]
     
+    #Drawing table and styling it.
     table tickets_data do
       row(0).font_style = :bold
       rows(0).background_color = "11AA22"
@@ -173,7 +175,7 @@ class LandownerReceipt < Prawn::Document
     end
   end
   
-  #These methods are here so that in initialize method, the application helper's methods
+  #These methods are here so that in the initialize method the application helper's methods
   # can be accessed easily.
   def give_pennies(x)
     @view.give_pennies(x)
