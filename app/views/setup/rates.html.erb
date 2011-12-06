@@ -42,11 +42,11 @@
 			<div class="data_rows" id="input_trucker_data_row_'+id+'">\
 				<div class="row_headers inputs">\
 				<select id="destination">\
-					<option value="none"> </option>\
-					<% Destination.all.each do |i| %>\
-						<option value="<%= i.id %>"><%= shorten i.name %></option>\
-					<% end %>\
-				</select>\
+					<option value="none"> </option>'+
+					<% Destination.all.each do |i| %>
+						'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
+					<% end %>
+				'</select>\
 				</div>\
 				<div class="row_data">\
 					<input type="text" id="rate" name="rate" size="3" /> /\
@@ -68,11 +68,11 @@
 			<div class="data_rows" id="input_logger_data_row_'+id+'">\
 				<div class="row_headers inputs">\
 				<select id="destination">\
-					<option value="none"> </option>\
-					<% Destination.all.each do |i| %>\
-						<option value="<%= i.id %>"><%= shorten i.name %></option>\
-					<% end %>\
-				</select>\
+					<option value="none"> </option>'+
+					<% Destination.all.each do |i| %>
+						'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
+					<% end %>
+				'</select>\
 				</div>\
 				<div class="row_data">\
 					<input type="text" id="rate" name="rate" size="3" /> /\

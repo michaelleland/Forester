@@ -184,7 +184,6 @@ class ReceiptsController < ApplicationController
     end
   end
   
-<<<<<<< .merge_file_y7RKw1
   def get_hfi_receipt
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)
@@ -206,12 +205,8 @@ class ReceiptsController < ApplicationController
       end 
     end
   end
-  
-  def save_owner_receipt    
-    debugger
-=======
+
   def save_owner_receipt
->>>>>>> .merge_file_0eKD72
     tickets = Ticket.find(params[:tickets])
     
     if tickets.first.paid_to_owner == true

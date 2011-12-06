@@ -1,6 +1,12 @@
 module ApplicationHelper
   $active
   
+  def esc_js(str)
+    c = str.count("'")
+    c.times { str.gsub!("'", "\\'") }
+    str
+  end
+  
   def set_active active
     $active = active
   end
