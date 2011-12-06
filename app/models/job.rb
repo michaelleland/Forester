@@ -2,6 +2,7 @@ class Job < ActiveRecord::Base
   has_many :receipts
   has_many :tickets
   has_many :ticket_ranges
+  has_many :payment_from_destinations
   
   belongs_to :owner
   
