@@ -607,7 +607,7 @@
 			}, 1000);
 		});
 		
-		/* Inserts correct job when ticket is entered */
+		/* Inserts correct job to input table's second row when ticket is entered */
 		
 		$('#ticket_num').change(function() {
 			$.ajax({
@@ -619,7 +619,7 @@
 			})
 		})
 		
-		// Recursively working infite timer
+		// Recursively working infite timer, not used.
 		function checkIt () {
 			$('.specie_mbfs').each(function(){$(this).attr('disabled', 'true');});
 			$('#tonnage').attr('disabled', 'true');
