@@ -101,7 +101,9 @@ class SetupController < ApplicationController
   end
   
   #Ajax action
-  #
+  #Creates a new job with given data.
+  #Renders a javascript which fires a function from application.js with parameters
+  # depending on the value of @content type. This function reloads the accordion on the page.
   def new_job
     @owner = Owner.find_by_name(params[:owner_name])
     @logger = Partner.find_by_name(params[:logger_name])
@@ -115,6 +117,9 @@ class SetupController < ApplicationController
     render "new_whatever.js.erb"
   end
   
+  #Ajax action
+  #Edits the job, as simple as that.
+  #Rendering done in the same way as above.
   def edit_job
     job = Job.find(params[:job_id])
     
@@ -144,6 +149,9 @@ class SetupController < ApplicationController
     render "edit_whatever.js.erb"
   end
   
+  #Ajax action
+  #Creates a new landowner
+  #About rendering: see comments above.
   def new_owner
     contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
     address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
@@ -153,6 +161,9 @@ class SetupController < ApplicationController
     render "new_whatever.js.erb"
   end
   
+  #Ajax action
+  #Edits a landowner
+  #About rendering: see comments above.
   def edit_owner
     @owner = Owner.find(params[:owner_id])
     
@@ -178,6 +189,9 @@ class SetupController < ApplicationController
     
   end
   
+  #Ajax action
+  #Creates a new sawmill
+  #About rendering: see comments above.
   def new_sawmill
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
     @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state] )
@@ -186,7 +200,10 @@ class SetupController < ApplicationController
     @content_type = 4
     render "new_whatever.js.erb"
   end
-    
+  
+  #Ajax action
+  #Edits a sawmill
+  #About rendering: see comments above.
   def edit_sawmill
     @sawmill = Destination.find(params[:sawmill_id])
      
@@ -212,6 +229,9 @@ class SetupController < ApplicationController
     
   end
   
+  #Ajax action
+  #Creates a new partner (logger/trucker)
+  #About rendering: see comments above.
   def new_partner
     @contact_person = ContactPerson.create(:name => params[:cp_name], :phone_number => params[:cp_phone], :email => params[:cp_email])
     @address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
@@ -221,6 +241,9 @@ class SetupController < ApplicationController
     render "new_whatever.js.erb"
   end
   
+  #Ajax action
+  #Edits a partner
+  #About rendering: see comments above.
   def edit_partner
     @partner = Partner.find(params[:partner_id])
     @partner.name = params[:partner_name]
@@ -244,10 +267,13 @@ class SetupController < ApplicationController
     render "edit_whatever.js.erb"
   end
   
+  #Show view action
   def rates
     
   end
 
+  #Ajax action
+  #Creates a new Rate record for a logger/trucker (depending on given type) to a destination.
   def new_rate
     @destination = Destination.find(params[:destination_id])
     @job = Job.find(params[:id])
@@ -270,13 +296,15 @@ class SetupController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Deletes a rate from db
   def delete_rate
     if params[:type] == "logger"
       @logger_rate = LoggerRate.find(params[:id])
       if @logger_rate.delete
         render :nothing => true
       else
-        render :state => 13
+        render :state => 13 #I'm not sure why in case of failior state 13 is rendered. Just for fun? :S
       end
     end
     if params[:type] == "trucker"
@@ -289,6 +317,8 @@ class SetupController < ApplicationController
     end
   end
   
+  #Ajax action
+  #Edits a rate of given type.
   def edit_rate
     if params[:type] == "logger"
       @logger_rate = LoggerRate.find(params[:id])
@@ -314,6 +344,9 @@ class SetupController < ApplicationController
     end
   end
   
+  #Ajax action
+  #This method is used in rate's accordion view, to make sure that to one destination only one rate exists
+  #It renders the ids of existing rates destinations as a csv string.
   def get_existing
     
     rates_string = ""
