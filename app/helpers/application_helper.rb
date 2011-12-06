@@ -11,11 +11,14 @@ module ApplicationHelper
     $active = active
   end
   
+  #To keep the views neat, long sawmill and owner names have to be shortened in certain places
+  #If the lenght of the name is more than 14, then the 14 first characters are taken and three
+  # dots are added to end of the string to indicate that name is truncated.
   def shorten str
-    if str.length < 16
+    if str.length <= 14
       return str
     else
-      return "#{str[0..15]}..."
+      return "#{str[0..13]}..."
     end
   end
   

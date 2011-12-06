@@ -79,7 +79,7 @@ class LoggerReceipt < Prawn::Document
       table_data = [["Payment number", "Date", "Description", "", "Amount"]] + 
       [[payment_num, date_string, "Logging pay", "", "$ #{give_pennies(logger_total)}"]] +
       deduction_items.map do |i|
-        ["", "", i[0], "", "$ #{give_pennies(i[1].to_f)}"]
+        ["", "", i[0], "", "- $ #{give_pennies(i[1].to_f)}"]
       end +
       [["", "", "", "<b>Total:</b>", "<u>$ #{give_pennies(total)}</u>"]]
       
