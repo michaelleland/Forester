@@ -10,14 +10,14 @@ $('#current_entries tbody').append('\
 	<tr id="<%= @ticket.id %>entry" class="current_entries_row">\
 		<td id="ticket_number">'+ticket_no+'</td>\
 		<td id="delivery_date">'+date+'</td>\
-		<td id="job_name"><%= shorten params[:job_name] %></td>\
-		<td id="destination_name"><%= shorten @destination.name %></td>\
+		<td id="job_name"><%= escape_javascript(shorten(params[:job_name])) %></td>\
+		<td id="destination_name"><%= escape_javascript(shorten(@destination.name)) %></td>\
 		<td id="wood_type" type_id="<%= @ticket.wood_type %>"><%= WoodType.find(params[:wood_type]).name %></td>\
 		<td id="species"><%= @sp_str %></td>\
 		<td id="net_mbf"><%= @ticket.net_mbf %></td>\
 		<td id="tonnage"><%= @ticket.tonnage %></td>\
 		<td id="load_pay"><%= @ac.give_pennies(@ticket.value)%></td>\
-		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= @ticket.id %>, true)" /> \
+		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= @ticket.id %>, true)" />\
 		<input type="button" value="del" onclick="delete_ticket(<%= @ticket.id %>)"></td>\
 	</tr>');
 

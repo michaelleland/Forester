@@ -15,6 +15,7 @@
 			<option value="owner">Landowner</option>
 			<option value="logger">Logger</option>
 			<option value="trucker">Trucker</option>
+			<option value="hfi">HFI</option>
 		</select>
 		
 		<h5>Select a receipt:</h5>
@@ -45,6 +46,9 @@ $('#owner_type_selector').change(function() {
 		disable_get_receipt();
 	} else if ($('#owner_type_selector').val() == 'trucker') {
 		refresh_receipts('trucker');
+		disable_get_receipt();
+	} else if ($('#owner_type_selector').val() == 'hfi') {
+		refresh_receipts('hfi');
 		disable_get_receipt();
 	}
 })

@@ -60,6 +60,7 @@ Forester::Application.routes.draw do
   match "/get_owner_receipt" => "receipts#get_owner_receipt"
   match "/get_logger_receipt" => "receipts#get_logger_receipt"
   match "/get_trucker_receipt" => "receipts#get_trucker_receipt"
+  match "/get_hfi_receipt" => "receipts#get_hfi_receipt"
   match "/get_old_receipt/" => "receipts#get_old_receipt"
   match "/get_statement/:id" => "receipts#get_statement"
   
@@ -69,8 +70,8 @@ Forester::Application.routes.draw do
   match "/get_owner_tickets/:id" => "page_controls#get_owner_tickets"
   match "/get_logger_tickets/:id" => "page_controls#get_logger_tickets"
   match "/get_trucker_tickets/:id" => "page_controls#get_trucker_tickets"
+  match "/get_hfi_tickets/:id" => "page_controls#get_hfi_tickets"
   match "/get_pdf_receipt" => "receipts#get_pdf_receipt"
-  
   
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"
@@ -80,6 +81,7 @@ Forester::Application.routes.draw do
   match "/save_owner_receipt" => "receipts#save_owner_receipt"
   match "/save_logger_receipt" => "receipts#save_logger_receipt"
   match "/save_trucker_receipt" => "receipts#save_trucker_receipt"
+  match "/save_hfi_receipt" => "receipts#save_hfi_receipt"
   
   #Get the thing!
   match "/export_the_thing/:id" => "reports#export_the_thing"

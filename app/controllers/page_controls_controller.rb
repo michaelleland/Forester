@@ -91,6 +91,11 @@ class PageControlsController < ApplicationController
     render "get_tickets.html.erb"
   end
   
+  def get_hfi_tickets
+    @tickets = Ticket.find_all_by_job_id_and_paid_to_hfi(params[:id], false, :order => "number")
+    render "get_tickets.html.erb"
+  end
+  
   def get_receipts
     @job = Job.find(params[:id])
     @receipts = []

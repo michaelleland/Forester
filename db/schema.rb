@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130222336) do
+ActiveRecord::Schema.define(:version => 20111130234354) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20111130222336) do
     t.datetime "updated_at"
     t.decimal  "value",           :precision => 8, :scale => 2
     t.boolean  "mbf_converted"
+    t.boolean  "paid_to_hfi"
   end
 
   create_table "trucker_assignments", :force => true do |t|

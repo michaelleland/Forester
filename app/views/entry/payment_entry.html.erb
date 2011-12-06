@@ -32,7 +32,7 @@
 					<select name="destination_name" id="destination_name">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
-							<option value="<%= i.id %>"><%= shorten i.name %></option>
+							<option value="<%= i.id %>"><%= shorten(i.name) %></option>
 						<% end %>
 					</select>
 				</td>
@@ -221,11 +221,11 @@
 			
 			//Select for job name
 			where_from.find('#job_name').html('\
-			<select id="job_name_select">\
+			<select id="job_name_select">'+
 				<% Job.all.each do |i| %>
-					<option value="<%= i.id %>"><%= shorten i.name %></option>\
+					'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
 				<% end %>
-			</select>\
+			'</select>\
 			');
 			
 			//Setting the previous job name as default selection
@@ -237,11 +237,11 @@
 			
 			//Same for Destinations
 			where_from.find('#destination_name').html('\
-			<select id="destination_name_select">\
+			<select id="destination_name_select">'+
 				<% Destination.all.each do |i| %>
-					<option value="<%= i.id %>"><%= shorten i.name %></option>\
+					'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
 				<% end %>
-			</select>\
+			'</select>\
 			');
 			
 			where_from.find('#destination_name option').each(function() {
