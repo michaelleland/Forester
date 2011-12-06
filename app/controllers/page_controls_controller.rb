@@ -72,30 +72,35 @@ class PageControlsController < ApplicationController
     @payments = PaymentFromDestination.all
   end
   
-  def get_payments
-    @unpaid_payments = PaymentFromDestination.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "payment_date")
-  end
-  
+  #Ajax action
+  #Renders tickets not paid to given logger in given job as options (html element select's option elements) 
   def get_logger_tickets
     @tickets = Ticket.find_all_by_job_id_and_paid_to_logger(params[:id], false, :order => "number")
     render "get_tickets.html.erb"
   end
   
+  #Ajax action
+  #Same as above, but for trucker
   def get_trucker_tickets
     @tickets = Ticket.find_all_by_job_id_and_paid_to_trucker(params[:id], false, :order => "number")
     render "get_tickets.html.erb"
   end
   
+  #Ajax action
+  #Same as above, but for landowner
   def get_owner_tickets
     @tickets = Ticket.find_all_by_job_id_and_paid_to_owner(params[:id], false, :order => "number")
     render "get_tickets.html.erb"
   end
   
+  #Ajax action
+  #Same as above, but for hfi
   def get_hfi_tickets
     @tickets = Ticket.find_all_by_job_id_and_paid_to_hfi(params[:id], false, :order => "number")
     render "get_tickets.html.erb"
   end
   
+  #Gets receipts according to given owner type and owner id
   def get_receipts
     @job = Job.find(params[:id])
     @receipts = []
@@ -107,6 +112,9 @@ class PageControlsController < ApplicationController
     end
     if params[:owner_type] == "trucker"
       @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, @job.trucker.id, "trucker")
+    end
+    if params[:owner_type] == "hfi"
+      @receipts = Receipt.find_all_by_job_id_and_owner_id_and_owner_type(@job.id, 0, "hfi")
     end
   end
   

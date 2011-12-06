@@ -19,10 +19,12 @@ module ApplicationHelper
     end
   end
   
+  #Documentation @ application_controller.rb
   def round_to(x, d)
     rounded = (x * 10**d).round.to_f / 10**d
   end
   
+  #Documentation @ application_controller.rb
   def give_pennies(x)
     negative = false
     if x<0
@@ -65,6 +67,7 @@ module ApplicationHelper
     as_string  
   end
   
+  #Rounds a float to 2 decimals and adds 0 to the string representation of it which is then returned
   def give_decimals(x)
     x = round_to(x, 2)
     as_string = x.to_s

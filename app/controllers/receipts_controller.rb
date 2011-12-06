@@ -531,5 +531,10 @@ class ReceiptsController < ApplicationController
       send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
                         type: "application/pdf"
     end
+    if params[:owner_type] == "hfi"
+      pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
+      send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
+                        type: "application/pdf"
+    end
   end
 end
