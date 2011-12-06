@@ -1,15 +1,22 @@
 class ReportsController < ApplicationController
   layout nil
   
+  #Show action
   def index
     
   end
   
+  #Show action
   def quarterly_report
     
   end
   
+  #Ajax action
+  #Gathers ticket from given quarter of given year and produces a report from them.
+  #In the report the gathered mbf and tonnage information from tickets is broken down by job.
   def exported_report
+    #The folder where the filename points to, is actually in the ~/rails/Forester because of capistrano as
+    # the Apache point to ~/rails/Forester/current symlinkfolder and capistrano updates the them.  
     @filename = "quarterly_report_#{params[:year]}_#{params[:quarter]}.csv"
     @file_path = "#{Rails.root}/../shared/system/exports/"
     if params[:quarter] == "1"
@@ -28,15 +35,20 @@ class ReportsController < ApplicationController
       end
     end
     
+    #Writing to file starts with empty line.
     File.open("#{@file_path}#{@filename}", 'w') do |writer|
       writer.puts("\n")
     end
     
+    #From the tickets delivered in the given quarter, the job ids are gathered here
     @job_ids = @tickets.collect {|i| i.job_id }
     @jobs = Job.find(@job_ids)
     
+    #To have less DB calls, all specie records are put into an instance variable
     @species = Specie.all
     
+    #Goes through all the jobs, for each sums up all the mbf and tonnages and writes them into the file
+    # per specie.
     @jobs.each do |k|
       @my_tickets = []
       @tickets.each do |l|
@@ -46,7 +58,7 @@ class ReportsController < ApplicationController
       end
       
       @amounts = []
-    
+      
       @species.length.times do
         @amounts.push([0, 0])
       end
@@ -55,15 +67,17 @@ class ReportsController < ApplicationController
     
       @my_tickets.each do |i|
         i.load_details.each do |j|
-          if i.wood_type == 3 || j.species_id == 0
+          if i.wood_type == 3 || j.species_id == 0 #wood type 3 & species_id 0 == pulp
             @total_pulp = @total_pulp + j.tonnage
-            next
+            next #If load is pulp, it has only one load detail so program jups to next loop
           end
-          @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss
+          #Amounts of mbf/tonnage are summed up here per ticket according to their specie.
+          @amounts[j.species_id-1][0] = @amounts[j.species_id-1][0] + j.mbfss #This and triple-n tonnage in next are helper methods. See their documentation.
           @amounts[j.species_id-1][1] = @amounts[j.species_id-1][1] + j.tonnnage
         end
       end
       
+      #Finally, the values calculated above are written into the file.
       File.open("#{@file_path}#{@filename}", 'a') do |writer|
         writer.puts "Job, #{k.name}"
         writer.puts "Category, MBF, Tonnage"
@@ -75,16 +89,21 @@ class ReportsController < ApplicationController
       end
     end
     
+    #The file created is opened in 'r' (== read) mode and send to user
     @file = File.open("#{@file_path}#{@filename}", 'r')
     
     send_data(@file.read, :type => "csv", :filename => @filename)
-    
   end
   
   def export_database
 
   end
   
+  #Ajax action
+  #The "thing" exported here can be of four different kind
+  # 1. All the jobs
+  # 2. All of the tickets
+  # 3. All of the payments
   def export_the_thing
     if params[:id] == "1"
       @jobs = Job.all
@@ -155,6 +174,7 @@ class ReportsController < ApplicationController
           writer.puts @puts
         end
       end
+      
       if params[:id] == "3"
         @payments.each do |i|
           @puts = "#{i.payment_date}, #{i.destination.name.gsub(',', '')}, #{i.job.name.gsub(',', '')}, #{i.payment_num}, "
