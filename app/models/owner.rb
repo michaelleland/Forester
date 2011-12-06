@@ -1,9 +1,6 @@
 class Owner < ActiveRecord::Base
-  def address
-    @address = Address.find(self.address_id)
-  end
+  has_many :jobs
   
-  def contact_person
-    @contact_person = ContactPerson.find(self.contact_person_id)
-  end
+  belongs_to :address
+  belongs_to :contact_person
 end

@@ -3,6 +3,8 @@ class Job < ActiveRecord::Base
   has_many :tickets
   has_many :ticket_ranges
   
+  belongs_to :owner
+  
   def logger
     @asg = LoggerAssignment.find_by_job_id(self.id)
     @logger = Partner.find(@asg.partner_id)
@@ -11,10 +13,6 @@ class Job < ActiveRecord::Base
   def trucker
     @asg = TruckerAssignment.find_by_job_id(self.id)
     @trucker = Partner.find(@asg.partner_id)
-  end
-  
-  def owner
-    @owner = Owner.find_by_id(self.owner_id)
   end
   
   def trucker_rates_details
