@@ -100,6 +100,8 @@ class SetupController < ApplicationController
     
   end
   
+  #Ajax action
+  #
   def new_job
     @owner = Owner.find_by_name(params[:owner_name])
     @logger = Partner.find_by_name(params[:logger_name])
@@ -147,7 +149,7 @@ class SetupController < ApplicationController
     address = Address.create(:street => params[:address_street], :city => params[:address_city], :zip_code => params[:address_zip], :state => params[:address_state])
     owner = Owner.create(:name => params[:owner_name], :address_id => address.id, :contact_person_id => contact_person.id)
     
-    content_type = 3
+    @content_type = 3
     render "new_whatever.js.erb"
   end
   
