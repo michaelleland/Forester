@@ -4,7 +4,7 @@
 		<div class="jobs rates" id="<%= i.id %>_accordion">
 			<div class="accordion_left_column">
 				<div class="data_rows"><h4>Trucker hauling rates:</h4></div>
-				<div class="data_rows"><div class="row_headers">Trucker name: </div><div class="row_data"> <%= i.trucker.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Trucker name: </div><div class="row_data" id="trucker_data" trucker_id="<%= i.trucker.id %>"> <%= i.trucker.name %></div></div>
 				<% @trds = i.trucker_rates_details %>
 				<% if @trds.length == 0 %>
 					<div class="data_rows" id="no_trucker_rate_data_for_<%= i.id %>"><div class="row_headers">No rate data</div></div>
@@ -18,7 +18,7 @@
 			</div>
 			<div class="accordion_right_column">
 				<div class="data_rows"><h4>Logger logging rates:</h4></div>
-				<div class="data_rows"><div class="row_headers">Logger name: </div><div class="row_data"> <%= i.logger.name %></div></div>
+				<div class="data_rows"><div class="row_headers">Logger name: </div><div class="row_data" id="logger_data" logger_id="<%= i.logger.id %>" > <%= i.logger.name %></div></div>
 				<% @lrds = i.logger_rates_details %>
 					<% if @lrds.length == 0 %>
 						<div class="data_rows" id="no_logger_rate_data_for_<%= i.id %>"><div class="row_headers">No rate data</div></div>
@@ -91,11 +91,17 @@
 		
 		function remove_existing_destinations(id, type) {
 			
+			var partner_id = "0";
+			if (type == 'logger') {
+				partner_id = $('#'+id+'_accordion #logger_data').attr('logger_id');
+			} else {
+				partner_id = $('#'+id+'_accordion #trucker_data').attr('trucker_id');
+			}
 			var options = $('#input_'+type+'_data_row_'+id+' select:first option')
-			var existing = []
+			var existing = [];
 			
 			$.ajax({
-				url: '/get_existing/'+id+'?type='+type,
+				url: '/get_existing/'+id+'?type='+type+'&partner_id='+partner_id,
 				cache: false,
 				success: function(ids) {
 					existing = ids.split(',');

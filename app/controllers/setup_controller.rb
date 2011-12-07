@@ -352,7 +352,7 @@ class SetupController < ApplicationController
     rates_string = ""
     
     if params[:type] == "logger"
-      logger_rates = LoggerRate.find_all_by_job_id(params[:id])
+      logger_rates = LoggerRate.find_all_by_job_id_and_partner_id(params[:id], params[:partner_id])
       
       rates_string << "#{logger_rates.first.destination_id}"
       logger_rates.delete(logger_rates.first)
@@ -363,7 +363,7 @@ class SetupController < ApplicationController
     end
     
     if params[:type] == "trucker"
-      trucker_rates = TruckerRate.find_all_by_job_id(params[:id])
+      trucker_rates = TruckerRate.find_all_by_job_id_and_partner_id(params[:id], params[:partner_id])
       
       rates_string << "#{trucker_rates.first.destination_id}"
       trucker_rates.delete(trucker_rates.first)
