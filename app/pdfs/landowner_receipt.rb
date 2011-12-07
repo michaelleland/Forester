@@ -54,7 +54,7 @@ class LandownerReceipt < Prawn::Document
       hfi_total = hfi_total + j.hfi_value.round(2)
       
       #Same as above but for trucker
-      rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(j.destination_id, j.job_id, job.logger.id)
+      rate = LoggerRate.find_by_destination_id_and_job_id_and_partner_id(j.destination_id, job.id, job.logger.id)
       if rate.rate_type == "MBF"
         j.logger_value = rate.rate * j.net_mbf
       else
