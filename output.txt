@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="generator" content="Phusion Passenger">
+	<title>Ruby (Rack) application could not be started</title>
+	<style type="text/css">
+		body {
+	font-family: Verdana, 'Bitstream Vera Sans', Arial, Sans-Serif;
+	font-size: 10pt;
+	background: white;
+	color: #222222;
+	margin: 0;
+	padding-top: 3em;
+	padding-bottom: 3em;
+	padding-left: 4.5em;
+	padding-right: 4.5em;
+}
+
+h1 {
+	font-size: 17pt;
+	font-weight: medium;
+	color: #533e72;
+	border-bottom: 1px solid #533e72;
+}
+
+h1.title {
+	margin-top: 0;
+}
+
+h1.error_title {
+	color: red;
+	border-bottom: 1px solid red;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+dt {
+	font-weight: bold;
+	color: #280050;
+}
+
+dd {
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+
+.commands {
+	border: 1px solid #b594e7;
+	background: #ddc6ff;
+	padding: 0.5em;
+	margin: 0.5em;
+	font-family: 'Bitstream Vera Sans Mono', 'Courier New', Monospace;
+}
+
+table.backtrace th {
+	background: #8470a6;
+	color: white;
+}
+
+table.backtrace th,
+table.backtrace td {
+	padding: 0.2em;
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+}
+
+table.backtrace tr td {
+	background: #ecdfff;
+}
+
+table.backtrace tr.even td {
+	background: #f7f2ff;
+}
+
+table.backtrace td.index {
+	font-weight: bold;
+}
+
+#site_footer {
+	border-top: solid 1px black;
+	margin-top: 1em;
+	padding-top: 1em;
+	font-size: small;
+	color: #777777;
+}
+
+#site_footer a {
+	color: #65498e;
+}
+
+#site_footer a:hover {
+	color: #9681d9;
+}
+
+#site_header .corporate_identity {
+	display: none;
+}
+
+	</style>
+	<link rel="stylesheet" type="text/css" href="http://www.modrails.com/error_pages/1.0/error_page.css">
+</head>
+
+<body>
+
+	<div id="site_container">
+		<div id="site_header">
+			<ul class="corporate_identity ">
+				<li class="logo"><a href="http://www.modrails.com"><span>Phusion Passenger</span></a></li>
+			</ul>
+		</div>
+		<div id="site_body">
+			
+<h1 class="error_title">Ruby (Rack) application could not be started</h1>
+<div id="content">
+
+	These are the possible causes:
+	<ul>
+	<li class="first">
+		<div class="container">
+		<div class="content">
+		There may be a syntax error in the application's code. Please
+		check for such errors and fix them.
+		</div>
+		</div>
+	</li>
+	<li>
+		<div class="container">
+		<div class="content">
+		A required library may not installed. Please install all libraries
+		that this application requires.
+		</div>
+		</div>
+	</li>
+	<li>
+		<div class="container">
+		<div class="content">
+		The application may not be properly configured. Please check whether all
+		configuration files are written correctly, fix any incorrect
+		configurations, and restart this application.
+		</div>
+		</div>
+	</li>
+	<li class="last">
+		<div class="container">
+		<div class="content">
+		A service that the application relies on (such as the database server
+		or the Ferret search engine server) may not have been started. Please start
+		that service.
+		</div>
+		</div>
+	</li>
+	</ul>
+	Further information about the error may have been written to the
+	application's log file. Please check it in order to analyse the problem.
+	
+	<dl>
+	<dt>Error message:</dt>
+	<dd>No such file or directory - /home/submarine/rails/Forester/releases/20111112162017/config/database.yml</dd>
+	
+	<dt>Exception class:</dt>
+	<dd>Errno::ENOENT</dd>
+	
+	<dt>Application root:</dt>
+	<dd>
+		<tt class="filename">/home/submarine/rails/Forester/current</tt>
+	</dd>
+	
+	<dt>Backtrace:</dt>
+	<dd>
+		
+			<table class="backtrace">
+			<tr class="headers">
+				<th>#</th>
+				<th>File</th>
+				<th>Line</th>
+				<th>Location</th>
+			</tr>
+		
+				<tr class="backtrace_line framework uneven">
+					<td class="index">0</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application/configuration.rb</td>
+					<td class="line">88</td>
+					<td class="location">in `read'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">1</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application/configuration.rb</td>
+					<td class="line">88</td>
+					<td class="location">in `database_configuration'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">2</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activerecord-3.0.9/lib/active_record/railtie.rb</td>
+					<td class="line">58</td>
+					<td class="location">in `block (2 levels) in <class:Railtie>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">3</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/lazy_load_hooks.rb</td>
+					<td class="line">36</td>
+					<td class="location">in `instance_eval'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">4</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/lazy_load_hooks.rb</td>
+					<td class="line">36</td>
+					<td class="location">in `execute_hook'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">5</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/lazy_load_hooks.rb</td>
+					<td class="line">43</td>
+					<td class="location">in `block in run_load_hooks'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">6</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/lazy_load_hooks.rb</td>
+					<td class="line">42</td>
+					<td class="location">in `each'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">7</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/lazy_load_hooks.rb</td>
+					<td class="line">42</td>
+					<td class="location">in `run_load_hooks'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">8</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activerecord-3.0.9/lib/active_record/base.rb</td>
+					<td class="line">1909</td>
+					<td class="location">in `<top (required)>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">9</td>
+					<td class="filename">/home/submarine/rails/Forester/releases/20111112162017/app/models/address.rb</td>
+					<td class="line">1</td>
+					<td class="location">in `<top (required)>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">10</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">239</td>
+					<td class="location">in `require'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">11</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">239</td>
+					<td class="location">in `block in require'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">12</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">227</td>
+					<td class="location">in `load_dependency'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">13</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">239</td>
+					<td class="location">in `require'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">14</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">346</td>
+					<td class="location">in `require_or_load'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">15</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">300</td>
+					<td class="location">in `depend_on'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">16</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/activesupport-3.0.9/lib/active_support/dependencies.rb</td>
+					<td class="line">216</td>
+					<td class="location">in `require_dependency'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">17</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/engine.rb</td>
+					<td class="line">138</td>
+					<td class="location">in `block (2 levels) in eager_load!'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">18</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/engine.rb</td>
+					<td class="line">137</td>
+					<td class="location">in `each'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">19</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/engine.rb</td>
+					<td class="line">137</td>
+					<td class="location">in `block in eager_load!'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">20</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/engine.rb</td>
+					<td class="line">135</td>
+					<td class="location">in `each'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">21</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/engine.rb</td>
+					<td class="line">135</td>
+					<td class="location">in `eager_load!'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">22</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application.rb</td>
+					<td class="line">108</td>
+					<td class="location">in `eager_load!'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">23</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application/finisher.rb</td>
+					<td class="line">41</td>
+					<td class="location">in `block in <module:Finisher>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">24</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/initializable.rb</td>
+					<td class="line">25</td>
+					<td class="location">in `instance_exec'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">25</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/initializable.rb</td>
+					<td class="line">25</td>
+					<td class="location">in `run'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">26</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/initializable.rb</td>
+					<td class="line">50</td>
+					<td class="location">in `block in run_initializers'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">27</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/initializable.rb</td>
+					<td class="line">49</td>
+					<td class="location">in `each'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">28</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/initializable.rb</td>
+					<td class="line">49</td>
+					<td class="location">in `run_initializers'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">29</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application.rb</td>
+					<td class="line">134</td>
+					<td class="location">in `initialize!'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">30</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/railties-3.0.9/lib/rails/application.rb</td>
+					<td class="line">77</td>
+					<td class="location">in `method_missing'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">31</td>
+					<td class="filename">/home/submarine/rails/Forester/releases/20111112162017/config/environment.rb</td>
+					<td class="line">5</td>
+					<td class="location">in `<top (required)>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">32</td>
+					<td class="filename">config.ru</td>
+					<td class="line">3</td>
+					<td class="location">in `require'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">33</td>
+					<td class="filename">config.ru</td>
+					<td class="line">3</td>
+					<td class="location">in `block in <main>'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">34</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/rack-1.2.3/lib/rack/builder.rb</td>
+					<td class="line">46</td>
+					<td class="location">in `instance_eval'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">35</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/rack-1.2.3/lib/rack/builder.rb</td>
+					<td class="line">46</td>
+					<td class="location">in `initialize'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework uneven">
+					<td class="index">36</td>
+					<td class="filename">config.ru</td>
+					<td class="line">1</td>
+					<td class="location">in `new'</td>
+				</tr>
+			
+				<tr class="backtrace_line framework even">
+					<td class="index">37</td>
+					<td class="filename">config.ru</td>
+					<td class="line">1</td>
+					<td class="location">in `<main>'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">38</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/rack/application_spawner.rb</td>
+					<td class="line">222</td>
+					<td class="location">in `eval'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">39</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/rack/application_spawner.rb</td>
+					<td class="line">222</td>
+					<td class="location">in `load_rack_app'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">40</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/rack/application_spawner.rb</td>
+					<td class="line">156</td>
+					<td class="location">in `block in initialize_server'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">41</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/utils.rb</td>
+					<td class="line">572</td>
+					<td class="location">in `report_app_init_status'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">42</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/rack/application_spawner.rb</td>
+					<td class="line">153</td>
+					<td class="location">in `initialize_server'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">43</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server.rb</td>
+					<td class="line">204</td>
+					<td class="location">in `start_synchronously'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">44</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server.rb</td>
+					<td class="line">180</td>
+					<td class="location">in `start'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">45</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/rack/application_spawner.rb</td>
+					<td class="line">128</td>
+					<td class="location">in `start'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">46</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/spawn_manager.rb</td>
+					<td class="line">253</td>
+					<td class="location">in `block (2 levels) in spawn_rack_application'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">47</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server_collection.rb</td>
+					<td class="line">132</td>
+					<td class="location">in `lookup_or_add'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">48</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/spawn_manager.rb</td>
+					<td class="line">246</td>
+					<td class="location">in `block in spawn_rack_application'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">49</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server_collection.rb</td>
+					<td class="line">82</td>
+					<td class="location">in `block in synchronize'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">50</td>
+					<td class="filename"><internal</td>
+					<td class="line">prelude></td>
+					<td class="location">10:in `synchronize'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">51</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server_collection.rb</td>
+					<td class="line">79</td>
+					<td class="location">in `synchronize'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">52</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/spawn_manager.rb</td>
+					<td class="line">244</td>
+					<td class="location">in `spawn_rack_application'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">53</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/spawn_manager.rb</td>
+					<td class="line">137</td>
+					<td class="location">in `spawn_application'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">54</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/spawn_manager.rb</td>
+					<td class="line">275</td>
+					<td class="location">in `handle_spawn_application'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">55</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server.rb</td>
+					<td class="line">357</td>
+					<td class="location">in `server_main_loop'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger uneven">
+					<td class="index">56</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/lib/phusion_passenger/abstract_server.rb</td>
+					<td class="line">206</td>
+					<td class="location">in `start_synchronously'</td>
+				</tr>
+			
+				<tr class="backtrace_line passenger even">
+					<td class="index">57</td>
+					<td class="filename">/usr/local/ruby/lib/ruby/gems/1.9.1/gems/passenger-3.0.8/helper-scripts/passenger-spawn-server</td>
+					<td class="line">99</td>
+					<td class="location">in `<main>'</td>
+				</tr>
+			</table>
+
+	</dd>
+	</dl>
+
+</div>
+
+		</div>
+		<div id="site_footer">
+			<!--
+			   You are free to modify the footer as you see fit,
+			   but we kindly ask of you to preserve to following
+			   text. Thank you.
+			-->
+			<div class="container">
+				Powered by <a href="http://www.modrails.com/">Phusion Passenger</a>,
+				<tt>mod_rails</tt> / <tt>mod_rack</tt> for Apache.
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+
