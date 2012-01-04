@@ -89,7 +89,7 @@ class EntryController < ApplicationController
     @job = Job.find_by_name(params[:job_name])
     @destination = Destination.find(params[:destination_id])
     
-    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false, :mbf_converted => converted)
+    @ticket = Ticket.create(:delivery_date => "#{@year}-#{@month}-#{@day}", :destination_id => @destination.id, :job_id => @job.id, :number => params[:ticket_num], :value => @value, :wood_type => params[:wood_type], :paid_to_owner => false, :paid_to_logger => false, :paid_to_trucker => false, :paid_to_hfi => false, :mbf_converted => converted)
     
     unless params[:wood_type] == "3" #wood type 3 means pulp
       #One load detail for one ticket is created in any case
