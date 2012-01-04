@@ -44,6 +44,12 @@ class LoggerStatement < Prawn::Document
       total = total.round(2)
     end
     
+    #The total of all deductions in all of the receipts
+    deductions_total = 0
+    deduction_items.each do |i|
+      deductions_total = deductions_total + i[1].to_f.round(2)
+    end
+    
     payments_total = 0
     
     receipts.each do |i|
