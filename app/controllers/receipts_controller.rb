@@ -326,7 +326,6 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
         deduction_items.push([i, params[:deductions_values][x]])
       end
     end
@@ -428,13 +427,12 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        receipt.receipt_items.push(ReceiptItem.create(:item_data => i, :value => params[:deductions_values][x]))
         deduction_items.push([i, params[:deductions_values][x]])
       end
     end
     
     deduction_items.each do |i| 
-      payment_total - round_to(i.to_f, 2)
+      payment_total - i[1].to_f.round(2)
     end
     
     payment_total = round_to(payment_total, 2)

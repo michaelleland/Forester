@@ -39,7 +39,7 @@ class LoggerReceipt < Prawn::Document
     total = logger_total
         
     deduction_items.each do |i| 
-      total = total - round_to(i[1].to_f)
+      total = total - i[1].to_f.round(2)
       total = round_to(total, 2)
     end
     
