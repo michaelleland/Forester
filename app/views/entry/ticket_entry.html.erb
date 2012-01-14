@@ -17,14 +17,14 @@
 			
 			<tr>
 				<td>
-					<input id="ticket_num" type="text" name="ticket_num" size="5" class="fields"/>
+					<input id="ticket_num" class="ticket_inputs" type="text" name="ticket_num" size="5" class="fields"/>
 				</td>
 				<td>
-					<input type="text" name="delivery_date" id="delivery_date" size="8" class="fields"/>
+					<input type="text" name="delivery_date" id="delivery_date" class="ticket_inputs" size="8" class="fields"/>
 					<script> $('#delivery_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#delivery_date').mask("99-99-9999", {placeholder: " "}); </script>
 				</td>
 				<td>
-					<select name="destination_name" id="destination_name" >
+					<select name="destination_name" id="destination_name" class="ticket_selects" >
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.id %>"><%= shorten(i.name) %></option>
@@ -32,7 +32,7 @@
 					</select>
 				</td>
 				<td>
-					<select id="wood_type" name="wood_type" >
+					<select id="wood_type" name="wood_type" class="ticket_selects" >
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -40,7 +40,7 @@
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species_1" id="species_1">
+					<select class="specie_selector" name="species_1" id="species_1" class="ticket_selects" >
 						<option value="-1"></option>
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
@@ -49,16 +49,16 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" value="0" id="tonnage" size="4" name="tonnage" class="fields"/>
+					<input type="text" value="0" id="tonnage" size="4" name="tonnage" class="fields ticket_inputs"/>
 				</td>
 				<td>
-					<input id="load_1_mbfs" value="0" class="specie_mbfs" type="text" size="4" name="load_1_mbfs"/>
+					<input id="load_1_mbfs" value="0" class="specie_mbfs ticket_inputs" type="text" size="4" name="load_1_mbfs"/>
 				</td>
 				<td>
-					<input id="net_mbf" type="text" size="4" value="0" name="net_mbf" disabled="true" class="fields"/>
+					<input id="net_mbf" type="text" size="4" value="0" name="net_mbf" disabled="true" class="ticket_inputs fields"/>
 				</td>
 				<td>
-					<input id="value" type="text" size="8" name="value" class="fields"/>
+					<input id="value" type="text" size="8" name="value" class="fields ticket_inputs"/>
 				</td>
 				<td>
 					<input id="check_button" type="button" value="Submit" onclick="validated_submit()" />
@@ -117,7 +117,7 @@
 	<script>
 		
 		function validated_submit() {
-			if (check_field_data()) {
+			if(validate_data()) {
 				var ticket_num = $('#ticket_num').attr('value');
 				var destination_id = $('#destination_name').val();
 				var job_name = $('#job_name').html();
@@ -174,9 +174,197 @@
 			set_mbf_as_not_converted();
 		}
 		
-		/* At this point, this function makes sure that all fields have a value. Disabled fields are not included.
-		 * This is called by Check-button only. Does not validate the data in any way, yet.
-		 */
+		function validate_data() {
+			clear_feedback_to_user();
+			valid = true;
+			if (!validate_ticket_number()) {
+				valid = false;
+			}
+			if (!validate_date()) {
+				valid = false;
+			}
+			/*if (!validate_destination()) {
+				valid = false;
+			}
+			if (!validate_wood_type()) {
+				valid = false;
+			}
+			if (!validate_species()) {
+				valid = false;
+			}
+			if (!validate_load_amounts()) {
+				valid = false;
+			}
+			if (!validate_load_pay()) {
+				valid = false;
+			}
+			return valid;
+			*/
+			return false;
+		}
+		
+		function clear_feedback_to_user() {
+			$('#feedback').html('');
+			$('.ticket_inputs').each(function() {
+				$(this).css('background-color', 'white');
+			});
+			$('.ticket_selects').each(function() {
+				$(this).css('background-color', 'light-gray');
+			});
+		}
+		
+		function validate_ticket_number() {
+			if (tn_is_a_number() && tn_not_duplicate() && tn_in_bounds()) {
+				return true;
+			} else {
+				if (!tn_not_duplicate()) {
+					tell_user_tn_is_duplicate();
+				}
+				tell_user_that_the_thing_invalid_is("ticket_number");
+				return false;
+			}
+		}
+		
+		function tn_not_duplicate() {
+			tn = $('#ticket_num').val();
+			not_duplicate = true;
+			
+			$.ajax ({
+				url: '/is_this_tn_duplicate/'+tn,
+				cache: false,
+				success: function(response) {
+					if (response == 'true') {
+						not_duplicate = false;
+					}
+				}
+			});
+			return not_duplicate;
+		}
+		
+		function tn_is_a_number() {
+			tn = $('#ticket_num').val();
+			return !isNaN(tn);
+		}
+		
+		function tn_in_bounds() {
+			tn = $('#ticket_num').val();
+			tn = parseInt(tn);
+			
+			if (tn < 0 || tn > 99999) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function tell_user_tn_is_duplicate() {
+			$('#feedback').append('<div>There already is a ticket with that number in DB</div>');
+		}
+		
+		function tell_user_that_the_thing_invalid_is(thing) {
+			switch (thing) {
+				case "ticket_number":
+					$('#ticket_num').css('background-color', 'red');
+					$('#feedback').append('<div>Ticket number is invalid</div>');
+				break;
+				case "date":
+					$('#delivery_date').css('background-color', 'red');
+					$('#feedback').append('<div>Date is invalid</div>');
+				break;
+			}
+		}
+		
+		function validate_date() {
+			if (month_is_valid() && day_is_valid() && year_is_valid()) {
+				return true;	
+			} else {
+				tell_user_that_the_thing_invalid_is("date");
+				return false;
+			}
+		}
+		
+		function month_is_valid() {
+			if(month_is_a_number() && month_is_in_bounds()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		function month_is_a_number() {
+			date = $('#delivery_date').val();
+			month = date.substr(0, 2);
+			return !isNaN(month);
+		}	
+		
+		function month_is_in_bounds() {
+			date = $('#delivery_date').val();
+			month = parseInt(date.substr(0, 2));
+			
+			if (month < 0 || month > 12) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function day_is_valid() {
+			if(day_is_a_number() && day_is_in_bounds()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		function day_is_a_number() {
+			date = $('#delivery_date').val();
+			day = date.substr(3, 2);
+			return !isNaN(day);
+		}	
+		
+		function day_is_in_bounds() {
+			date = $('#delivery_date').val();
+			day = parseInt(date.substr(3, 2));
+			
+			if (day < 0 || day > days_in_month()) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function days_in_month() {
+			date = $('#delivery_date').val();
+			month = parseInt(date.substr(0, 2));
+			
+			days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+			return days_array[month-1];
+		}
+		
+		function year_is_valid() {
+			if(year_is_a_number() && year_is_in_bounds()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		function year_is_a_number() {
+			date = $('#delivery_date').val();
+			year = date.substr(6, 4);
+			return !isNaN(year);
+		}	
+		
+		function year_is_in_bounds() {
+			date = $('#delivery_date').val();
+			year = parseInt(date.substr(6, 4));
+			
+			if (year < 1990 || year > 2075) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 		
 		function check_field_data() {
 			var values = [];

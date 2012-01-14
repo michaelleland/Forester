@@ -260,4 +260,12 @@ class EntryController < ApplicationController
     
     render :nothing => true
   end
+  
+  def is_this_tn_duplicate
+    if Ticket.find_by_number(params[:id]).nil?
+      render :text => "false"
+    else
+      render :text => "true"
+    end
+  end
 end
