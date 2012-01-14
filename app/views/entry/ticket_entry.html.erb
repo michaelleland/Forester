@@ -240,16 +240,19 @@
 			}
 		}
 		
+		var not_duplicate;
+		
 		function tn_not_duplicate() {
 			tn = $('#ticket_num').val();
-			not_duplicate = true;
 			
 			$.ajax ({
 				url: '/is_this_tn_duplicate/'+tn,
 				cache: false,
 				success: function(response) {
-					if (response == 'true') {
+					if (response == "true") {
 						not_duplicate = false;
+					} else {
+						not_duplicate = true
 					}
 				}
 			});
