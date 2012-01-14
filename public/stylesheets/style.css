@@ -392,6 +392,7 @@ a:hover {
 
 #deductions_to_receipt_list_values select {
 	float: left;
+	text-align: right;
 	width: 100px;
 }
 
