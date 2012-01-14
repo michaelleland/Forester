@@ -40,7 +40,7 @@
 					</select>
 				</td>
 				<td>
-					<select class="specie_selector" name="species_1" id="species_1" class="ticket_selects" >
+					<select class="specie_selector ticket_selects" name="species_1" id="species_1" >
 						<option value="-1"></option>
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
@@ -72,6 +72,8 @@
 			</tr>
 		</table>
 	</form>
+	
+	<div id="feedback"></div>
 </div>
 
 <div id="current_entries">
@@ -183,7 +185,7 @@
 			if (!validate_date()) {
 				valid = false;
 			}
-			/*if (!validate_destination()) {
+			if (!validate_destination()) {
 				valid = false;
 			}
 			if (!validate_wood_type()) {
@@ -192,14 +194,18 @@
 			if (!validate_species()) {
 				valid = false;
 			}
-			if (!validate_load_amounts()) {
+			
+			if (!validate_tonnage()) {
+				valid = false;
+			}
+			
+			if (!validate_mbf()) {
 				valid = false;
 			}
 			if (!validate_load_pay()) {
 				valid = false;
 			}
-			return valid;
-			*/
+			//return valid;
 			return false;
 		}
 		
@@ -209,12 +215,12 @@
 				$(this).css('background-color', 'white');
 			});
 			$('.ticket_selects').each(function() {
-				$(this).css('background-color', 'light-gray');
+				$(this).css('background-color', 'lightgray');
 			});
 		}
 		
 		function validate_ticket_number() {
-			if (tn_is_a_number() && tn_not_duplicate() && tn_in_bounds()) {
+			if (tn_not_missing() && tn_is_a_number() && tn_not_duplicate() && tn_in_bounds()) {
 				return true;
 			} else {
 				if (!tn_not_duplicate()) {
@@ -222,6 +228,15 @@
 				}
 				tell_user_that_the_thing_invalid_is("ticket_number");
 				return false;
+			}
+		}
+		
+		function tn_not_missing() {
+			tn = $('#ticket_num').val();
+			if (tn == '') {
+				return false;
+			} else {
+				return true;
 			}
 		}
 		
@@ -271,15 +286,48 @@
 					$('#delivery_date').css('background-color', 'red');
 					$('#feedback').append('<div>Date is invalid</div>');
 				break;
+				case "destination":
+					$('#destination_name').css('background-color', 'red');
+					$('#feedback').append('<div>Destination not selected</div>');
+				break;
+				case "wood_type":
+					$('#wood_type').css('background-color', 'red');
+					$('#feedback').append('<div>Wood type not selected</div>');
+				break;
+				case "species":
+					$('#species_1').css('background-color', 'red');
+					$('#feedback').append('<div>Species not selected</div>');
+				break;
+				case "tonnage":
+					$('#tonnage').css('background-color', 'red');
+					$('#feedback').append('<div>Tonnage is invalid</div>');
+				break;
+				case "mbf":
+					$('#load_1_mbfs').css('background-color', 'red');
+					$('#feedback').append('<div>MBF is invalid</div>');
+				break;
+				case "load_pay":
+					$('#value').css('background-color', 'red');
+					$('#feedback').append('<div>Load pay is invalid</div>');
+				break;
 			}
 		}
 		
 		function validate_date() {
-			if (month_is_valid() && day_is_valid() && year_is_valid()) {
+			if (date_not_missing() && month_is_valid() && day_is_valid() && year_is_valid()) {
 				return true;	
 			} else {
 				tell_user_that_the_thing_invalid_is("date");
 				return false;
+			}
+		}
+		
+		function date_not_missing() {
+			date = $('#delivery_date').val();
+			if (date == '') {
+				return false;
+			} else {
+				return true;
 			}
 		}
 		
@@ -366,74 +414,93 @@
 			}
 		}
 		
-		function check_field_data() {
-			var values = [];
-			values.push([$('#ticket_num').attr('value'), 'Ticket number']);
-			values.push([$('#delivery_date').attr('value'), 'Delivery date']);
-			values.push([$('#destination_name :selected').text(), 'Destination']);
-			values.push([$('#wood_type :selected').text(), 'Wood Type']);
-			values.push([$('#species_1 :selected').text(), 'Specie']);
-			
-			if (($('#tonnage').val() == "" || $('#tonnage').val() == "0") && ($('#net_mbf').val() == "" || $('#net_mbf').val() == "0")) {
-				values.push(["", 'MBF or Tonnage']);
+		function validate_destination() {
+			if ($('#destination_name').val() == '-1') {
+				tell_user_that_the_thing_invalid_is("destination");
+				return false;
+			} else {
+				return true;
 			}
-			
-			values.push([$('#value').attr('value'), 'Ticket value']);
-			
-			$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
-			
-			var everything_ok = true;
-			
-			for (i=0;i<values.length;i++) {
-				if (values[i][0] == "") {
-					$('#feedback').append('<div>'+values[i][1]+' missing </div>');
-					everything_ok = false; 
-				}
-			}
-			
-			if (!validate_date($('#delivery_date').val())) {
-				$('#feedback').append('<div>Invalid date</div>');
-				everything_ok = false;
-			}
-			
-			setTimeout(function() {
-				$('#feedback').fadeOut();
-				setTimeout(function() {
-					$('#feedback').remove();
-				}, 620);
-			}, 5000);
-			
-			return everything_ok;
 		}
 		
-		/* When destination fields value changes, this function enables Tonnage/MBf fields according to the  
-		 * trucker/logger rates in this job / destination combination. 
-		 */
-		
-		/*
-		function enable_load_fields() {
-			var job_name = $('#job_name').html();
-			var destination_name = $('#destination_name').val();
-			
-			$('#tonnage').attr('disabled', 'true');
-			$('#load_1_mbfs').attr('disabled', 'true');
-			
-			$.ajax ({
-				url: '/get_load_type/?job_name='+job_name+'&destination_name='+destination_name,
-			 	cache: false,
-			 	success: function (answer) {
-			 		if (answer == "Tonnage") {
-			 			$('#tonnage').removeAttr('disabled');
-			 		} else if (answer == "MBF") {
-			 			$('#load_1_mbfs').removeAttr('disabled');
-			 		} else if (answer == "Both") {
-			 			$('#load_1_mbfs').removeAttr('disabled');
-			 			$('#tonnage').removeAttr('disabled');
-			 		}
-			 	}
-			 });
+		function validate_wood_type() {
+			if ($('#wood_type').val() == '-1') {
+				tell_user_that_the_thing_invalid_is("wood_type");
+				return false;
+			} else {
+				return true;
+			}
 		}
-		*/
+		
+		function validate_species() {
+			if ($('#species_1').val() == '-1') {
+				tell_user_that_the_thing_invalid_is("species");
+				return false;
+			} else {
+				return true;	
+			}
+		}
+		
+		function validate_tonnage() {
+			if (tonnage_is_number()) {
+				return true;
+			} else {
+				tell_user_that_the_thing_invalid_is("tonnage");
+				return false;
+			}
+		}
+		
+		function tonnage_is_number() {
+			tonnage = $('#tonnage').val();
+			return !isNaN(tonnage);
+		}
+		
+		function validate_mbf() {
+			if (mbf_is_number()) {
+				return true;
+			} else {
+				tell_user_that_the_thing_invalid_is("mbf");
+				return false;
+			}
+		}
+		
+		function mbf_is_number() {
+			mbf = $('#load_1_mbfs').val();
+			return !isNaN(mbf);
+		}
+		
+		
+		function validate_load_pay() {
+			if (load_pay_is_not_empty() && load_pay_is_a_number()) {
+				return true;
+			} else {
+				tell_user_that_the_thing_invalid_is("load_pay");
+				return false;
+			}
+		}
+		
+		function load_pay_is_not_empty() {
+			load_pay = $('#value').val();
+			
+			if (load_pay == '') {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function load_pay_is_a_number() {
+			load_pay = $('#value').val();
+			return !isNaN(load_pay);
+		}
+		
+		
+		
+		/********************************************************************************************************************************************
+		* ----------------------------------------------------------------------------------------------------------------------------------------- *
+		*********************************************************************************************************************************************
+		* ----------------------------------------------------------------------------------------------------------------------------------------- *
+		*********************************************************************************************************************************************/
 		
 		var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
 		
