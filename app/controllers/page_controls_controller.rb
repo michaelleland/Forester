@@ -172,7 +172,12 @@ class PageControlsController < ApplicationController
         end
       end
     end    
-    render :text => @answer
-    
+    render :text => @answer  
   end
+  
+  def get_the_inputs_to_ticket
+    @ticket = Ticket.find(params[:id])
+  end
+  
+  
 end

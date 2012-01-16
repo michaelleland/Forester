@@ -174,37 +174,42 @@
 			set_mbf_as_not_converted();
 		}
 		
-		function validate_data() {
-			clear_feedback_to_user();
-			valid = true;
-			if (!validate_ticket_number()) {
-				valid = false;
-			}
-			if (!validate_date()) {
-				valid = false;
-			}
-			if (!validate_destination()) {
-				valid = false;
-			}
-			if (!validate_wood_type()) {
-				valid = false;
-			}
-			if (!validate_species()) {
-				valid = false;
+		function validate_data(id) {
+			if (id == "-1") {
+				clear_feedback_to_user();
+				valid = true;
+				if (!validate_ticket_number()) {
+					valid = false;
+				}
+				if (!validate_date()) {
+					valid = false;
+				}
+				if (!validate_destination()) {
+					valid = false;
+				}
+				if (!validate_wood_type()) {
+					valid = false;
+				}
+				if (!validate_species()) {
+					valid = false;
+				}
+				
+				if (!validate_tonnage()) {
+					valid = false;
+				}
+				
+				if (!validate_mbf()) {
+					valid = false;
+				}
+				if (!validate_load_pay()) {
+					valid = false;
+				}
+				//return valid;
+				return false;
+			} else {
+				
 			}
 			
-			if (!validate_tonnage()) {
-				valid = false;
-			}
-			
-			if (!validate_mbf()) {
-				valid = false;
-			}
-			if (!validate_load_pay()) {
-				valid = false;
-			}
-			//return valid;
-			return false;
 		}
 		
 		function clear_feedback_to_user() {
@@ -502,6 +507,32 @@
 		*********************************************************************************************************************************************
 		* ----------------------------------------------------------------------------------------------------------------------------------------- *
 		*********************************************************************************************************************************************/
+		
+		function get_the_inputs_to_ticket(id) {
+			row = $('#'+id+'entry');
+			
+			$.ajax({
+				url: '/get_the_inputs_to_ticket/'+id,
+				cache: false,
+				success: function(inputs_html) {
+					row.before(inputs_html);
+					row.remove();
+				}
+			});
+		}
+		
+		
+		
+		
+		
+		
+		/********************************************************************************************************************************************
+		* ----------------------------------------------------------------------------------------------------------------------------------------- *
+		*********************************************************************************************************************************************
+		* ----------------------------------------------------------------------------------------------------------------------------------------- *
+		*********************************************************************************************************************************************/
+		
+		
 		
 		var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
 		

@@ -37,6 +37,7 @@ Forester::Application.routes.draw do
   match "/delete_ticket/:id" => "entry#delete_ticket"
   match "/delete_payment/:id" => "entry#delete_payment"
   match "/is_this_tn_duplicate/:id" => "entry#is_this_tn_duplicate"
+  match "/get_the_inputs_to_ticket/:id" => "page_controls#get_the_inputs_to_ticket"
   
   
   #Setup page's basic page calls
