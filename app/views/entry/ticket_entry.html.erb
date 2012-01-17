@@ -117,8 +117,7 @@
 	<script>
 		
 		function validated_submit() {
-			//if(validate_data()) {
-			if (true) {
+			if(validate_data()) {
 				var ticket_num = $('#ticket_num').attr('value');
 				var destination_id = $('#destination_name').val();
 				var job_name = $('#job_name').html();
@@ -170,47 +169,49 @@
 						
 					}
 				});
+				remove_conversion_mark();
+				set_mbf_as_not_converted();
 			}
-			remove_conversion_mark();
-			set_mbf_as_not_converted();
+			
 		}
 		
-		//validates the contents in inputs/selects. If id is -1, the target of validation is inputs/selects of
-		// new data entry. Otherwise target is the inputs/selects in the ticket row of the id param.
-		function validate_data(id) {
+		function validate_data() {
 			valid = true;
-			clear_feedback_to_user(id);
-			if (!validate_ticket_number(id)) {
+			clear_feedback_to_user();
+			if (!validate_ticket_number()) {
 				valid = false;
 			}
 			if (!validate_date()) {
 				valid = false;
 			}
-			if (!validate_destination(id)) {
+			if (!validate_destination()) {
 				valid = false;
 			}
-			if (!validate_wood_type(id)) {
+			if (!validate_wood_type()) {
 				valid = false;
 			}
-			if (!validate_species(id)) {
-				valid = false;
-			}
-			
-			if (!validate_tonnage(id)) {
+			if (!validate_species()) {
 				valid = false;
 			}
 			
-			if (!validate_mbf(id)) {
+			if (!validate_tonnage()) {
 				valid = false;
 			}
-			if (!validate_load_pay(id)) {
+			
+			if (!validate_mbf()) {
+				valid = false;
+			}
+			if (!validate_load_pay()) {
 				valid = false;
 			}
 			//return valid;
 			return false;
 		}
 		
-		function clear_feedback_to_user(id) {
+		//The id is not used in the same sense as in some other functions. Because
+		// the feedback in the new entry should not be cleared when some editing validation\
+		// happens. It would not be catastrophe that way either, but...
+		function clear_feedback_to_user() {
 			$('#feedback').html('');
 			$('.ticket_inputs').each(function() {
 				$(this).css('background-color', 'white');
@@ -246,9 +247,16 @@
 		function tn_not_duplicate() {
 			tn = $('#ticket_num').val();
 			
+			not_duplicate = true;
+			
+			if (tn == "") {
+				return true;
+			}
+			
 			$.ajax ({
 				url: '/is_this_tn_duplicate/'+tn,
 				cache: false,
+				async: false,
 				success: function(response) {
 					if (response == "true") {
 						not_duplicate = false;
