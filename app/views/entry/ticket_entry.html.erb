@@ -45,7 +45,7 @@
 						<% Specie.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.code %></option>
 						<% end %>
-						<option value="0">Pulp</option>
+						<option value="0">PU</option>
 					</select>
 				</td>
 				<td>
@@ -117,7 +117,8 @@
 	<script>
 		
 		function validated_submit() {
-			if(validate_data()) {
+			//if(validate_data()) {
+			if (true) {
 				var ticket_num = $('#ticket_num').attr('value');
 				var destination_id = $('#destination_name').val();
 				var job_name = $('#job_name').html();
@@ -174,45 +175,42 @@
 			set_mbf_as_not_converted();
 		}
 		
+		//validates the contents in inputs/selects. If id is -1, the target of validation is inputs/selects of
+		// new data entry. Otherwise target is the inputs/selects in the ticket row of the id param.
 		function validate_data(id) {
-			if (id == "-1") {
-				clear_feedback_to_user();
-				valid = true;
-				if (!validate_ticket_number()) {
-					valid = false;
-				}
-				if (!validate_date()) {
-					valid = false;
-				}
-				if (!validate_destination()) {
-					valid = false;
-				}
-				if (!validate_wood_type()) {
-					valid = false;
-				}
-				if (!validate_species()) {
-					valid = false;
-				}
-				
-				if (!validate_tonnage()) {
-					valid = false;
-				}
-				
-				if (!validate_mbf()) {
-					valid = false;
-				}
-				if (!validate_load_pay()) {
-					valid = false;
-				}
-				//return valid;
-				return false;
-			} else {
-				
+			valid = true;
+			clear_feedback_to_user(id);
+			if (!validate_ticket_number(id)) {
+				valid = false;
+			}
+			if (!validate_date()) {
+				valid = false;
+			}
+			if (!validate_destination(id)) {
+				valid = false;
+			}
+			if (!validate_wood_type(id)) {
+				valid = false;
+			}
+			if (!validate_species(id)) {
+				valid = false;
 			}
 			
+			if (!validate_tonnage(id)) {
+				valid = false;
+			}
+			
+			if (!validate_mbf(id)) {
+				valid = false;
+			}
+			if (!validate_load_pay(id)) {
+				valid = false;
+			}
+			//return valid;
+			return false;
 		}
 		
-		function clear_feedback_to_user() {
+		function clear_feedback_to_user(id) {
 			$('#feedback').html('');
 			$('.ticket_inputs').each(function() {
 				$(this).css('background-color', 'white');

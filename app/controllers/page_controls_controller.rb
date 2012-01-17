@@ -61,7 +61,7 @@ class PageControlsController < ApplicationController
   #Renders a html which contains 200 first ticket entries as table rows filled with ticket data
   def all_ticket_entries
    @ac = ApplicationController.new
-   @tickets = Ticket.all[0..200] 
+   @tickets = Ticket.find(:all, :order => "created_at")[0..100].reverse!
    @species = Specie.all
    @woodtypes = WoodType.all
   end

@@ -1,8 +1,8 @@
-<tr id="<%= @ticket.id %>entry" class="all_entries_row">
-	<td id="ticket_number"><input value="<%= @ticket.number %>" type="text" /></td>
-	<td id="delivery_date"><input value="<%= @ticket.delivery_date.strftime("%m-%d-%Y") %>" type="text" /></td>
+<tr id="<%= @ticket.id %>entry" class="all_entries_row" style="background-color: lime;" >
+	<td id="ticket_number"><input value="<%= @ticket.number %>" type="text" class="ticket_number_edit" /></td>
+	<td id="delivery_date"><input value="<%= @ticket.delivery_date.strftime("%m-%d-%Y") %>" type="text" class="delivery_date_edit" /></td>
 	<td id="job_name">
-		<select id="job_select">
+		<select class="job_select">
 			<% Job.all.each do |i| %>
 				<% if i.name == @ticket.job.name %>
 					<option value="<%= i.id %>" selected="true"><%= shorten i.name %></option>
@@ -13,7 +13,7 @@
 		</select>
 	</td>	
 	<td id="destination_name">
-		<select id="destination_select">
+		<select class="destination_select">
 			<% Destination.all.each do |i| %>
 				<% if i.name == @ticket.destination.name %>
 					<option value="<%= i.id %>" selected="true"><%= shorten i.name %></option>
@@ -24,7 +24,7 @@
 		</select>
 	</td>
 	<td id="wood_type" type_id="<%= @ticket.wood_type %>">
-		<select id="wood_type_select">
+		<select class="wood_type_select">
 			<% WoodType.all.each do |i| %>
 				<% if i.id == @ticket.wood_type %>
 					<option value="<%= i.id %>" selected="true"><%= i.name %></option>
@@ -35,26 +35,39 @@
 		</select>
 	</td>
 	<td id="species">
-		<select id="species_select">
+		<select class="specie_select">
 			<% Specie.all.each do |i| %>
 				<% if i.id == @ticket.load_details.first.species_id %>
-					<option value="<%= i.id %>" selected="true"><%= i.name %></option>
+					<option value="<%= i.id %>" selected="true"><%= i.code %></option>
 				<% else %>
-					<option value="<%= i.id %>"><%= i.name %></option>
+					<option value="<%= i.id %>"><%= i.code %></option>
 				<% end %>
 			<% end %>
+			<% if @ticket.load_details.first.species_id == 0 %>
+				<option value="0" selected="true">PU</option>
+			<% else %>
+				<option value="0">PU</option>
+			<% end %>
+			
 		</select>
 	</td>
 	
-	<td class="currency" id="net_mbf"><%= give_pennies(@ticket.load_details.first.mbfss) %></td>
-	<td class="currency" id="tonnage"><%= give_pennies(@ticket.load_details.first.tonnnage) %></td>
-	<td class="currency" id="load_pay"><%= give_pennies(@ticket.value) %></td>
-	<td><input type="button" value="save" onclick="save_the_edited_values_of_ticket(<%= @ticket.id %>);"> 
+	<td class="currency" id="net_mbf">
+		<input value="<%= give_pennies(@ticket.load_details.first.mbfss) %>" class="mbf_edit" />
+	</td>
+	<td class="currency" id="tonnage">
+		<input value="<%= give_pennies(@ticket.load_details.first.tonnnage) %>" class="tonnage_edit" />
+	</td>
+	<td class="currency" id="load_pay">
+		<input value="<%= give_pennies(@ticket.value) %>" class="load_pay_edit" />
+	</td>
+	<td>
+		<input type="button" value="save" class="save_edit_button" onclick="save_the_edited_values_of_ticket(<%= @ticket.id %>);">
+	</td> 
 </tr>
 <% @ticket.load_details.each do |i| %>
 <% if i == @ticket.load_details.first then next end %>
-<tr id="<%= i.id %>load_detail_row" class="load_detail_rows">
-	<td></td>
+<tr id="<%= i.id %>load_detail_row" class="load_detail_rows" style="background-color: lime;">
 	<td></td>
 	<td></td>
 	<td></td>
@@ -62,17 +75,23 @@
 	<td></td>
 		
 	<td>
-		<select id="species_select">
+		<select class="species_select">
 			<% Specie.all.each do |j| %>
 				<% if j.id == i.species_id %>
-					<option value="<%= j.id %>" selected="true"><%= j.name %></option>
+					<option value="<%= j.id %>" selected="true"><%= j.code %></option>
 				<% else %>
-					<option value="<%= j.id %>"><%= j.name %></option>
+					<option value="<%= j.id %>"><%= j.code %></option>
 				<% end %>
 			<% end %>
 		</select>
 	</td>
-	<td><%= give_pennies(i.mbfss) %></td>
-	<td><%= give_pennies(i.tonnnage) %></td>
+	<td>
+		<input value="<%= give_pennies(i.mbfss) %>" id="mbf_input" class="mbf_edit" />
+	</td>
+	<td>
+		<input value="<%= give_pennies(i.tonnnage) %>" id="tonnage_input" class="tonnage_edit" />
+	</td>
+	<td></td>
+	<td></td>
 </tr>
 <% end %>

@@ -93,7 +93,7 @@ class EntryController < ApplicationController
     
     unless params[:wood_type] == "3" #wood type 3 means pulp
       #One load detail for one ticket is created in any case
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species.first, :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
       @specie_codes.push(Specie.find(@species[0]).code)
       
       #But if there is more, so many load details will be created
