@@ -261,8 +261,8 @@ function select_all_deductions() {
 	
 	vals = []
 	$('#deductions_values option').each(function () {
-		vals.push(parseFloat($(this).attr('value')));
-	})
+		vals.push($(this).val());
+	});
 	$('#deductions_values').val(vals);
 }
 </script>
