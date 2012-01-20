@@ -527,6 +527,38 @@
 			});
 		}
 		
+		function validate_data_of_edit_row(id) {
+			valid = true;
+			clear_error_background_colors(id);
+			if (!validate_edited_ticket_number(id)) {
+				valid = false;
+			}
+			if (!validate_edited_date(id)) {
+				valid = false;
+			}
+			if (!validate_edited_destination(id)) {
+				valid = false;
+			}
+			if (!validate_edited_wood_type(id)) {
+				valid = false;
+			}
+			if (!validate_edited_species(id)) {
+				valid = false;
+			}
+			
+			if (!validate_edited_tonnages(id)) {
+				valid = false;
+			}
+			
+			if (!validate_edited_mbfs(id)) {
+				valid = false;
+			}
+			if (!validate_edited_load_pay(id)) {
+				valid = false;
+			}
+			//return valid;
+			return false;
+		}
 		
 		
 		
