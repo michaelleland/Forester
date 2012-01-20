@@ -81,7 +81,7 @@ class HFIReceipt < Prawn::Document
     
     tickets_data = [["Ticket #", "Delivery Date", "Destination", "Wood Type", "MBF", "Tons", "HFI Rate", "Load Pay", "HFI Pay"]]+
     tickets.map do |i|
-      [i.number, i.delivery_date.strftime("%d/%m/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{job.hfi_rate} %", "#{give_pennies(i.value)}", "#{give_pennies(i.hfi_value)}"]
+      [i.number, i.delivery_date.strftime("%m/%d/%y"), shorten(i.destination.name), WoodType.find(i.wood_type).name, give_pennies(i.net_mbf), give_pennies(i.tonnage), "#{job.hfi_rate} %", "#{give_pennies(i.value)}", "#{give_pennies(i.hfi_value)}"]
     end +
     [["", "", "", "", "", "", "<b>Totals</b>", "<b>$ #{give_pennies(load_pay_total)}</b>", "<b>$ #{give_pennies(hfi_total)}</b>"]]
     
