@@ -538,6 +538,24 @@
 		
 		function save_the_edited_values_of_ticket(id) {
 			if (validate_data_of_edit_row(id)) {
+				ticket_number = $('#'+id+'entry').find('#ticket_number input').val();
+				delivery_date = $('#'+id+'entry').find('#delivery_date input').val();
+				job_id = $('#'+id+'entry').find('#job_name select').val();
+				destination_id = $('#'+id+'entry').find('#destination_name select').val();
+				wood_type_id = $('#'+id+'entry').find('#wood_type select').val();
+				load_pay = $('#'+id+'entry').find('#ticket_number input').val();
+				
+				tonnages = [];
+				tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
+				ld_rows = $('.load_detail_rows_of_'+id);
+				
+				counter = 1;
+				
+				ld_rows.each(function() {
+					tonnages[counter] = $(this).find('#tonnage_input').val();
+					counter++;
+				});
+				
 				
 			}
 		}
@@ -550,6 +568,9 @@
 				valid = false;
 			}
 			if (!validate_edited_date(id)) {
+				valid = false;
+			}
+			if (!validate_edited_specieses(id)) {
 				valid = false;
 			}
 			if (!validate_edited_tonnages(id)) {
@@ -568,11 +589,13 @@
 		function clear_user_feedback(id) {
 			$('#'+id+'entry td').each(function() {
 				$(this).find('input').css('background-color', 'white');
-				$(this).find('select').css('background-color', 'white');
+				$(this).find('select').css('background-color', 'lightgray');
 			});
 			
 			$('.load_detail_rows_of_'+id).each(function() {
 				$(this).find('#tonnage_input').css('background-color', 'white');
+				$(this).find('#mbf_input').css('background-color', 'white');
+				$(this).find('#specie_select').css('background-color', 'lightgray');
 			});
 		}
 		
@@ -725,7 +748,43 @@
 				return false;
 			}
 		}
-	
+		
+		function validate_edited_specieses(id) {
+			if (no_two_same_species_are_selected(id)) {
+				return true;
+			} else {
+				highlight_background_of("species", id);
+				return false;
+			}
+		}
+		
+		function no_two_same_species_are_selected(id) {
+			no_two_are_the_same = true;
+			
+			specieses = []
+			specieses[0] = $('#'+id+'entry').find('#specie_select').val();
+			ld_rows = $('.load_detail_rows_of_'+id);
+			
+			counter = 1;
+			
+			ld_rows.each(function() {
+				specieses[counter] = $(this).find('#specie_select').val();
+				counter++;
+			});
+			
+			n = specieses.length
+			
+			for (i=0; i<n; i++) {
+				for (j=i+1; j<n; j++) {
+					if (specieses[i] == specieses[j]) {
+						no_two_are_the_same = false;
+					}
+				}	
+			}
+			
+			return no_two_are_the_same;
+		}
+		
 		function validate_edited_tonnages(id) {
 			tonnages = [];
 			tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
@@ -834,6 +893,12 @@
 					break;
 				case "delivery_date":
 					$('#'+id+'entry').find('#delivery_date input').css('background-color', 'red');
+					break;
+				case "species":
+					$('#'+id+'entry').find('#species select').css('background-color', 'red');
+					$('.load_detail_rows_of_'+id).each(function() {
+						$(this).find('#specie_select').css('background-color', 'red');
+					});
 					break;
 				case "tonnages":
 					$('#'+id+'entry').find('#tonnage input').css('background-color', 'red');

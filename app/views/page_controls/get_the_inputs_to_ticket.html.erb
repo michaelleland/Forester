@@ -35,7 +35,7 @@
 		</select>
 	</td>
 	<td id="species">
-		<select class="specie_select">
+		<select id="specie_select" class="specie_select">
 			<% Specie.all.each do |i| %>
 				<% if i.id == @ticket.load_details.first.species_id %>
 					<option value="<%= i.id %>" selected="true"><%= i.code %></option>
@@ -75,7 +75,7 @@
 	<td></td>
 		
 	<td>
-		<select class="species_select">
+		<select id="specie_select" class="species_select">
 			<% Specie.all.each do |j| %>
 				<% if j.id == i.species_id %>
 					<option value="<%= j.id %>" selected="true"><%= j.code %></option>
