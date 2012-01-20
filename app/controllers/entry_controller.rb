@@ -262,10 +262,23 @@ class EntryController < ApplicationController
   end
   
   def is_this_tn_duplicate
-    if Ticket.find_by_number(params[:id]).nil?
-      render :text => "false"
+    if params[:ticket_id].nil?
+      if Ticket.find_by_number(params[:id]).nil?
+        render :text => "false"
+      else
+        render :text => "true"
+      end
     else
-      render :text => "true"
+      if Ticket.find(params[:ticket_id]).number == params[:id].to_i
+        render :text => "false"
+      else
+        if Ticket.find_by_number(params[:id]).nil?
+          render :text => "false"
+        else
+          render :text => "true"
+        end
+      end     
     end
+    
   end
 end

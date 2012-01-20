@@ -523,15 +523,25 @@
 				success: function(inputs_html) {
 					row.before(inputs_html);
 					row.remove();
+					
+					load_pay = $('#'+id+'entry').find('#load_pay input').val();
+			
+					while (load_pay.indexOf(',') != -1) {
+						load_pay = load_pay.replace(',', '');
+					}
+					
+					$('#'+id+'entry').find('#load_pay input').val(load_pay);
 				}
 			});
 		}
+		
 		
 		function save_the_edited_values_of_ticket(id) {
 			if (validate_data_of_edit_row(id)) {
 				
 			}
 		}
+		
 		
 		function validate_data_of_edit_row(id) {
 			valid = true;
@@ -555,8 +565,19 @@
 			return false;
 		}
 		
+		function clear_user_feedback(id) {
+			$('#'+id+'entry td').each(function() {
+				$(this).find('input').css('background-color', 'white');
+				$(this).find('select').css('background-color', 'white');
+			});
+			
+			$('.load_detail_rows_of_'+id).each(function() {
+				$(this).find('#tonnage_input').css('background-color', 'white');
+			});
+		}
+		
 		function validate_edited_ticket_number(id) {
-			if (tn_is_not_empty(id) && tn_is_a_number(id) && tn_is_in_bounds(id && tn_is_not_duplicate(id)) {
+			if (tn_is_not_empty(id) && tn_is_a_number(id) && tn_is_in_bounds(id) && tn_is_not_duplicate(id)) {
 				return true;
 			} else {
 				highlight_background_of("ticket_number", id);
@@ -591,10 +612,10 @@
 			not_duplicate = true;
 			
 			$.ajax({
-				url: '/is_this_tn_duplicate/'+tn,
+				url: '/is_this_tn_duplicate/'+tn+'?ticket_id='+id,
 				cache: false,
 				async: false,
-				success: function(respose) {
+				success: function(response) {
 					if (response == 'true') {
 						not_duplicate = false;
 					} else {
@@ -704,7 +725,7 @@
 				return false;
 			}
 		}
-		
+	
 		function validate_edited_tonnages(id) {
 			tonnages = [];
 			tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
@@ -724,7 +745,7 @@
 				return false;
 			}
 		}
-		
+			
 		function no_tonnage_is_missing(tonnages) {
 			none_missing = true;
 			for (i=0;i<tonnages.length;i++) {
@@ -739,14 +760,14 @@
 		function tonnages_are_numbers(tonnages) {
 			all_are_numbers = true;
 			for (i=0;i<tonnages.length;i++) {
-				if (isNaN(tonnages[i]) {
+				if (isNaN(tonnages[i])) {
 					all_are_numbers = false;
 					break;
 				}
 			}
 			return all_are_numbers;
 		}
-		
+
 		function validate_edited_mbfs(id) {
 			mbfs = [];
 			mbfs[0] = $('#'+id+'entry').find('#net_mbf input').val();
@@ -766,6 +787,7 @@
 				return false;
 			}
 		}
+
 		
 		function no_mbf_is_missing(mbfs) {
 			none_missing = true;
@@ -781,7 +803,7 @@
 		function mbfs_are_numbers(mbfs) {
 			all_are_numbers = true;
 			for (i=0;i<mbfs.length;i++) {
-				if (isNaN(mbfs[i]) {
+				if (isNaN(mbfs[i])) {
 					all_are_numbers = false;
 					break;
 				}
@@ -798,10 +820,37 @@
 			}
 		}
 		
+		
 		function load_pay_is_a_number(id) {
 			load_pay = $('#'+id+'entry').find('#load_pay input').val();
 			
 			return !isNaN(load_pay);
+		}
+		
+		function highlight_background_of(thing, id) {
+			switch (thing) {
+				case "ticket_number":
+					$('#'+id+'entry').find('#ticket_number input').css('background-color', 'red');
+					break;
+				case "delivery_date":
+					$('#'+id+'entry').find('#delivery_date input').css('background-color', 'red');
+					break;
+				case "tonnages":
+					$('#'+id+'entry').find('#tonnage input').css('background-color', 'red');
+					$('.load_detail_rows_of_'+id).each(function() {
+						$(this).find('#tonnage_input').css('background-color', 'red');
+					});
+					break;
+				case "mbfs":
+					$('#'+id+'entry').find('#net_mbf input').css('background-color', 'red');
+					$('.load_detail_rows_of_'+id).each(function() {
+						$(this).find('#mbf_input').css('background-color', 'red');
+					});
+					break;
+				case "load_pay":
+					$('#'+id+'entry').find('#load_pay input').css('background-color', 'red');
+					break;
+			}
 		}
 		
 		/********************************************************************************************************************************************
