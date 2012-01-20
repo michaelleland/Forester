@@ -7,7 +7,7 @@ var load_pay = '<%= params[:value] %>'
 <% if @sp_str == "" then @sp_str = "PU" end %>
 
 $('#current_entries tbody').append('\
-	<tr id="<%= @ticket.id %>entry" class="current_entries_row">\
+	<tr class="current_entries_row">\
 		<td id="ticket_number">'+ticket_no+'</td>\
 		<td id="delivery_date">'+date+'</td>\
 		<td id="job_name"><%= escape_javascript(shorten(params[:job_name])) %></td>\
