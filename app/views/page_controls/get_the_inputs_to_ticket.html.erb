@@ -67,7 +67,7 @@
 </tr>
 <% @ticket.load_details.each do |i| %>
 <% if i == @ticket.load_details.first then next end %>
-<tr id="<%= i.id %>load_detail_row" class="load_detail_rows" style="background-color: lime;">
+<tr id="<%= i.id %>load_detail_row" class="load_detail_rows_of_<%= @ticket.id %>" style="background-color: lime;">
 	<td></td>
 	<td></td>
 	<td></td>
