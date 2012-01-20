@@ -90,7 +90,6 @@
 			<th class="table_headers" style="width: 60px;">NMBF</th>
 			<th class="table_headers" style="width: 60px;">Tons</th>
 			<th class="table_headers" style="width: 80px;">Load pay</th>
-			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>
 	</table>
 </div>
@@ -126,7 +125,7 @@
 		
 		function validated_submit() {
 			if(validate_data()) {
-				var ticket_num = $('#ticket_num').attr('value');
+				var ticket_number = $('#ticket_num').val();
 				var destination_id = $('#destination_name').val();
 				var job_name = $('#job_name').html();
 				var species = [$('#species_1').val()];
@@ -166,7 +165,7 @@
 				}
 				
 				var url = "";
-				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_num+'&destination_id='+destination_id+'&job_name='+job_name+'&wood_type='+wood_type
+				url = url+'/add_ticket_entry_row/?ticket_num='+ticket_number+'&destination_id='+destination_id+'&job_name='+job_name+'&wood_type='+wood_type
 				url = url+'&tonnage='+tonnage+loads_string+species_string+'&value='+value+'&delivery_date='+delivery_date+'&converted='+converted;
 				
 				$.ajax ({
@@ -532,13 +531,13 @@
 					row.before(inputs_html);
 					row.remove();
 					
-					load_pay = $('#'+id+'entry').find('#load_pay input').val();
+					load_pay = $('#all_entries #'+id+'entry').find('#load_pay input').val();
 			
 					while (load_pay.indexOf(',') != -1) {
 						load_pay = load_pay.replace(',', '');
 					}
 					
-					$('#'+id+'entry').find('#load_pay input').val(load_pay);
+					$('#all_entries #'+id+'entry').find('#load_pay input').val(load_pay);
 				}
 			});
 		}
@@ -656,7 +655,7 @@
 		}
 		
 		function validate_edited_ticket_number(id) {
-			if (tn_is_not_empty(id) && tn_is_a_number(id) && tn_is_in_bounds(id) && tn_is_not_duplicate(id)) {
+			if (edited_tn_is_not_empty(id) && edited_tn_is_a_number(id) && edited_tn_is_in_bounds(id) && edited_tn_is_not_duplicate(id)) {
 				return true;
 			} else {
 				highlight_background_of("ticket_number", id);
@@ -664,17 +663,17 @@
 			}
 		}
 		
-		function tn_is_not_empty(id) {
+		function edited_tn_is_not_empty(id) {
 			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			return !(tn == '');
 		}
 		
-		function tn_is_a_number(id) {
+		function edited_tn_is_a_number(id) {
 			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			return !isNaN(tn);
 		}
 		
-		function tn_is_in_bounds(id) {
+		function edited_tn_is_in_bounds(id) {
 			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			tn = parseInt(tn);
 			
@@ -685,7 +684,7 @@
 			}
 		}
 		
-		function tn_is_not_duplicate(id) {
+		function edited_tn_is_not_duplicate(id) {
 			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			
 			not_duplicate = true;
@@ -706,7 +705,7 @@
 		}
 		
 		function validate_edited_date(id) {
-			if(date_is_not_empty(id) && month_is_valid(id) && day_is_valid(id) && year_is_valid(id)) {
+			if(edited_date_is_not_empty(id) && edited_month_is_valid(id) && edited_day_is_valid(id) && edited_year_is_valid(id)) {
 				return true;
 			} else {
 				highlight_background_of("delivery_date", id);
@@ -714,12 +713,12 @@
 			}
 		}
 		
-		function date_is_not_empty(id) {
+		function edited_date_is_not_empty(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			return !(date == '');
 		}
 		
-		function month_is_valid(id) {
+		function edited_month_is_valid(id) {
 			if (month_is_a_number(id) && month_is_in_bounds(id)) {
 				return true;
 			} else {
@@ -727,14 +726,14 @@
 			}
 		}
 		
-		function month_is_a_number(id) {
+		function edited_month_is_a_number(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = date.substr(0, 2);
 			
 			return !isNaN(month);
 		}
 		
-		function month_is_in_bounds(id) {
+		function edited_month_is_in_bounds(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = parseInt(date.substr(0, 2));
 			
@@ -745,7 +744,7 @@
 			}
 		}
 		
-		function day_is_valid(id) {
+		function edited_day_is_valid(id) {
 			if (day_is_a_number(id) && day_is_in_bounds(id)) {
 				return true;
 			} else {
@@ -753,25 +752,25 @@
 			}
 		}
 		
-		function day_is_a_number(id) {
+		function edited_day_is_a_number(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			day = parseInt(date.substr(3, 2));
 			
 			return !isNaN(day); 
 		}
 		
-		function day_is_in_bounds(id) {
+		function edited_day_is_in_bounds(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			day = parseInt(date.substr(3, 2));
 			
-			if (day < 0 || day > days_in_month(id)) {
+			if (day < 0 || day > days_in_the_month_of_edited_date(id)) {
 				return false;
 			} else {
 				return true;
 			}
 		}
 		
-		function days_in_month(id) {
+		function days_in_the_month_of_edited_date(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = parseInt(date.substr(0, 2));
 			
@@ -779,7 +778,7 @@
 			return days_array[month-1];
 		}
 		
-		function year_is_valid(id) {
+		function edited_year_is_valid(id) {
 			if (year_is_a_number(id) && year_is_in_bounds(id)) {
 				return true;
 			} else {
@@ -787,14 +786,14 @@
 			}
 		}
 		
-		function year_is_a_number(id) {
+		function edited_year_is_a_number(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			year = parseInt(date.substr(6, 4));
 			
 			return !isNaN(year);
 		}
 		
-		function year_is_in_bounds(id) {
+		function edited_year_is_in_bounds(id) {
 			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			year = parseInt(date.substr(6, 4));
 			
@@ -927,7 +926,7 @@
 		}
 		
 		function validate_edited_load_pay(id) {
-			if (load_pay_is_a_number(id)) {
+			if (edited_load_pay_is_a_number(id)) {
 				return true;
 			} else {
 				highlight_background_of("load_pay", id);
@@ -936,7 +935,7 @@
 		}
 		
 		
-		function load_pay_is_a_number(id) {
+		function edited_load_pay_is_a_number(id) {
 			load_pay = $('#all_entries #'+id+'entry').find('#load_pay input').val();
 			
 			return !isNaN(load_pay);
