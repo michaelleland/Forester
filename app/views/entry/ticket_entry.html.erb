@@ -204,8 +204,7 @@
 			if (!validate_load_pay()) {
 				valid = false;
 			}
-			//return valid;
-			return false;
+			return valid;
 		}
 		
 		//The id is not used in the same sense as in some other functions. Because
@@ -543,7 +542,18 @@
 				job_id = $('#'+id+'entry').find('#job_name select').val();
 				destination_id = $('#'+id+'entry').find('#destination_name select').val();
 				wood_type_id = $('#'+id+'entry').find('#wood_type select').val();
-				load_pay = $('#'+id+'entry').find('#ticket_number input').val();
+				load_pay = $('#'+id+'entry').find('#load_pay input').val();
+				
+				specieses = [];
+				specieses[0] = $('#'+id+'entry').find('#specie_select').val();
+				ld_rows = $('.load_detail_rows_of_'+id);
+				
+				counter = 1;
+				
+				ld_rows.each(function() {
+					specieses[counter] = $(this).find('#specie_select').val();
+					counter++;
+				});
 				
 				tonnages = [];
 				tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
@@ -556,7 +566,44 @@
 					counter++;
 				});
 				
+				mbfs = [];
+				mbfs[0] = $('#'+id+'entry').find('#net_mbf input').val();
+				ld_rows = $('.load_detail_rows_of_'+id);
 				
+				counter = 1;
+				
+				ld_rows.each(function() {
+					mbfs[counter] = $(this).find('#mbf_input').val();
+					counter++;
+				});
+				
+				url = "/save_edited_ticket_entry/"+id+"?ticket_number="+ticket_number+"&delivery_date="+delivery_date;
+				url = url + "&job_id="+job_id+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id;
+				url = url + "&load_pay="+load_pay;
+				
+				$.each(specieses, function(index, value) {
+					url = url + "&specieses[]="+value;
+				});
+				
+				$.each(tonnages, function(index, value) {
+					url = url + "&tonnages[]="+value;
+				});
+				
+				$.each(mbfs, function(index, value) {
+					url = url + "&mbfs[]="+value;
+				});
+				
+				$.ajax({
+					url: url,
+					cache: false,
+					success: function() {
+						$('.ld_rows').each(function() {
+							$(this).remove();
+						});
+						
+						refresh_all_entries('ticket');
+					}
+				});
 			}
 		}
 		
@@ -582,8 +629,7 @@
 			if (!validate_edited_load_pay(id)) {
 				valid = false;
 			}
-			//return valid;
-			return false;
+			return valid;
 		}
 		
 		function clear_user_feedback(id) {

@@ -169,7 +169,7 @@ class EntryController < ApplicationController
     @delivery_date = "#{@year}-#{@month}-#{@day}"
     
     @ticket = Ticket.find(params[:id])
-    @ticket.number = params[:ticket_num]
+    @ticket.number = params[:ticket_number]
     @ticket.delivery_date = @delivery_date
     @ticket.job_id = params[:job_id]
     @ticket.destination_id = params[:destination_id]
@@ -177,7 +177,7 @@ class EntryController < ApplicationController
     
     #Because the tickets value (load pay) comes in as string in currency format
     # some parts have to be stripped off to be able to turn it into float correctly 
-    @value = params[:value].to_s
+    @value = params[:load_pay].to_s
     3.times do
       @value.sub!(",", "")
     end
@@ -186,8 +186,8 @@ class EntryController < ApplicationController
     @ticket.value = @value
     
     @ticket.load_details.each_with_index do |i, x|
-      i.species_id = params[:species][x]
-      i.tonnage = params[:tons][x]
+      i.species_id = params[:specieses][x]
+      i.tonnage = params[:tonnages][x]
       i.mbfs = params[:mbfs][x]
       
       unless i.save
