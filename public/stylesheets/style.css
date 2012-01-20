@@ -1140,3 +1140,47 @@ hr {
 #comparison_wrapper table th {
 	border: 1px solid #BABABA;
 }
+
+.ticket_number_edit {
+	width: 50px;
+	padding-right: 5px;
+}
+
+.delivery_date_edit {
+	width: 85px;
+}
+
+.job_select {
+	width: 150px;
+}
+
+.destination_select {
+	width: 160px;
+}
+
+.wood_type_select {
+	width: 80px;
+}
+
+.specie_select {
+	width: 51px;
+}
+
+.mbf_edit {
+	width: 46px;
+	text-align: right;
+}
+
+.tonnage_edit {
+	width: 46px;
+	text-align: right;
+}
+
+.load_pay_edit {
+	width: 70px;
+	text-align: right;
+}
+
+.save_edit_button {
+	width: 90px;
+}

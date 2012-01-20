@@ -1,17 +1,15 @@
 <% @tickets.each do |i| %>
-	<% @load_details = i.load_details %>
-	
 	<tr id="<%= i.id %>entry" class="all_entries_row">
 		<td id="ticket_number"><%= i.number %></td>
 		<td id="delivery_date"><%= i.delivery_date.strftime("%m-%d-%Y") %></td>
 		<td id="job_name"><%= shorten i.job.name %></td>	
 		<td id="destination_name"><%= shorten i.destination.name %></td>
 		<td id="wood_type" type_id="<%= i.wood_type %>"><%= @woodtypes[i.wood_type-1].name %></td>
-		<td id="species"><%= unless i.load_details.first.species_id == 0 then @species[@load_details.first.species_id-1].code else "PU" end %></td>
+		<td id="species"><%= unless i.load_details.first.species_id == 0 then @species[i.load_details.first.species_id-1].code else "PU" end %></td>
 		<td class="currency" id="net_mbf"><%= @ac.give_pennies(i.net_mbf) %></td>
 		<td class="currency" id="tonnage"><%= @ac.give_pennies(i.tonnage) %></td>
 		<td class="currency" id="load_pay"><%= @ac.give_pennies(i.value) %></td>
-		<td><input type="button" value="edit" onclick="show_ticket_inputs(<%= i.id %>, false);"> 
+		<td><input type="button" value="edit" onclick="get_the_inputs_to_ticket(<%= i.id %>);"> 
 		<input type="button" value="del" onclick="delete_ticket(<%= i.id %>)"></td>
 	</tr>
 <% end %>

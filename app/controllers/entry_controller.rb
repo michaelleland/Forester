@@ -93,7 +93,7 @@ class EntryController < ApplicationController
     
     unless params[:wood_type] == "3" #wood type 3 means pulp
       #One load detail for one ticket is created in any case
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species[0], :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species.first, :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
       @specie_codes.push(Specie.find(@species[0]).code)
       
       #But if there is more, so many load details will be created
@@ -169,7 +169,7 @@ class EntryController < ApplicationController
     @delivery_date = "#{@year}-#{@month}-#{@day}"
     
     @ticket = Ticket.find(params[:id])
-    @ticket.number = params[:ticket_num]
+    @ticket.number = params[:ticket_number]
     @ticket.delivery_date = @delivery_date
     @ticket.job_id = params[:job_id]
     @ticket.destination_id = params[:destination_id]
@@ -177,7 +177,7 @@ class EntryController < ApplicationController
     
     #Because the tickets value (load pay) comes in as string in currency format
     # some parts have to be stripped off to be able to turn it into float correctly 
-    @value = params[:value].to_s
+    @value = params[:load_pay].to_s
     3.times do
       @value.sub!(",", "")
     end
@@ -186,8 +186,8 @@ class EntryController < ApplicationController
     @ticket.value = @value
     
     @ticket.load_details.each_with_index do |i, x|
-      i.species_id = params[:species][x]
-      i.tonnage = params[:tons][x]
+      i.species_id = params[:specieses][x]
+      i.tonnage = params[:tonnages][x]
       i.mbfs = params[:mbfs][x]
       
       unless i.save
@@ -259,5 +259,26 @@ class EntryController < ApplicationController
     @payment.delete
     
     render :nothing => true
+  end
+  
+  def is_this_tn_duplicate
+    if params[:ticket_id].nil?
+      if Ticket.find_by_number(params[:id]).nil?
+        render :text => "false"
+      else
+        render :text => "true"
+      end
+    else
+      if Ticket.find(params[:ticket_id]).number == params[:id].to_i
+        render :text => "false"
+      else
+        if Ticket.find_by_number(params[:id]).nil?
+          render :text => "false"
+        else
+          render :text => "true"
+        end
+      end     
+    end
+    
   end
 end
