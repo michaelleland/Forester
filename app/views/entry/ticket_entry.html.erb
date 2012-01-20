@@ -514,7 +514,7 @@
 		*********************************************************************************************************************************************/
 		
 		function get_the_inputs_to_ticket(id) {
-			row = $('#'+id+'entry');
+			row = $('#all_entries #'+id+'entry');
 			
 			$.ajax({
 				url: '/get_the_inputs_to_ticket/'+id,
@@ -537,15 +537,16 @@
 		
 		function save_the_edited_values_of_ticket(id) {
 			if (validate_data_of_edit_row(id)) {
-				ticket_number = $('#'+id+'entry').find('#ticket_number input').val();
-				delivery_date = $('#'+id+'entry').find('#delivery_date input').val();
-				job_id = $('#'+id+'entry').find('#job_name select').val();
-				destination_id = $('#'+id+'entry').find('#destination_name select').val();
-				wood_type_id = $('#'+id+'entry').find('#wood_type select').val();
-				load_pay = $('#'+id+'entry').find('#load_pay input').val();
+				row = $('#all_entries #'+id+'entry');
+				ticket_number = row.find('#ticket_number input').val();
+				delivery_date = row.find('#delivery_date input').val();
+				job_id = row.find('#job_name select').val();
+				destination_id = row.find('#destination_name select').val();
+				wood_type_id = row.find('#wood_type select').val();
+				load_pay = row.find('#load_pay input').val();
 				
 				specieses = [];
-				specieses[0] = $('#'+id+'entry').find('#specie_select').val();
+				specieses[0] = row.find('#specie_select').val();
 				ld_rows = $('.load_detail_rows_of_'+id);
 				
 				counter = 1;
@@ -556,7 +557,7 @@
 				});
 				
 				tonnages = [];
-				tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
+				tonnages[0] = row.find('#tonnage input').val();
 				ld_rows = $('.load_detail_rows_of_'+id);
 				
 				counter = 1;
@@ -567,7 +568,7 @@
 				});
 				
 				mbfs = [];
-				mbfs[0] = $('#'+id+'entry').find('#net_mbf input').val();
+				mbfs[0] = row.find('#net_mbf input').val();
 				ld_rows = $('.load_detail_rows_of_'+id);
 				
 				counter = 1;
@@ -633,7 +634,7 @@
 		}
 		
 		function clear_user_feedback(id) {
-			$('#'+id+'entry td').each(function() {
+			$('#all_entries #'+id+'entry td').each(function() {
 				$(this).find('input').css('background-color', 'white');
 				$(this).find('select').css('background-color', 'lightgray');
 			});
@@ -655,17 +656,17 @@
 		}
 		
 		function tn_is_not_empty(id) {
-			tn = $('#'+id+'entry').find('#ticket_number input').val();
+			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			return !(tn == '');
 		}
 		
 		function tn_is_a_number(id) {
-			tn = $('#'+id+'entry').find('#ticket_number input').val();
+			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			return !isNaN(tn);
 		}
 		
 		function tn_is_in_bounds(id) {
-			tn = $('#'+id+'entry').find('#ticket_number input').val();
+			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			tn = parseInt(tn);
 			
 			if (tn < 0 || tn > 99999) {
@@ -676,7 +677,7 @@
 		}
 		
 		function tn_is_not_duplicate(id) {
-			tn = $('#'+id+'entry').find('#ticket_number input').val();
+			tn = $('#all_entries #'+id+'entry').find('#ticket_number input').val();
 			
 			not_duplicate = true;
 			
@@ -705,7 +706,7 @@
 		}
 		
 		function date_is_not_empty(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			return !(date == '');
 		}
 		
@@ -718,14 +719,14 @@
 		}
 		
 		function month_is_a_number(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = date.substr(0, 2);
 			
 			return !isNaN(month);
 		}
 		
 		function month_is_in_bounds(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = parseInt(date.substr(0, 2));
 			
 			if (0 < month && month < 12) {
@@ -744,14 +745,14 @@
 		}
 		
 		function day_is_a_number(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			day = parseInt(date.substr(3, 2));
 			
 			return !isNaN(day); 
 		}
 		
 		function day_is_in_bounds(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			day = parseInt(date.substr(3, 2));
 			
 			if (day < 0 || day > days_in_month(id)) {
@@ -762,7 +763,7 @@
 		}
 		
 		function days_in_month(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			month = parseInt(date.substr(0, 2));
 			
 			days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -778,14 +779,14 @@
 		}
 		
 		function year_is_a_number(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			year = parseInt(date.substr(6, 4));
 			
 			return !isNaN(year);
 		}
 		
 		function year_is_in_bounds(id) {
-			date = $('#'+id+'entry').find('#delivery_date input').val();
+			date = $('#all_entries #'+id+'entry').find('#delivery_date input').val();
 			year = parseInt(date.substr(6, 4));
 			
 			if (year > 1900 && year < 2075) {
@@ -808,7 +809,7 @@
 			no_two_are_the_same = true;
 			
 			specieses = []
-			specieses[0] = $('#'+id+'entry').find('#specie_select').val();
+			specieses[0] = $('#all_entries #'+id+'entry').find('#specie_select').val();
 			ld_rows = $('.load_detail_rows_of_'+id);
 			
 			counter = 1;
@@ -833,7 +834,7 @@
 		
 		function validate_edited_tonnages(id) {
 			tonnages = [];
-			tonnages[0] = $('#'+id+'entry').find('#tonnage input').val();
+			tonnages[0] = $('#all_entries #'+id+'entry').find('#tonnage input').val();
 			ld_rows = $('.load_detail_rows_of_'+id);
 			
 			counter = 1;
@@ -875,7 +876,7 @@
 
 		function validate_edited_mbfs(id) {
 			mbfs = [];
-			mbfs[0] = $('#'+id+'entry').find('#net_mbf input').val();
+			mbfs[0] = $('#all_entries #'+id+'entry').find('#net_mbf input').val();
 			ld_rows = $('.load_detail_rows_of_'+id);
 			
 			counter = 1;
@@ -927,39 +928,40 @@
 		
 		
 		function load_pay_is_a_number(id) {
-			load_pay = $('#'+id+'entry').find('#load_pay input').val();
+			load_pay = $('#all_entries #'+id+'entry').find('#load_pay input').val();
 			
 			return !isNaN(load_pay);
 		}
 		
 		function highlight_background_of(thing, id) {
+			row = $('#all_entries #'+id+'entry');
 			switch (thing) {
 				case "ticket_number":
-					$('#'+id+'entry').find('#ticket_number input').css('background-color', 'red');
+					row.find('#ticket_number input').css('background-color', 'red');
 					break;
 				case "delivery_date":
-					$('#'+id+'entry').find('#delivery_date input').css('background-color', 'red');
+					row.find('#delivery_date input').css('background-color', 'red');
 					break;
 				case "species":
-					$('#'+id+'entry').find('#species select').css('background-color', 'red');
+					row.find('#species select').css('background-color', 'red');
 					$('.load_detail_rows_of_'+id).each(function() {
 						$(this).find('#specie_select').css('background-color', 'red');
 					});
 					break;
 				case "tonnages":
-					$('#'+id+'entry').find('#tonnage input').css('background-color', 'red');
+					row.find('#tonnage input').css('background-color', 'red');
 					$('.load_detail_rows_of_'+id).each(function() {
 						$(this).find('#tonnage_input').css('background-color', 'red');
 					});
 					break;
 				case "mbfs":
-					$('#'+id+'entry').find('#net_mbf input').css('background-color', 'red');
+					row.find('#net_mbf input').css('background-color', 'red');
 					$('.load_detail_rows_of_'+id).each(function() {
 						$(this).find('#mbf_input').css('background-color', 'red');
 					});
 					break;
 				case "load_pay":
-					$('#'+id+'entry').find('#load_pay input').css('background-color', 'red');
+					row.find('#load_pay input').css('background-color', 'red');
 					break;
 			}
 		}
@@ -969,7 +971,6 @@
 		*********************************************************************************************************************************************
 		* ----------------------------------------------------------------------------------------------------------------------------------------- *
 		*********************************************************************************************************************************************/
-		
 		
 		
 		var c_rates = [7.5, 8.25, 7.0, 7.8, 9.0];
@@ -1069,233 +1070,6 @@
 			}
 		})
 		
-		function show_ticket_inputs(id, current) {
-			var where_from;
-			var boolean_as_string = "";
-			
-			if (current) {
-				where_from = $('#current_entries').find('#'+id+'entry');
-				boolean_as_string = "true";
-			} else {
-				where_from = $('#all_entries').find('#'+id+'entry');
-				boolean_as_string = "false";
-			}
-			
-			var ticket_number = where_from.find('#ticket_number');
-			var delivery_date = where_from.find('#delivery_date');
-			var job_name = where_from.find('#job_name').html();
-			var destination_name = where_from.find('#destination_name').html();
-			var wood_type = where_from.find('#wood_type').html();
-			var species_1 = where_from.find('#species').html();
-			var net_mbf = where_from.find('#net_mbf');
-			var tonnage = where_from.find('#tonnage');
-			var load_pay = where_from.find('#load_pay');
-			
-			where_from.find('td').fadeOut();
-			
-			var counter = 1;
-			
-			setTimeout(function() {
-				where_from.find('td').each(function() {
-					var value = $(this).html();
-					var width = $('#all_entries th:nth-child('+counter+')').width();
-					$(this).html('<input type="text" value="'+value+'" style="width: 90%;" />');
-					where_from.find('td').fadeIn();
-					counter++;
-				});
-				
-				// Following  blocks "overwrite" some of the fields of previous loop
-				
-				//The button for saving
-				where_from.find('td').last().html('<input type="button" value="save" style="width: 105px;" onclick="edit_ticket_entry('+id+', '+boolean_as_string+')" />');
-				
-				//Select for job name
-				where_from.find('#job_name').html('\
-				<select id="job_name_select">'+
-					<% Job.all.each do |i| %>
-						'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
-					<% end %>
-				'</select>\
-				');
-				
-				//Setting the previous job name as default selection
-				where_from.find('#job_name option').each(function() {
-					if ($(this).html() == job_name) {
-						$(this).attr('selected', 'true');
-					}
-				});
-				
-				//Same for Destinations
-				where_from.find('#destination_name').html('\
-				<select id="destination_name_select">'+
-					<% Destination.all.each do |i| %>
-						'<option value="<%= i.id %>"><%= escape_javascript(shorten(i.name)) %></option>'+
-					<% end %>
-				'</select>\
-				');
-				
-				where_from.find('#destination_name option').each(function() {
-					if ($(this).html() == destination_name) {
-						$(this).attr('selected', 'true');
-					}
-				});
-				
-				//And wood types
-				where_from.find('#wood_type').html('\
-				<select id="wood_type_select">\
-					<% WoodType.all.each do |i| %>
-						<option value="<%= i.id %>"><%= i.name %></option>\
-					<% end %>
-				</select>\
-				');
-				
-				where_from.find('#wood_type option').each(function() {
-					if ($(this).html() == wood_type) {
-						$(this).attr('selected', 'true');
-					}
-				});
-				
-				where_from.find('#delivery_date input').css('width', '83px');
-				
-				where_from.find('#load_pay input').css('width', '65px');
-				where_from.find('#load_pay input').css('float', 'right');
-				where_from.find('#load_pay input').css('text-align', 'right');
-				
-				var species;
-				var mbfs;
-				var tons;
-				
-				$.ajax({
-					url: '/get_load_details/'+id,
-					cache: false,
-					success: function(data) {
-						var arr = data.split(';');
-						species = arr[0].split(',');
-						mbfs = arr[1].split(',');
-						tons = arr[2].split(',');
-						
-						var counterr = 2;
-						
-						var mbf_width = $('#all_entries th:nth-child(7)').width()-10;
-						var tonnage_width = $('#all_entries th:nth-child(8)').width()-10;
-						var bg_color = where_from.css('background-color');
-						
-						net_mbf.html('\
-							<input type="text" id="load_1_mbf" value="'+mbfs[0]+'" style="width: '+mbf_width+'px; float: right; text-align: right;" />\
-						');
-						
-						tonnage.html('\
-							<input type="text" id="load_1_tons" value="'+tons[0]+'" style="width: '+tonnage_width+'px; float: right; text-align: right;" />\
-						');
-						
-						where_from.find('#species').html('\
-							<select id="species_1_select">\
-								<% Specie.all.each do |i| %>
-									<option value="<%= i.id %>"><%= i.code %></option>\
-								<% end %>
-								<option value="0">PU</option>\
-							</select>\
-						');
-										
-						where_from.find('#species option').each(function() {
-							if ($(this).html() == species[(counterr-2)]) {
-								$(this).attr('selected', 'true');
-							}
-						});
-						
-						$.each(species, function() {
-							if (this != species[0]) {
-								where_from.after('\
-								<tr class="'+id+'_species_edit_row species_edit_rows" style="background-color: '+bg_color+';" >\
-									<td></td>\
-									<td></td>\
-									<td></td>\
-									<td></td>\
-									<td></td>\
-									<td>\
-										<select id="species_'+counterr+'_select">\
-											<% Specie.all.each do |i| %>\
-												<option value="<%= i.id %>"><%= i.code %></option>\
-											<% end %>\
-											<option value="0">PU</option>\
-										</select>\
-									</td>\
-									<td>\
-										<input type="text" id="load_'+counterr+'_mbf" value="'+mbfs[(counterr-1)]+'" style="width: '+mbf_width+'px; float: right; text-align: right;" />\
-									</td>\
-									<td>\
-										<input type="text" id="load_'+counterr+'_tons" value="'+tons[(counterr-1)]+'" style="width: '+tonnage_width+'px; float: right; text-align: right;" />\
-									</td>\
-									<td></td>\
-									<td></td>\
-								</tr>\
-								');
-								
-								$('.'+id+'_species_edit_row').find('#species_'+counterr+'_select option').each(function() {
-									if ($(this).html() == species[(counterr-1)]) {
-										$(this).attr('selected', 'true');
-									}
-								});
-								
-								counterr++;
-								
-							}
-						});
-					}
-				});
-			}, 620);
-		}
-		
-		function edit_ticket_entry(id, current) {
-			var where_from;
-			
-			if (current) {
-				var where_from = $('#current_entries').find('#'+id+'entry');
-			} else {
-				var where_from = $('#all_entries').find('#'+id+'entry');
-			}
-			
-			var serows = $('.'+id+'_species_edit_row');
-			
-			var ticket_num = where_from.find('#ticket_number').find('input').val();
-			var delivery_date = where_from.find('#delivery_date').find('input').val();
-			var job_id = where_from.find('#job_name_select').val();
-			var destination_id = where_from.find('#destination_name_select').val();
-			var wood_type_id = where_from.find('#wood_type_select').val();
-			var species_1 = where_from.find('#species_1_select').val();
-			var species_2 = serows.find('#species_2_select').val();
-			var species_3 = serows.find('#species_3_select').val();
-			var species_4 = serows.find('#species_4_select').val();
-			var species_5 = serows.find('#species_5_select').val();
-			var load_1_mbf = where_from.find('#load_1_mbf').val();
-			var load_2_mbf = serows.find('#load_2_mbf').val();
-			var load_3_mbf = serows.find('#load_3_mbf').val();
-			var load_4_mbf = serows.find('#load_4_mbf').val();
-			var load_5_mbf = serows.find('#load_5_mbf').val();
-			var load_1_tons = where_from.find('#load_1_tons').val();
-			var load_2_tons = serows.find('#load_2_tons').val();
-			var load_3_tons = serows.find('#load_3_tons').val();
-			var load_4_tons = serows.find('#load_4_tons').val();
-			var load_5_tons = serows.find('#load_5_tons').val();
-			var value = where_from.find('#load_pay').find('input').val();
-			
-			var url = "/save_edited_ticket_entry/"+id+"?ticket_num="+ticket_num+"&delivery_date="+delivery_date;
-			url = url+"&job_id="+job_id+"&destination_id="+destination_id+"&wood_type_id="+wood_type_id+"&species[]="+species_1;
-			url = url+"&species[]="+species_2+"&species[]="+species_3+"&species[]="+species_4+"&species[]="+species_5;
-			url = url+"&mbfs[]="+load_1_mbf+"&mbfs[]="+load_2_mbf+"&mbfs[]="+load_3_mbf+"&mbfs[]="+load_4_mbf;
-			url = url+"&mbfs[]="+load_5_mbf+"&tons[]="+load_1_tons+"&tons[]="+load_2_tons+"&tons[]="+load_3_tons;
-			url = url+"&mbfs[]="+load_4_tons+"&tons[]="+load_5_tons+"&value="+value;
-			
-			$.ajax ({
-				url: url,
-				cache: false,
-				success: function() {
-					fade_out_from_current_entries(id, current);
-					refresh_all_entries('ticket');
-				}
-			});	
-		}
-				
 		function fade_out_from_current_entries(id, current) {
 			var where_from = $('#current_entries').find('#'+id+'entry');
 			
