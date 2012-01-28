@@ -106,7 +106,7 @@
 <script>
 	
 	function validated_submit() {
-		if (check_field_data()) {
+		if (validate_data()) {
 			var payment_num = $('#payment_num').attr('value');
 			var destination_id = $('#destination_name').val();
 			var job_id = $('#job_name').val();
@@ -137,6 +137,40 @@
 			});
 		}
 	}
+	
+	function validate_data() {
+		valid = true;
+		clear_feedback_to_user();
+		if (!validate_date()) {
+			valid = false;
+		}
+		if (!validate_destination()) {
+			valid = false;
+		}
+		if (!validate_job()) {
+			valid = false;
+		}
+		if (!validate_wood_type()) {
+			valid = false;
+		}
+		if (!validate_payment_no()) {
+			valid = false;
+		}
+		if (!validate_tickets()) {
+			valid = false;
+		}
+		if (!validate_tonnage()) {
+			valid = false;
+		}
+		if (!validate_mbf()) {
+			valid = false;
+		}
+		if (!validate_amount()) {
+			valid = false;
+		}
+		return valid;
+	}
+	
 	
 	
 	function check_field_data() {
