@@ -30,7 +30,7 @@ module ApplicationHelper
   #Documentation @ application_controller.rb
   def give_pennies(x)
     negative = false
-    if x<0
+    if x < 0
       negative = true
       x = x.abs
     end

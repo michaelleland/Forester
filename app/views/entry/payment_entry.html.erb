@@ -444,6 +444,79 @@
 		}
 	}
 
+	
+	/*****************************************************************************
+	 *                                                                           *
+	 *                                                                           *
+	 *                                                                           *
+	 ***************************************************************************** 
+	*/
+	
+	function get_the_inputs_of_payment(id) {
+		row = $('#all_entries #'+id+'entry');
+		
+		$.ajax({
+			url: '/get_the_inputs_to_payment/'+id,
+			cache: false,
+			success: function(inputs_html) {
+				row.before(inputs_html);
+				row.remove();
+				
+				amount = $('#all_entries #'+id+'entry').find('#amount input').val();
+		
+				while (amount.indexOf(',') != -1) {
+					amount = amount.replace(',', '');
+				}
+				
+				$('#all_entries #'+id+'entry').find('#amount input').val(amount);
+			}
+		});
+	}
+	
+	function save_the_edited_values_of_payment(id) {
+		if (validate_edited_data(id)) {
+			row = $('#all_entries #'+id+'entry');
+		}
+		
+		
+		
+		
+	}
+	
+	function validate_edited_data(id) {
+		valid = true;
+		clear_feedback_to_user_in(id);
+		if (!validate_date()) {
+			valid = false;
+		}
+		
+		
+	}
+	
+	function clear_feedback_to_user_in(id) {
+		row = $('#all_entries #'+id+'entry');
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function show_payment_inputs(id, current) {
 		var where_from;
 		var boolean_as_string = "";

@@ -179,5 +179,7 @@ class PageControlsController < ApplicationController
     @ticket = Ticket.find(params[:id])
   end
   
-  
+  def get_the_inputs_to_payment
+    @payment = PaymentFromDestination.find(params[:id])
+  end
 end

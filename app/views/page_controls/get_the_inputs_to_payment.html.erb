@@ -1,0 +1,54 @@
+<tr id="<%= @payment.id %>entry" class="all_entries_row" style="background-color: lime;" >
+	<td id="payment_date"><input value="<%= @payment.payment_date.strftime("%m-%d-%Y") %>" type="text" class="payment_date_edit" /></td>
+	<td id="job_name">
+		<select class="job_select">
+			<% Job.all.each do |i| %>
+				<% if i.name == @payment.job.name %>
+					<option value="<%= i.id %>" selected="true"><%= shorten i.name %></option>
+				<% else %>
+					<option value="<%= i.id %>"><%= shorten i.name %></option>
+				<% end %>
+			<% end %>
+		</select>
+	</td>	
+	<td id="destination_name">
+		<select class="destination_select">
+			<% Destination.all.each do |i| %>
+				<% if i.name == @payment.destination.name %>
+					<option value="<%= i.id %>" selected="true"><%= shorten i.name %></option>
+				<% else %>
+					<option value="<%= i.id %>"><%= shorten i.name %></option>
+				<% end %>
+			<% end %>
+		</select>
+	</td>
+	<td id="wood_type" type_id="<%= @payment.wood_type %>">
+		<select class="wood_type_select">
+			<% WoodType.all.each do |i| %>
+				<% if i.id == @payment.wood_type %>
+					<option value="<%= i.id %>" selected="true"><%= i.name %></option>
+				<% else %>
+					<option value="<%= i.id %>"><%= i.name %></option>
+				<% end %>
+			<% end %>
+		</select>
+	</td>
+	<td class="currency" id="payment_num">
+		<input value="<%= @payment.payment_num %>" class="payment_num_edit" />
+	</td>
+	<td class="currency" id="tickets">
+		<input value="<%= tickets = give_pennies(@payment.tickets); tickets[-3, 3] = ""; tickets %>" class="tickets_edit" />
+	</td>
+	<td class="currency" id="tonnage">
+		<input value="<%= give_pennies(@payment.tonnnage) %>" class="tonnage_edit" />
+	</td>
+	<td class="currency" id="net_mbf">
+		<input value="<%= give_pennies(@payment.net_mbff) %>" class="mbf_edit" />
+	</td>
+	<td class="currency" id="load_pay">
+		<input value="<%= give_pennies(@payment.total_payment) %>" class="amount_edit" />
+	</td>
+	<td>
+		<input type="button" value="save" class="save_edit_button" onclick="save_the_edited_values_of_payment(<%= @payment.id %>);">
+	</td> 
+</tr>
