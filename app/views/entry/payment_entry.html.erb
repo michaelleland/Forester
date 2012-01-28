@@ -17,11 +17,11 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="payment_date" id="payment_date" size="8" class="fields"/>
+					<input type="text" name="payment_date" id="payment_date" size="8" class="fields payment_inputs"/>
 					<script> $('#payment_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#payment_date').mask("99-99-9999", {placeholder: " "});</script>
 				</td>
 				<td>
-					<select id="job_name">
+					<select id="job_name" class="payment_selects">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
 							<option value="<%= i.id %>"><%= shorten i.name %></option>
@@ -29,7 +29,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="destination_name" id="destination_name">
+					<select name="destination_name" id="destination_name" class="payment_selects">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.id %>"><%= shorten(i.name) %></option>
@@ -37,7 +37,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="wood_type" id="wood_type">
+					<select name="wood_type" id="wood_type" class="payment_selects">
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -45,19 +45,19 @@
 					</select>
 				</td>
 				<td>
-					<input id="payment_num" type="text" size="7" name="payment_num" class="fields"/>
+					<input id="payment_num" type="text" size="7" name="payment_num" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="tickets" type="text" size="2" name="tickets" class="fields"/>
+					<input id="tickets" type="text" size="2" name="tickets" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="tonnage" type="text" size="4" name="tonnage" class="fields"/>
+					<input id="tonnage" type="text" size="4" name="tonnage" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields"/>
+					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="amount" type="text" size="6" name="amount" class="fields" />
+					<input id="amount" type="text" size="6" name="amount" class="fields payment_inputs" />
 				</td>
 				<td>
 					<input id="submit_button" type="button" value="Submit" onclick="validated_submit();"/>
@@ -65,6 +65,7 @@
 			</tr>
 		</table>
 	</form>
+	<div id="feedback"></div> 
 </div>
 
 <div id="current_entries">
@@ -144,16 +145,16 @@
 		if (!validate_date()) {
 			valid = false;
 		}
-		if (!validate_destination()) {
+		if (!validate_job()) {
 			valid = false;
 		}
-		if (!validate_job()) {
+		if (!validate_destination()) {
 			valid = false;
 		}
 		if (!validate_wood_type()) {
 			valid = false;
 		}
-		if (!validate_payment_no()) {
+		if (!validate_payment_num()) {
 			valid = false;
 		}
 		if (!validate_tickets()) {
@@ -171,46 +172,277 @@
 		return valid;
 	}
 	
+	function clear_feedback_to_user() {
+		$('#feedback').html('');
+		$('.payment_inputs').each(function() {
+			$(this).css('background-color', 'white');
+		});
+		$('.payment_selects').each(function() {
+			$(this).css('background-color', 'lightgray');
+		});
+	}
+	
+	function validate_date() {
+		if (date_is_not_missing() && date_format_is_valid()) {
+			return true;
+		} else { 
+			tell_user_that_the_thing_invalid_is("date");
+			return false; 
+		}
+	}
+	
+	function date_is_not_missing() {
+		return $('#payment_date').val() != "";
+	}
+	
+	function date_format_is_valid() {
+		if (month_is_valid() && day_is_valid() && year_is_valid()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function month_is_valid() {
+		if (month_is_a_number() && month_is_in_bounds()) {
+			return true;
+		} else  {
+			return false;
+		}
+	}
+	
+	function month_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(0, 2));
+	}
+	
+	function month_is_in_bounds() {
+		date = $('#payment_date').val();
+		month = parseInt(date.substr(0, 2));
+		
+		if (month > 0 && month < 13) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function day_is_valid() {
+		if (day_is_a_number() && day_is_in_bounds()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function day_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(3, 2));
+	}
+	
+	function day_is_in_bounds() {
+		date = $('#payment_date').val();
+		day = parseInt(date.substr(3, 2));
+		
+		if (day > 0 && day <= days_in_month()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function days_in_month() {
+		date = $('#payment_date').val();
+		month = parseInt(date.substr(0, 2));
+		
+		days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		return days_array[month-1];
+	}
+	
+	function year_is_valid() {
+		if (year_is_a_number() && year_is_in_bounds()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function year_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(6, 4));
+	}
+	
+	function year_is_in_bounds() {
+		date = $('#payment_date').val();
+		year = date.substr(6, 4);
+		
+		if (year < 1990 || year > 2075) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	function validate_job() {
+		if (job_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("job");
+			return false;
+		}
+	}
+	
+	function job_is_selected() {
+		return ($('#job_name').val() != "-1");
+	}
+	
+	function validate_destination() {
+		if (destination_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("destination");
+			return false;
+		}
+	}
+	
+	function destination_is_selected() {
+		return ($('#destination_name').val() != "-1");
+	}
+		
+	function validate_wood_type() {
+		if (wood_type_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("wood_type");
+			return false;
+		}
+	}
+	
+	function wood_type_is_selected() {
+		return ($('#wood_type').val() != "-1");
+	}
 	
 	
-	function check_field_data() {
-		var values = [];
-		values.push([$('#payment_date').attr('value'), 'Payment date']);
-		values.push([$('#payment_num').attr('value'), 'Payment number']);
-		values.push([$('#job_name :selected').text(), 'Job']);
-		values.push([$('#destination_name :selected').text(), 'Destination']);
-		values.push([$('#wood_type :selected').text(), 'Wood type']);
-		values.push([$('#tickets').attr('value'), 'Number of tickets']);
-		values.push([$('#Amount').attr('value'), 'Amount']);
-		
-		if ($('#tonnage').attr('value') == "" && $('#net_mbf').attr('value') == "") {
-			values.push(["", 'Either MBF or Tonnage']);
+	function validate_payment_num() {
+		if (payment_num_is_not_missing()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("payment_num");
+			return false;
 		}
-		
-		$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
-		
-		var everything_ok = true;
-		
-		for (i=0;i<values.length;i++) {
-			if (values[i][0] == "") {
-				$('#feedback').append('<div>'+values[i][1]+' missing </div>');
-				everything_ok = false;
-			}
+	}
+	
+	function payment_num_is_not_missing() {
+		return $('#payment_num').val() != '';
+	}
+
+	function validate_tickets() {
+		if (amount_of_tickets_is_not_missing() && amount_of_tickets_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("amount_of_tickets");
+			return false;
 		}
-		
-		if (!validate_date($('#payment_date').val())) {
-			$('#feedback').append('<div>Invalid date</div>');
-			everything_ok = false;
+	}
+	
+	function amount_of_tickets_is_not_missing() {
+		return $('#tickets').val() != '';
+	}
+	
+	function amount_of_tickets_is_a_number() {
+		return !isNaN($('#tickets').val());
+	}
+	
+	function validate_tonnage() {
+		if (tonnage_is_not_missing() && tonnage_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("tonnage");
+			return false;
 		}
+	}
+	
+	function tonnage_is_not_missing() {
+		return $('#tonnage').val() != '';
+	}
+	
+	function tonnage_is_a_number() {
+		return !isNaN($('#tonnage').val());
+	}
 		
-		setTimeout(function() {
-			$('#feedback').fadeOut();
-			setTimeout(function() {
-				$('#feedback').remove();
-			}, 620);
-		}, 5000);
-		
-		return everything_ok;
+	function validate_mbf() {
+		if (mbf_is_not_missing() && mbf_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("mbf");
+			return false;
+		}
+	}
+	
+	function mbf_is_not_missing() {
+		return $('#net_mbf').val() != '';
+	}
+	
+	function mbf_is_a_number() {
+		return !isNaN($('#net_mbf').val());
+	}
+	
+	function validate_amount() {
+		if (amount_is_not_missing() && amount_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("amount");
+			return false;
+		}
+	}
+	
+	function amount_is_not_missing() {
+		return $('#amount').val() != '';
+	}
+	
+	function amount_is_a_number() {
+		return !isNaN($('#amount').val());
+	}
+	
+	function tell_user_that_the_thing_invalid_is(thing) {
+		switch (thing) {
+			case "date":
+				$('#payment_date').css('background-color', 'red');
+				$('#feedback').append('<div>Payment date is invalid</div>');
+				break;
+			case "job":
+				$('#job_name').css('background-color', 'red');
+				$('#feedback').append('<div>Job not selected</div>');
+				break;
+			case "destination":
+				$('#destination_name').css('background-color', 'red');
+				$('#feedback').append('<div>Destination not selected</div>');
+				break;
+			case "wood_type":
+				$('#wood_type').css('background-color', 'red');
+				$('#feedback').append('<div>Wood type not selected</div>');
+				break;
+			case "payment_num":
+				$('#payment_num').css('background-color', 'red');
+				$('#feedback').append('<div>Payment num is empty</div>');
+				break;
+			case "amount_of_tickets":
+				$('#tickets').css('background-color', 'red');
+				$('#feedback').append('<div>Amount of tickets is invalid</div>');
+				break;
+			case "tonnage":
+				$('#tonnage').css('background-color', 'red');
+				$('#feedback').append('<div>Tonnage is invalid</div>');
+				break;
+			case "mbf":
+				$('#net_mbf').css('background-color', 'red');
+				$('#feedback').append('<div>MBF is invalid</div>');
+				break;
+			case "amount":
+				$('#amount').css('background-color', 'red');
+				$('#feedback').append('<div>Payment amount is invalid</div>');
+				break;
+		}
 	}
 
 	function show_payment_inputs(id, current) {
