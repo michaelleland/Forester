@@ -69,7 +69,7 @@ class PageControlsController < ApplicationController
   #Same as above but for payment
   def all_payment_entries
     @ac = ApplicationController.new
-    @payments = PaymentFromDestination.all
+    @payments = PaymentFromDestination.find(:all, :order => "created_at").reverse!
   end
   
   #Ajax action
