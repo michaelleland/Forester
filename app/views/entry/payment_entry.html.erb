@@ -486,28 +486,226 @@
 	function validate_edited_data(id) {
 		valid = true;
 		clear_feedback_to_user_in(id);
-		if (!validate_date()) {
+		if (!validate_edited_date(id)) {
 			valid = false;
 		}
-		
-		
+		if (!validate_edited_payment_num(id)) {
+			valid = false;
+		}
+		if (!validate_edited_tickets(id)) {
+			valid = false;
+		}
+		if (!validate_edited_tonnage(id)) {
+			valid = false;
+		}
+		if (!validate_edited_mbf(id)) {
+			valid = false;
+		}
+		if (!validate_edited_amount(id)) {
+			valid = false;
+		}
+		return valid;
 	}
 	
 	function clear_feedback_to_user_in(id) {
 		row = $('#all_entries #'+id+'entry');
+		row.find('input').css('background', 'light-gray');
+		row.find('select').css('background', 'white');
+	}
+	
+	function validate_edited_date(id) {
+		if (edited_date_is_not_empty(id) && edited_date_is_valid(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("date");
+			return false;
+		}
+		
+		row = $('#all_entries #'+id+'entry');
+		
+		row.find('#payment_date input') 
 		
 	}
 	
+	function edited_date_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		
+		return !(date == "");
+	}
 	
+	function edited_date_is_valid(id) {
+		if (edited_month_is_valid(id) && edited_day_is_valid(id) && edited_year_is_valid(id)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	function edited_month_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		month = date.substr(0, 2);
+		if (isNaN(month)) {
+			return false;
+		} else {
+			parseInt(month);
+			if (month > 0 && month < 13) {
+				return true;
+			}
+		}
+	}
 	
+	function edited_day_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		day = date.substr(3, 2);
+		if (isNaN(day)) {
+			return false;
+		} else {
+			if (day > 0 && day <= edited_days_in_month(date)) {
+				return true;
+			}
+		}
+	}
 	
+	function edited_days_in_month(date) {
+		days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		month = parseInt(date.substr(0, 2));
+		return days_array[month-1];
+	}
 	
+	function edited_year_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		year = date.substr(6, 4);
+		if (isNaN(year) {
+			return false;
+		} else {
+			if (year > 1990 && year < 2075) {
+				return true;
+			}
+		}
+	}
 	
+	function validate_edited_payment_num(id) {
+		if (edited_payment_num_is_not_empty(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("payment_num")
+			return false;
+		}
+	}
 	
+	function edited_payment_date_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		payment_num = row.find('#payment_num input').val();
+		return !(payment_num == "")
+	}
 	
+	function validate_edited_tickets(id) {
+		if (edited_tickets_is_not_empty(id) && edited_tickets_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("tickets")
+			return false;
+		}
+	}
 	
+	function edited_tickets_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		tickets = row.find('#tickets input').val();
+		return !(tickets == "");
+	}
 	
+	function edited_tickets_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		tickets = row.find('#tickets input').val();
+		return !isNaN(tickets);
+	}
+	
+	function validate_edited_tonnage(id) {
+		if (edited_tonnage_is_not_empty(id) && edited_tonnage_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("tonnage")
+			return false;
+		}
+	}
+	
+	function edited_tonnage_is_not_empty() {
+		row = $('#all_entries #'+id+'entry');
+		tonnage = row.find('#tonnage input').val();
+		return !(tonnage == "");
+	}
+	
+	function edited_tonnage_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		tonnage = row.find('#tonnage input').val();
+		return isNaN(tonnage);
+	}
+	
+	function validate_edited_mbf(id) {
+		if (edited_mbf_is_not_empty(id) && edited_mbf_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("mbf")
+			return false;
+		}
+	}
+	
+	function edited_mbf_is_not_empty() {
+		row = $('#all_entries #'+id+'entry');
+		mbf = row.find('#net_mbf input').val();
+		return !(mbf == "");
+	}
+	
+	function edited_mbf_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		mbf = row.find('#net_mbf input').val();
+		return isNaN(mbf);
+	}
+	
+	function tell_user_that_the_edited_thing_invalid_is(thing) {
+		switch (thing) {
+			case "date":
+				$('#payment_date').css('background-color', 'red');
+				$('#feedback').append('<div>Payment date is invalid</div>');
+				break;
+			case "job":
+				$('#job_name').css('background-color', 'red');
+				$('#feedback').append('<div>Job not selected</div>');
+				break;
+			case "destination":
+				$('#destination_name').css('background-color', 'red');
+				$('#feedback').append('<div>Destination not selected</div>');
+				break;
+			case "wood_type":
+				$('#wood_type').css('background-color', 'red');
+				$('#feedback').append('<div>Wood type not selected</div>');
+				break;
+			case "payment_num":
+				$('#payment_num').css('background-color', 'red');
+				$('#feedback').append('<div>Payment num is empty</div>');
+				break;
+			case "amount_of_tickets":
+				$('#tickets').css('background-color', 'red');
+				$('#feedback').append('<div>Amount of tickets is invalid</div>');
+				break;
+			case "tonnage":
+				$('#tonnage').css('background-color', 'red');
+				$('#feedback').append('<div>Tonnage is invalid</div>');
+				break;
+			case "mbf":
+				$('#net_mbf').css('background-color', 'red');
+				$('#feedback').append('<div>MBF is invalid</div>');
+				break;
+			case "amount":
+				$('#amount').css('background-color', 'red');
+				$('#feedback').append('<div>Payment amount is invalid</div>');
+				break;
+		}
+	}
 	
 	
 	
