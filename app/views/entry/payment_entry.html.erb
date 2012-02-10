@@ -476,19 +476,19 @@
 		if (validate_edited_data(id)) {
 			row = $('#all_entries #'+id+'entry');
 			
-			date = row.find('#payment_date input').val();
+			payment_date = row.find('#payment_date input').val();
 			job_id = row.find('#job_name select').val();
 			destination_id = row.find('#destination_name select').val();
 			wood_type_id = row.find('#wood_type select').val();
 			payment_num = row.find('#payment_num input').val();
 			tickets = row.find('#tickets input').val();
 			tonnage = row.find('#tonnage input').val();
-			mbf = row.find('#net_mbf input').val();
+			net_mbf = row.find('#net_mbf input').val();
 			amount = row.find('#amount input').val();
 			
-			url = "/save_edited_payment_values/"+id+"?date="+date+"&job_id="+job_id+"&destination_id="+destination_id;
+			url = "/save_edited_payment_entry/"+id+"?payment_date="+payment_date+"&job_id="+job_id+"&destination_id="+destination_id;
 			url += "&=wood_type_id="+wood_type_id+"&payment_num"+payment_num+"&tickets="+tickets+"&tonnage="+tonnage;
-			url += "&mbf="+mbf+"&amount="+amount;
+			url += "&net_mbf="+net_mbf+"&amount="+amount;
 			
 			$.ajax({
 				url: url,

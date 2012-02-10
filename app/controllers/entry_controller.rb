@@ -221,12 +221,12 @@ class EntryController < ApplicationController
     @payment.payment_num = params[:payment_num]
     @payment.wood_type = params[:wood_type_id]
     @payment.tickets = params[:tickets]
-    @payment.tonnage = params[:tons]
-    @payment.net_mbf = params[:mbf]
+    @payment.tonnage = params[:tonnage]
+    @payment.net_mbf = params[:net_mbf]
     
     #Because the total payment comes in as string in currency format
     # some parts have to be stripped off to be able to turn it into float correctly
-    @total_payment = params[:total_payment].to_s
+    @total_payment = params[:amount].to_s
     3.times do
       @total_payment.sub!(",", "")
     end
