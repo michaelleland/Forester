@@ -22,7 +22,7 @@
 			<% end %>
 		</select>
 	</td>
-	<td id="wood_type" type_id="<%= @payment.wood_type %>">
+	<td id="wood_type">
 		<select class="wood_type_select">
 			<% WoodType.all.each do |i| %>
 				<% if i.id == @payment.wood_type %>
