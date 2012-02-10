@@ -213,10 +213,7 @@
 			}
 			return valid;
 		}
-		
-		//The id is not used in the same sense as in some other functions. Because
-		// the feedback in the new entry should not be cleared when some editing validation\
-		// happens. It would not be catastrophe that way either, but...
+
 		function clear_feedback_to_user() {
 			$('#feedback').html('');
 			$('.ticket_inputs').each(function() {

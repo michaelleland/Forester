@@ -1184,3 +1184,20 @@ hr {
 .save_edit_button {
 	width: 90px;
 }
+
+.amount_edit {
+	width: 75px;
+	text-align: right;
+}
+
+.tickets_edit {
+	width: 30px;
+}
+
+.payment_num_edit {
+	width: 65px;
+}
+
+.payment_date_edit {
+	width: 85px;
+}

@@ -28,7 +28,7 @@
 			<%= @ac.give_pennies(i.total_payment) %>
 		</td>
 		<td>
-			<input type="button" value="edit" onclick="show_payment_inputs(<%= i.id %>, false)"> 
+			<input type="button" value="edit" onclick="get_the_inputs_of_payment(<%= i.id %>, false)"> 
 			<input type="button" value="del" onclick="delete_payment(<%= i.id %>)">
 		</td>
 	</tr>

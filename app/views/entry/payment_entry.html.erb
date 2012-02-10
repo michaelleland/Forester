@@ -17,11 +17,11 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="payment_date" id="payment_date" size="8" class="fields"/>
+					<input type="text" name="payment_date" id="payment_date" size="8" class="fields payment_inputs"/>
 					<script> $('#payment_date').datepicker({ dateFormat: 'mm-dd-yy'}); $('#payment_date').mask("99-99-9999", {placeholder: " "});</script>
 				</td>
 				<td>
-					<select id="job_name">
+					<select id="job_name" class="payment_selects">
 						<option value="-1"></option>
 						<%= @jobs.each do |i| %>
 							<option value="<%= i.id %>"><%= shorten i.name %></option>
@@ -29,7 +29,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="destination_name" id="destination_name">
+					<select name="destination_name" id="destination_name" class="payment_selects">
 						<option value="-1"></option>
 						<% @destinations.each do |i| %>
 							<option value="<%= i.id %>"><%= shorten(i.name) %></option>
@@ -37,7 +37,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="wood_type" id="wood_type">
+					<select name="wood_type" id="wood_type" class="payment_selects">
 						<option value="-1"></option>
 						<% WoodType.all.each do |i| %>
 							<option value="<%= i.id %>"><%= i.name %></option>
@@ -45,19 +45,19 @@
 					</select>
 				</td>
 				<td>
-					<input id="payment_num" type="text" size="7" name="payment_num" class="fields"/>
+					<input id="payment_num" type="text" size="7" name="payment_num" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="tickets" type="text" size="2" name="tickets" class="fields"/>
+					<input id="tickets" type="text" size="2" name="tickets" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="tonnage" type="text" size="4" name="tonnage" class="fields"/>
+					<input id="tonnage" type="text" size="4" name="tonnage" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields"/>
+					<input id="net_mbf" type="text" size="4" name="net_mbf" class="fields payment_inputs"/>
 				</td>
 				<td>
-					<input id="amount" type="text" size="6" name="amount" class="fields" />
+					<input id="amount" type="text" size="6" name="amount" class="fields payment_inputs" />
 				</td>
 				<td>
 					<input id="submit_button" type="button" value="Submit" onclick="validated_submit();"/>
@@ -65,6 +65,7 @@
 			</tr>
 		</table>
 	</form>
+	<div id="feedback"></div> 
 </div>
 
 <div id="current_entries">
@@ -80,7 +81,6 @@
 			<th class="table_headers" style="width: 50px;">Tons</th>
 			<th class="table_headers" style="width: 50px;">NMBF</th>
 			<th class="table_headers" style="width: 100px;">Amount</th>
-			<th class="table_headers" style="width: 120px;">Action</th>
 		</tr>		
 	</table>
 </div>
@@ -106,7 +106,7 @@
 <script>
 	
 	function validated_submit() {
-		if (check_field_data()) {
+		if (validate_data()) {
 			var payment_num = $('#payment_num').attr('value');
 			var destination_id = $('#destination_name').val();
 			var job_id = $('#job_name').val();
@@ -138,47 +138,596 @@
 		}
 	}
 	
+	function validate_data() {
+		valid = true;
+		clear_feedback_to_user();
+		if (!validate_date()) {
+			valid = false;
+		}
+		if (!validate_job()) {
+			valid = false;
+		}
+		if (!validate_destination()) {
+			valid = false;
+		}
+		if (!validate_wood_type()) {
+			valid = false;
+		}
+		if (!validate_payment_num()) {
+			valid = false;
+		}
+		if (!validate_tickets()) {
+			valid = false;
+		}
+		if (!validate_tonnage()) {
+			valid = false;
+		}
+		if (!validate_mbf()) {
+			valid = false;
+		}
+		if (!validate_amount()) {
+			valid = false;
+		}
+		return valid;
+	}
 	
-	function check_field_data() {
-		var values = [];
-		values.push([$('#payment_date').attr('value'), 'Payment date']);
-		values.push([$('#payment_num').attr('value'), 'Payment number']);
-		values.push([$('#job_name :selected').text(), 'Job']);
-		values.push([$('#destination_name :selected').text(), 'Destination']);
-		values.push([$('#wood_type :selected').text(), 'Wood type']);
-		values.push([$('#tickets').attr('value'), 'Number of tickets']);
-		values.push([$('#Amount').attr('value'), 'Amount']);
-		
-		if ($('#tonnage').attr('value') == "" && $('#net_mbf').attr('value') == "") {
-			values.push(["", 'Either MBF or Tonnage']);
+	function clear_feedback_to_user() {
+		$('#feedback').html('');
+		$('.payment_inputs').each(function() {
+			$(this).css('background-color', 'white');
+		});
+		$('.payment_selects').each(function() {
+			$(this).css('background-color', 'lightgray');
+		});
+	}
+	
+	function validate_date() {
+		if (date_is_not_missing() && date_format_is_valid()) {
+			return true;
+		} else { 
+			tell_user_that_the_thing_invalid_is("date");
+			return false; 
 		}
-		
-		$('#entry_form table').after('<div id="feedback" style="color: red;"></div>');
-		
-		var everything_ok = true;
-		
-		for (i=0;i<values.length;i++) {
-			if (values[i][0] == "") {
-				$('#feedback').append('<div>'+values[i][1]+' missing </div>');
-				everything_ok = false;
-			}
+	}
+	
+	function date_is_not_missing() {
+		return $('#payment_date').val() != "";
+	}
+	
+	function date_format_is_valid() {
+		if (month_is_valid() && day_is_valid() && year_is_valid()) {
+			return true;
+		} else {
+			return false;
 		}
-		
-		if (!validate_date($('#payment_date').val())) {
-			$('#feedback').append('<div>Invalid date</div>');
-			everything_ok = false;
+	}
+	
+	function month_is_valid() {
+		if (month_is_a_number() && month_is_in_bounds()) {
+			return true;
+		} else  {
+			return false;
 		}
+	}
+	
+	function month_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(0, 2));
+	}
+	
+	function month_is_in_bounds() {
+		date = $('#payment_date').val();
+		month = parseInt(date.substr(0, 2));
 		
-		setTimeout(function() {
-			$('#feedback').fadeOut();
-			setTimeout(function() {
-				$('#feedback').remove();
-			}, 620);
-		}, 5000);
+		if (month > 0 && month < 13) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function day_is_valid() {
+		if (day_is_a_number() && day_is_in_bounds()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function day_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(3, 2));
+	}
+	
+	function day_is_in_bounds() {
+		date = $('#payment_date').val();
+		day = parseInt(date.substr(3, 2));
 		
-		return everything_ok;
+		if (day > 0 && day <= days_in_month()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function days_in_month() {
+		date = $('#payment_date').val();
+		month = parseInt(date.substr(0, 2));
+		
+		days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		return days_array[month-1];
+	}
+	
+	function year_is_valid() {
+		if (year_is_a_number() && year_is_in_bounds()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function year_is_a_number() {
+		date = $('#payment_date').val();
+		return !isNaN(date.substr(6, 4));
+	}
+	
+	function year_is_in_bounds() {
+		date = $('#payment_date').val();
+		year = date.substr(6, 4);
+		
+		if (year < 1990 || year > 2075) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	function validate_job() {
+		if (job_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("job");
+			return false;
+		}
+	}
+	
+	function job_is_selected() {
+		return ($('#job_name').val() != "-1");
+	}
+	
+	function validate_destination() {
+		if (destination_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("destination");
+			return false;
+		}
+	}
+	
+	function destination_is_selected() {
+		return ($('#destination_name').val() != "-1");
+	}
+		
+	function validate_wood_type() {
+		if (wood_type_is_selected()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("wood_type");
+			return false;
+		}
+	}
+	
+	function wood_type_is_selected() {
+		return ($('#wood_type').val() != "-1");
+	}
+	
+	
+	function validate_payment_num() {
+		if (payment_num_is_not_missing()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("payment_num");
+			return false;
+		}
+	}
+	
+	function payment_num_is_not_missing() {
+		return $('#payment_num').val() != '';
 	}
 
+	function validate_tickets() {
+		if (amount_of_tickets_is_not_missing() && amount_of_tickets_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("amount_of_tickets");
+			return false;
+		}
+	}
+	
+	function amount_of_tickets_is_not_missing() {
+		return $('#tickets').val() != '';
+	}
+	
+	function amount_of_tickets_is_a_number() {
+		return !isNaN($('#tickets').val());
+	}
+	
+	function validate_tonnage() {
+		if (tonnage_is_not_missing() && tonnage_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("tonnage");
+			return false;
+		}
+	}
+	
+	function tonnage_is_not_missing() {
+		return $('#tonnage').val() != '';
+	}
+	
+	function tonnage_is_a_number() {
+		return !isNaN($('#tonnage').val());
+	}
+		
+	function validate_mbf() {
+		if (mbf_is_not_missing() && mbf_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("mbf");
+			return false;
+		}
+	}
+	
+	function mbf_is_not_missing() {
+		return $('#net_mbf').val() != '';
+	}
+	
+	function mbf_is_a_number() {
+		return !isNaN($('#net_mbf').val());
+	}
+	
+	function validate_amount() {
+		if (amount_is_not_missing() && amount_is_a_number()) {
+			return true;
+		} else {
+			tell_user_that_the_thing_invalid_is("amount");
+			return false;
+		}
+	}
+	
+	function amount_is_not_missing() {
+		return $('#amount').val() != '';
+	}
+	
+	function amount_is_a_number() {
+		return !isNaN($('#amount').val());
+	}
+	
+	function tell_user_that_the_thing_invalid_is(thing) {
+		switch (thing) {
+			case "date":
+				$('#payment_date').css('background-color', 'red');
+				$('#feedback').append('<div>Payment date is invalid</div>');
+				break;
+			case "job":
+				$('#job_name').css('background-color', 'red');
+				$('#feedback').append('<div>Job not selected</div>');
+				break;
+			case "destination":
+				$('#destination_name').css('background-color', 'red');
+				$('#feedback').append('<div>Destination not selected</div>');
+				break;
+			case "wood_type":
+				$('#wood_type').css('background-color', 'red');
+				$('#feedback').append('<div>Wood type not selected</div>');
+				break;
+			case "payment_num":
+				$('#payment_num').css('background-color', 'red');
+				$('#feedback').append('<div>Payment num is empty</div>');
+				break;
+			case "amount_of_tickets":
+				$('#tickets').css('background-color', 'red');
+				$('#feedback').append('<div>Amount of tickets is invalid</div>');
+				break;
+			case "tonnage":
+				$('#tonnage').css('background-color', 'red');
+				$('#feedback').append('<div>Tonnage is invalid</div>');
+				break;
+			case "mbf":
+				$('#net_mbf').css('background-color', 'red');
+				$('#feedback').append('<div>MBF is invalid</div>');
+				break;
+			case "amount":
+				$('#amount').css('background-color', 'red');
+				$('#feedback').append('<div>Payment amount is invalid</div>');
+				break;
+		}
+	}
+
+	
+	/*****************************************************************************
+	 *                                                                           *
+	 *                                                                           *
+	 *                                                                           *
+	 ***************************************************************************** 
+	*/
+	
+	function get_the_inputs_of_payment(id) {
+		row = $('#all_entries #'+id+'entry');
+		
+		$.ajax({
+			url: '/get_the_inputs_to_payment/'+id,
+			cache: false,
+			success: function(inputs_html) {
+				row.before(inputs_html);
+				row.remove();
+				
+				amount = $('#all_entries #'+id+'entry').find('#amount input').val();
+		
+				while (amount.indexOf(',') != -1) {
+					amount = amount.replace(',', '');
+				}		
+				$('#all_entries #'+id+'entry').find('#amount input').val(amount);
+			}
+		});
+	}
+	
+	function save_the_edited_values_of_payment(id) {
+		if (validate_edited_data(id)) {
+			row = $('#all_entries #'+id+'entry');
+			
+			payment_date = row.find('#payment_date input').val();
+			job_id = row.find('#job_name select').val();
+			destination_id = row.find('#destination_name select').val();
+			wood_type_id = row.find('#wood_type select').val();
+			payment_num = row.find('#payment_num input').val();
+			tickets = row.find('#tickets input').val();
+			tonnage = row.find('#tonnage input').val();
+			net_mbf = row.find('#net_mbf input').val();
+			amount = row.find('#amount input').val();
+			
+			url = "/save_edited_payment_entry/"+id+"?payment_date="+payment_date+"&job_id="+job_id+"&destination_id="+destination_id;
+			url += "&wood_type_id="+wood_type_id+"&payment_num="+payment_num+"&tickets="+tickets+"&tonnage="+tonnage;
+			url += "&net_mbf="+net_mbf+"&amount="+amount;
+			
+			$.ajax({
+				url: url,
+				cache: false,
+				success: function() {
+					refresh_all_entries('payment');
+				}
+			});
+		}
+	}
+	
+	function validate_edited_data(id) {
+		valid = true;
+		clear_feedback_to_user_in(id);
+		if (!validate_edited_date(id)) {
+			valid = false;
+		}
+		if (!validate_edited_payment_num(id)) {
+			valid = false;
+		}
+		if (!validate_edited_tickets(id)) {
+			valid = false;
+		}
+		if (!validate_edited_tonnage(id)) {
+			valid = false;
+		}
+		if (!validate_edited_mbf(id)) {
+			valid = false;
+		}
+		if (!validate_edited_amount(id)) {
+			valid = false;
+		}
+		return valid;
+	}
+	
+	function clear_feedback_to_user_in(id) {
+		row = $('#all_entries #'+id+'entry');
+		row.find('select').each(function() {
+			$(this).css('background', 'light-gray');
+		});
+		row.find('input').each(function() {
+			$(this).css('background', 'white');
+		});
+	}
+	
+	function validate_edited_date(id) {
+		if (edited_date_is_not_empty(id) && edited_date_is_valid(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("date", id);
+			return false;
+		}
+	}
+	
+	function edited_date_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();	
+		return !(date == "");
+	}
+	
+	function edited_date_is_valid(id) {
+		if (edited_month_is_valid(id) && edited_day_is_valid(id) && edited_year_is_valid(id)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function edited_month_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		amount = row.find('#load_pay input');
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		month = date.substr(0, 2);
+		if (isNaN(month)) {
+			return false;
+		} else {
+			parseInt(month);
+			if (month > 0 && month < 13) {
+				return true;
+			}
+		}
+	}
+	
+	function edited_day_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		day = date.substr(3, 2);
+		if (isNaN(day)) {
+			return false;
+		} else {
+			if (day > 0 && day <= edited_days_in_month(date)) {
+				return true;
+			}
+		}
+	}
+	
+	function edited_days_in_month(date) {
+		days_array = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		month = parseInt(date.substr(0, 2));
+		return days_array[month-1];
+	}
+	
+	function edited_year_is_valid(id) {
+		row = $('#all_entries #'+id+'entry');
+		date = row.find('#payment_date input').val();
+		year = date.substr(6, 4);
+		if (isNaN(year)) {
+			return false;
+		} else {
+			if (year > 1990 && year < 2075) {
+				return true;
+			}
+		}
+	}
+	
+	function validate_edited_payment_num(id) {
+		if (edited_payment_num_is_not_empty(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("payment_num", id);
+			return false;
+		}
+	}
+	
+	function edited_payment_num_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		payment_num = row.find('#payment_num input').val();
+		return !(payment_num == "");
+	}
+	
+	function validate_edited_tickets(id) {
+		if (edited_tickets_is_not_empty(id) && edited_tickets_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("tickets", id);
+			return false;
+		}
+	}
+	
+	function edited_tickets_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		tickets = row.find('#tickets input').val();
+		return !(tickets == "");
+	}
+	
+	function edited_tickets_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		tickets = row.find('#tickets input').val();
+		return !isNaN(tickets);
+	}
+	
+	function validate_edited_tonnage(id) {
+		if (edited_tonnage_is_not_empty(id) && edited_tonnage_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("tonnage", id);
+			return false;
+		}
+	}
+	
+	function edited_tonnage_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		tonnage = row.find('#tonnage input').val();
+		return !(tonnage == "");
+	}
+	
+	function edited_tonnage_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		tonnage = row.find('#tonnage input').val();
+		return !isNaN(tonnage);
+	}
+	
+	function validate_edited_mbf(id) {
+		if (edited_mbf_is_not_empty(id) && edited_mbf_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("mbf", id);
+			return false;
+		}
+	}
+	
+	function edited_mbf_is_not_empty(id) {
+		row = $('#all_entries #'+id+'entry');
+		mbf = row.find('#net_mbf input').val();
+		return !(mbf == "");
+	}
+	
+	function edited_mbf_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		mbf = row.find('#net_mbf input').val();
+		return !isNaN(mbf);
+	}
+	
+	function validate_edited_amount(id) {
+		if (amount_is_not_empty(id) && amount_is_a_number(id)) {
+			return true;
+		} else {
+			tell_user_that_the_edited_thing_invalid_is("amount", id)
+			return false;
+		}
+	}
+	
+	function amount_is_not_empty(id) { 
+		row = $('#all_entries #'+id+'entry');
+		amount = row.find('#amount input').val();
+		return !(amount == "");
+	}
+	
+	function amount_is_a_number(id) {
+		row = $('#all_entries #'+id+'entry');
+		amount = row.find('#amount input').val();
+		return !isNaN(amount);
+	}
+	
+	function tell_user_that_the_edited_thing_invalid_is(thing, id) {
+		row = $('#all_entries #'+id+'entry');
+		switch (thing) {
+			case "date":
+				row.find('#payment_date input').css('background-color', 'red');
+				break;
+			case "payment_num":
+				row.find('#payment_num input').css('background-color', 'red');
+				break;
+			case "tickets":
+				row.find('#tickets input').css('background-color', 'red');
+				break;
+			case "tonnage":
+				row.find('#tonnage input').css('background-color', 'red');
+				break;
+			case "mbf":
+				row.find('#net_mbf input').css('background-color', 'red');
+				break;
+			case "amount":
+				row.find('#amount input').css('background-color', 'red');
+				break;
+		}
+	}
+	
 	function show_payment_inputs(id, current) {
 		var where_from;
 		var boolean_as_string = "";
