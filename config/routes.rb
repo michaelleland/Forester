@@ -20,6 +20,7 @@ Forester::Application.routes.draw do
   match "/ticket_entry" => "entry#ticket_entry"
   match "/payment_entry" => "entry#payment_entry"
   match "/comparison" => "entry#comparison"
+  match "/deduction"  => "entry#deduction"
  
   #Nav tab's stoof
   match "/setup" => "setup#index"

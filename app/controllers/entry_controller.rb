@@ -44,6 +44,19 @@ class EntryController < ApplicationController
     @tonnage_diff = @tickets_total_tonnage - @payments_total_tonnage
   end
   
+  #View Action
+  #Gets all the deductions (aka reciept_items) and displays them
+  
+  def deduction
+     @receipt_item = ReceiptItem.new
+     @receipt_items = ReceiptItem.all
+  end
+  
+  def create
+    @receipt_item = ReceiptItem.create(params[:biditem])
+    respond_with(@receipt_item)
+  end
+  
   #Ajax action
   #Creates a ticket and returns a html ul list row with the data of the new ticket
   def add_ticket_entry_row

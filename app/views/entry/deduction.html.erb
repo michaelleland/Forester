@@ -1,0 +1,29 @@
+<div id="comparison_wrapper">
+
+	<h1>Deductions</h1>
+	
+	<%= form_for @receipt, :url => { :action => "create"}, :html => {:class => "receipt_form"} do |f|%>
+		<%= f.label_tag(:job, "Job")%>
+	
+	<% end %>
+	
+	<% @receipt_items.each do |item|%>
+
+		<table>
+			<tr>
+				<th class="th">Job Name</th>
+				<th class="th">Owner Name</th>
+				<th class="th">Description</th>
+				<th class="th">Amount</th>
+			</tr>
+			<tr>
+				<td><%= item.receipt.job.name %></td>
+				<td><%= item.receipt.job.owner.name %></td>
+				<td><%= item.item_data %></td>
+				<td><%= item.value %></td>
+			</tr>
+		</table>
+
+	<% end %>	
+	
+</div>
