@@ -53,7 +53,12 @@ class EntryController < ApplicationController
   end
   
   def create
-    @receipt_item = ReceiptItem.create(params[:biditem])
+    @receipt_item = ReceiptItem.new
+    @receipt_item.job_id = params[:job_id]
+    @receipt_item.owner_type = params[:owner_type]
+    @receipt_item.item_data = params[:item_data]
+    @receipt_item.value = params[:value]
+    @receipt_item.save
     respond_with(@receipt_item)
   end
   

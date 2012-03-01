@@ -282,6 +282,13 @@ a:hover {
   text-decoration: underline;
 }
 
+.receipt_form input {
+	display: block;
+}
+.receipt_form input[type="radio"] {
+	display: inline;
+}
+
 
 /*Contents styling*/
 #contents {
