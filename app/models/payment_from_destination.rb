@@ -11,7 +11,6 @@ class PaymentFromDestination < ActiveRecord::Base
     else
       0
     end
-    
   end
   
   def net_mbff

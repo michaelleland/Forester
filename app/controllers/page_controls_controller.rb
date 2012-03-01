@@ -61,7 +61,7 @@ class PageControlsController < ApplicationController
   #Renders a html which contains 200 first ticket entries as table rows filled with ticket data
   def all_ticket_entries
    @ac = ApplicationController.new
-   @tickets = Ticket.all[0..200] 
+   @tickets = Ticket.find(:all, :order => "created_at")[0..100].reverse!
    @species = Specie.all
    @woodtypes = WoodType.all
   end
@@ -69,7 +69,7 @@ class PageControlsController < ApplicationController
   #Same as above but for payment
   def all_payment_entries
     @ac = ApplicationController.new
-    @payments = PaymentFromDestination.all
+    @payments = PaymentFromDestination.find(:all, :order => "created_at").reverse!
   end
   
   #Ajax action
@@ -172,7 +172,14 @@ class PageControlsController < ApplicationController
         end
       end
     end    
-    render :text => @answer
-    
+    render :text => @answer  
+  end
+  
+  def get_the_inputs_to_ticket
+    @ticket = Ticket.find(params[:id])
+  end
+  
+  def get_the_inputs_to_payment
+    @payment = PaymentFromDestination.find(params[:id])
   end
 end

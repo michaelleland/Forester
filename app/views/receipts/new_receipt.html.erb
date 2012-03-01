@@ -41,7 +41,8 @@
 		<div id="input_row">
 			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
 			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
-			<input type="button" id="add_ded_button" disabled="true" value="Add deduction" onclick="add_new_deduction();"/>
+			<input type="button" id="add_ded_button" value="Add deduction" onclick="add_new_deduction();"/>
+			<div id="feedback"></div>
 		</div>
 		
 		<h5 style="float: left; clear: left;">Notes:</h5>
@@ -198,56 +199,57 @@ $('#owner_type_selector').change(function() {
 	refresh_form_action();
 });
 
-$('#deduction_data').change(function() {
-	if (isNaN(parseFloat($('#deduction_value').attr('value')))) {
-		if ($('#deduction_value').attr('value') == '') {
-			$('#add_ded_button').removeAttr('disabled');
-		}
-	} else {
-		if ($(this).attr('value') != '' && $('#deduction_value').attr('value') != '') {
-			$('#add_ded_button').removeAttr('disabled');
-		} else {
-			$('#add_ded_button').attr('disabled', 'true');
-		}
-	}
-})
-
-$('#deduction_value').focusin(function() {
-	if ($(this).attr('value') == '') {
-		$(this).css('color', 'black');
-	}
-})
-
-$('#deduction_value').focusout(function() {
-	if (isNaN(parseFloat($(this).attr('value')))) {
-		$(this).css('color', 'red');
-		$('#add_ded_button').attr('disabled', 'true');
-	} else {
-		$(this).css('color', 'black');
-		if ($(this).attr('value') != '' && $('#deduction_data').attr('value') != '') {
-		$('#add_ded_button').removeAttr('disabled');
-		} else {
-			$('#add_ded_button').attr('disabled', 'true');
-		}
-	}
-})
-
 function add_new_deduction() {
-	var data = $('#deduction_data').attr('value');
-	var value = $('#deduction_value').attr('value');
-	var id = parseInt($('#deductions_list').children().first().attr('value'), 10);
-	
-	if (String(id) == "NaN") {
-		id = 1;
+	clear_feedback();
+	if (deduction_value_is_valid()) {
+		data = $('#deduction_data').attr('value');
+		value = $('#deduction_value').attr('value');
+		value = turn_into_currency(value);
+		id = parseInt($('#deductions_list').children().first().attr('value'), 10);
+		
+		if (String(id) == "NaN") {
+			id = 1;
+		} else {
+			id = id + 1;
+		}
+		
+		$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
+		$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
+		$('#deduction_data').attr('value', '');
+		$('#deduction_value').attr('value', '');
 	} else {
-		id = id + 1;
+		tell_user_deduction_value_is_invalid();
 	}
+}
 
-	$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
-	$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
-	$('#deduction_data').attr('value', '');
-	$('#deduction_value').attr('value', '');
-	$('#add_ded_button').attr('disabled', 'true');
+function clear_feedback() {
+	$('#feedback').html('');
+}
+
+function turn_into_currency(value) {
+	value = parseFloat(value);
+	value = Math.round(value*100)/100;
+	value_as_string = String(value);
+	
+	if (value_as_string.indexOf(".") == -1) {
+		value_as_string = value_as_string + ".00"
+	}
+	
+	if (value_as_string.substr(value_as_string.indexOf("."), 3).length == 2) {
+		value_as_string = value_as_string + "0"
+	}
+	
+	return value_as_string;
+}
+
+function deduction_value_is_valid() {
+	valid = false;
+	value = $('#deduction_value').val();
+	return !isNaN(value);
+}
+
+function tell_user_deduction_value_is_invalid() {
+	$('#feedback').append('<div>Deduction value is invalid</div>')
 }
 
 function select_all_deductions() {
@@ -259,8 +261,8 @@ function select_all_deductions() {
 	
 	vals = []
 	$('#deductions_values option').each(function () {
-		vals.push(parseFloat($(this).attr('value')));
-	})
+		vals.push($(this).val());
+	});
 	$('#deductions_values').val(vals);
 }
 </script>
