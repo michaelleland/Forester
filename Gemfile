@@ -30,7 +30,7 @@ gem 'rake', '=0.9.2.2'
 gem 'pdfkit'
 gem 'prawn'
 
-gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'ruby-debug'
 
 # Bundle the extra gems:
 # gem 'bj'
