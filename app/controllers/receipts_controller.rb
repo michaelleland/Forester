@@ -30,8 +30,7 @@ class ReceiptsController < ApplicationController
       respond_to do |format|
         format.pdf do
         pdf = LandownerStatement.new(receipts, deduction_items, view_context)
-        send_data pdf.render, filename: "#{job.name}_landowner_statement",
-                              type: "application/pdf"
+        send_data pdf.render, :filename=> "#{job.name}_landowner_statement",:type=> "application/pdf"
         end 
       end
     end
@@ -39,8 +38,7 @@ class ReceiptsController < ApplicationController
       respond_to do |format|
         format.pdf do
           pdf = LoggerStatement.new(receipts, deduction_items, view_context)
-          send_data pdf.render, filename: "#{job.name}_logger_statement",
-                              type: "application/pdf"
+          send_data pdf.render, :filename=>"#{job.name}_logger_statement",:type=>"application/pdf"
         end 
       end
     end
@@ -48,8 +46,7 @@ class ReceiptsController < ApplicationController
       respond_to do |format|
       format.pdf do
         pdf = TruckerStatement.new(receipts, deduction_items, view_context)
-        send_data pdf.render, filename: "#{job.name}_trucker_statement",
-                              type: "application/pdf"
+        send_data pdf.render, :filename=> "#{job.name}_trucker_statement",:type=> "application/pdf"
         end 
       end
     end
@@ -57,8 +54,7 @@ class ReceiptsController < ApplicationController
       respond_to do |format|
         format.pdf do
         pdf = HFIStatement.new(receipts, view_context)
-        send_data pdf.render, filename: "#{job.name}_hfi_statement",
-                              type: "application/pdf"
+        send_data pdf.render, :filename=> "#{job.name}_hfi_statement",:type=> "application/pdf"
         end 
       end
     end
@@ -126,9 +122,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
-                              type: "application/pdf",
-                              disposition: "inline" #PDF will be shown in the browser
+        send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_landowner_receipt",:type=>"application/pdf",:disposition=>"inline" #PDF will be shown in the browser
       end 
     end
   end
@@ -159,9 +153,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
-                              type: "application/pdf",
-                              disposition: "inline"
+        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",:type=>"application/pdf",:disposition=> "inline"
       end
     end
   end
@@ -194,9 +186,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt}",
-                              type: "application/pdf",
-                              disposition: "inline"
+        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt}",:type=>"application/pdf",:disposition=>"inline"
       end
     end
   end
@@ -218,9 +208,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
-                              type: "application/pdf",
-                              disposition: "inline"
+        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_hfi_receipt",:type=>"application/pdf",:disposition=>"inline"
       end 
     end
   end
@@ -305,8 +293,7 @@ class ReceiptsController < ApplicationController
     end
     
     pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
-                           type: "application/pdf"
+    send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",:type=>"application/pdf"
   end
   
   #Ajax action
@@ -383,8 +370,8 @@ class ReceiptsController < ApplicationController
     end
     
     pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-    send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
-                           type: "application/pdf"
+    send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",
+                          :type=> "application/pdf"
   end
   
   #Ajax action
@@ -452,8 +439,8 @@ class ReceiptsController < ApplicationController
     end
     
     pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-    send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
-                           type: "application/pdf"
+    send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_trucker_receipt",
+                           :type=> "application/pdf"
   end
   
   #Ajax action
@@ -498,8 +485,8 @@ class ReceiptsController < ApplicationController
     end
     
     pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
-        send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
-                              type: "application/pdf"
+        send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_hfi_receipt",
+                              :type=> "application/pdf"
   end
   
   #Ajax action
@@ -543,25 +530,25 @@ class ReceiptsController < ApplicationController
     
     if params[:owner_type] == "owner"
       pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-      send_data pdf.render, filename: "#{job.name}_#{payment_num}_landowner_receipt",
-                        type: "application/pdf"
+      send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_landowner_receipt",
+                        :type=>"application/pdf"
     end
     
     if params[:owner_type] == "logger"
       pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-      send_data pdf.render, filename: "#{job.name}_#{payment_num}_logger_receipt",
-                        type: "application/pdf"
+      send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",
+                        :type=>"application/pdf"
     end
     
     if params[:owner_type] == "trucker"
       pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-      send_data pdf.render, filename: "#{job.name}_#{payment_num}_trucker_receipt",
-                        type: "application/pdf"
+      send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt",
+                        :type=>"application/pdf"
     end
     if params[:owner_type] == "hfi"
       pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
-      send_data pdf.render, filename: "#{job.name}_#{payment_num}_hfi_receipt",
-                        type: "application/pdf"
+      send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_hfi_receipt",
+                        :type=>"application/pdf"
     end
   end
 end

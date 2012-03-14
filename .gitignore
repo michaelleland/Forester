@@ -5,3 +5,5 @@ tmp/
 shared/
 config/deploy.rb
 public/system/
+config/database.yml
+nbproject/*

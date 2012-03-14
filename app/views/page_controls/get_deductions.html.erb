@@ -1,0 +1,21 @@
+
+
+<div id="deductions_to_receipt_list">
+  <select multiple="true" id="deductions_list" name="deductions_list[]"  size="6">
+    <% unless @deductions.length == 0 %>
+      <% @deductions.each do |i| %>
+        <option value="<%= i.value %>"> <%= "# #{i.item_data} | #{i.created_at.strftime("%Y-%m-%d")} | $ #{i.value}" %></option>
+      <% end %>
+    <% end %>
+  </select>
+</div>
+
+<div id="deductions_to_receipt_list_values">
+  <select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
+    <% unless @deductions.length == 0 %>
+      <% @deductions.each do |i| %>
+        <option value="<%= i.value %>"> <%= "$ #{i.value}" %></option>
+      <% end %>
+    <% end %>
+  </select>
+</div>

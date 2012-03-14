@@ -75,7 +75,12 @@ Forester::Application.routes.draw do
   match "/get_logger_tickets/:id" => "page_controls#get_logger_tickets"
   match "/get_trucker_tickets/:id" => "page_controls#get_trucker_tickets"
   match "/get_hfi_tickets/:id" => "page_controls#get_hfi_tickets"
-  
+
+  #get deductions
+  match "/get_logger_deductions/:id" =>"page_controls#get_logger_deductions"
+  match "/get_trucker_deductions/:id" =>"page_controls#get_trucker_deductions"
+  match "/get_owner_deductions/:id" =>"page_controls#get_owner_deductions"
+
   #Report page's basic page calls
   match "/quarterly_report" => "reports#quarterly_report"
   match "/export_database" => "reports#export_database"
