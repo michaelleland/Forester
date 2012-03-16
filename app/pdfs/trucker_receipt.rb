@@ -9,9 +9,16 @@ class TruckerReceipt < Prawn::Document
     deduction_items = deduction_items
     notes = notes
     
-    #Some utility stoof
-    date_string = Time.now.strftime('%m/%d/%Y')
-    #end utils
+    #added by Michael after the fact to print the actual date the receipt was printed
+    job = Job.find(tickets.first.job_id)
+    trucker_assignment = TruckerAssignment.find_by_job_id(job.id)
+    trucker = trucker_assignment.partner_id
+    receipt = Receipt.where(:job_id => job, :owner_id => trucker, :payment_num => payment_num).first
+    unless receipt == nil
+      date_string = receipt.receipt_date.strftime('%m/%d/%Y')
+    else
+      date_string = Time.now.strftime('%m/%d/%Y')
+    end
     
     #Total vars declared and initialized
     

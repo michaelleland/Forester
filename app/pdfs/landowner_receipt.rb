@@ -6,8 +6,15 @@ class LandownerReceipt < Prawn::Document
     # in this initialize methot but in others as well. Thus it is stored into and instance variable.
     @view = view
     
-    #Current date as a formatted string
-    date_string = Time.now.strftime('%m/%d/%Y')
+    #added by Michael after the fact to print the actual date the receipt was printed
+    job = Job.find(tickets.first.job_id)
+    owner = Owner.find(job.owner)
+    receipt = Receipt.where(:job_id => job, :owner_id => owner, :payment_num => payment_num).first
+    unless receipt == nil
+      date_string = receipt.receipt_date.strftime('%m/%d/%Y')
+    else
+      date_string = Time.now.strftime('%m/%d/%Y')
+    end
     
     #Total vars initialized
     trucker_total = 0
