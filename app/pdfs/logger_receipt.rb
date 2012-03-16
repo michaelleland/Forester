@@ -4,7 +4,18 @@ class LoggerReceipt < Prawn::Document
     
     @view = view
     
-    date_string = Time.now.strftime('%m/%d/%Y')
+    
+    #added by Michael after the fact to print the actual date the receipt was printed
+    job = Job.find(tickets.first.job_id)
+    logger_assignment = LoggerAssignment.find_by_job_id(job.id)
+    logger = logger_assignment.partner_id
+    receipt = Receipt.where(:job_id => job, :owner_id => logger, :payment_num => payment_num).first
+    unless receipt == nil
+      date_string = receipt.receipt_date.strftime('%m/%d/%Y')
+    else
+      date_string = Time.now.strftime('%m/%d/%Y')
+    end
+    
     
     load_pay_total = 0
     
