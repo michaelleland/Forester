@@ -34,13 +34,14 @@
     <textarea id="notes" name="notes" rows="5"></textarea>
 
     <input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
-    <input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
+    <input type="submit" value="Confirm and Save" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
   </form>
 </div>
 
 <script>
 
   function lets_get_outta_here() {
+        set_form_action_to_save();
 	time = ($("#tickets_select").val().length/10)*2000
 
 	setTimeout(function() {
