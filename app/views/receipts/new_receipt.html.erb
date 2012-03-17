@@ -27,7 +27,7 @@
     </div>
 
     <div id="deductions_div">
-      
+
     </div>
     <h5 style="float: left; clear: left;">Notes:</h5>
 
@@ -202,10 +202,10 @@
 		} else {
 			id = id + 1;
 		}
-                var len = $('#decdution_chks').children.length;
-                $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+data+'" />');
-                
-                $('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
+  var len = $('#decdution_chks').children.length;
+  $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+data+'" />');
+
+  $('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
 		$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
 		$('#deduction_data').attr('value', '');
 		$('#deduction_value').attr('value', '');
@@ -236,12 +236,21 @@
 
   function deduction_value_is_valid() {
 	valid = false;
-	value = $('#deduction_value').val();
-	return !isNaN(value);
+  value = $('#deduction_value').val();
+  if ($('#deduction_data').attr('value')=='' || $('#deduction_data').attr('value')==null)
+  {
+  return false;
+  }
+  else
+  {
+  return !isNaN(value);
+  }
+
+
   }
 
   function tell_user_deduction_value_is_invalid() {
-	$('#feedback').append('<div>Deduction value is invalid</div>')
+	$('#feedback').append('<div>Deduction description or value is invalid</div>')
   }
 
   function select_all_deductions() {
