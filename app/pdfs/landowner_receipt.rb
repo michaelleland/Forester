@@ -87,7 +87,7 @@ class LandownerReceipt < Prawn::Document
     
     #The header of the receipt
     grid([0, 2], [0, 9]).bounding_box do
-      text "Landowner Receipt", size: 25, style: :bold, :align => :center
+      text "Landowner Receipt", :size=>25,:style=>:bold, :align => :center
     end
     
     #HFI info list
@@ -101,10 +101,10 @@ class LandownerReceipt < Prawn::Document
     #The basic job data "table". In practice it is just two lists.
     #Basic job info list headers.
     grid([1, 6], [2, 7]).bounding_box do
-      text "Job:", style: :bold, :indent_paragraphs => 5
-      text "Owner:", style: :bold, :indent_paragraphs => 5
-      text "Logger:", style: :bold, :indent_paragraphs => 5
-      text "Trucker:", style: :bold, :indent_paragraphs => 5
+      text "Job:", :style=>:bold, :indent_paragraphs => 5
+      text "Owner:", :style=>:bold, :indent_paragraphs => 5
+      text "Logger:", :style=>:bold, :indent_paragraphs => 5
+      text "Trucker:", :style=>:bold, :indent_paragraphs => 5
     end
     
     #Basic job info list values.
