@@ -33,8 +33,10 @@ class TruckerReceipt < Prawn::Document
     
     #All tickets are given values for trucker_value, hfi_value and logger_value, with which
     # we can calculate owner_value by substracting them from ticket's value. Trucker and logger
-    # totals are also added up in the midst of all this. 
+    # totals are also added up in the midst of all this.
+    debugger
     tickets.each do |j|
+      debugger
       rate = TruckerRate.find_by_job_id_and_partner_id_and_destination_id(job.id, job.trucker.id, j.destination_id)
       if rate.rate_type == "MBF"
         j.trucker_value = rate.rate * j.net_mbf

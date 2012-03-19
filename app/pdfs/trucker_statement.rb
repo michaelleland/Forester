@@ -58,7 +58,7 @@ class TruckerStatement < Prawn::Document
     end
     
     grid([0, 2], [0, 9]).bounding_box do
-      text "Trucker Statement", size: 25, style: :bold, :align => :center
+      text "Trucker Statement", :size=>25, :style=>:bold, :align => :center
     end
     
     grid([1, 2], [2, 6]).bounding_box do
@@ -69,10 +69,10 @@ class TruckerStatement < Prawn::Document
     end
     
     grid([1, 6], [2, 7]).bounding_box do
-      text "Job:", style: :bold, :indent_paragraphs => 5
-      text "Owner:", style: :bold, :indent_paragraphs => 5
-      text "Logger:", style: :bold, :indent_paragraphs => 5
-      text "Trucker:", style: :bold, :indent_paragraphs => 5
+      text "Job:", :style=>:bold, :indent_paragraphs => 5
+      text "Owner:", :style=>:bold, :indent_paragraphs => 5
+      text "Logger:", :style=>:bold, :indent_paragraphs => 5
+      text "Trucker:", :style=>:bold, :indent_paragraphs => 5
     end
     
     grid([1, 7], [2, 9]).bounding_box do
