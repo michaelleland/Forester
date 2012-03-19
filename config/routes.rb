@@ -16,14 +16,14 @@ Forester::Application.routes.draw do
   match "/get_job_name/:id" => "page_controls#get_job_name"
   match "/get_load_details/:id" => "page_controls#get_load_details"
   
-  #Kinda nav stoof
+  #Kinda nav stuff
   match "/ticket_entry" => "entry#ticket_entry"
   match "/payment_entry" => "entry#payment_entry"
   match "/comparison" => "entry#comparison"
   match "/deduction"  => "entry#deduction"
-  match "/create" => "entry#create"
+  match "/entry/create" => "entry#create"
  
-  #Nav tab's stoof
+  #Nav tab's stuff
   match "/setup" => "setup#index"
   match "/receipts" => "receipts#index"
   match "/reports" => "reports#index"
