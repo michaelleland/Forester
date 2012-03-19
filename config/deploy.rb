@@ -23,7 +23,7 @@ set :branch, "master"
 #The authentication information for the remote computer
 set :user, "submarine"
 set :password, "WwwfiFi'39"
-set :scm_passphrase, "WwwfiFi'39"
+set :scm_passphrase, "0034313"
 set :use_sudo, true # We are sudoing so that we have all privileges when deploying
 
 #The folder in the remote computer which to the repo is to be put
