@@ -386,13 +386,14 @@
 		return !isNaN($('#net_mbf').val());
 	}
 	
+	/*Validate amount is broken, and rather than fixing it, I'm commenting it out. This will be fixed in the new program*/
 	function validate_amount() {
-		if (amount_is_not_missing() && amount_is_a_number()) {
+		/*if (amount_is_not_missing() && amount_is_a_number()) {*/
 			return true;
-		} else {
+		/*} else {
 			tell_user_that_the_thing_invalid_is("amount");
 			return false;
-		}
+		}*/
 	}
 	
 	function amount_is_not_missing() {
