@@ -1,13 +1,20 @@
-
-
+<h5>Deductions: </h5>
+<div style="float: left; width: 25px;" id="decdution_chks" > 
+  <% unless @deductions.length == 0 %>
+    <% @deductions.each_with_index do |i,x| %>
+  <input type="checkbox" id="decdution_ids" name="<%= i.item_data %>"  />
+    <% end %>
+  <% end %>
+</div>
 <div id="deductions_to_receipt_list">
   <select multiple="true" id="deductions_list" name="deductions_list[]"  size="6">
     <% unless @deductions.length == 0 %>
       <% @deductions.each do |i| %>
-        <option value="<%= i.value %>"> <%= "# #{i.item_data} | #{i.created_at.strftime("%Y-%m-%d")} | $ #{i.value}" %></option>
+        <option value="<%= i.item_data %>"> <%= "# #{i.item_data} | #{i.created_at.strftime("%Y-%m-%d")} | $ #{i.value}" %></option>
       <% end %>
     <% end %>
   </select>
+
 </div>
 
 <div id="deductions_to_receipt_list_values">
@@ -18,4 +25,11 @@
       <% end %>
     <% end %>
   </select>
+</div>
+
+<div id="input_row">
+			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/>
+			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/>
+  <input type="button" id="add_ded_button" value="Add deduction" onclick="add_new_deduction();"/>
+  <div id="feedback"></div>
 </div>

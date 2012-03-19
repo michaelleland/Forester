@@ -29,8 +29,8 @@ class ReceiptsController < ApplicationController
     if params[:type] == "owner"
       respond_to do |format|
         format.pdf do
-        pdf = LandownerStatement.new(receipts, deduction_items, view_context)
-        send_data pdf.render, :filename=> "#{job.name}_landowner_statement",:type=> "application/pdf"
+          pdf = LandownerStatement.new(receipts, deduction_items, view_context)
+          send_data pdf.render, :filename=> "#{job.name}_landowner_statement",:type=> "application/pdf"
         end 
       end
     end
@@ -44,17 +44,17 @@ class ReceiptsController < ApplicationController
     end
     if params[:type] == "trucker"
       respond_to do |format|
-      format.pdf do
-        pdf = TruckerStatement.new(receipts, deduction_items, view_context)
-        send_data pdf.render, :filename=> "#{job.name}_trucker_statement",:type=> "application/pdf"
+        format.pdf do
+          pdf = TruckerStatement.new(receipts, deduction_items, view_context)
+          send_data pdf.render, :filename=> "#{job.name}_trucker_statement",:type=> "application/pdf"
         end 
       end
     end
     if params[:type] == "hfi"
       respond_to do |format|
         format.pdf do
-        pdf = HFIStatement.new(receipts, view_context)
-        send_data pdf.render, :filename=> "#{job.name}_hfi_statement",:type=> "application/pdf"
+          pdf = HFIStatement.new(receipts, view_context)
+          send_data pdf.render, :filename=> "#{job.name}_hfi_statement",:type=> "application/pdf"
         end 
       end
     end
@@ -162,6 +162,9 @@ class ReceiptsController < ApplicationController
   #Ajax action
   #Same as above
   def get_trucker_receipt
+    
+    debugger
+    
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)     
     trucker = job.trucker
@@ -177,7 +180,9 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end     
     end
     
@@ -371,7 +376,7 @@ class ReceiptsController < ApplicationController
     
     pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
     send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",
-                          :type=> "application/pdf"
+      :type=> "application/pdf"
   end
   
   #Ajax action
@@ -440,7 +445,7 @@ class ReceiptsController < ApplicationController
     
     pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
     send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_trucker_receipt",
-                           :type=> "application/pdf"
+      :type=> "application/pdf"
   end
   
   #Ajax action
@@ -485,8 +490,8 @@ class ReceiptsController < ApplicationController
     end
     
     pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
-        send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_hfi_receipt",
-                              :type=> "application/pdf"
+    send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_hfi_receipt",
+      :type=> "application/pdf"
   end
   
   #Ajax action
@@ -531,24 +536,24 @@ class ReceiptsController < ApplicationController
     if params[:owner_type] == "owner"
       pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
       send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_landowner_receipt",
-                        :type=>"application/pdf"
+        :type=>"application/pdf"
     end
     
     if params[:owner_type] == "logger"
       pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
       send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",
-                        :type=>"application/pdf"
+        :type=>"application/pdf"
     end
     
     if params[:owner_type] == "trucker"
       pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
       send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt",
-                        :type=>"application/pdf"
+        :type=>"application/pdf"
     end
     if params[:owner_type] == "hfi"
       pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
       send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_hfi_receipt",
-                        :type=>"application/pdf"
+        :type=>"application/pdf"
     end
   end
 end
