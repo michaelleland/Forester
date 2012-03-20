@@ -191,7 +191,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       format.pdf do
         pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt}",:type=>"application/pdf",:disposition=>"inline"
+        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt",:type=>"application/pdf",:disposition=>"inline"
       end
     end
   end
