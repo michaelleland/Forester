@@ -114,7 +114,9 @@ class ReceiptsController < ApplicationController
     #Deduction items is populated here, using data from params arrays.
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end     
     end
     
@@ -146,7 +148,9 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end     
     end
     
@@ -163,7 +167,7 @@ class ReceiptsController < ApplicationController
   #Same as above
   def get_trucker_receipt
     
-    debugger
+    
     
     tickets = Ticket.find(params[:tickets])
     job = Job.find(tickets.first.job_id)     
@@ -272,7 +276,9 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end
     end
     
@@ -419,7 +425,9 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end
     end
     
