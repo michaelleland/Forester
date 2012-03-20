@@ -31,11 +31,11 @@
     <% @receipt_items.each do |item| if @receipt_items %>
         <tr>
           <% if item.receipt %>
-            <td><%#= item.receipt.job.name %></td>
-            <td><%#= item.receipt.job.owner.name %></td>
+            <td><%= item.receipt.job.name %></td>
+            <td><%= item.receipt.job.owner.name %></td>
           <% else %>
-            <td><%#= item.job.name %></td>
-            <td><%#= item.job.owner.name %></td>
+            <td><%= item.job.name %></td>
+            <td><%= item.job.owner.name %></td>
           <% end %>
           <td><%= item.item_data %></td>
           <td><%= item.value %></td>
