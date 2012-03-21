@@ -114,12 +114,12 @@ class ReceiptsController < ApplicationController
     deduction_items = []
     
     #Deduction items is populated here, using data from params arrays.
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
-      end     
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
+      end
     end
     
     #The ajax call from browser uses pdf format so we respond to that.
@@ -134,7 +134,7 @@ class ReceiptsController < ApplicationController
   #Ajax action
   #Same as above
   def get_logger_receipt
-    
+
     tickets = Ticket.find(params[:tickets])
     notes = params[:notes]
     job = Job.find(tickets.first.job_id)
@@ -149,12 +149,12 @@ class ReceiptsController < ApplicationController
     
     deduction_items = []
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
-      end     
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
+      end
     end
     
     respond_to do |format|
@@ -185,12 +185,12 @@ class ReceiptsController < ApplicationController
     
     deduction_items = []
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
-      end     
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
+      end
     end
     
     notes = params[:notes]
@@ -277,11 +277,11 @@ class ReceiptsController < ApplicationController
     #Needed by the pdf
     deduction_items = []
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -325,11 +325,11 @@ class ReceiptsController < ApplicationController
     
     deduction_items = []
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -428,11 +428,11 @@ class ReceiptsController < ApplicationController
     #Needed by the pdf
     deduction_items = []
     
-    unless params[:deductions_list].nil?
-      params[:deductions_list].each_with_index do |i, x|
-        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
-          deduction_items.push([i, params[:deductions_values][x]])
-        end
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        deduction_items.push([@item.item_data,@item.value])
+        @item.update_attribute(:is_deducted,true)
       end
     end
     

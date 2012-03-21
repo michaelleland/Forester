@@ -2,7 +2,7 @@
 <div style="float: left; width: 25px;" id="decdution_chks" > 
   <% unless @deductions.length == 0 %>
     <% @deductions.each_with_index do |i,x| %>
-      <input type="checkbox" id="decdution_ids" name="<%= i.item_data %>"  />
+      <input type="checkbox" id="decdution_ids" name="deduction_ids[]" value="<%= i.id %>"  />
     <% end %>
   <% end %>
 </div>
@@ -26,6 +26,6 @@
   Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/>
   Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/>
   <%=link_to "Add" ,"#", {:onclick=>"add_deduction($('#deduction_data').val(), $('#deduction_value').val(), $('#job_selector').val(), $('#owner_type_selector').val())"}%>
-  <div id="feedback"></div>
-<%# end %>
+  
+<div id="feedback"></div>
 </div>
