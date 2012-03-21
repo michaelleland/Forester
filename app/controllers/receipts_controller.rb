@@ -4,7 +4,9 @@ class ReceiptsController < ApplicationController
   def index
     
   end
-  
+  def new_receipt
+    @receipt_item1 = ReceiptItem.new
+  end
   def new_statement
     
   end
@@ -132,6 +134,7 @@ class ReceiptsController < ApplicationController
   #Ajax action
   #Same as above
   def get_logger_receipt
+    
     tickets = Ticket.find(params[:tickets])
     notes = params[:notes]
     job = Job.find(tickets.first.job_id)
@@ -324,7 +327,9 @@ class ReceiptsController < ApplicationController
     
     unless params[:deductions_list].nil?
       params[:deductions_list].each_with_index do |i, x|
-        deduction_items.push([i, params[:deductions_values][x]])
+        if !(params[params[:deductions_list][x].to_s].blank?) and params[params[:deductions_list][x].to_s]=='on'
+          deduction_items.push([i, params[:deductions_values][x]])
+        end
       end
     end
     

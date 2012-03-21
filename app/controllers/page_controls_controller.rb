@@ -96,6 +96,7 @@ class PageControlsController < ApplicationController
   #Ajax action
   def get_logger_deductions
     @deductions = ReceiptItem.find_all_by_job_id_and_owner_type(params[:id], 'logger', :order => "id")
+    @receipt_item = ReceiptItem.new
     render "get_deductions.html.erb"
   end
 
@@ -103,6 +104,7 @@ class PageControlsController < ApplicationController
   #Same as above, but for trucker
   def get_trucker_deductions
     @deductions = ReceiptItem.find_all_by_job_id_and_owner_type(params[:id], 'trucker', :order => "id")
+    @receipt_item = ReceiptItem.new
     render "get_deductions.html.erb"
   end
 
@@ -110,6 +112,7 @@ class PageControlsController < ApplicationController
   #Same as above, but for landowner
   def get_owner_deductions
     @deductions = ReceiptItem.find_all_by_job_id_and_owner_type(params[:id], 'owner', :order => "id")
+    @receipt_item = ReceiptItem.new
     render "get_deductions.html.erb"
   end
   
