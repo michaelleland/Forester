@@ -41,7 +41,7 @@
 <script>
 
   function lets_get_outta_here() {
-        set_form_action_to_save();
+  set_form_action_to_save();
 	time = ($("#tickets_select").val().length/10)*2000
 
 	setTimeout(function() {
@@ -206,8 +206,10 @@
   var len = $('#decdution_chks').children.length;
   $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+data+'" />');
 
-  $('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
-		$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
+  $('#deductions_to_receipt_list').append('<div>'+data+'</div>');
+  $('#deductions_to_receipt_list_values').append('<div> $ '+value+'</div>');
+                $('#deductions_list').append(data);
+  		$('#deductions_values').append('$ '+value);
 		$('#deduction_data').attr('value', '');
 		$('#deduction_value').attr('value', '');
 	} else {

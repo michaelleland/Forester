@@ -6,33 +6,26 @@
     <% end %>
   <% end %>
 </div>
-<div id="deductions_to_receipt_list">
-  <select multiple="true" id="deductions_list" name="deductions_list[]"  size="6">
-    <% unless @deductions.length == 0 %>
-      <% @deductions.each do |i| %>
-        <option value="<%= i.item_data %>"> <%= "# #{i.item_data} | #{i.created_at.strftime("%Y-%m-%d")} | $ #{i.value}" %></option>
-      <% end %>
+<div id="deductions_to_receipt_list" style="float: left;width: 287px;background-color: white">
+  <% unless @deductions.length == 0 %>
+    <% @deductions.each do |i| %>
+  <div><%=i.item_data%></div>
     <% end %>
-  </select>
-
+  <% end %>
 </div>
 
-<div id="deductions_to_receipt_list_values">
-  <select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
-    <% unless @deductions.length == 0 %>
-      <% @deductions.each do |i| %>
-        <option value="<%= i.value %>"> <%= "$ #{i.value}" %></option>
-      <% end %>
+<div id="deductions_to_receipt_list_values" >
+  <% unless @deductions.length == 0 %>
+    <% @deductions.each do |i| %>
+  <div><%=" $ #{i.value}"%></div>
     <% end %>
-  </select>
+  <% end %>
 </div>
 
 <div id="input_row">
-  <%#= form_for @receipt_item, :url => { :controller=>"entry",:action => "create"},:remote=>true, :html => {:id => "ded_form"} do |f|%>
-                          Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/>
-                          Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/>
-    <%#= f.submit "Add"  %>
-                          <%=link_to "Add" ,"#", {:onclick=>"add_deduction($('#deduction_data').val(), $('#deduction_value').val(), $('#job_selector').val(), $('#owner_type_selector').val())"}%>
-    <div id="feedback"></div>
-  <%# end %>
+  Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/>
+  Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/>
+  <%=link_to "Add" ,"#", {:onclick=>"add_deduction($('#deduction_data').val(), $('#deduction_value').val(), $('#job_selector').val(), $('#owner_type_selector').val())"}%>
+  <div id="feedback"></div>
+<%# end %>
 </div>
