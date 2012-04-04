@@ -41,7 +41,7 @@
 <script>
 
   function lets_get_outta_here() {
-        set_form_action_to_save();
+  set_form_action_to_save();
 	time = ($("#tickets_select").val().length/10)*2000
 
 	setTimeout(function() {
@@ -123,7 +123,7 @@
   }
 
   $('#job_selector').change(function() {
-	init_type_select(); 
+	init_type_select();
 	init_ticket_select();
 	disable_button();
   })
@@ -140,7 +140,7 @@
 
   $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
-		enable_button();		
+		enable_button();
 	} else {
 		disable_button();
 	}
@@ -177,7 +177,7 @@
 			cache: false,
 			success: function (html) {
 				$('#tickets_select').html(html);
-			}		
+			}
 		});
   $.ajax ({
 			url: '/get_'+$(this).val()+'_deductions/'+id,
@@ -190,7 +190,7 @@
 	refresh_form_action();
   });
 
-  function add_new_deduction() {
+  function add_new_deduction(ded_id) {
 	clear_feedback();
 	if (deduction_value_is_valid()) {
 		data = $('#deduction_data').attr('value');
@@ -204,7 +204,10 @@
 			id = id + 1;
 		}
   var len = $('#decdution_chks').children.length;
-  $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+data+'" />');
+  $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+ded_id+'" />');
+  $('#deductions_to_receipt_list').append('<div>'+data+'</div>');
+  $('#deductions_to_receipt_list_values').append('<div> $ '+value+'</div>');
+
 
   $('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
 		$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');

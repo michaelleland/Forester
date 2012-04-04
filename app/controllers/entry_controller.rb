@@ -62,6 +62,7 @@ class EntryController < ApplicationController
     respond_to do |format| 
       format.js do
         render :update do |page|
+          page.call "add_new_deduction",@receipt_item.id if @receipt_item.errors.blank?
           page.alert(flash[:notice])
         end
       end

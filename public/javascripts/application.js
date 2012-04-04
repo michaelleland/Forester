@@ -10,7 +10,13 @@ function change_content (target, tab, time) {
 		change_content(target, tab)
 	}, time);
 }
-
+function add_deduction(data, value, job_id, owner_type){
+			$.ajax({
+                                  type: "POST",
+                                  url: "/entry/create",
+                                  data: "receipt_item[item_data]=" + data + "&receipt_item[value]="+ value + "&receipt_item[job_id]=" + job_id + "&receipt_item[owner_type]=" + owner_type
+                                });
+}
 
 function change_content (target, tab) {
 	
