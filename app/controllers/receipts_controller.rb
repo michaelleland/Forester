@@ -423,6 +423,14 @@ class ReceiptsController < ApplicationController
     end
     
     receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :total_payment => total)
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
+    
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_logger = true
@@ -493,6 +501,13 @@ class ReceiptsController < ApplicationController
     payment_total = round_to(payment_total, 2)
     
     receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :total_payment => payment_total);
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
     
     tickets.each do |i|
       receipt.tickets.push(i)
