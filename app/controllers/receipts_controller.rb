@@ -138,7 +138,7 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+        #@item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -180,7 +180,7 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+       # @item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -221,7 +221,7 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+       # @item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -336,6 +336,14 @@ class ReceiptsController < ApplicationController
     payment_total = payment_total.round(2)
     
     receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :total_payment => payment_total)
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
+
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_owner = true
@@ -577,11 +585,14 @@ class ReceiptsController < ApplicationController
     job = Job.find(receipt.job_id)
     tickets = receipt.tickets
     payment_num = receipt.payment_num
+
     
     deduction_items = []
     
-    unless receipt.receipt_items.nil?
-      receipt.receipt_items.each_with_index do |i|
+    receipt_items = ReceiptItem.find(:all,:conditions=>["receipt_id =? and is_deducted=?",receipt.id,true])
+    
+    unless receipt_items.nil?
+      receipt_items.each do |i|
         deduction_items.push([i.item_data, i.value])
       end     
     end
