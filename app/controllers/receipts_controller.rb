@@ -31,32 +31,52 @@ class ReceiptsController < ApplicationController
     if params[:type] == "owner"
       respond_to do |format|
         format.pdf do
-          pdf = LandownerStatement.new(receipts, deduction_items, view_context)
-          send_data pdf.render, :filename=> "#{job.name}_landowner_statement",:type=> "application/pdf"
+          begin
+            pdf = LandownerStatement.new(receipts, deduction_items, view_context)
+            send_data pdf.render, :filename=> "#{job.name}_landowner_statement",:type=> "application/pdf"
+          rescue StandardError => e
+            flash[:error] = "#{e.message}"
+            redirect_to :controller=> 'index' ,:action => "index"
+          end
         end 
       end
     end
     if params[:type] == "logger"
       respond_to do |format|
         format.pdf do
-          pdf = LoggerStatement.new(receipts, deduction_items, view_context)
-          send_data pdf.render, :filename=>"#{job.name}_logger_statement",:type=>"application/pdf"
+          begin
+            pdf = LoggerStatement.new(receipts, deduction_items, view_context)
+            send_data pdf.render, :filename=>"#{job.name}_logger_statement",:type=>"application/pdf"
+          rescue StandardError => e
+            flash[:error] = "#{e.message}"
+            redirect_to :controller=> 'index' ,:action => "index"
+          end
         end 
       end
     end
     if params[:type] == "trucker"
       respond_to do |format|
         format.pdf do
-          pdf = TruckerStatement.new(receipts, deduction_items, view_context)
-          send_data pdf.render, :filename=> "#{job.name}_trucker_statement",:type=> "application/pdf"
+          begin
+            pdf = TruckerStatement.new(receipts, deduction_items, view_context)
+            send_data pdf.render, :filename=> "#{job.name}_trucker_statement",:type=> "application/pdf"
+          rescue StandardError => e
+            flash[:error] = "#{e.message}"
+            redirect_to :controller=> 'index' ,:action => "index"
+          end
         end 
       end
     end
     if params[:type] == "hfi"
       respond_to do |format|
         format.pdf do
-          pdf = HFIStatement.new(receipts, view_context)
-          send_data pdf.render, :filename=> "#{job.name}_hfi_statement",:type=> "application/pdf"
+          begin
+            pdf = HFIStatement.new(receipts, view_context)
+            send_data pdf.render, :filename=> "#{job.name}_hfi_statement",:type=> "application/pdf"
+          rescue StandardError => e
+            flash[:error] = "#{e.message}"
+            redirect_to :controller=> 'index' ,:action => "index"
+          end
         end 
       end
     end
@@ -118,15 +138,22 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+        #@item.update_attribute(:is_deducted,true)
       end
     end
     
     #The ajax call from browser uses pdf format so we respond to that.
     respond_to do |format|
       format.pdf do
-        pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_landowner_receipt",:type=>"application/pdf",:disposition=>"inline" #PDF will be shown in the browser
+        begin
+          pdf = LandownerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+          send_data pdf.render, :filename=> "#{job.name}_#{payment_num}_landowner_receipt",:type=>"application/pdf",:disposition=>"inline" #PDF will be shown in the browser
+        rescue StandardError => e
+          flash[:error] = "#{e.message}"
+          redirect_to :controller=> 'index' ,:action => "index"
+        end
+        
+        
       end 
     end
   end
@@ -153,14 +180,19 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+       # @item.update_attribute(:is_deducted,true)
       end
     end
     
     respond_to do |format|
       format.pdf do
-        pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",:type=>"application/pdf",:disposition=> "inline"
+        begin
+          pdf = LoggerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+          send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_logger_receipt",:type=>"application/pdf",:disposition=> "inline"
+        rescue StandardError => e
+          flash[:error] = "#{e.message}"
+          redirect_to :controller=> 'index' ,:action => "index"
+        end
       end
     end
   end
@@ -189,7 +221,7 @@ class ReceiptsController < ApplicationController
       params[:deduction_ids].each do |i|
         @item = ReceiptItem.find(i)
         deduction_items.push([@item.item_data,@item.value])
-        @item.update_attribute(:is_deducted,true)
+       # @item.update_attribute(:is_deducted,true)
       end
     end
     
@@ -197,8 +229,13 @@ class ReceiptsController < ApplicationController
     
     respond_to do |format|
       format.pdf do
-        pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
-        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt",:type=>"application/pdf",:disposition=>"inline"
+        begin
+          pdf = TruckerReceipt.new(tickets, payment_num, deduction_items, notes, view_context)
+          send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_trucker_receipt",:type=>"application/pdf",:disposition=>"inline"
+        rescue StandardError => e
+          flash[:error] = "#{e.message}"
+          redirect_to :controller=> 'index' ,:action => "index"
+        end
       end
     end
   end
@@ -219,8 +256,13 @@ class ReceiptsController < ApplicationController
     
     respond_to do |format|
       format.pdf do
-        pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
-        send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_hfi_receipt",:type=>"application/pdf",:disposition=>"inline"
+        begin
+          pdf = HFIReceipt.new(tickets, payment_num, notes, view_context)
+          send_data pdf.render, :filename=>"#{job.name}_#{payment_num}_hfi_receipt",:type=>"application/pdf",:disposition=>"inline"
+        rescue StandardError => e
+          flash[:error] = "#{e.message}"
+          redirect_to :controller=> 'index' ,:action => "index"
+        end
       end 
     end
   end
@@ -294,6 +336,14 @@ class ReceiptsController < ApplicationController
     payment_total = payment_total.round(2)
     
     receipt = Receipt.create(:job_id => tickets.first.job_id, :payment_num => payment_num, :owner_id => owner.id, :owner_type => "owner", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => params[:notes], :total_payment => payment_total)
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
+
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_owner = true
@@ -373,6 +423,14 @@ class ReceiptsController < ApplicationController
     end
     
     receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => logger.id, :owner_type => "logger", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :total_payment => total)
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
+    
     tickets.each do |i|
       receipt.tickets.push(i)
       i.paid_to_logger = true
@@ -443,6 +501,13 @@ class ReceiptsController < ApplicationController
     payment_total = round_to(payment_total, 2)
     
     receipt = Receipt.create(:job_id => job.id, :payment_num => payment_num, :owner_id => trucker.id, :owner_type => "trucker", :receipt_date => Time.now.strftime("%Y-%m-%d"), :notes => notes, :total_payment => payment_total);
+
+    unless params[:deduction_ids].blank?
+      params[:deduction_ids].each do |i|
+        @item = ReceiptItem.find(i)
+        @item.update_attribute(:receipt_id,receipt.id)
+      end
+    end
     
     tickets.each do |i|
       receipt.tickets.push(i)
@@ -535,11 +600,14 @@ class ReceiptsController < ApplicationController
     job = Job.find(receipt.job_id)
     tickets = receipt.tickets
     payment_num = receipt.payment_num
+
     
     deduction_items = []
     
-    unless receipt.receipt_items.nil?
-      receipt.receipt_items.each_with_index do |i|
+    receipt_items = ReceiptItem.find(:all,:conditions=>["receipt_id =? and is_deducted=?",receipt.id,true])
+    
+    unless receipt_items.nil?
+      receipt_items.each do |i|
         deduction_items.push([i.item_data, i.value])
       end     
     end

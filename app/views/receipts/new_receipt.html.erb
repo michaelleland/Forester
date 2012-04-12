@@ -64,8 +64,10 @@
 		$('body').find('select').each(function() {
 			$(this).fadeOut(10);
 		});
-
-		$('body').find('input').each(function() {
+                $('#deductions_to_receipt_list').hide();
+                $('#deductions_to_receipt_list_values').hide();
+                
+                $('body').find('input').each(function() {
 			if ($(this).attr('id') != 'save_button') {
 				$(this).fadeOut(10);
 			}
