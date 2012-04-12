@@ -55,14 +55,14 @@ class EntryController < ApplicationController
   def create
     @receipt_item = ReceiptItem.new(params[:receipt_item])
     if @receipt_item.save
-      flash[:notice]="Deduction is sucessfully created."
+      flash[:notice]="Deduction sucessfully created."
     else
       flash[:notice] = @receipt_item.errors.map{|code, msg| "#{code} #{msg}"}.join(" ")
     end
     respond_to do |format| 
       format.js do
         render :update do |page|
-          page.call "add_new_deduction",@receipt_item.id if @receipt_item.errors.blank?
+          #page.call "add_new_deduction",@receipt_item.id if @receipt_item.errors.blank?
           page.alert(flash[:notice])
         end
       end
