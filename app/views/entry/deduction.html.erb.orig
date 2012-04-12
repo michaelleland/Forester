@@ -1,6 +1,28 @@
 <div id="comparison_wrapper">
 
+<<<<<<< HEAD
+	<h1>Deductions</h1>
+	
+	<%= form_for @receipt_item, :url => { :action => "create"}, :html => {:class => "receipt_form"} do |f|%>
+		
+		<%= f.label(:job, "Job")%>
+		<%= select("job", "job_id", Job.all.collect {|j| [ j.name, j.id ] }, {:include_blank => 'None'}) %>
+		<%= f.radio_button(:owner_type, "owner")%>
+		<%= f.label(:owner_type_owner, "Owner")%>
+		<%= f.radio_button(:owner_type, "logger") %>
+		<%= f.label(:owner_type_logger, "Logger")%> 
+		<%= f.radio_button(:owner_type, "trucker") %>
+		<%= f.label(:owner_type_trucker, "Trucker")%>
+		<%= f.text_field(:item_data)%>
+		<%= f.label(:item_data, "Description")%>
+		<%= f.number_field(:value)%>
+		<%= f.label(:value, "Amount")%>
+		<input type="button" value="Submit" disabled="true">
+	<% end %>
+	
+=======
   <h1>Deductions</h1>
+>>>>>>> issues
 
   <%= form_for @receipt_item, :url => { :action => "create"},:remote=>true, :html => {:class => "receipt_form"} do |f|%>
 

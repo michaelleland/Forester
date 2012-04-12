@@ -5,5 +5,6 @@ class AddOwnerTypeAndJobIdToReceiptItems < ActiveRecord::Migration
   end
 
   def self.down
+    
   end
 end

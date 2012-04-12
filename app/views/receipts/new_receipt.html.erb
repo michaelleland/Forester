@@ -1,109 +1,96 @@
 <div class="grid_10" id="new_receipt_box">
-	<h4>Create a new receipt: </h4>
-	<form id="create_form" action="" method="get" target="_blank">
-		<h5>Select job:</h5>
-		<select id="job_selector">
-			<option value="0">Select a job</option>
-			<% Job.all.each do |i| %>
-				<option value="<%= i.id %>"><%= i.name %></option>
-			<% end %>
-		</select>
-		
-		<h5>Create receipt for:</h5>
-		<select id="owner_type_selector">
-			<option value="none"> </option>
-			<option value="owner">Landowner</option>
-			<option value="logger">Logger</option>
-			<option value="trucker">Trucker</option>
-			<option value="hfi">HFI</option>
-		</select>
-		
-		<h5>Select tickets:</h5>
-		
-		<div id="tickets_to_receipt">
-			<select multiple="true" id="tickets_select" name="tickets[]" size="10">
-				<option value="0">Select owner type</option>
-			</select>
-		</div>
-		
-		<h5>Deductions: </h5>
-		
-		<div id="deductions_to_receipt_list">
-			<select id="deductions_list" name="deductions_list[]" multiple="true" size="6">
-			</select>
-		</div>
-		
-		<div id="deductions_to_receipt_list_values">
-			<select id="deductions_values" name="deductions_values[]" multiple="true" size="6">
-			</select>
-		</div>
-		
-		<div id="input_row">
-			Deduction: <input type="text" size="16" id="deduction_data" name="deduction_data"/> 
-			Value: $ <input type="text" size="5" id="deduction_value" name="deduction_value"/> 
-			<input type="button" id="add_ded_button" value="Add deduction" onclick="add_new_deduction();"/>
-			<div id="feedback"></div>
-		</div>
-		
-		<h5 style="float: left; clear: left;">Notes:</h5>
-		
-		<textarea id="notes" name="notes" rows="5"></textarea>
-		
-		<input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
-		<input type="submit" value="Confirm and Save" onmouseover="set_form_action_to_save();" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
-	</form>	
+  <h4>Create a new receipt: </h4>
+  <form id="create_form" action="" method="get" target="_blank">
+    <h5>Select job:</h5>
+    <select id="job_selector">
+      <option value="0">Select a job</option>
+      <% Job.all.each do |i| %>
+        <option value="<%= i.id %>"><%= i.name %></option>
+      <% end %>
+    </select>
+
+    <h5>Create receipt for:</h5>
+    <select id="owner_type_selector">
+      <option value="none"> </option>
+      <option value="owner">Landowner</option>
+      <option value="logger">Logger</option>
+      <option value="trucker">Trucker</option>
+      <option value="hfi">HFI</option>
+    </select>
+
+    <h5>Select tickets:</h5>
+
+    <div id="tickets_to_receipt">
+      <select multiple="true" id="tickets_select" name="tickets[]" size="10">
+        <option value="0">Select owner type</option>
+      </select>
+    </div>
+
+    <div id="deductions_div">
+
+    </div>
+    <h5 style="float: left; clear: left;">Notes:</h5>
+
+    <textarea id="notes" name="notes" rows="5"></textarea>
+
+    <input id="submit_button" disabled="true" onclick="set_reviewed();" onmouseover="select_all_deductions();" type="submit" value="No tickets selected" />
+    <input type="submit" value="Confirm and Save" onclick="lets_get_outta_here();" disabled="true" id="save_button" />
+  </form>
 </div>
 
 <script>
 
-function lets_get_outta_here() {
+  function lets_get_outta_here() {
+  set_form_action_to_save();
 	time = ($("#tickets_select").val().length/10)*2000
-	
+
 	setTimeout(function() {
 		change_content('new_receipt', 2);
 	}, time)
-}
+  }
 
-function set_form_action_to_save() {
+  function set_form_action_to_save() {
 	var type = $('#owner_type_selector').val();
-	
+
 	$('#create_form').attr('action', '/save_'+type+'_receipt/');
 	//$('#create_form').attr('data-remote', 'true');
 	$('#create_form').removeAttr('target');
-}
+  }
 
-function set_reviewed() {
+  function set_reviewed() {
 	setTimeout(function() {
 		$('#submit_button').attr('disabled', 'true');
-		
+
 		$('body').find('select').each(function() {
 			$(this).fadeOut(10);
 		});
-		
-		$('body').find('input').each(function() {
+                $('#deductions_to_receipt_list').hide();
+                $('#deductions_to_receipt_list_values').hide();
+                
+                $('body').find('input').each(function() {
 			if ($(this).attr('id') != 'save_button') {
 				$(this).fadeOut(10);
 			}
 		});
-		
+
 		$('body').find('h5').each(function() {
 			$(this).fadeOut(10);
 		});
-		
+
 		$('#input_row').fadeOut();
 		$('textarea').fadeOut(10);
-		
-		$('#save_button').removeAttr('disabled')
-		
-	}, 800);
-}
 
-//onclick="init_the_page();"
-function save_the_receipt() {
+		$('#save_button').removeAttr('disabled')
+
+	}, 800);
+  }
+
+  //onclick="init_the_page();"
+  function save_the_receipt() {
 	var tickets = $('#tickets_select').val();
 	var owner = $('#owner_type_selector').val();
 	var url = 'http://localhost/get_'+owner+'_receipt/?';
-	
+
 	$.each(tickets, function(index, value) {
 		if (value == tickets[0]) {
 			url = url+"tickets[]="+value;
@@ -111,158 +98,178 @@ function save_the_receipt() {
 			url = url+"&tickets[]="+value;
 		}
 	});
-	
+
 	var deductions = $('#deductions_list').val();
-	
+
 	$.each(deductions, function(index, value) {
 		url = url+"&deductions_list[]="+value;
 	});
-	
+
 	var deductions_values = $('#deductions_values').val();
-	
+
 	$.each(deductions_values, function(index, value) {
 		url = url+"&deductions_values[]="+value;
 	});
-	
+
 	var notes = $('#notes').val();
-	
+
 	url = url + "&notes="+notes;
-	
+
 	$.ajax({
 		url: '/get_pdf_receipt/?url='+url,
 		cache: false,
 		success: function() {
-			
+
 		}
 	});
-}
+  }
 
-$('#job_selector').change(function() {
-	init_type_select(); 
+  $('#job_selector').change(function() {
+	init_type_select();
 	init_ticket_select();
 	disable_button();
-})
+  })
 
-function disable_button() {
+  function disable_button() {
 	$('#submit_button').attr('disabled', 'true');
 	$('#submit_button').attr('value', 'No tickets selected');
-	
-}
+  }
 
-function enable_button() {
+  function enable_button() {
 	$('#submit_button').removeAttr('disabled');
 	$('#submit_button').attr('value', 'Get receipt');
-}
+  }
 
-$('#tickets_select').change(function() {
+  $('#tickets_select').change(function() {
 	if ($(this).val() != '0' && $(this).val() != '' && $(this).val() != null) {
-		enable_button();		
+		enable_button();
 	} else {
 		disable_button();
 	}
-});
+  });
 
-function init_the_page() {
+  function init_the_page() {
 	setTimeout(function() {
 		change_content('new_receipt', 2);
 	}, 1000);
-}
+  }
 
-function init_ticket_select () {
+  function init_ticket_select () {
 	$('#tickets_select').html('<option value="0">Select owner type</option>');
-}
+  }
 
-function init_type_select () {
+  function init_type_select () {
 	$('#owner_type_selector').val('0');
 	$('#tickets_select').html('<option value="0">Select owner type</option>');
-}
+  }
 
-function refresh_form_action () {
+  function refresh_form_action () {
 	var type = $('#owner_type_selector').val();
-	
-	$('#create_form').attr('action', '/get_'+type+'_receipt.pdf/');
-}
 
-$('#owner_type_selector').change(function() {
+	$('#create_form').attr('action', '/get_'+type+'_receipt.pdf/');
+  }
+
+  $('#owner_type_selector').change(function() {
 	var id = $('#job_selector').val();
 	if ($(this).val() == "none") {
-		
+
 	} else {
 		$.ajax ({
 			url: '/get_'+$(this).val()+'_tickets/'+id,
 			cache: false,
 			success: function (html) {
 				$('#tickets_select').html(html);
-			}		
+			}
+		});
+  $.ajax ({
+			url: '/get_'+$(this).val()+'_deductions/'+id,
+			cache: false,
+			success: function (html) {
+				$('#deductions_div').html(html);
+			}
 		});
 	}
 	refresh_form_action();
-});
+  });
 
-function add_new_deduction() {
+  function add_new_deduction(ded_id) {
 	clear_feedback();
 	if (deduction_value_is_valid()) {
 		data = $('#deduction_data').attr('value');
 		value = $('#deduction_value').attr('value');
 		value = turn_into_currency(value);
 		id = parseInt($('#deductions_list').children().first().attr('value'), 10);
-		
+
 		if (String(id) == "NaN") {
 			id = 1;
 		} else {
 			id = id + 1;
 		}
-		
-		$('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
+  var len = $('#decdution_chks').children.length;
+  $('#decdution_chks').append('<input type="checkbox" id="decdution_ids" name="'+ded_id+'" />');
+  $('#deductions_to_receipt_list').append('<div>'+data+'</div>');
+  $('#deductions_to_receipt_list_values').append('<div> $ '+value+'</div>');
+
+
+  $('#deductions_list').append('<option value="'+data+'">'+data+'</option>');
 		$('#deductions_values').append('<option value="'+value+'"> $ '+value+'</option>');
 		$('#deduction_data').attr('value', '');
 		$('#deduction_value').attr('value', '');
 	} else {
 		tell_user_deduction_value_is_invalid();
 	}
-}
+  }
 
-function clear_feedback() {
+  function clear_feedback() {
 	$('#feedback').html('');
-}
+  }
 
-function turn_into_currency(value) {
+  function turn_into_currency(value) {
 	value = parseFloat(value);
 	value = Math.round(value*100)/100;
 	value_as_string = String(value);
-	
+
 	if (value_as_string.indexOf(".") == -1) {
 		value_as_string = value_as_string + ".00"
 	}
-	
+
 	if (value_as_string.substr(value_as_string.indexOf("."), 3).length == 2) {
 		value_as_string = value_as_string + "0"
 	}
-	
+
 	return value_as_string;
-}
+  }
 
-function deduction_value_is_valid() {
+  function deduction_value_is_valid() {
 	valid = false;
-	value = $('#deduction_value').val();
-	return !isNaN(value);
-}
+  value = $('#deduction_value').val();
+  if ($('#deduction_data').attr('value')=='' || $('#deduction_data').attr('value')==null)
+  {
+  return false;
+  }
+  else
+  {
+  return !isNaN(value);
+  }
 
-function tell_user_deduction_value_is_invalid() {
-	$('#feedback').append('<div>Deduction value is invalid</div>')
-}
 
-function select_all_deductions() {
+  }
+
+  function tell_user_deduction_value_is_invalid() {
+	$('#feedback').append('<div>Deduction description or value is invalid</div>')
+  }
+
+  function select_all_deductions() {
 	var vals = []
 	$('#deductions_list option').each(function () {
 		vals.push($(this).attr('value'));
 	})
 	$('#deductions_list').val(vals);
-	
+
 	vals = []
 	$('#deductions_values option').each(function () {
 		vals.push($(this).val());
 	});
 	$('#deductions_values').val(vals);
-}
+  }
 </script>

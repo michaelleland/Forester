@@ -48,19 +48,26 @@ class EntryController < ApplicationController
   #Gets all the deductions (aka reciept_items) and displays them
   
   def deduction
-     @receipt_item = ReceiptItem.new
-     @receipt_items = ReceiptItem.all
+    @receipt_item = ReceiptItem.new
+    @receipt_items = ReceiptItem.all
   end
   
   def create
-    debugger
-    @receipt_item = ReceiptItem.new
-    @receipt_item.job_id = params[:job_id]
-    @receipt_item.owner_type = params[:owner_type]
-    @receipt_item.item_data = params[:item_data]
-    @receipt_item.value = params[:value]
-    @receipt_item.save!
-    respond_with(@receipt_item)
+    @receipt_item = ReceiptItem.new(params[:receipt_item])
+    if @receipt_item.save
+      flash[:notice]="Deduction sucessfully created."
+    else
+      flash[:notice] = @receipt_item.errors.map{|code, msg| "#{code} #{msg}"}.join(" ")
+    end
+    respond_to do |format| 
+      format.js do
+        render :update do |page|
+          #page.call "add_new_deduction",@receipt_item.id if @receipt_item.errors.blank?
+          page.alert(flash[:notice])
+        end
+      end
+    end
+    
   end
   
   #Ajax action
@@ -112,7 +119,7 @@ class EntryController < ApplicationController
     
     unless params[:wood_type] == "3" #wood type 3 means pulp
       #One load detail for one ticket is created in any case
-      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species.first, :tonnage => params[:tonnage], :mbfs => @mbfs[0])  
+      LoadDetail.create(:ticket_id => @ticket.id, :species_id => @species.first, :tonnage => params[:tonnage], :mbfs => @mbfs[0])
       @specie_codes.push(Specie.find(@species[0]).code)
       
       #But if there is more, so many load details will be created
@@ -173,7 +180,7 @@ class EntryController < ApplicationController
     @jobs = Job.all
     @loggers = Job.all.collect {|i| i.logger }.flatten.uniq
     @destinations = Destination.all
-  end 
+  end
   
   #Ajax action
   #Searches for a ticket with given id and saves the given values to it
@@ -195,7 +202,7 @@ class EntryController < ApplicationController
     @ticket.wood_type = params[:wood_type_id]
     
     #Because the tickets value (load pay) comes in as string in currency format
-    # some parts have to be stripped off to be able to turn it into float correctly 
+    # some parts have to be stripped off to be able to turn it into float correctly
     @value = params[:load_pay].to_s
     3.times do
       @value.sub!(",", "")
@@ -296,7 +303,7 @@ class EntryController < ApplicationController
         else
           render :text => "true"
         end
-      end     
+      end
     end
     
   end

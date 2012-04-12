@@ -6,6 +6,7 @@ class AddTotalPaymentToReceipt < ActiveRecord::Migration
   end
 
   def self.down
+    
     change_table :receipts do |t|    
       t.delete :payment_total    
     end

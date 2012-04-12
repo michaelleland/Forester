@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120301172843) do
+ActiveRecord::Schema.define(:version => 20120320205854) do
 
   create_table "addresses", :force => true do |t|
     t.string   "street"
@@ -112,9 +112,10 @@ ActiveRecord::Schema.define(:version => 20120301172843) do
     t.integer  "receipt_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",      :precision => 8, :scale => 2
+    t.decimal  "value",       :precision => 8, :scale => 2
     t.integer  "job_id"
     t.string   "owner_type"
+    t.boolean  "is_deducted",                               :default => false
   end
 
   create_table "receipt_logger_rates", :force => true do |t|
