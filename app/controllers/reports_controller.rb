@@ -18,7 +18,7 @@ class ReportsController < ApplicationController
     #The folder where the filename points to, is actually in the ~/rails/Forester because of capistrano as
     # the Apache point to ~/rails/Forester/current symlinkfolder and capistrano updates the them.  
     @filename = "quarterly_report_#{params[:year]}_#{params[:quarter]}.csv"
-    @file_path = "#{Rails.root}/../../shared/system/exports/"
+    @file_path = "#{Rails.root}/public/exports/"
     if params[:quarter] == "1"
       @tickets = Ticket.find(:all, :conditions => "delivery_date>'#{(params[:year].to_i-1)}-12-31' AND delivery_date<'#{params[:year]}-04-01'")
     else
@@ -111,7 +111,7 @@ class ReportsController < ApplicationController
       
       #Same filepath thingy here as above
       @filename = "Jobs_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Jobs"
       @table_headers = "Name, Owner Name, Logger Name, Trucker Name, HFI-rate (%), HFI-prime" 
     end
@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
       @tickets = Ticket.all
       
       @filename = "Tickets_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Tickets"
       
       @species = ""
@@ -134,7 +134,7 @@ class ReportsController < ApplicationController
       @payments = PaymentFromDestination.all
       
       @filename = "Payments_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Payments"
       @table_headers = "Date, Destination Name, Job Name, Payment #, Wood Type, Net MBF, Tonnage, Total Payment"      
     end
@@ -142,7 +142,7 @@ class ReportsController < ApplicationController
       @receipts = Receipt.all
       
       @filename = "Receipts_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Receipts"
       @table_headers = "Date, Job Name, Owner Type, Owner Name, Payment #, # of Tickets, Total Payment"     
     end
