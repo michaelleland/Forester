@@ -18,7 +18,7 @@ class ReportsController < ApplicationController
     #The folder where the filename points to, is actually in the ~/rails/Forester because of capistrano as
     # the Apache point to ~/rails/Forester/current symlinkfolder and capistrano updates the them.  
     @filename = "quarterly_report_#{params[:year]}_#{params[:quarter]}.csv"
-    @file_path = "#{Rails.root}/../../shared/system/exports/"
+    @file_path = "#{Rails.root}/public/export/"
     if params[:quarter] == "1"
       @tickets = Ticket.find(:all, :conditions => "delivery_date>'#{(params[:year].to_i-1)}-12-31' AND delivery_date<'#{params[:year]}-04-01'")
     else
@@ -111,7 +111,7 @@ class ReportsController < ApplicationController
       
       #Same filepath thingy here as above
       @filename = "Jobs_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Jobs"
       @table_headers = "Name, Owner Name, Logger Name, Trucker Name, HFI-rate (%), HFI-prime" 
     end
@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
       @tickets = Ticket.all
       
       @filename = "Tickets_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Tickets"
       
       @species = ""
@@ -128,13 +128,13 @@ class ReportsController < ApplicationController
         @species = "#{@species}, #{i.code}"
       end
       
-      @table_headers = "Number, Delivery Date, Destination Name, Job Name, Wood Type#{@species}, Tonnage, Net MBF, Load Pay"      
+      @table_headers = "Number, Delivery Date, Destination Name, Job Name, Wood Type#{@species}, Tonnage, Net MBF, Load Pay, Logger Pay, Trucker Pay, HFI Pay, Owner Pay"      
     end
     if params[:id] == "3"
       @payments = PaymentFromDestination.all
       
       @filename = "Payments_on_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}.csv"
-      @file_path = "#{Rails.root}/../../shared/system/exports/"
+      @file_path = "#{Rails.root}/public/exports/"
       @table_name = "Payments"
       @table_headers = "Date, Destination Name, Job Name, Payment #, Wood Type, Net MBF, Tonnage, Total Payment"      
     end
@@ -182,8 +182,48 @@ class ReportsController < ApplicationController
             @amounts_str = "#{@amounts_str}, #{j}"
           end
           
+          if i.logger_rate.nil?   
+           i.logger_value = 0
+            else
+          
+            if i.logger_rate.rate_type == "MBF"
+              i.logger_value = i.net_mbf * i.logger_rate.rate
+              i.logger_value = i.logger_value.round(2)
+            end
+            if i.logger_rate.rate_type == "Tonnage"
+              i.logger_value = i.tonnage * i.logger_rate.rate
+              i.logger_value = i.logger_value.round(2)
+            end
+            if i.logger_rate.rate_type == "percent"
+              i.logger_value = i.value * (i.logger_rate.rate/100)
+              i.logger_value = i.logger_value.round(2)
+            end
+         end
+          
+          if i.trucker_rate.nil?
+            i.trucker_value = 0
+          else
+            if i.trucker_rate.rate_type == "MBF"
+              i.trucker_value = round_to(i.trucker_rate.rate*i.net_mbf, 2)
+              else
+                if i.trucker_rate.rate_type == "Tonnage"
+                  i.trucker_value = round_to(i.trucker_rate.rate*i.tonnage, 2)
+                  else
+                  i.trucker_value = round_to(i.trucker_rate.rate/100*i.value, 2)
+                end
+            end
+          end
+          
+          if i.job.hfi_rate.nil?
+            i.hfi_value = 0
+          else
+            i.hfi_value = (i.job.hfi_rate/100)*i.value
+          end
+          
+          i.owner_value = i.value - i.hfi_value - i.logger_value - i.trucker_value
+          
           @puts = "#{i.number}, #{i.delivery_date}, #{i.destination.name.gsub(',', '')}, #{i.job.name.gsub(',', '')}, "
-          @puts << "#{WoodType.find(i.wood_type).name}#{@amounts_str}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value).gsub(',', '')}"
+          @puts << "#{WoodType.find(i.wood_type).name}#{@amounts_str}, #{i.tonnage}, #{i.net_mbf}, #{give_pennies(i.value).gsub(',', '')}, #{give_pennies(i.logger_value).gsub(',', '')}, #{give_pennies(i.trucker_value).gsub(',', '')}, #{give_pennies(i.hfi_value).gsub(',', '')}, #{give_pennies(i.owner_value).gsub(',', '')}"
           writer.puts @puts
         end
       end
@@ -224,3 +264,4 @@ class ReportsController < ApplicationController
   end
   
 end
+
